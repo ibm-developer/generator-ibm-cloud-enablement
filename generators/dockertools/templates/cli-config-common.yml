@@ -1,0 +1,29 @@
+container-name-run : "<%= cliConfig.containerNameRun %>"
+container-name-tools : "<%= cliConfig.containerNameTools %>"
+
+host-path-run : "<%= cliConfig.hostPathRun %>"
+host-path-tools : "<%= cliConfig.hostPathTools %>"
+
+container-path-run : "<%= cliConfig.containerPathRun %>"
+container-path-tools : "<%= cliConfig.containerPathTools %>"
+
+container-port-map : "<%= cliConfig.containerPortMap %>"
+container-port-map-debug : "<%= cliConfig.containerPortMapDebug %>"
+
+dockerfile-run : "<%= cliConfig.dockerFileRun %>"
+dockerfile-tools : "<%= cliConfig.dockerFileTools %>"
+
+image-name-run : "<%= cliConfig.imageNameRun %>"
+image-name-tools : "<%= cliConfig.imageNameTools %>"
+
+build-cmd-run : "<%= cliConfig.buildCmdRun %>"
+test-cmd : "<%= cliConfig.testCmd %>"
+build-cmd-debug : "<%= cliConfig.buildCmdDebug %>"
+
+run-cmd : "<%= cliConfig.runCmd %>"
+debug-cmd : "<%= cliConfig.debugCmd %>"
+stop-cmd : "<%= cliConfig.stopCmd %>"
+
+chart-path : "<%= cliConfig.chartPath %>"
+
+version : "0.0.3"

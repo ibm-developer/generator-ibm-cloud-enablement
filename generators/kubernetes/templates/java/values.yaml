@@ -1,0 +1,24 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+revisionHistoryLimit: 1
+image:
+  repository: {{#toLowerCase applicationName}}{{/toLowerCase}}
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+service:
+  name: Node
+  type: NodePort
+  servicePort: {{servicePorts.http}}
+{{#if servicePorts.https}}
+  servicePortHttps: {{servicePorts.https}}
+{{/if}}
+{{#storageDeploys.env}}
+services:
+{{/storageDeploys.env}}
+{{#has storages 'mongo'}}
+  mongo:
+     url: mongo
+     name: comments
+     env: production
+{{/has}}

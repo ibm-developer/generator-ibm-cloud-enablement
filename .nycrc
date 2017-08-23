@@ -1,0 +1,15 @@
+{
+    "check-coverage": true,
+    "statements": 84,
+    "branches": 73,
+    "functions": 92,
+    "lines": 84,
+    "include": [
+        "generators/**/*.js"
+    ],
+    "exclude": [
+        "generators/cloudfoundry/templates/**",
+        "generators/dockertools/templates/**",
+        "generators/kubernetes/templates/**"
+    ]
+}

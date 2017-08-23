@@ -1,0 +1,42 @@
+---
+applications:
+- instances: 1
+  timeout: 180
+  {{#if this.name }}
+  name: {{{this.name}}}
+  {{/if ~}}
+  {{#if this.buildpack }}
+  buildpack: {{{this.buildpack}}}
+  {{/if ~}}
+  {{#if this.command }}
+  command: {{{this.command}}}
+  {{/if ~}}
+  {{#if this.path }}
+  path: {{{this.path}}}
+  {{/if ~}}
+  {{#if this.disk_quota }}
+  disk_quota: {{{this.disk_quota}}}
+  {{/if ~}}
+  {{#if this.memory }}
+  memory: {{{this.memory}}}
+  {{/if ~}}
+  {{#if this.domain }}
+  domain: {{{this.domain}}}
+  {{/if ~}}
+  {{#if this.host }}
+  host: {{{this.host}}}
+  {{else}}
+  random-route: true
+  {{/if ~}}
+  {{#if this.services }}
+  services:
+  {{#each this.services}}
+    - {{{this}}}
+  {{/each}}
+  {{/if ~}}
+  {{#if this.env}}
+  env:
+  {{#each this.env}}
+    {{{@key}}} : {{{this}}}
+  {{/each}}
+  {{/if ~}}

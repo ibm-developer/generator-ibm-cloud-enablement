@@ -1,0 +1,20 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+revisionHistoryLimit: 1
+image:
+  repository: registry.ng.bluemix.net/replace-me-namespace/acmeproject
+  tag: v1.0.0
+  pullPolicy: Always
+livenessProbe:
+  initialDelaySeconds: 3000
+  periodSeconds: 1000
+service:
+  name: Node
+  type: NodePort
+  servicePort: 3000
+services:
+  mongo:
+     url: mongo
+     name: comments
+     env: production

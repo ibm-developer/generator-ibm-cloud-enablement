@@ -1,0 +1,20 @@
+FROM ibmjava:8-sdk
+
+MAINTAINER IBM Java engineering at IBM Cloud
+
+RUN apt-get update && apt-get install -y {{#has buildType 'maven'}}maven{{/has}}{{#has buildType 'gradle'}}gradle{{/has}}
+{{#has buildType 'maven'}}
+{{#has frameworkType 'liberty'}}
+ENV PATH /project/target/liberty/wlp/bin/:$PATH
+{{/has}}
+{{/has}}
+{{#has buildType 'gradle'}}
+{{#has frameworkType 'liberty'}}
+ENV PATH /project/build/wlp/bin/:$PATH
+{{/has}}
+{{/has}}
+
+ARG bx_dev_userid=root
+RUN BX_DEV_USERID=$bx_dev_userid
+RUN if [ $bx_dev_userid != "root" ]; then useradd -ms /bin/bash $bx_dev_userid; fi
+

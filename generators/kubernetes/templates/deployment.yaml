@@ -1,0 +1,31 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: "{{tag '  .Chart.Name '}}-deployment"
+  labels:
+    chart: "{{tag ' .Chart.Name '}}-{{{tag ' .Chart.Version | replace "+" "_" '}}}"
+spec:
+  replicas:  {{tag ' .Values.replicaCount '}}
+  revisionHistoryLimit: {{tag ' .Values.revisionHistoryLimit '}}
+  template:
+    metadata:
+      labels:
+        app: "{{tag '  .Chart.Name '}}-selector"
+    spec:
+     containers:
+      - name: {{tag '  .Chart.Name  '}}
+        image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.image.tag '}}"
+        imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{tag ' .Values.service.servicePort '}}
+          initialDelaySeconds: {{tag ' .Values.livenessProbe.initialDelaySeconds'}}
+          periodSeconds: {{tag ' .Values.livenessProbe.periodSeconds'}}
+        env:
+          - name: PORT
+            value : "{{tag ' .Values.service.servicePort '}}"
+{{#each storageDeploys.env}}
+          - name: {{@key}}
+            value: {{{this}}}
+{{/each}}

@@ -1,0 +1,10 @@
+Dockerfile
+Dockerfile-tools
+{{#has frameworkType 'liberty'}}
+#Ignore Liberty server files
+target/liberty/wlp/usr/servers/defaultServer/logs
+target/liberty/wlp/usr/servers/defaultServer/workarea
+target/liberty/wlp/usr/servers/defaultServer/.classCache
+target/liberty/wlp/usr/servers/defaultServer/.pid
+{{/has}}
+

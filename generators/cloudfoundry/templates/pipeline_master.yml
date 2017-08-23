@@ -1,0 +1,39 @@
+stages:
+- name: Build Stage
+  inputs:
+  - type: git
+    branch: master
+    service: ${REPO}
+{{#if triggersType}}
+  triggers:
+    - type: {{triggersType}}
+{{/if}}
+  jobs:
+  - name: Build
+    type: builder
+{{#each buildJobProps}}
+    {{@key}} : {{{this}}}
+{{/each}}
+- name: Deploy Stage
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  triggers:
+  - type: stage
+  jobs:
+  - name: Deploy
+    type: deployer
+    target:
+      region_id: ${CF_REGION_ID}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
+    script: |-
+      #!/bin/bash
+{{#if pushCommand}}
+      {{{pushCommand}}}
+{{else}}
+      cf push "${CF_APP}"
+{{/if}}
+      # cf logs "${CF_APP}" --recent
