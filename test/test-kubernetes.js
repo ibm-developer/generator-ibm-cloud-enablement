@@ -65,6 +65,11 @@ function assertYmlContent(actual, expected, label) {
 }
 
 describe('cloud-enablement:kubernetes', () => {
+
+	before(function(){
+		this.timeout(5000);
+	});
+
 	let frameworks = ['liberty', 'spring'];
 	frameworks.forEach(framework => {
 		describe('kubernetes:app with Java-' + framework +' project',() => {

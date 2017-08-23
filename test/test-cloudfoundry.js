@@ -30,6 +30,11 @@ const scaffolderSampleJavaNoServices = scaffolderSample.getJsonNoServices('JAVA'
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
 
 describe('cloud-enablement:cloudfoundry', () => {
+
+	before(function(){
+		this.timeout(5000);
+	});
+
 	describe('cloud-enablement:cloudfoundry with Python', () => {
 		beforeEach(() => {
 			return helpers.run(path.join(__dirname, '../generators/app'))
