@@ -29,6 +29,11 @@ const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
 const applicationName = "AcmeProject"; // From all scaffolder samples
 
 describe('cloud-enablement:dockertools', () => {
+
+	before(function(){
+		this.timeout(5000);
+	});
+
 	describe('cloud-enablement:dockertools with Swift project', () => {
 		beforeEach(() => {
 			return helpers.run(path.join(__dirname, '../generators/app'))

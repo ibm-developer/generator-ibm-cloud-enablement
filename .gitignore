@@ -41,10 +41,10 @@ test/tmp
 .vscode
 
 # output from generator 
-Dockerfile
-Dockerfile-tools
-cli-config.yml
-manifest.yml
-.cfignore
-.bluemix
+# Dockerfile
+# Dockerfile-tools
+# cli-config.yml
+# manifest.yml
+# .cfignore
+# .bluemix
 helm
