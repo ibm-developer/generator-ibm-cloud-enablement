@@ -3,12 +3,11 @@
 [![Bluemix powered][img-bluemix-powered]][url-bluemix]
 [![Travis][img-travis-master]][url-travis-master]
 [![Coveralls][img-coveralls-master]][url-coveralls-master]
+[![Codacy][img-codacy]][url-codacy]
 [![Version][img-version]][url-npm]
 [![DownloadsMonthly][img-npm-downloads-monthly]][url-npm]
 [![DownloadsTotal][img-npm-downloads-total]][url-npm]
 [![License][img-license]][url-npm]
-
-> Work-in-progress
 
 [img-bluemix-powered]: https://img.shields.io/badge/bluemix-powered-blue.svg
 [url-bluemix]: http://bluemix.net
@@ -23,6 +22,9 @@
 
 [img-coveralls-master]: https://coveralls.io/repos/github/ibm-developer/generator-ibm-cloud-enablement/badge.svg
 [url-coveralls-master]: https://coveralls.io/github/ibm-developer/generator-ibm-cloud-enablement
+
+[img-codacy]: https://api.codacy.com/project/badge/Grade/a5893a4622094dc8920c8a372a8d3588?branch=master
+[url-codacy]: https://www.codacy.com/app/ibm-developer/generator-ibm-cloud-enablement
 
 ## Pre-requisites
 
