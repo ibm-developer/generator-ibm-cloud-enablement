@@ -202,8 +202,8 @@ describe('cloud-enablement:dockertools', () => {
 		});
 
 		it('creates all docker with javametrics options', () => {
-				assert.fileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
-				assert.fileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+			assert.fileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
+			assert.fileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
 		});
 	});
 
@@ -215,8 +215,8 @@ describe('cloud-enablement:dockertools', () => {
 		});
 
 		it('creates all docker without javametrics options', () => {
-				assert.noFileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
-				assert.noFileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+			assert.noFileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
+			assert.noFileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
 		});
 	});
 
