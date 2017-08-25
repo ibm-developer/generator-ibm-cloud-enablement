@@ -194,6 +194,32 @@ describe('cloud-enablement:dockertools', () => {
 		});
 	});
 
+	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with javametrics enabled', () => {
+		beforeEach(() => {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), javametrics: true, buildType: 'maven', frameworkType: 'liberty'})
+		});
+
+		it('creates all docker with javametrics options', () => {
+				assert.fileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
+				assert.fileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with javametrics disabled', () => {
+		beforeEach(() => {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), javametrics: false, buildType: 'maven', frameworkType: 'liberty'})
+		});
+
+		it('creates all docker without javametrics options', () => {
+				assert.noFileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
+				assert.noFileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+		});
+	});
+
 	describe('cloud-enablement:dockertools with Python project', () => {
 		beforeEach(() => {
 			return helpers.run(path.join(__dirname, '../generators/app'))
