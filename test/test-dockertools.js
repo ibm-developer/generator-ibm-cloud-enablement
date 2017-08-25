@@ -127,12 +127,13 @@ describe('cloud-enablement:dockertools', () => {
 	});
 
 	let buildTypes = ['maven', 'gradle'];
-	let frameworks = ['liberty', 'spring'];
+	let languages = ['JAVA', 'SPRING'];
 	buildTypes.forEach(buildType => {
-		frameworks.forEach(framework => {
-			describe('cloud-enablement:dockertools with Java project with buildType ' + buildType + ' and framework ' + framework, () => {
-				let bluemixJson = framework === 'spring' ? scaffolderSampleSpring : scaffolderSampleJava;
-				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, frameworkType: framework};
+		languages.forEach(language => {
+			describe('cloud-enablement:dockertools with Java project with buildType ' + buildType + ' and language ' + language, () => {
+				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
+				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, language: language};
+				
 				beforeEach(() => {
 					return helpers.run(path.join(__dirname, '../generators/app'))
 						.inDir(path.join(__dirname, './tmp'))
@@ -161,15 +162,53 @@ describe('cloud-enablement:dockertools', () => {
 		})
 	})
 
-	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with NO platforms', () => {
+	describe('cloud-enablement:dockertools with Java-Spring project with buildType maven with NO platforms', () => {
 		beforeEach(() => {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: [], buildType: 'maven', frameworkType: 'liberty'})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSpring), platforms: [], buildType: 'maven'})
 		});
 
 		it('creates a Dockerfile and .dockerignore', () => {
 			assert.file('Dockerfile');
+			assert.fileContent('Dockerfile', '/app.jar');
+			assert.file('.dockerignore');
+		});
+
+		it('does not create a Dockerfile-tools or cli-config.yml', () => {
+			assert.noFile('Dockerfile-tools');
+			assert.noFile('cli-config.yml');
+		});		
+	});
+
+	describe('cloud-enablement:dockertools with Java-Spring project with buildType maven with platforms including cli', () => {
+		beforeEach(() => {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSpring), platforms: ['cli'], buildType: 'maven'})
+		});
+
+		it('creates all docker and cli files', () => {
+			assert.file('Dockerfile');
+			assert.fileContent('Dockerfile', '/app.jar');
+			assert.file('.dockerignore');
+			assert.file('Dockerfile-tools');
+			assert.noFileContent('Dockerfile-tools', 'wlp/bin');
+			assert.file('cli-config.yml');
+		});
+	});
+
+
+	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with NO platforms', () => {
+		beforeEach(() => {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: [], buildType: 'maven'})
+		});
+
+		it('creates a Dockerfile and .dockerignore', () => {
+			assert.file('Dockerfile');
+			assert.fileContent('Dockerfile', 'installUtility');
 			assert.file('.dockerignore');
 		});
 
@@ -177,19 +216,22 @@ describe('cloud-enablement:dockertools', () => {
 			assert.noFile('Dockerfile-tools');
 			assert.noFile('cli-config.yml');
 		});
+		
 	});
 
 	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with platforms including cli', () => {
 		beforeEach(() => {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['cli'], buildType: 'maven', frameworkType: 'liberty'})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['cli'], buildType: 'maven'})
 		});
 
 		it('creates all docker and cli files', () => {
 			assert.file('Dockerfile');
+			assert.fileContent('Dockerfile', 'installUtility');
 			assert.file('.dockerignore');
 			assert.file('Dockerfile-tools');
+			assert.fileContent('Dockerfile-tools', 'wlp/bin');
 			assert.file('cli-config.yml');
 		});
 	});
@@ -279,6 +321,7 @@ describe('cloud-enablement:dockertools', () => {
 			]);
 		});
 	});
+
 	describe('cloud-enablement:dockertools with empty bluemix object', () => {
 		beforeEach(() => {
 			return helpers.run(path.join(__dirname, '../generators/dockertools'))

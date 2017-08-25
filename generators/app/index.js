@@ -56,6 +56,7 @@ module.exports = class extends Generator {
 				message: 'Language Runtime',
 				choices: [
 					'JAVA',
+					'SPRING',
 					'NODE',
 					'PYTHON',
 					'SWIFT'
@@ -66,17 +67,6 @@ module.exports = class extends Generator {
 				name: 'dockerRegistry',
 				message: 'Docker Registry (space for none)',
 				default: 'registry.ng.bluemix.net/' + os.userInfo().username
-			});
-			prompts.push({
-				when: function(answers) {return answers.language === 'JAVA'},
-				type: 'list',
-				name: 'frameworkType',
-				message: 'Java Framework',
-				choices: [
-					'liberty',
-					'spring'
-				],
-				default: 'liberty'
 			});
 			prompts.push({
 				when: function(answers) {return answers.language === 'JAVA'},
@@ -102,7 +92,6 @@ module.exports = class extends Generator {
 		this.opts.bluemix.name = answers.name || this.opts.bluemix.name;
 		answers.dockerRegistry = answers.dockerRegistry.trim();
 		this.opts.bluemix.dockerRegistry = answers.dockerRegistry.length > 0 ? answers.dockerRegistry : '';
-		this.opts.frameworkType = answers.frameworkType || this.opts.frameworkType;
 		this.opts.buildType = answers.buildType || this.opts.buildType;
 	}
 
