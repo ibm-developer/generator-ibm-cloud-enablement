@@ -153,11 +153,11 @@ module.exports = class extends Generator {
 				}
 			}
 			if(this.opts.language === 'java') {
-			    this.fileLocations.istiofile = {
-				source : 'java/istio.yaml',
-				target : 'istio.yaml',
-				process : true
-			    }
+				this.fileLocations.istiofile = {
+					source : 'java/istio.yaml',
+					target : 'istio.yaml',
+					process : true
+				}
 			}
 		}
 
