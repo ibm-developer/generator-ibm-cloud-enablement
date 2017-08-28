@@ -3,6 +3,10 @@ FROM websphere-liberty:webProfile7
 MAINTAINER IBM Java engineering at IBM Cloud
 {{#has buildType 'maven'}}
 COPY /target/liberty/wlp/usr/servers/defaultServer /config/
+{{#javametrics}}
+COPY /target/liberty/wlp/usr/shared/resources /config/resources/
+COPY /src/main/liberty/config/jvmbx.options /config/jvm.options
+{{/javametrics}}
 {{/has}}
 {{#has buildType 'gradle'}}
 COPY /build/wlp/usr/servers/defaultServer /config/
