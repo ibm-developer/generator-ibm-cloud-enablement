@@ -43,7 +43,7 @@ npm install -g generator-ibm-cloud-enablement
 ## Usage
 
 Following command line arguments are supported
-* `--bluemix {stringified-json}` -  used by Scaffolder to supply project information from `pman`. This will be referred as `projectConfig` in this document. You can also supply a local file containing compatible JSON object by using `--bluemix file:path/to/file.json` or pass the JSON in the CLI like `--bluemix "{\"backendPlatform\":\"NODE\"}"`. You will need 
+* `--bluemix {stringified-json}` -  used by Scaffolder to supply project information from `pman`. This will be referred as `projectConfig` in this document. You can also supply a local file containing compatible JSON object by using `--bluemix file:path/to/file.json` or pass the JSON in the CLI like `--bluemix "{\"backendPlatform\":\"NODE\"}"`. You will need at least a backendPlatform to run it locally.
 * `--storages {stringified-array}` - used to add storage deployment to helm charts
 * `--isDeployableContainer` -  if true add `container` to `deploy-target` in `cli-config.yaml`
 
@@ -62,4 +62,14 @@ In a separate directory invoke the generator via
 ```bash
 yo ibm-cloud-enablement 
 ```
+
+## Publishing Changes
+
+In order to publish changes, you will need to fork the repository or ask to join the `ibm-developer` org and branch off the development branch.
+
+Once you are finished with your changes, run `npm test` to make sure all tests pass.
+
+Do a pull request against `development`, make sure the build passes. A team member will review and merge your pull request. 
+Once merged to development, the version will be auto-incremented.
+Do a pull request against master, once that PR is reviewed and merged, a new version will be published.
 
