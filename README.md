@@ -43,7 +43,7 @@ npm install -g generator-ibm-cloud-enablement
 ## Usage
 
 Following command line arguments are supported
-* `--bluemix {stringified-json}` -  used by Scaffolder to supply project information from `pman`. This will be referred as `projectConfig` in this document. You can also supply a local file containing compatible JSON object by using `--bluemix file:path/to/file.json` or pass the JSON in the CLI like `--bluemix "{\"backendPlatform\":\"NODE\"}"`.
+* `--bluemix {stringified-json}` -  used by Scaffolder to supply project information from `pman`. This will be referred as `projectConfig` in this document. You can also supply a local file containing compatible JSON object by using `--bluemix file:path/to/file.json` or pass the JSON in the CLI like `--bluemix "{\"backendPlatform\":\"NODE\"}"`. You will need 
 * `--storages {stringified-array}` - used to add storage deployment to helm charts
 * `--isDeployableContainer` -  if true add `container` to `deploy-target` in `cli-config.yaml`
 
