@@ -14,7 +14,7 @@ stages:
 {{#each buildJobProps}}
     {{@key}} : {{{this}}}
 {{/each}}
-  - name: Post_Builder
+  - name: Post Build
     type: builder
     artifact_dir: ''
     build_type: shell
