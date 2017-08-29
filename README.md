@@ -47,7 +47,7 @@ Following command line arguments are supported
 * `--storages {stringified-array}` - used to add storage deployment to helm charts
 * `--isDeployableContainer` -  if true add `container` to `deploy-target` in `cli-config.yaml`
 
-## Development
+## Development Environment
 
 Clone this repository and link it via npm
 
