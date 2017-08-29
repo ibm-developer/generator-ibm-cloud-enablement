@@ -18,7 +18,13 @@ stages:
     type: post_builder
     script: |-
       #!/bin/bash
-      chmod +x ../post_build.sh; if  [[ -x ../post_build.sh ]]; then echo "executing the post_build script"; sh ../post_build.sh; else echo "the post_build script is not executable";fi
+      if  [[ -f ../post_build.sh ]]; then
+        chmod +x ../post_build.sh;
+        echo "executing the post_build script";
+        sh ../post_build.sh;
+      else
+        echo "the post_build script does not exist";
+      fi
 - name: Deploy Stage
   inputs:
   - type: job
