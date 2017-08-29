@@ -22,10 +22,11 @@ build-cmd-debug : "gradle -g . build"
 container-path-run : "/project"
 container-path-tools : "/project"
 
-#Liberty server settings
-container-port-map : "9080:9080,9443:9443"
-container-port-map-debug : "7777:7777"
-debug-cmd : "server debug"
+#Tomcat/Spring settings
+container-port-map : "8080:8080,8443:8443"
+container-port-map-debug : "8000:8000"
+run-cmd : "java -Dspring.profiles.active=local -jar {{appName}}-{{version}}.jar"
+debug-cmd : "java -Dspring.profiles.active=local -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar {{#has buildType 'maven'}}./target/{{/has}}{{#has buildType 'gradle'}}./build/libs/{{/has}}{{appName}}-{{version}}.jar"
 
 dockerfile-run : "Dockerfile"
 dockerfile-tools : "Dockerfile-tools"
