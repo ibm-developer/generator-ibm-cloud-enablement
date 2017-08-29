@@ -9,7 +9,9 @@ spec:
   ports:
   - name: http
     port: {{ .Values.service.servicePort }}
+{{#if servicePorts.https}}
   - name: https
     port: {{ .Values.service.servicePortHttps }}
+{{/if}}
   selector:
     app: "{{  .Chart.Name }}-selector"

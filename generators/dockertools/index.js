@@ -198,28 +198,52 @@ module.exports = class extends Generator {
 		if(!this.opts.appName) {
 			this.opts.appName = this._sanitizeAppName(this.bluemix.name);
 		}
-		let files = undefined;
-		//skip writing Dockerfile-tools and cli-config.yml if the platforms option has been specified without cli
-		if(!this.opts.platforms || this.opts.platforms.includes('cli')) {
-			files = [FILENAME_CLI_CONFIG, FILENAME_DOCKERFILE, FILENAME_DOCKERFILE_TOOLS, FILENAME_DOCKER_IGNORE];
-		} else {
-			files = [FILENAME_DOCKERFILE, FILENAME_DOCKER_IGNORE];
-		}
-		files.forEach(file => {
-			if (this.fs.exists(this.destinationPath(file))){
-				console.info(file, "already exists, skipping.");
-			} else {
-				let templateFile = '';
-				if(file === FILENAME_DOCKER_IGNORE) {
-					templateFile = 'java/dockerignore.template';
-				} else {
-					templateFile = 'java/' + file + '.template';
-				}
-				this._writeHandlebarsFile(templateFile, file, this.opts);
-			}
-		})
-	}
+		let dir = this.bluemix.backendPlatform.toLowerCase();
 
+		if(!this.opts.platforms || this.opts.platforms.includes('cli')) {
+			/* Common cli-config template */
+			if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
+				console.info(FILENAME_CLI_CONFIG, "already exists, skipping.");
+			} else {
+				this._writeHandlebarsFile(
+					dir + '/cli-config.yml.template', 
+					FILENAME_CLI_CONFIG, 
+					this.opts
+				);
+			}
+
+			if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))){
+				console.info(FILENAME_DOCKERFILE_TOOLS, "already exists, skipping.");
+			} else {
+				this._writeHandlebarsFile(
+					dir + '/Dockerfile-tools.template',
+					FILENAME_DOCKERFILE_TOOLS, 
+					this.opts
+				);
+			}
+		}
+
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
+			console.info(FILENAME_DOCKERFILE, "already exists, skipping.");
+		} else {
+			this._writeHandlebarsFile(
+				dir + '/Dockerfile.template',
+				FILENAME_DOCKERFILE, 
+				this.opts
+			);
+		}
+
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))){
+			console.info(FILENAME_DOCKER_IGNORE, "already exists, skipping.");
+		} else {
+			this._writeHandlebarsFile(
+				dir + '/dockerignore.template',
+				FILENAME_DOCKER_IGNORE, 
+				this.opts
+			);
+		}
+	}
+	
 	_writeHandlebarsFile(templateFile, destinationFile, data) {
 		let template = this.fs.read(this.templatePath(templateFile));
 		let compiledTemplate = Handlebars.compile(template);
