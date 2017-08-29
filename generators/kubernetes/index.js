@@ -71,6 +71,7 @@ module.exports = class extends Generator {
 			chart: {source : 'Chart.yaml', target : 'chartDir/Chart.yaml', process: true},
 			deployment: {source : 'deployment.yaml', target : 'chartDir/templates/deployment.yaml', process: true},
 			service: {source : 'service.yaml', target : 'chartDir/templates/service.yaml', process: false},
+			hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
 			values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true}
 		}
 	}
@@ -176,8 +177,8 @@ module.exports = class extends Generator {
 			this.opts.storages.forEach(storage => {
 				if(_.includes(supportingStorageTypes, storage)){
 					this.fs.copy(
-					this.templatePath(STORAGE_DIR + storage + DEPLOYMENT_SUFFIX),
-					this.destinationPath(chartDir + '/templates/' + storage + DEPLOYMENT_SUFFIX));
+						this.templatePath(STORAGE_DIR + storage + DEPLOYMENT_SUFFIX),
+						this.destinationPath(chartDir + '/templates/' + storage + DEPLOYMENT_SUFFIX));
 				} else {
 					console.error(storage + ' is not supported');
 				}
