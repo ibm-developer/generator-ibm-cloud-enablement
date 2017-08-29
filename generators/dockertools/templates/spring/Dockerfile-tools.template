@@ -4,13 +4,6 @@ MAINTAINER IBM Java engineering at IBM Cloud
 
 RUN apt-get update && apt-get install -y {{#has buildType 'maven'}}maven{{/has}}{{#has buildType 'gradle'}}gradle{{/has}}
 
-{{#has buildType 'maven'}}
-ENV PATH /project/target/liberty/wlp/bin/:$PATH
-{{/has}}
-{{#has buildType 'gradle'}}
-ENV PATH /project/build/wlp/bin/:$PATH
-{{/has}}
-
 ARG bx_dev_userid=root
 RUN BX_DEV_USERID=$bx_dev_userid
 RUN if [ $bx_dev_userid != "root" ]; then useradd -ms /bin/bash $bx_dev_userid; fi
