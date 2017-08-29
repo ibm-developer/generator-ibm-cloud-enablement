@@ -126,11 +126,12 @@ describe('cloud-enablement:dockertools', () => {
 		});
 	});
 
-	let buildTypes = ['maven', 'gradle'];
-	let languages = ['JAVA', 'SPRING'];
-	buildTypes.forEach(buildType => {
-		languages.forEach(language => {
-			describe('cloud-enablement:dockertools with Java project with buildType ' + buildType + ' and language ' + language, () => {
+	/* Common Java Project characteristics: Spring or Liberty, maven or gradle */
+	let javaBuildTypes = ['maven', 'gradle'];
+	let javaFrameworks = ['JAVA', 'SPRING'];
+	javaBuildTypes.forEach(buildType => {
+		javaFrameworks.forEach(language => {
+			describe('cloud-enablement:dockertools for ['+ language +'] project using [' + buildType + ']', () => {
 				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
 				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType};
 				
@@ -155,96 +156,131 @@ describe('cloud-enablement:dockertools', () => {
 				it('create cli-config chart path includes application name', () => {
 					assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 				});
+				
+				if ( language === "SPRING" ) {
+					it('Dockerfile contains app.jar', () => {
+						assert.fileContent('Dockerfile', '/app.jar');
+					});
+					it('.dockerignore does not contain wlp', () => {
+						assert.noFileContent('.dockerignore', 'wlp');
+					});
+					it('Dockerfile-tools does not contain wlp', () => {
+						assert.noFileContent('Dockerfile-tools', 'wlp/bin');
+					});
+				} else  /* language === 'JAVA' */ {
+					it('.dockerignore ignores workarea and logs', () => {
+						assert.fileContent('.dockerignore', 'workarea');
+						assert.fileContent('.dockerignore', 'logs');
+					});
+					it('Dockerfile contains installUtility', () => {
+						assert.fileContent('Dockerfile', 'installUtility');
+					});
+					it('Dockerfile-tools contains wlp path', () => {
+						assert.fileContent('Dockerfile-tools', 'wlp/bin');
+					});
+				}
+				
+				if ( buildType === "gradle" ) {
+					it('Dockerfile references build directory', () => {
+						assert.fileContent('Dockerfile', 'build');
+						assert.noFileContent('Dockerfile', 'target');
+					});
+					it('Dockerfile-tools references gradle', () => {
+						assert.fileContent('Dockerfile-tools', 'gradle');
+						assert.noFileContent('Dockerfile-tools', 'maven');
+					});
+					it('CLI config references gradle', () => {
+						assert.fileContent('cli-config.yml', 'gradle');
+						assert.noFileContent('cli-config.yml', 'maven');
+					});
+				} else /* buildType === 'maven' */ {
+					it('Dockerfile references target directory', () => {
+						assert.fileContent('Dockerfile', 'target');
+						assert.noFileContent('Dockerfile', 'build');
+					});
+					it('Dockerfile-tools references maven', () => {
+						assert.fileContent('Dockerfile-tools', 'maven');
+						assert.noFileContent('Dockerfile-tools', 'gradle');
+					});
+					it('CLI config references maven', () => {
+						assert.fileContent('cli-config.yml', 'maven');
+						assert.noFileContent('cli-config.yml', 'gradle');
+					});
+				}
 			});
-		})
-	})
+			
+			/* Verify CLI platform included */
+			describe('cloud-enablement:dockertools for ['+language+'] project using [' + buildType + '] (cli included)', () => {
+				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
+				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, platforms: ['cli']};
+				beforeEach(() => {
+					return helpers.run(path.join(__dirname, '../generators/app'))
+						.inDir(path.join(__dirname, './tmp'))
+						.withOptions(options)
+				});
 
-	/* Full Content test for Java (Spring) project */
-	describe('cloud-enablement:dockertools with Java-Spring project with buildType maven with platforms including cli', () => {
-		beforeEach(() => {
-			return helpers.run(path.join(__dirname, '../generators/app'))
-				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleSpring), platforms: ['cli'], buildType: 'maven'})
-		});
+				it('creates a Dockerfile and .dockerignore', () => {
+					assert.file(['Dockerfile', '.dockerignore', 'Dockerfile-tools', 'cli-config.yml']);
+				});
+			});
+			
+			/* Verify CLI platform excluded */
+			describe('cloud-enablement:dockertools for ['+language+'] project using [' + buildType + '] (cli excluded)', () => {
+				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
+				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, platforms: []};
+				beforeEach(() => {
+					return helpers.run(path.join(__dirname, '../generators/app'))
+						.inDir(path.join(__dirname, './tmp'))
+						.withOptions(options)
+				});
 
-		it('creates all docker and cli files', () => {
-			assert.file(['Dockerfile', '.dockerignore', 'Dockerfile-tools', 'cli-config.yml']);
-		});
-		it('Dockerfile contains app.jar', () => {
-			assert.fileContent('Dockerfile', '/app.jar');
-		});
-		it('.dockerignore does not contain wlp', () => {
-			assert.noFileContent('.dockerignore', 'wlp');
-		});
-		it('Dockerfile-tools does not contain wlp', () => {
-			assert.noFileContent('Dockerfile-tools', 'wlp/bin');
-		});
-	});
+				it('creates a Dockerfile and .dockerignore', () => {
+					assert.file(['Dockerfile', '.dockerignore']);
+				});
+				it('does not create a Dockerfile-tools or cli-config.yml', () => {
+					assert.noFile(['Dockerfile-tools', 'cli-config.yml']);
+				});
+			});
+			
+			/* Java Metrics enabled */
+			describe('cloud-enablement:dockertools for ['+ language +'] project using [' + buildType + '] with javametrics enabled', () => {
+				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
+				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, javametrics: true};
+				beforeEach(() => {
+					return helpers.run(path.join(__dirname, '../generators/app'))
+						.inDir(path.join(__dirname, './tmp'))
+						.withOptions(options)
+				});
 
-	/* Full Content test for Java (Liberty) project */
-	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with platforms including cli', () => {
-		beforeEach(() => {
-			return helpers.run(path.join(__dirname, '../generators/app'))
-				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['cli'], buildType: 'maven'})
-		});
+				/* TODO: spring and gradle builds do not support javametrics yet */
+				if ( language === "SPRING" || buildType === 'gradle' ) {
+					it('creates does not create coremetrics COPY lines with gradle', () => {
+						assert.noFileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
+						assert.noFileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+					});
+				} else {
+					it('creates COPY lines for javametrics options with maven', () => {
+						assert.fileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
+						assert.fileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+					});
+				}
+			});
 
-		it('creates all docker and cli files', () => {
-			assert.file(['Dockerfile', '.dockerignore', 'Dockerfile-tools', 'cli-config.yml']);
-		});
-		it('.dockerignore ignores workarea and logs', () => {
-			assert.fileContent('.dockerignore', 'workarea');
-			assert.fileContent('.dockerignore', 'logs');
-		});
-		it('Dockerfile contains installUtility', () => {
-			assert.fileContent('Dockerfile', 'installUtility');
-		});
-		it('Dockerfile-tools contains wlp path', () => {
-			assert.fileContent('Dockerfile-tools', 'wlp/bin');
-		});
-	});
+			/* Java Metrics disabled */
+			describe('cloud-enablement:dockertools for ['+ language +'] project using [' + buildType + '] with javametrics disabled', () => {
+				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
+				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, javametrics: false};
+				beforeEach(() => {
+					return helpers.run(path.join(__dirname, '../generators/app'))
+						.inDir(path.join(__dirname, './tmp'))
+						.withOptions(options)
+				});
 
-	/* Verify CLI tag behavior */
-	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with NO platforms', () => {
-		beforeEach(() => {
-			return helpers.run(path.join(__dirname, '../generators/app'))
-				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: [], buildType: 'maven'})
-		});
-
-		it('creates a Dockerfile and .dockerignore', () => {
-			assert.file(['Dockerfile', '.dockerignore']);
-		});
-
-		it('does not create a Dockerfile-tools or cli-config.yml', () => {
-			assert.noFile(['Dockerfile-tools', 'cli-config.yml']);
-		});
-	});
-
-
-	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with javametrics enabled', () => {
-		beforeEach(() => {
-			return helpers.run(path.join(__dirname, '../generators/app'))
-				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), javametrics: true, buildType: 'maven', frameworkType: 'liberty'})
-		});
-
-		it('creates all docker with javametrics options', () => {
-			assert.fileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
-			assert.fileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
-		});
-	});
-
-	describe('cloud-enablement:dockertools with Java-liberty project with buildType maven with javametrics disabled', () => {
-		beforeEach(() => {
-			return helpers.run(path.join(__dirname, '../generators/app'))
-				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), javametrics: false, buildType: 'maven', frameworkType: 'liberty'})
-		});
-
-		it('creates all docker without javametrics options', () => {
-			assert.noFileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
-			assert.noFileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+				it('creates all docker without javametrics options', () => {
+					assert.noFileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
+					assert.noFileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+				});
+			});
 		});
 	});
 
