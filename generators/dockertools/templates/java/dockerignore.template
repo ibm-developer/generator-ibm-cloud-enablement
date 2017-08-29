@@ -1,10 +1,14 @@
-Dockerfile
-Dockerfile-tools
-{{#has frameworkType 'liberty'}}
 #Ignore Liberty server files
+{{#has buildType 'maven'}}
 target/liberty/wlp/usr/servers/defaultServer/logs
 target/liberty/wlp/usr/servers/defaultServer/workarea
 target/liberty/wlp/usr/servers/defaultServer/.classCache
 target/liberty/wlp/usr/servers/defaultServer/.pid
+{{/has}}
+{{#has buildType 'gradle'}}
+build/liberty/wlp/usr/servers/defaultServer/logs
+build/liberty/wlp/usr/servers/defaultServer/workarea
+build/liberty/wlp/usr/servers/defaultServer/.classCache
+build/liberty/wlp/usr/servers/defaultServer/.pid
 {{/has}}
 
