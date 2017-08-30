@@ -139,6 +139,7 @@ module.exports = class extends Generator {
 		if(this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';
 			this.fileLocations.service.source = 'java/service.yaml';
+			this.fileLocations.service.process = true;
 			this.fileLocations.values.source = 'java/values.yaml';
 			this.fileLocations.kubedeploy = {
 				source : 'java/manifests/kube.deploy.yml',
