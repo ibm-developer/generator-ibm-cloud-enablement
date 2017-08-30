@@ -89,46 +89,41 @@ describe('cloud-enablement:cloudfoundry', () => {
 		});
 	});
 	
-	let languages = ['JAVA', 'SPRING'];
-	let buildTypes = ['maven', 'gradle'];
+	let javaFrameworks = ['JAVA', 'SPRING'];
+	let javaBuildTypes = ['maven', 'gradle'];
 	let createTypes = ['basic/', 'microservice'];
 	
 	let assertYmlContent = function(actual, expected, label) {
 		assert.strictEqual(actual, expected, 'Expected ' + label + ' to be ' + expected + ', found ' + actual);
 	}
-	languages.forEach(language => {
-		buildTypes.forEach(buildType => {
+	javaFrameworks.forEach(language => {
+		javaBuildTypes.forEach(buildType => {
 			createTypes.forEach(createType => {
+
 				describe('cloud-enablement:cloudfoundry with ' + language + ' with buildType ' + buildType + ' and createType ' + createType, () => {
+					let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
+					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType};
 					beforeEach(() => {
-						let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
 						return helpers.run(path.join(__dirname, '../generators/app'))
 							.inDir(path.join(__dirname, './tmp'))
-							.withOptions({bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType});
+							.withOptions(options)
 					});
 
 					it('manifest.yml is generated with correct content', () => {
 						assert.file('manifest.yml');
 						let manifestyml = yml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
-						if(language === 'JAVA' && buildType === 'maven') {
-							assertYmlContent(manifestyml.applications[0].path, './target/my-application.zip', 'manifestyml.applications[0].path');
+
+						if ( language === 'JAVA ' ) {
+							let targetDir = buildType === 'maven' ? 'target' : 'build'
+							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application.zip', 'manifestyml.applications[0].path');
 							assertYmlContent(manifestyml.applications[0].memory, '512M', 'manifestyml.applications[0].memory')
 							assertYmlContent(manifestyml.applications[0].buildpack, 'liberty-for-java', 'manifestyml.applications[0].buildpack')
 							assertYmlContent(manifestyml.applications[0].env.services_autoconfig_excludes, 'cloudantNoSQLDB=config Object-Storage=config', 'manifestyml.applications[0].env.services_autoconfig_excludes');
-						}
-						if(language === 'JAVA' && buildType === 'gradle') {
-							assertYmlContent(manifestyml.applications[0].path, './build/my-application.zip', 'manifestyml.applications[0].path');
-							assertYmlContent(manifestyml.applications[0].memory, '512M', 'manifestyml.applications[0].memory')
-							assertYmlContent(manifestyml.applications[0].buildpack, 'liberty-for-java', 'manifestyml.applications[0].buildpack')
-							assertYmlContent(manifestyml.applications[0].env.services_autoconfig_excludes, 'cloudantNoSQLDB=config Object-Storage=config', 'manifestyml.applications[0].env.services_autoconfig_excludes');
-						}
-						if(language === 'SPRING' && buildType === 'maven') {
-							assertYmlContent(manifestyml.applications[0].path, './target/my-application.jar', 'manifestyml.applications[0].path');
-							assertYmlContent(manifestyml.applications[0].memory, '256M', 'manifestyml.applications[0].memory')
-							assertYmlContent(manifestyml.applications[0].buildpack, 'java_buildpack', 'manifestyml.applications[0].buildpack')
-						}
-						if(language === 'SPRING' && buildType === 'gradle') {
-							assertYmlContent(manifestyml.applications[0].path, './build/libs/my-application.jar', 'manifestyml.applications[0].path');
+						} 
+						
+						if ( language === 'SPRING' ) {
+							let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
+							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application.jar', 'manifestyml.applications[0].path');
 							assertYmlContent(manifestyml.applications[0].memory, '256M', 'manifestyml.applications[0].memory')
 							assertYmlContent(manifestyml.applications[0].buildpack, 'java_buildpack', 'manifestyml.applications[0].buildpack')
 						}
@@ -142,8 +137,7 @@ describe('cloud-enablement:cloudfoundry', () => {
 						assert.file('.cfignore');
 						if(language === 'JAVA') {
 							assert.fileContent('.cfignore', '/src/main/liberty/config/server.env');
-						}
-						if(language === 'SPRING') {
+						} else /* language === 'SPRING' */ {
 							assert.fileContent('.cfignore', '/src/main/resources/application-local.properties');
 						}
 					});
@@ -176,20 +170,14 @@ describe('cloud-enablement:cloudfoundry', () => {
 								assertYmlContent(postBuildScript, stage.jobs[1].script);
 							}
 							if(stage.name === 'Deploy Stage') {
-								if(language === 'JAVA'&& buildType === 'maven') {
-									let deployCommand = 'cf push "${CF_APP}" -p target/my-application.zip';
+								if ( language === 'JAVA ' ) {
+									let targetDir = buildType === 'maven' ? 'target' : 'build'
+									let deployCommand = 'cf push "${CF_APP}" -p '+targetDir+'/my-application.zip';
 									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
 								}
-								if(language === 'JAVA'&& buildType === 'gradle') {
-									let deployCommand = 'cf push "${CF_APP}" -p build/my-application.zip'
-									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
-								}
-								if(language === 'SPRING'&& buildType === 'maven') {
-									let deployCommand = 'cf push "${CF_APP}" -p target/my-application.jar'
-									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
-								}
-								if(language === 'SPRING'&& buildType === 'gradle') {
-									let deployCommand = 'cf push "${CF_APP}" -p build/libs/my-application.jar'
+								if ( language === 'SPRING' ) {
+									let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
+									let deployCommand = 'cf push "${CF_APP}" -p '+targetDir+'/my-application.jar'
 									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
 								}
 							}
