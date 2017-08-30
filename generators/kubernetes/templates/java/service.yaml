@@ -1,17 +1,17 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: "{{  .Chart.Name }}-service"
+  name: "{{tag '  .Chart.Name '}}-service"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    chart: "{{tag ' .Chart.Name '}}-{{{tag ' .Chart.Version | replace "+" "_" '}}}"
 spec:
-  type: {{ .Values.service.type }}
+  type: {{tag ' .Values.service.type '}}
   ports:
   - name: http
-    port: {{ .Values.service.servicePort }}
+    port: {{tag ' .Values.service.servicePort '}}
 {{#if servicePorts.https}}
   - name: https
-    port: {{ .Values.service.servicePortHttps }}
+    port: {{tag ' .Values.service.servicePortHttps '}}
 {{/if}}
   selector:
-    app: "{{  .Chart.Name }}-selector"
+    app: "{{tag '  .Chart.Name '}}-selector"
