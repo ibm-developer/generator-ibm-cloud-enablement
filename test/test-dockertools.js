@@ -219,7 +219,7 @@ describe('cloud-enablement:dockertools', () => {
 						.withOptions(options)
 				});
 
-				it('creates a Dockerfile and .dockerignore', () => {
+				it('creates a creates a Dockerfile, .dockerignore, Dockerfile-tools and cli-config.yml', () => {
 					assert.file(['Dockerfile', '.dockerignore', 'Dockerfile-tools', 'cli-config.yml']);
 				});
 			});
@@ -254,7 +254,7 @@ describe('cloud-enablement:dockertools', () => {
 
 				/* TODO: spring and gradle builds do not support javametrics yet */
 				if ( language === "SPRING" || buildType === 'gradle' ) {
-					it('creates does not create coremetrics COPY lines with gradle', () => {
+					it('does not create javametrics COPY lines with gradle or SPRING', () => {
 						assert.noFileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
 						assert.noFileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
 					});
