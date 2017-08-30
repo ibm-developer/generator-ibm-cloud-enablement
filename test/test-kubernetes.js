@@ -68,6 +68,10 @@ function assertYmlContent(actual, expected, label) {
 	assert.strictEqual(actual, expected, 'Expected ' + label + ' to be ' + expected + ', found ' + actual);
 }
 
+function assertYmlContentExists(actual, label) {
+	assert.notStrictEqual(actual, undefined, 'Expected ' + label + ' to be defined it was not');
+}
+
 describe('cloud-enablement:kubernetes', () => {
 
 	before(function(){
@@ -98,6 +102,14 @@ describe('cloud-enablement:kubernetes', () => {
 					assertYmlContent(readinessProbe.httpGet.path, '/health', 'readinessProbe.httpGet.path');
 					assertYmlContent(readinessProbe.httpGet.port, 8080, 'readinessProbe.httpGet.port');
 				}
+			});
+			it('has deployment.yaml with correct hpa settings', () => {
+				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
+				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
+				let deploymentyml = yml.safeLoad(newdeploymentyml);
+				let resources = deploymentyml.spec.template.spec.containers[0].resources;
+				assertYmlContentExists(resources.requests.cpu, 'resources.requests.cpu');
+				assertYmlContentExists(resources.requests.memory, 'resources.requests.memory');
 			});
 			it('has values.yaml with correct content', () => {
 				let valuesyml = yml.safeLoad(fs.readFileSync(chartLocation + '/values.yaml', 'utf8'));
