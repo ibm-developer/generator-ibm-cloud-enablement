@@ -152,6 +152,11 @@ module.exports = class extends Generator {
 					target : 'Jenkinsfile',
 					process : true
 				}
+				this.fileLocations.istiofile = {
+					source : 'java/istio.yaml',
+					target : 'istio.yaml',
+					process : true
+				}
 			}
 		}
 
