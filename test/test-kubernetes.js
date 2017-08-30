@@ -160,6 +160,9 @@ describe('cloud-enablement:kubernetes', () => {
 				it('does not have a Jenkinsfile', () => {
 					assert.noFile('Jenkinsfile');
 				});
+				it('does not have a istio.yaml', () => {
+					assert.noFile('istio.yaml');
+				});
 			}
 		});
 	});
@@ -214,6 +217,7 @@ describe('cloud-enablement:kubernetes', () => {
 			assert.noFile(chartLocation + '/values.yaml');
 			assert.noFile(chartLocation + '/Chart.yaml');
 			assert.noFile('Jenkinsfile');
+			assert.noFile('istio.yaml');
 			assert.noFile('manifests/kube.deploy.yml');
 			
 		});
@@ -234,6 +238,7 @@ describe('cloud-enablement:kubernetes', () => {
 			assert.file(chartLocation + '/values.yaml');
 			assert.file(chartLocation + '/Chart.yaml');
 			assert.file('Jenkinsfile');
+			assert.file('istio.yaml');
 			assert.file('manifests/kube.deploy.yml');
 			
 		});
