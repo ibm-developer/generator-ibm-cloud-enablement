@@ -95,6 +95,19 @@ describe('cloud-enablement:kubernetes', () => {
 					assertYmlContent(readinessProbe.httpGet.port, 8080, 'readinessProbe.httpGet.port');
 				}
 			});
+			it('has service.yaml with correct content', () => {
+				let rawserviceyml = fs.readFileSync(chartLocation + '/templates/service.yaml', 'utf8');
+				let newserviceyml = rawserviceyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
+				let serviceyml = yml.safeLoad(newserviceyml);
+				if(language === 'JAVA') {
+					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
+					assertYmlContent(serviceyml.spec.ports[1].name, 'https', 'serviceyml.spec.ports[1].name');
+				}
+				if(language === 'SPRING') {
+					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
+					assertYmlContent(serviceyml.spec.ports[1], undefined, 'serviceyml.spec.ports[1]');
+				}
+			});
 			it('has values.yaml with correct content', () => {
 				let valuesyml = yml.safeLoad(fs.readFileSync(chartLocation + '/values.yaml', 'utf8'));
 				if(language === 'JAVA') {
