@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app: "{{tag '  .Chart.Name '}}-selector"
+        version: "{{tag ' .Values.image.tag '}}"
     spec:
      containers:
       - name: {{tag '  .Chart.Name  '}}
@@ -28,6 +29,10 @@ spec:
             port: 8080
           {{/has}}
           initialDelaySeconds: 20
+        resources:
+          requests:
+            cpu: "{{tag ' .Values.image.resources.requests.cpu '}}"
+            memory: "{{tag ' .Values.image.resources.requests.memory '}}"
         env:
           - name: PORT
             value: "{{tag ' .Values.service.servicePort '}}"
