@@ -28,6 +28,10 @@ spec:
             port: 8080
           {{/has}}
           initialDelaySeconds: 20
+        resources:
+          requests:
+            cpu: "{{tag ' .Values.image.resources.requests.cpu '}}"
+            memory: "{{tag ' .Values.image.resources.requests.memory '}}"
         env:
           - name: PORT
             value: "{{tag ' .Values.service.servicePort '}}"

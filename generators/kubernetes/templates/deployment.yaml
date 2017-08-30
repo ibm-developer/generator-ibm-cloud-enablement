@@ -22,6 +22,10 @@ spec:
             port: {{tag ' .Values.service.servicePort '}}
           initialDelaySeconds: {{tag ' .Values.livenessProbe.initialDelaySeconds'}}
           periodSeconds: {{tag ' .Values.livenessProbe.periodSeconds'}}
+        resources:
+          requests:
+            cpu: "{{tag ' .Values.image.resources.requests.cpu '}}"
+            memory: "{{tag ' .Values.image.resources.requests.memory '}}"
         env:
           - name: PORT
             value : "{{tag ' .Values.service.servicePort '}}"
