@@ -39,23 +39,23 @@ const chartLocation = 'chart/' + applicationName.toLowerCase();
 
 function testOutput() {
 
-	it('has kubernetes config for Chart.yaml', () => {
+	it('has kubernetes config for Chart.yaml', function () {
 		let chartFile = chartLocation + '/Chart.yaml';
 		assert.file(chartFile);
 		let chartyml = yml.safeLoad(fs.readFileSync(chartFile, 'utf8'));
 		assertYmlContent(chartyml.name, applicationName.toLowerCase(), 'chartyml.name');
 	});
 
-	it('has kubernetes config for values.yaml', () => {
+	it('has kubernetes config for values.yaml', function () {
 		let valuesFile = chartLocation + '/values.yaml';
 		assert.file(valuesFile);
 	});
 
-	it('has kubernetes config for deployment', () => {
+	it('has kubernetes config for deployment', function () {
 		assert.file(chartLocation + '/templates/deployment.yaml');
 	});
 
-	it('has kubernetes config for service', () => {
+	it('has kubernetes config for service', function () {
 		assert.file(chartLocation + '/templates/service.yaml');
 	});
 }
@@ -64,24 +64,21 @@ function assertYmlContent(actual, expected, label) {
 	assert.strictEqual(actual, expected, 'Expected ' + label + ' to be ' + expected + ', found ' + actual);
 }
 
-describe('cloud-enablement:kubernetes', () => {
-
-	before(function(){
-		this.timeout(5000);
-	});
+describe('cloud-enablement:kubernetes', function () {
+	this.timeout(5000);
 
 	let languages = ['JAVA', 'SPRING'];
 	languages.forEach(language => {
-		describe('kubernetes:app with Java-' + language +' project',() => {
+		describe('kubernetes:app with Java-' + language +' project',function () {
 			let bluemix = language === 'SPRING' ? JSON.stringify(scaffolderSampleSpring) : JSON.stringify(scaffolderSampleJava);
-			beforeEach(() => {
+			beforeEach(function () {
 				return helpers.run(path.join(__dirname, '../generators/app'))
 					.inDir(path.join(__dirname, './tmp'))
 					.withOptions({bluemix: bluemix})
 			});
 
 			testOutput();
-			it('has deployment.yaml with correct readinessProbe', () => {
+			it('has deployment.yaml with correct readinessProbe', function () {
 				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
 				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
 				let deploymentyml = yml.safeLoad(newdeploymentyml);
@@ -95,7 +92,7 @@ describe('cloud-enablement:kubernetes', () => {
 					assertYmlContent(readinessProbe.httpGet.port, 8080, 'readinessProbe.httpGet.port');
 				}
 			});
-			it('has service.yaml with correct content', () => {
+			it('has service.yaml with correct content', function () {
 				let rawserviceyml = fs.readFileSync(chartLocation + '/templates/service.yaml', 'utf8');
 				let newserviceyml = rawserviceyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
 				let serviceyml = yml.safeLoad(newserviceyml);
@@ -108,7 +105,7 @@ describe('cloud-enablement:kubernetes', () => {
 					assertYmlContent(serviceyml.spec.ports[1], undefined, 'serviceyml.spec.ports[1]');
 				}
 			});
-			it('has values.yaml with correct content', () => {
+			it('has values.yaml with correct content', function () {
 				let valuesyml = yml.safeLoad(fs.readFileSync(chartLocation + '/values.yaml', 'utf8'));
 				if(language === 'JAVA') {
 					assertYmlContent(valuesyml.service.servicePort, 9080, 'valuesyml.service.servicePort');
@@ -119,7 +116,7 @@ describe('cloud-enablement:kubernetes', () => {
 					assertYmlContent(valuesyml.service.servicePortHttps, undefined, 'valuesyml.service.servicePortHttps');
 				}
 			});
-			it('has manifests/kube.deploy.yml with correct content', () => {
+			it('has manifests/kube.deploy.yml with correct content', function () {
 				assert.file('manifests/kube.deploy.yml');
 				let i = 0;
 				yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
@@ -152,26 +149,26 @@ describe('cloud-enablement:kubernetes', () => {
 				assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
 			});
 			if(language === 'JAVA') {
-				it('has Jenkinsfile with correct content', () => {
+				it('has Jenkinsfile with correct content', function () {
 					assert.fileContent('Jenkinsfile', 'image = \''+ applicationName.toLowerCase() + '\'');
 				});
 			}
 			if(language === 'SPRING') {
-				it('does not have a Jenkinsfile', () => {
+				it('does not have a Jenkinsfile', function () {
 					assert.noFile('Jenkinsfile');
 				});
 			}
 		});
 	});
 
-	describe('kubernetes:app with Java project and custom health endpoint', () => {
-		beforeEach(() => {
+	describe('kubernetes:app with Java project and custom health endpoint', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSpring), healthEndpoint: 'customHealth'})
 		});
 
-		it('has deployment.yml with correct readinessProbe health endpoint', () => {
+		it('has deployment.yml with correct readinessProbe health endpoint', function () {
 			let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
 			let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
 			let deploymentyml = yml.safeLoad(newdeploymentyml);
@@ -179,7 +176,7 @@ describe('cloud-enablement:kubernetes', () => {
 			assertYmlContent(readinessProbe.httpGet.path, '/customHealth', 'readinessProbe.httpGet.path');
 		});
 
-		it('has manifests/kube.deploy.yml with correct content', () => {
+		it('has manifests/kube.deploy.yml with correct content', function () {
 			assert.file('manifests/kube.deploy.yml');
 			let i = 0;
 			yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
@@ -199,15 +196,15 @@ describe('cloud-enablement:kubernetes', () => {
 		});
 	});
 
-	describe('kubernetes:app with Java-liberty project and NO platforms specified', () => {
+	describe('kubernetes:app with Java-liberty project and NO platforms specified', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: []})
 		});
 
-		it('should not have kubernetes files', () => {
+		it('should not have kubernetes files', function () {
 			assert.noFile(chartLocation + '/templates/service.yaml');
 			assert.noFile(chartLocation + '/templates/deployment.yaml');
 			assert.noFile(chartLocation + '/templates/mongo.deploy.yaml');
@@ -219,15 +216,15 @@ describe('cloud-enablement:kubernetes', () => {
 		});
 	});
 
-	describe('kubernetes:app with Java-liberty project and mongo and platforms specified including kube', () => {
+	describe('kubernetes:app with Java-liberty project and mongo and platforms specified including kube', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['kube'], storages: ['mongo']})
 		});
 
-		it('should not have kubernetes files', () => {
+		it('should not have kubernetes files', function () {
 			assert.file(chartLocation + '/templates/service.yaml');
 			assert.file(chartLocation + '/templates/deployment.yaml');
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
@@ -239,63 +236,63 @@ describe('cloud-enablement:kubernetes', () => {
 		});
 	});
 
-	describe('kubernetes:app with Java project and mongo deployment', () => {
+	describe('kubernetes:app with Java project and mongo deployment', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), storages: ['mongo']})
 		});
 
-		it('should have mongo.deploy.yaml', () => {
+		it('should have mongo.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have deployment.yaml', () => {
+		it('should have deployment.yaml', function () {
 			assert.file(chartLocation + '/templates/deployment.yaml');
 		});
 
-		it('should have env variables for mongo in deployment ', () => {
+		it('should have env variables for mongo in deployment ', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoJavaSample);
 			assert.fileContent(chartLocation + '/values.yaml', valuesMongoJavaSample);
 		});
 	});
 
-	describe('kubernetes:app with Java project and  unsupported deployment', () => {
+	describe('kubernetes:app with Java project and  unsupported deployment', function () {
 		const WRONG_DEPLOY = 'NOTAVALIDSTORAGE';
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), storages: ['mongo']})
 		});
 
-		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', () => {
+		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
 			assert.noFile(chartLocation + '/' + WRONG_DEPLOY + '.deploy.yaml');
 		});
 
 	});
 
-	describe('kubernetes:app with Java project and mongo deployment with opts as a string', () => {
-		beforeEach(() => {
+	describe('kubernetes:app with Java project and mongo deployment with opts as a string', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), storages: "[\"mongo\"]"})
 		});
 
-		it('should have mongo.deploy.yaml', () => {
+		it('should have mongo.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have env variables for mongo in deployment and values', () => {
+		it('should have env variables for mongo in deployment and values', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoJavaSample);
 			assert.fileContent(chartLocation + '/values.yaml', valuesMongoJavaSample);
 		});
 
 	});
 
-	describe('kubernetes:app with Node project', () => {
-		beforeEach(() => {
+	describe('kubernetes:app with Node project', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode)});
@@ -304,63 +301,63 @@ describe('cloud-enablement:kubernetes', () => {
 		testOutput();
 	});
 
-	describe('kubernetes:app with Node project and mongo deployment', () => {
+	describe('kubernetes:app with Node project and mongo deployment', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), storages: ['mongo']})
 		});
 
-		it('should have mongo.deploy.yaml', () => {
+		it('should have mongo.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have deployment.yaml', () => {
+		it('should have deployment.yaml', function () {
 			assert.file(chartLocation + '/templates/deployment.yaml');
 		});
 
-		it('should have env variables for mongo in deployment ', () => {
+		it('should have env variables for mongo in deployment ', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample)
 		});
 	});
 
-	describe('kubernetes:app with Node project and  unsupported deployment', () => {
+	describe('kubernetes:app with Node project and  unsupported deployment', function () {
 		const WRONG_DEPLOY = 'NOTAVALIDSTORAGE';
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), storages: ['mongo']})
 		});
 
-		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', () => {
+		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
 			assert.noFile(chartLocation + '/' + WRONG_DEPLOY + '.deploy.yaml');
 		});
 
 	});
 
-	describe('kubernetes:app with Node project and mongo deployment with opts as a string', () => {
+	describe('kubernetes:app with Node project and mongo deployment with opts as a string', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), storages: "[\"mongo\"]"})
 		});
 
-		it('should have mongo.deploy.yaml', () => {
+		it('should have mongo.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have env variables for mongo in deployment and values', () => {
+		it('should have env variables for mongo in deployment and values', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample)
 			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSample);
 		});
 
 	});
 
-	describe('kubernetes:app with Swift project', () => {
-		beforeEach(() => {
+	describe('kubernetes:app with Swift project', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift)})
@@ -369,56 +366,56 @@ describe('cloud-enablement:kubernetes', () => {
 		testOutput();
 	});
 
-	describe('kubernetes:app with Swift project and mongo deployment', () => {
+	describe('kubernetes:app with Swift project and mongo deployment', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), storages: ['mongo']})
 		});
 
-		it('should have mongo.deploy.yaml', () => {
+		it('should have mongo.deploy.yaml', function () {
 			assert.file(chartLocation+ '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have deployment.yaml', () => {
+		it('should have deployment.yaml', function () {
 			assert.file(chartLocation + '/templates/deployment.yaml');
 		});
 
-		it('should have env variables for mongo in deployment ', () => {
+		it('should have env variables for mongo in deployment ', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
 			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftPythonSample);
 		});
 	});
 
-	describe('kubernetes:app with Swift project and  unsupported deployment', () => {
+	describe('kubernetes:app with Swift project and  unsupported deployment', function () {
 		const WRONG_DEPLOY = 'NOTAVALIDSTORAGE';
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), storages: ['mongo']})
 		});
 
-		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', () => {
+		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
 			assert.noFile(chartLocation + '/' + WRONG_DEPLOY + '.deploy.yaml');
 		});
 
 	});
 
-	describe('kubernetes:app with Swift project and mongo deployment with opts as a string', () => {
+	describe('kubernetes:app with Swift project and mongo deployment with opts as a string', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), storages: "[\"mongo\"]"})
 		});
 
-		it('should have mongo.deploy.yaml', () => {
+		it('should have mongo.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have env variables for mongo in deployment and values', () => {
+		it('should have env variables for mongo in deployment and values', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
 			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftPythonSample);
 		});
@@ -426,8 +423,8 @@ describe('cloud-enablement:kubernetes', () => {
 	});
 
 
-	describe('kubernetes:app with Python project', () => {
-		beforeEach(() => {
+	describe('kubernetes:app with Python project', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
@@ -436,64 +433,64 @@ describe('cloud-enablement:kubernetes', () => {
 		testOutput();
 	});
 
-	describe('kubernetes:app with Python project and mongo deployment', () => {
+	describe('kubernetes:app with Python project and mongo deployment', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), storages: ['mongo']})
 		});
 
-		it('should have mongo.deploy.yaml', () => {
+		it('should have mongo.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have deployment.yaml', () => {
+		it('should have deployment.yaml', function () {
 			assert.file(chartLocation + '/templates/deployment.yaml');
 		});
 
-		it('should have env variables for mongo in deployment ', () => {
+		it('should have env variables for mongo in deployment ', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
 			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftPythonSample);
 		});
 	});
 
-	describe('kubernetes:app with Python project and  unsupported deployment', () => {
+	describe('kubernetes:app with Python project and  unsupported deployment', function () {
 		const WRONG_DEPLOY = 'NOTAVALIDSTORAGE';
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), storages: ['mongo']})
 		});
 
-		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', () => {
+		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
 			assert.noFile(chartLocation + '/' + WRONG_DEPLOY + '.deploy.yaml');
 		});
 
 	});
 
-	describe('kubernetes:app with Python project and mongo deployment with opts as a string', () => {
+	describe('kubernetes:app with Python project and mongo deployment with opts as a string', function () {
 
-		beforeEach(() => {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), storages: "[\"mongo\"]"})
 		});
 
-		it('should have mongo.deploy.yaml', () => {
+		it('should have mongo.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have env variables for mongo in deployment and values', () => {
+		it('should have env variables for mongo in deployment and values', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
 			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftPythonSample);
 		});
 
 	});
 
-	describe('kubernetes:app with Node with NO server', () => {
-		beforeEach(() => {
+	describe('kubernetes:app with Node with NO server', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNodeNoServer)});
@@ -501,22 +498,22 @@ describe('cloud-enablement:kubernetes', () => {
 
 		testOutput();
 	});
-	describe('cloud-enablement:kubernetes with empty bluemix object', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:kubernetes with empty bluemix object', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/kubernetes'))
 				.withOptions({ bluemix: JSON.stringify(
 					{ backendPlatform: "NODE", server: { namespace: 'some-test-namespace' } }
 				), port: '9876' })
 		});
-		it('should give us the default output with no project name', () => {
+		it('should give us the default output with no project name', function () {
 			assert.file('chart/app');
 		});
 
-		it('should use a custom port if set', () => {
+		it('should use a custom port if set', function () {
 			assert.fileContent('chart/app/values.yaml', 'servicePort: 9876');
 		});
 
-		it('should use a custom namespace if set', () => {
+		it('should use a custom namespace if set', function () {
 			assert.fileContent('chart/app/values.yaml', 'some-test-namespace');
 		});
 	});
