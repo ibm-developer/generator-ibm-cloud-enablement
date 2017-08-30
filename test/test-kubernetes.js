@@ -58,10 +58,18 @@ function testOutput() {
 	it('has kubernetes config for service', () => {
 		assert.file(chartLocation + '/templates/service.yaml');
 	});
+
+	it('has kubernetes config for HPA', () => {
+		assert.file(chartLocation + '/templates/hpa.yaml');
+	});
 }
 
 function assertYmlContent(actual, expected, label) {
 	assert.strictEqual(actual, expected, 'Expected ' + label + ' to be ' + expected + ', found ' + actual);
+}
+
+function assertYmlContentExists(actual, label) {
+	assert.notStrictEqual(actual, undefined, 'Expected ' + label + ' to be defined it was not');
 }
 
 describe('cloud-enablement:kubernetes', () => {
@@ -95,6 +103,14 @@ describe('cloud-enablement:kubernetes', () => {
 					assertYmlContent(readinessProbe.httpGet.port, 8080, 'readinessProbe.httpGet.port');
 				}
 			});
+			it('has deployment.yaml with correct hpa settings', () => {
+				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
+				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
+				let deploymentyml = yml.safeLoad(newdeploymentyml);
+				let resources = deploymentyml.spec.template.spec.containers[0].resources;
+				assertYmlContentExists(resources.requests.cpu, 'resources.requests.cpu');
+				assertYmlContentExists(resources.requests.memory, 'resources.requests.memory');
+			});
 			it('has service.yaml with correct content', () => {
 				let rawserviceyml = fs.readFileSync(chartLocation + '/templates/service.yaml', 'utf8');
 				let newserviceyml = rawserviceyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
@@ -118,6 +134,8 @@ describe('cloud-enablement:kubernetes', () => {
 					assertYmlContent(valuesyml.service.servicePort, 8080, 'valuesyml.service.servicePort');
 					assertYmlContent(valuesyml.service.servicePortHttps, undefined, 'valuesyml.service.servicePortHttps');
 				}
+				assertYmlContent(valuesyml.hpa.enabled, false, 'valuesyml.hpa.enabled');
+				assertYmlContent(valuesyml.image.resources.requests.cpu, '200m', 'valuesyml.image.resources.requests.cpu');
 			});
 			it('has manifests/kube.deploy.yml with correct content', () => {
 				assert.file('manifests/kube.deploy.yml');
@@ -210,6 +228,7 @@ describe('cloud-enablement:kubernetes', () => {
 		it('should not have kubernetes files', () => {
 			assert.noFile(chartLocation + '/templates/service.yaml');
 			assert.noFile(chartLocation + '/templates/deployment.yaml');
+			assert.noFile(chartLocation + '/templates/hpa.yaml');
 			assert.noFile(chartLocation + '/templates/mongo.deploy.yaml');
 			assert.noFile(chartLocation + '/values.yaml');
 			assert.noFile(chartLocation + '/Chart.yaml');
@@ -230,6 +249,7 @@ describe('cloud-enablement:kubernetes', () => {
 		it('should not have kubernetes files', () => {
 			assert.file(chartLocation + '/templates/service.yaml');
 			assert.file(chartLocation + '/templates/deployment.yaml');
+			assert.file(chartLocation + '/templates/hpa.yaml');
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 			assert.file(chartLocation + '/values.yaml');
 			assert.file(chartLocation + '/Chart.yaml');
