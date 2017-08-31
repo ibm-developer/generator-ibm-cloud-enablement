@@ -29,61 +29,58 @@ const scaffolderSampleSpring = scaffolderSample.getJson('SPRING');
 const scaffolderSampleJavaNoServices = scaffolderSample.getJsonNoServices('JAVA');
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
 
-describe('cloud-enablement:cloudfoundry', () => {
+describe('cloud-enablement:cloudfoundry', function () {
+	this.timeout(5000);
 
-	before(function(){
-		this.timeout(5000);
-	});
-
-	describe('cloud-enablement:cloudfoundry with Python', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:cloudfoundry with Python', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)});
 		});
 
-		it('manifest.yml has memory', () => {
+		it('manifest.yml has memory', function () {
 			assert.file('manifest.yml');
 			assert.fileContent('manifest.yml', 'memory: 1024M');
 		});
 
-		it('toolchain.yml repo type is clone', () => {
+		it('toolchain.yml repo type is clone', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
 		});
 	});
 
-	describe('cloud-enablement:cloudfoundry with Swift', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:cloudfoundry with Swift', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift)});
 		});
 
-		it('manifest.yml has memory', () => {
+		it('manifest.yml has memory', function () {
 			assert.file('manifest.yml');
 			assert.fileContent('manifest.yml', 'memory: 1024M');
 		});
 
-		it('toolchain.yml repo type is clone', () => {
+		it('toolchain.yml repo type is clone', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
 		});
 	});
 
-	describe('cloud-enablement:cloudfoundry with Node', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:cloudfoundry with Node', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode)});
 		});
 
-		it('manifest.yml has memory', () => {
+		it('manifest.yml has memory', function () {
 			assert.file('manifest.yml');
 			assert.fileContent('manifest.yml', 'memory: 1024M');
 		});
 
-		it('toolchain.yml repo type is clone', () => {
+		it('toolchain.yml repo type is clone', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
 		});
@@ -100,16 +97,17 @@ describe('cloud-enablement:cloudfoundry', () => {
 		javaBuildTypes.forEach(buildType => {
 			createTypes.forEach(createType => {
 
-				describe('cloud-enablement:cloudfoundry with ' + language + ' with buildType ' + buildType + ' and createType ' + createType, () => {
+				describe('cloud-enablement:cloudfoundry with ' + language + ' with buildType ' + buildType + ' and createType ' + createType, function () {
 					let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
-					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType};
-					beforeEach(() => {
+					let javaVersion = '1.0-SNAPSHOT';
+					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType, version: javaVersion};
+					beforeEach(function () {
 						return helpers.run(path.join(__dirname, '../generators/app'))
 							.inDir(path.join(__dirname, './tmp'))
 							.withOptions(options)
 					});
 
-					it('manifest.yml is generated with correct content', () => {
+					it('manifest.yml is generated with correct content', function () {
 						assert.file('manifest.yml');
 						let manifestyml = yml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
 
@@ -123,17 +121,17 @@ describe('cloud-enablement:cloudfoundry', () => {
 						
 						if ( language === 'SPRING' ) {
 							let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
-							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application.jar', 'manifestyml.applications[0].path');
+							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application-'+javaVersion+'.jar', 'manifestyml.applications[0].path');
 							assertYmlContent(manifestyml.applications[0].memory, '256M', 'manifestyml.applications[0].memory')
 							assertYmlContent(manifestyml.applications[0].buildpack, 'java_buildpack', 'manifestyml.applications[0].buildpack')
 						}
 					});
 
-					it('deploy.json file is generated', () => {
+					it('deploy.json file is generated', function () {
 						assert.file('.bluemix/deploy.json');
 					});
 
-					it('.cfignore file is generated', () => {
+					it('.cfignore file is generated', function () {
 						assert.file('.cfignore');
 						if(language === 'JAVA') {
 							assert.fileContent('.cfignore', '/src/main/liberty/config/server.env');
@@ -142,7 +140,7 @@ describe('cloud-enablement:cloudfoundry', () => {
 						}
 					});
 
-					it('toolchain.yml file is generated with correct repo.parameters.type', () => {
+					it('toolchain.yml file is generated with correct repo.parameters.type', function () {
 						assert.file('.bluemix/toolchain.yml');
 						let toolchainyml = yml.safeLoad(fs.readFileSync('.bluemix/toolchain.yml', 'utf8'));
 						let repoType = toolchainyml.repo.parameters.type;
@@ -153,7 +151,7 @@ describe('cloud-enablement:cloudfoundry', () => {
 						}
 					});
 
-					it('pipeline.yml file is generated with correct content', () => {
+					it('pipeline.yml file is generated with correct content', function () {
 						assert.file('.bluemix/pipeline.yml');
 						let pipelineyml = yml.safeLoad(fs.readFileSync('.bluemix/pipeline.yml', 'utf8'));
 						let stages = pipelineyml.stages;
@@ -167,7 +165,7 @@ describe('cloud-enablement:cloudfoundry', () => {
 								assert(stage.jobs[0].script.includes('export JAVA_HOME=$JAVA8_HOME'), 'Expected pipelineyml.stages[0].jobs[0].script to include "export JAVA_HOME=$JAVA8_HOME", found : ' + stage.jobs[0].script);
 								assert(stage.jobs[0].script.includes(buildCommand), 'Expected pipelineyml.stages[0].jobs[0].script to include "' + buildCommand + '", found : ' + stage.jobs[0].script);
 								let postBuildScript = fs.readFileSync(__dirname + '/samples/post-build-script.txt', 'utf8')
-								assertYmlContent(postBuildScript, stage.jobs[1].script);
+								assertYmlContent(postBuildScript, stage.jobs[1].script, 'pipelineyml.stages[0].jobs[1].script');
 							}
 							if(stage.name === 'Deploy Stage') {
 								if ( language === 'JAVA ' ) {
@@ -177,7 +175,7 @@ describe('cloud-enablement:cloudfoundry', () => {
 								}
 								if ( language === 'SPRING' ) {
 									let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
-									let deployCommand = 'cf push "${CF_APP}" -p '+targetDir+'/my-application.jar'
+									let deployCommand = 'cf push "${CF_APP}" -p '+targetDir+'/my-application-'+javaVersion+'.jar'
 									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
 								}
 							}
@@ -188,14 +186,14 @@ describe('cloud-enablement:cloudfoundry', () => {
 		});
 	});
 
-	describe('cloud-enablement:cloudfoundry with java-liberty with NO services', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:cloudfoundry with java-liberty with NO services', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleJavaNoServices)});
 		});
 
-		it('manifest.yml is generated with correct content', () => {
+		it('manifest.yml is generated with correct content', function () {
 			assert.file('manifest.yml');
 			let manifestyml = yml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
 			if(manifestyml.applications[0].env) {
@@ -204,14 +202,14 @@ describe('cloud-enablement:cloudfoundry', () => {
 		});
 	});
 
-	describe('cloud-enablement:cloudfoundry with java-liberty with NO platforms', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:cloudfoundry with java-liberty with NO platforms', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: []});
 		});
 
-		it('no cloud foundry files should be created', () => {
+		it('no cloud foundry files should be created', function () {
 			assert.noFile('manifest.yml');
 			assert.noFile('.bluemix/pipeline.yml');
 			assert.noFile('.bluemix/toolchain.yml');
@@ -220,14 +218,14 @@ describe('cloud-enablement:cloudfoundry', () => {
 		});
 	});
 
-	describe('cloud-enablement:cloudfoundry with java-liberty with platforms array specified', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:cloudfoundry with java-liberty with platforms array specified', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['bluemix']});
 		});
 
-		it('no cloud foundry files should be created', () => {
+		it('no cloud foundry files should be created', function () {
 			assert.file('manifest.yml');
 			assert.file('.bluemix/pipeline.yml');
 			assert.file('.bluemix/toolchain.yml');
@@ -236,33 +234,33 @@ describe('cloud-enablement:cloudfoundry', () => {
 		});
 	});
 
-	describe('cloud-enablement:cloudfoundry with java-liberty and createType = bff', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:cloudfoundry with java-liberty and createType = bff', function () {
+		beforeEach(function () {
 			let bluemixJson = scaffolderSampleJava;
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.withOptions({ bluemix: JSON.stringify(bluemixJson), createType: 'bff' })
 		});
-		it('should contain the OPENAPI_SPEC env var', () => {
+		it('should contain the OPENAPI_SPEC env var', function () {
 			let manifestyml = yml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
 			assertYmlContent(manifestyml.applications[0].env["OPENAPI_SPEC"], '/my-application/swagger/api', 'manifest.yml.env["OPENAPI_SPEC"]');
 		});
 	});
 
-	describe('cloud-enablement:cloudfoundry with node with NO server', () => {
-		beforeEach(() => {
+	describe('cloud-enablement:cloudfoundry with node with NO server', function () {
+		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNodeNoServer), repoType: "link"});
 		});
 
-		it('manifest has no server details', () => {
+		it('manifest has no server details', function () {
 			assert.file('manifest.yml');
 			assert.fileContent('manifest.yml', 'name: AcmeProject');
 			assert.fileContent('manifest.yml', 'random-route: true');
 			assert.noFileContent('manifest.yml', 'env:');
 		});
 
-		it('toolchain.yml repo type is link', () => {
+		it('toolchain.yml repo type is link', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.fileContent('.bluemix/toolchain.yml', 'type: link');
 		});
