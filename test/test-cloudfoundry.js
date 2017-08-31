@@ -99,7 +99,8 @@ describe('cloud-enablement:cloudfoundry', function () {
 
 				describe('cloud-enablement:cloudfoundry with ' + language + ' with buildType ' + buildType + ' and createType ' + createType, function () {
 					let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
-					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType};
+					let javaVersion = '1.0-SNAPSHOT';
+					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType, version: javaVersion};
 					beforeEach(function () {
 						return helpers.run(path.join(__dirname, '../generators/app'))
 							.inDir(path.join(__dirname, './tmp'))
@@ -120,7 +121,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 						
 						if ( language === 'SPRING' ) {
 							let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
-							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application.jar', 'manifestyml.applications[0].path');
+							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application-'+javaVersion+'.jar', 'manifestyml.applications[0].path');
 							assertYmlContent(manifestyml.applications[0].memory, '256M', 'manifestyml.applications[0].memory')
 							assertYmlContent(manifestyml.applications[0].buildpack, 'java_buildpack', 'manifestyml.applications[0].buildpack')
 						}
@@ -164,7 +165,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 								assert(stage.jobs[0].script.includes('export JAVA_HOME=$JAVA8_HOME'), 'Expected pipelineyml.stages[0].jobs[0].script to include "export JAVA_HOME=$JAVA8_HOME", found : ' + stage.jobs[0].script);
 								assert(stage.jobs[0].script.includes(buildCommand), 'Expected pipelineyml.stages[0].jobs[0].script to include "' + buildCommand + '", found : ' + stage.jobs[0].script);
 								let postBuildScript = fs.readFileSync(__dirname + '/samples/post-build-script.txt', 'utf8')
-								assertYmlContent(postBuildScript, stage.jobs[1].script);
+								assertYmlContent(postBuildScript, stage.jobs[1].script, 'pipelineyml.stages[0].jobs[1].script');
 							}
 							if(stage.name === 'Deploy Stage') {
 								if ( language === 'JAVA ' ) {
@@ -174,7 +175,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 								}
 								if ( language === 'SPRING' ) {
 									let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
-									let deployCommand = 'cf push "${CF_APP}" -p '+targetDir+'/my-application.jar'
+									let deployCommand = 'cf push "${CF_APP}" -p '+targetDir+'/my-application-'+javaVersion+'.jar'
 									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
 								}
 							}
