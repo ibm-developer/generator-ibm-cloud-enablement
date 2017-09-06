@@ -88,7 +88,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 	
 	let javaFrameworks = ['JAVA', 'SPRING'];
 	let javaBuildTypes = ['maven', 'gradle'];
-	let createTypes = ['basic/', 'microservice'];
+	let createTypes = ['enable/', 'microservice'];
 	
 	let assertYmlContent = function(actual, expected, label) {
 		assert.strictEqual(actual, expected, 'Expected ' + label + ' to be ' + expected + ', found ' + actual);
@@ -144,7 +144,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 						assert.file('.bluemix/toolchain.yml');
 						let toolchainyml = yml.safeLoad(fs.readFileSync('.bluemix/toolchain.yml', 'utf8'));
 						let repoType = toolchainyml.repo.parameters.type;
-						if (createType === 'basic/') {
+						if (createType === 'enable/') {
 							assertYmlContent(repoType, 'link', 'toolchainyml.repo.type');
 						} else {
 							assertYmlContent(repoType, 'clone', 'toolchainyml.repo.type');

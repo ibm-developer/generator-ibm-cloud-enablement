@@ -89,7 +89,7 @@ module.exports = class extends Generator {
 		if (this.opts.createType === 'bff') {
 			this.manifestConfig.env.OPENAPI_SPEC = `/${this.name}/swagger/api`;
 		}
-		if (this.opts.createType && this.opts.createType.startsWith('basic/')) {
+		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {
 			this.toolchainConfig.repoType = 'link';
 		}
 		this.pipelineConfig.triggersType = 'commit';
