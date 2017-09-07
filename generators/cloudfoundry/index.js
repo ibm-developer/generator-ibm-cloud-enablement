@@ -89,7 +89,7 @@ module.exports = class extends Generator {
 		if (this.opts.createType === 'bff') {
 			this.manifestConfig.env.OPENAPI_SPEC = `/${this.name}/swagger/api`;
 		}
-		if (this.opts.createType && this.opts.createType.startsWith('basic/')) {
+		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {
 			this.toolchainConfig.repoType = 'link';
 		}
 		this.pipelineConfig.triggersType = 'commit';
@@ -129,8 +129,8 @@ module.exports = class extends Generator {
 		this.cfIgnoreContent = ['/.classpath', '/.project', '/.settings', '/src/main/resources/application-local.properties', 'target/', 'build/'];
 		this.manifestConfig.buildpack = 'java_buildpack';
 		this.manifestConfig.memory = this.manifestConfig.memory || '256M';
-		this.manifestConfig.path = (this.opts.buildType && this.opts.buildType === 'gradle') ? `./build/libs/${this.name}.jar` : `./target/${this.name}.jar`;
-		let fileLocation = (this.opts.buildType && this.opts.buildType === 'gradle') ? `build/libs/${this.name}.jar` : `target/${this.name}.jar`;
+		this.manifestConfig.path = (this.opts.buildType && this.opts.buildType === 'gradle') ? `./build/libs/${this.name}-${this.opts.version}.jar` : `./target/${this.name}-${this.opts.version}.jar`;
+		let fileLocation = (this.opts.buildType && this.opts.buildType === 'gradle') ? `build/libs/${this.name}-${this.opts.version}.jar` : `target/${this.name}-${this.opts.version}.jar`;
 		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + fileLocation;
 	}
 
