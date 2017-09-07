@@ -115,13 +115,13 @@ module.exports = class extends Generator {
 		} else {
 			// TODO(gib): we seem to be hitting this, not sure how.
 
-			// if --bluemix specified and dockerRegistry is not 
-			if (this.bluemix.dockerRegistry === undefined) { 
+			// if --bluemix specified and dockerRegistry is not
+			if (this.bluemix.dockerRegistry === undefined) {
 				this.opts.repositoryURL= 'registry.ng.bluemix.net/replace-me-namespace/';
 			}
 			else {
-				// dockerRegistry was passed in --bluemix or was 
-				// set via prompt response 
+				// dockerRegistry was passed in --bluemix or was
+				// set via prompt response
 				this.opts.repositoryURL = this.bluemix.dockerRegistry + '/';
 			}
 		}
@@ -150,6 +150,11 @@ module.exports = class extends Generator {
 				this.fileLocations.jenkinsfile = {
 					source : 'java/Jenkinsfile',
 					target : 'Jenkinsfile',
+					process : true
+				}
+				this.fileLocations.istiofile = {
+					source : 'java/istio.yaml',
+					target : 'istio.yaml',
 					process : true
 				}
 			}
