@@ -6,6 +6,10 @@ image:
   repository: {{#toLowerCase applicationName}}{{/toLowerCase}}
   tag: v1.0.0
   pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 200m
+      memory: 300Mi
 service:
   name: Node
   type: NodePort
@@ -13,6 +17,15 @@ service:
 {{#if servicePorts.https}}
   servicePortHttps: {{servicePorts.https}}
 {{/if}}
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    cpu:
+      targetAverageUtilization: 70
+    memory:
+      targetAverageUtilization: 70
 {{#storageDeploys.env}}
 services:
 {{/storageDeploys.env}}
