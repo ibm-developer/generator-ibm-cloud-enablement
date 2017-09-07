@@ -1,0 +1,9 @@
+type: route-rule
+spec:
+  name: {{#toLowerCase applicationName}}{{/toLowerCase}}-default
+  destination: {{#toLowerCase applicationName}}{{/toLowerCase}}.default.svc.cluster.local
+  precedence: 1
+  route:
+  - tags:
+      version:latest
+    weight: 100
