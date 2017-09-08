@@ -29,6 +29,7 @@ module.exports = class extends Generator {
 
 	configuring() {
 		this.manifestConfig = {};
+		this.manifestConfig.env = {};
 		this.toolchainConfig = {};
 		this.pipelineConfig = {buildJobProps : {artifact_dir: "''"}};
 		this.name = undefined
@@ -40,7 +41,6 @@ module.exports = class extends Generator {
 			this.manifestConfig.name = this.bluemix.name;
 		}
 		this.toolchainConfig.repoType = this.opts.repoType || "clone";
-		this.manifestConfig.env = {};
 		switch (this.bluemix.backendPlatform) {
 			case 'NODE':
 				this._configureNode();
