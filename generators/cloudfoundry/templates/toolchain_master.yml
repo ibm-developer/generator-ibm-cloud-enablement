@@ -48,3 +48,6 @@ deploy:
   service-category: pipeline
   parameters:
     app-name: {{name}}
+    dev-space: {{tag 'space'}}
+    dev-organization: {{tag 'organization'}}
+    dev-region: {{tag 'region'}}
