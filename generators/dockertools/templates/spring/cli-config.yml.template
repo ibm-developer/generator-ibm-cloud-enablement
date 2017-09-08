@@ -1,34 +1,67 @@
-# generator-cloud-enablement version of cli-config.yml
+# The IBM version of this configuration
 version : 0.0.2
-container-name-run : "{{#toLowerCase appName}}{{/toLowerCase}}"
-container-name-tools : "bx-dev-{{#toLowerCase appName}}{{/toLowerCase}}-tools"
-image-name-run : "{{#toLowerCase appName}}{{/toLowerCase}}"
 
+# The container name used for the run container
+container-name-run : "{{#toLowerCase appName}}{{/toLowerCase}}"
+
+# The container name used for the tools container
+container-name-tools : "bx-dev-{{#toLowerCase appName}}{{/toLowerCase}}-tools"
+
+# The name of image to create from dockerfile-run
+image-name-run : "{{#toLowerCase appName}}{{/toLowerCase}}"
 {{#has buildType 'maven'}}
+# The name of image to create from dockerfile-tools
 image-name-tools : "bx-dev-java-maven-tools"
+
+# The project root on the host for the run container to mount to container-path-run
 host-path-run : "target"
+
+# The command to build the code and docker image for RUN
 build-cmd-run : "mvn install -Dmaven.repo.local=/project/.m2/repository"
+
+# The command to execute tests for the code in the tools container
 test-cmd : "mvn install -Dmaven.repo.local=/project/.m2/repository"
+
+# The command to build the code and docker image for DEBUG
 build-cmd-debug : "mvn install -Dmaven.repo.local=/project/.m2/repository"
 {{/has}}
 {{#has buildType 'gradle'}}
+# The name of image to create from dockerfile-tools
 image-name-tools : "bx-dev-java-gradle-tools"
+
+# The project root on the host for the run container to mount to container-path-run
 host-path-run : "build"
+
+# The command to build the code and docker image for RUN
 build-cmd-run : "gradle -g . build"
+
+# The command to execute tests for the code in the tools container
 test-cmd : "gradle -g . build"
+
+# The command to build the code and docker image for DEBUG
 build-cmd-debug : "gradle -g . build"
 {{/has}}
 
+# The project root in the run container to mount to host-path-run
 container-path-run : "/project"
+# The project root in the tools container that will be mounted to host-path-tools
 container-path-tools : "/project"
 
-#Tomcat/Spring settings
+# The port mappings between the host and the container in the form [host:container]
 container-port-map : "8080:8080,8443:8443"
+# The port mappings between the host and the container for the debug port in the form [host:container]
 container-port-map-debug : "8000:8000"
+
+# The command to run the code in the run container
 run-cmd : "java -Dspring.profiles.active=local -jar {{appName}}-{{version}}.jar"
+# The command to execute debug of the code in the tools container
 debug-cmd : "java -Dspring.profiles.active=local -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=n -jar {{#has buildType 'maven'}}./target/{{/has}}{{#has buildType 'gradle'}}./build/libs/{{/has}}{{appName}}-{{version}}.jar"
 
+# The name for the dockerfile for the run container
 dockerfile-run : "Dockerfile"
+
+# The name for the dockerfile for the tools container
 dockerfile-tools : "Dockerfile-tools"
 
+# The relative path to the helm chart used for Kubernetes deployment
 chart-path : "chart/{{#toLowerCase appName}}{{/toLowerCase}}"
