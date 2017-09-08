@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app: "{{  .Chart.Name }}-selector"
+        version: "{{ .Values.image.tag }}"
     spec:
      containers:
       - name: {{  .Chart.Name  }}
@@ -21,6 +22,10 @@ spec:
             path: /AcmeProject/health
             port: 9080
           initialDelaySeconds: 20
+        resources:
+          requests:
+            cpu: "{{ .Values.image.resources.requests.cpu }}"
+            memory: "{{ .Values.image.resources.requests.memory }}"
         env:
           - name: PORT
             value: "{{ .Values.service.servicePort }}"
