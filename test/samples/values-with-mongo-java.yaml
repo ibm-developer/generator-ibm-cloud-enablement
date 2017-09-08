@@ -6,11 +6,24 @@ image:
   repository: acmeproject
   tag: v1.0.0
   pullPolicy: IfNotPresent
+  resources:
+    requests:
+      cpu: 200m
+      memory: 300Mi
 service:
   name: Node
   type: NodePort
   servicePort: 9080
   servicePortHttps: 9443
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    cpu:
+      targetAverageUtilization: 70
+    memory:
+      targetAverageUtilization: 70
 services:
   mongo:
      url: mongo

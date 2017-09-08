@@ -6,6 +6,10 @@ image:
   repository: registry.ng.bluemix.net/replace-me-namespace/acmeproject
   tag: v1.0.0
   pullPolicy: Always
+  resources:
+    requests:
+      cpu: 200m
+      memory: 300Mi
 livenessProbe:
   initialDelaySeconds: 3000
   periodSeconds: 1000
@@ -13,6 +17,15 @@ service:
   name: Node
   type: NodePort
   servicePort: 8080
+hpa:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 2
+  metrics:
+    cpu:
+      targetAverageUtilization: 70
+    memory:
+      targetAverageUtilization: 70
 services:
   mongo:
      url: mongo
