@@ -32,14 +32,17 @@ module.exports = class extends Generator {
 		this.manifestConfig.env = {};
 		this.toolchainConfig = {};
 		this.pipelineConfig = {buildJobProps : {artifact_dir: "''"}};
-		this.name = undefined
+		this.name = undefined;
 		if(this.bluemix.server) {
 			this.name = this.bluemix.server.name;
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
+			this.toolchainConfig.cloudDeploymentType = this.bluemix.server.cloudDeploymentType;
+			this.toolchainConfig.cloudDeploymentOptions = this.bluemix.server.cloudDeploymentOptions;
 		} else {
 			this.name = this.bluemix.name;
 			this.manifestConfig.name = this.bluemix.name;
 		}
+
 		this.toolchainConfig.repoType = this.opts.repoType || "clone";
 		switch (this.bluemix.backendPlatform) {
 			case 'NODE':
@@ -167,7 +170,8 @@ module.exports = class extends Generator {
 		}
 
 		// create .bluemix directory for toolchain/devops related files
-		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml', {name: this.name, repoType: this.toolchainConfig.repoType});
+		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml',
+			{name: this.name, repoType: this.toolchainConfig.repoType, deploymentType: this.toolchainConfig.cloudDeploymentType});
 
 		this.fs.copy(
 			this.templatePath('deploy_master.json'),

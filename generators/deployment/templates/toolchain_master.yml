@@ -33,6 +33,10 @@ build:
       CF_SPACE: "{{tag 'deploy.parameters.dev-space'}}"
       CF_ORGANIZATION: "{{tag 'deploy.parameters.dev-organization'}}"
       CF_REGION_ID: "{{tag 'deploy.parameters.dev-region'}}"
+      {{#has deploymentType 'Kube'}}
+      KUBE_CLUSTER_NAME: "{{tag 'deploy.parameters.kube-cluster-name'}}"
+      API_KEY: "{{tag 'deploy.parameters.api-key'}}"
+      {{/has}}
      execute: true
     services: ["repo"]
   hidden: ["form"]
@@ -51,3 +55,6 @@ deploy:
     dev-space: {{tag 'space'}}
     dev-organization: {{tag 'organization'}}
     dev-region: {{tag 'region'}}
+    {{#has deploymentType 'Kube'}}
+    kube-cluster-name: {{name}}
+    {{/has}}
