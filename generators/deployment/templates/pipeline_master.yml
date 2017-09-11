@@ -114,7 +114,7 @@ stages:
   inputs:
   - type: job
     stage: Build Stage
-    job: Post Build
+    job: {{#has deployment.type 'Kube'}}Container {{/has}}Build
   properties:
   - name: buildProperties
     value: build.properties
