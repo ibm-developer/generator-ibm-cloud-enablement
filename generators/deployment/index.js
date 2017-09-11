@@ -36,7 +36,6 @@ module.exports = class extends Generator {
 		if(this.bluemix.server) {
 			this.name = this.bluemix.server.name;
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
-			this.toolchainConfig.cloudDeploymentType = this.bluemix.server.cloudDeploymentType;
 			this.pipelineConfig.deployment = Object.assign(this.pipelineConfig.deployment, this.bluemix.server.cloudDeploymentOptions);
 			this.pipelineConfig.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
 			this.pipelineConfig.deployment.name = this._sanitizeAppName(this.name || this.bluemix.name);
@@ -182,7 +181,7 @@ module.exports = class extends Generator {
 
 		// create .bluemix directory for toolchain/devops related files
 		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml',
-			{name: this.name, repoType: this.toolchainConfig.repoType, deploymentType: this.toolchainConfig.cloudDeploymentType});
+			{name: this.name, repoType: this.toolchainConfig.repoType, deployment: this.pipelineConfig.deployment});
 
 		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json',
 			{deploymentType: this.toolchainConfig.cloudDeploymentType});
