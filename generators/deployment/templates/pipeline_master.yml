@@ -169,7 +169,7 @@ stages:
 
       echo ""
       echo "DEPLOYED PODS:"
-      kubectl describe pods --selector app=${CHART_NAME}
+      kubectl describe pods --selector app=${CHART_NAME}-selector
 
       port=$(kubectl get services | grep ${CHART_NAME} | sed 's/.*:\([0-9]*\).*/\1/g')
       echo ""
