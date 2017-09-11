@@ -44,6 +44,11 @@ stages:
       application: ${CF_APP}
     script: |-
       #!/bin/bash
+{{#each services}}
+  # {{{@key}}}
+      cf create-service "{{{{label}}}}" "{{{{plan}}}}" "{{{{name}}}}"
+  # {{{/each}}}
+{{/each}}
 {{#if pushCommand}}
       {{{pushCommand}}}
 {{else}}
