@@ -64,6 +64,37 @@ module.exports = class extends Generator {
 	}
 
 	_generateSwift() {
+
+		// Define object that contains the metadata for all those services that 
+		// require custom logic in dockerfiles
+		const services = {
+			"postgresql": {
+				"package": "libpq-dev",
+				"compilationOptions": "-Xcc -I/usr/include/postgresql"
+			}
+		}
+
+		// Get array with all the keys for the services objects
+		const servKeys = Object.keys(services);
+
+		const servicesFound = [];
+		// Iterate over service keys
+		for (let index in servKeys) {
+			const servKey = servKeys[index];
+			if(this.bluemix.hasOwnProperty(servKey)) {
+				console.log("HAS PROPERTY" + servKey)
+				console.log("HELLLLLL!!")
+				console.log("package: " + services[servKey].package);
+				console.log("compilationOptions: " + services[servKey].compilationOptions);
+				servicesFound.push(services[servKey]);
+			} else {
+				console.log("IR DOES NOT HAVE PROPERTY: " + servKey);
+			}		
+		}
+
+		console.log("servicesFound: " + JSON.stringify(servicesFound));
+
+
 		const applicationName = this._sanitizeAppName(this.bluemix.name);
 		const executableName = applicationName;
 
@@ -100,13 +131,19 @@ module.exports = class extends Generator {
 			);
 		}
 
+		const dockerConfig = {
+			executableName: `${executableName}`,
+			servicesFound: servicesFound
+		}
+
 		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
 			console.info(FILENAME_DOCKERFILE, "already exists, skipping.");
-		} else {			
+		} else {	
+			console.log("dockerConfig: " + JSON.stringify(dockerConfig));		
 			this.fs.copyTpl(
 				this.templatePath('swift/Dockerfile'),
 				this.destinationPath(FILENAME_DOCKERFILE), {
-					executableName: `${executableName}`
+					dockerConfig					
 				}
 			);
 		}
