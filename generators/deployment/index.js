@@ -173,10 +173,8 @@ module.exports = class extends Generator {
 		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml',
 			{name: this.name, repoType: this.toolchainConfig.repoType, deploymentType: this.toolchainConfig.cloudDeploymentType});
 
-		this.fs.copy(
-			this.templatePath('deploy_master.json'),
-			this.destinationPath('.bluemix/deploy.json')
-		);
+		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json',
+			{deploymentType: this.toolchainConfig.cloudDeploymentType});
 
 		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml', this.pipelineConfig);
 	}
