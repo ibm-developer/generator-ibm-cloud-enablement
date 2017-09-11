@@ -31,13 +31,16 @@ module.exports = class extends Generator {
 		this.manifestConfig = {};
 		this.manifestConfig.env = {};
 		this.toolchainConfig = {};
-		this.pipelineConfig = {buildJobProps : {artifact_dir: "''"}};
+		this.pipelineConfig = {buildJobProps : {artifact_dir: "''"}, deployment: {type: 'CF', name: this.bluemix.name}};
 		this.name = undefined;
 		if(this.bluemix.server) {
 			this.name = this.bluemix.server.name;
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
 			this.toolchainConfig.cloudDeploymentType = this.bluemix.server.cloudDeploymentType;
-			this.toolchainConfig.cloudDeploymentOptions = this.bluemix.server.cloudDeploymentOptions;
+			this.pipelineConfig.deployment = Object.assign(this.pipelineConfig.deployment, this.bluemix.server.cloudDeploymentOptions);
+			this.pipelineConfig.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
+			this.pipelineConfig.deployment.name = this._sanitizeAppName(this.name || this.bluemix.name);
+
 		} else {
 			this.name = this.bluemix.name;
 			this.manifestConfig.name = this.bluemix.name;
@@ -146,6 +149,14 @@ module.exports = class extends Generator {
 		this.manifestConfig.env.FLASK_DEBUG = 'true';
 		this.cfIgnoreContent = ['.pyc', '.egg-info'];
 	}
+
+    _sanitizeAppName(name) {
+        let cleanName = "";
+        if (name != undefined) {
+            cleanName = name.replace(/^[^a-zA-Z]*/, '').replace(/[^a-zA-Z0-9]/g, '');
+        }
+        return cleanName || 'APP';
+    }
 
 	cleanUpPass() {
 		if (this.manifestConfig && this.manifestConfig.env && Object.keys(this.manifestConfig.env).length < 1) {
