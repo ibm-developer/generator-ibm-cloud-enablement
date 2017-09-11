@@ -114,6 +114,9 @@ module.exports = class extends Generator {
 			// TODO(gib): Can we get this from scaffolder (this.bluemix) somehow?
 			const namespace = this.bluemix.server.namespace ? this.bluemix.server.namespace : 'replace-me-namespace';
 			this.opts.repositoryURL= `registry.${this.bluemix.server.domain}/${namespace}/`;
+			this.opts.kubeClusterNamespace =
+				this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
+					this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace : 'default';
 		} else {
 			// TODO(gib): we seem to be hitting this, not sure how.
 
