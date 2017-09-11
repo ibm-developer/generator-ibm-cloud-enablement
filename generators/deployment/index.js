@@ -39,7 +39,8 @@ module.exports = class extends Generator {
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
 			this.pipelineConfig.deployment = Object.assign(this.pipelineConfig.deployment, this.bluemix.server.cloudDeploymentOptions);
 			this.pipelineConfig.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
-			this.pipelineConfig.deployment.name = Utils.sanitizeAppName(this.name || this.bluemix.name);
+			this.pipelineConfig.deployment.name = this.name || this.bluemix.name;
+            this.pipelineConfig.deployment.name = Utils.sanitizeAppName(this.pipelineConfig.deployment.name).toLowerCase();
 
 		} else {
 			this.name = this.bluemix.name;
