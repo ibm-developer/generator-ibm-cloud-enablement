@@ -45,9 +45,9 @@ stages:
     script: |-
       #!/bin/bash
 {{#each services}}
-  # {{{@key}}}
-      cf create-service "{{{{label}}}}" "{{{{plan}}}}" "{{{{name}}}}"
-  # {{{/each}}}
+   {{#each this}}
+      cf create-service "{{{this.label}}}" "{{{this.plan}}}" "{{{this.name}}}"
+   {{/each}}
 {{/each}}
 {{#if pushCommand}}
       {{{pushCommand}}}
