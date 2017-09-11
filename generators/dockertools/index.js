@@ -65,8 +65,8 @@ module.exports = class extends Generator {
 
 	_generateSwift() {
 
-		// Define object that contains the metadata for all those services that 
-		// require custom logic in dockerfiles
+		// Define metadata for all services that 
+		// require custom logic in Dockerfile
 		const services = {
 			"postgresql": {
 				"package": "libpq-dev",
@@ -76,8 +76,20 @@ module.exports = class extends Generator {
 
 		// Get array with all the keys for the services objects
 		const servKeys = Object.keys(services);
-
 		const servicesFound = [];
+		const array = [{key: "value1"}, {key: "value2"}];
+		const reformattedArray = array.map(function(obj) { 
+			const rObj = {};
+			rObj.key = obj.key;
+			return rObj;
+		});
+
+		console.log("reformattedArray" + JSON.stringify(reformattedArray));
+
+		const array2 = ["el", "paso", "de"]
+		const finalVal = array2.reduce((prev, curr) => prev + " " + curr );
+		console.log("finalVal:" + finalVal);
+
 		// Iterate over service keys
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
@@ -93,7 +105,18 @@ module.exports = class extends Generator {
 		}
 
 		console.log("servicesFound: " + JSON.stringify(servicesFound));
-
+		const compilationOptions = servicesFound.reduce(
+			(accumulator, currentValue) => {
+				if (accumulator.length == 0) {
+					return currentValue.compilationOptions;
+				} else {
+					return accumulator + " " + currentValue.compilationOptions;
+				}
+			},
+			""
+		);
+		//	(accumulator, service) => accumulator + " " + service.compilationOptions );
+		console.log("compilationOptions:" + JSON.stringify(compilationOptions));
 
 		const applicationName = this._sanitizeAppName(this.bluemix.name);
 		const executableName = applicationName;
@@ -131,6 +154,7 @@ module.exports = class extends Generator {
 			);
 		}
 
+		// Create docker config object for Swift
 		const dockerConfig = {
 			executableName: `${executableName}`,
 			servicesFound: servicesFound
