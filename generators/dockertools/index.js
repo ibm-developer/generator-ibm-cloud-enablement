@@ -74,18 +74,18 @@ module.exports = class extends Generator {
 
 		// Get array with all the keys for the services objects
 		const servKeys = Object.keys(services);
-		const servicesFound = [];
+		const serviceItems = [];
 		
 		// Iterate over service keys to search for provisioned services
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
 			if(this.bluemix.hasOwnProperty(servKey)) {
-				servicesFound.push(services[servKey]);
+				serviceItems.push(services[servKey]);
 			}		
 		}
 
 		// Create compilationOptions string by concatenating all options
-		const compilationOptions = servicesFound.reduce(
+		const compilationOptions = serviceItems.reduce(
 			(accumulator, currentValue) => {
 				if (accumulator.length == 0) {
 					return currentValue.compilationOptions;
@@ -124,7 +124,7 @@ module.exports = class extends Generator {
 		// Create Docker config object for Swift
 		const dockerConfig = {
 			executableName: `${executableName}`,
-			servicesFound: servicesFound
+			serviceItems: serviceItems
 		}
 
 		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {

@@ -10,10 +10,10 @@ ARG bx_dev_user=root
 ARG bx_dev_userid=1000
 
 # Install system level packages
-<% if (dockerConfig.servicesFound.length > 0) { -%>
+<% if (dockerConfig.serviceItems.length > 0) { -%>
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y \
-<% for (var index = 0; index < dockerConfig.servicesFound.length; index++) { -%>
-  <%- dockerConfig.servicesFound[index].package %> \
+<% for (var index = 0; index < dockerConfig.serviceItems.length; index++) { -%>
+  <%- dockerConfig.serviceItems[index].package %> \
 <% } -%>
   && apt-get clean
 <% } else { -%>
