@@ -67,10 +67,10 @@ describe('cloud-enablement:cloudfoundry', function () {
 			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
 		});
 
-		/*it('pipeline.yml creates services', function () {
+		it('pipeline.yml creates services', function () {
 			assert.file('.bluemix/pipeline.yml');
 			assert.fileContent('.bluemix/pipeline.yml', 'create-service');
-		});*/
+		});
 	});
 
 	describe('cloud-enablement:cloudfoundry with Node', function () {
