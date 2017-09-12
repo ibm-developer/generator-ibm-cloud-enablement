@@ -64,47 +64,27 @@ module.exports = class extends Generator {
 	}
 
 	_generateSwift() {
+		// Files to contain custom build and test commands
+		const FILENAME_SWIFT_BUILD = ".swift-build-linux";
+		const FILENAME_SWIFT_TEST = ".swift-test-linux";
 
 		// Define metadata for all services that 
-		// require custom logic in Dockerfile
-		const services = {
-			"postgresql": {
-				"package": "libpq-dev",
-				"compilationOptions": "-Xcc -I/usr/include/postgresql"
-			}
-		}
+		// require custom logic in Dockerfiles
+		const services = require('./resources/swift/services.json');
 
 		// Get array with all the keys for the services objects
 		const servKeys = Object.keys(services);
 		const servicesFound = [];
-		const array = [{key: "value1"}, {key: "value2"}];
-		const reformattedArray = array.map(function(obj) { 
-			const rObj = {};
-			rObj.key = obj.key;
-			return rObj;
-		});
-
-		console.log("reformattedArray" + JSON.stringify(reformattedArray));
-
-		const array2 = ["el", "paso", "de"]
-		const finalVal = array2.reduce((prev, curr) => prev + " " + curr );
-		console.log("finalVal:" + finalVal);
-
-		// Iterate over service keys
+		
+		// Iterate over service keys to search for provisioned services
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
 			if(this.bluemix.hasOwnProperty(servKey)) {
-				console.log("HAS PROPERTY" + servKey)
-				console.log("HELLLLLL!!")
-				console.log("package: " + services[servKey].package);
-				console.log("compilationOptions: " + services[servKey].compilationOptions);
 				servicesFound.push(services[servKey]);
-			} else {
-				console.log("IR DOES NOT HAVE PROPERTY: " + servKey);
 			}		
 		}
 
-		console.log("servicesFound: " + JSON.stringify(servicesFound));
+		// Create compilationOptions string by concatenating all options
 		const compilationOptions = servicesFound.reduce(
 			(accumulator, currentValue) => {
 				if (accumulator.length == 0) {
@@ -115,8 +95,6 @@ module.exports = class extends Generator {
 			},
 			""
 		);
-		//	(accumulator, service) => accumulator + " " + service.compilationOptions );
-		console.log("compilationOptions:" + JSON.stringify(compilationOptions));
 
 		const applicationName = this._sanitizeAppName(this.bluemix.name);
 		const executableName = applicationName;
@@ -143,51 +121,36 @@ module.exports = class extends Generator {
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
 
-		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
-			console.info(FILENAME_CLI_CONFIG, "already exists, skipping.");
-		} else {
-			this.fs.copyTpl(
-				this.templatePath('cli-config-common.yml'),
-				this.destinationPath(FILENAME_CLI_CONFIG), {
-					cliConfig
-				}
-			);
-		}
-
-		// Create docker config object for Swift
+		// Create Docker config object for Swift
 		const dockerConfig = {
 			executableName: `${executableName}`,
 			servicesFound: servicesFound
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
-			console.info(FILENAME_DOCKERFILE, "already exists, skipping.");
-		} else {	
-			console.log("dockerConfig: " + JSON.stringify(dockerConfig));		
-			this.fs.copyTpl(
-				this.templatePath('swift/Dockerfile'),
-				this.destinationPath(FILENAME_DOCKERFILE), {
-					dockerConfig					
-				}
-			);
-		}
+		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {
+			cliConfig					
+		});
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))){
-			console.info(FILENAME_DOCKERFILE_TOOLS, "already exists, skipping.");
-		} else {
-			this.fs.copyTpl(
-				this.templatePath('swift/Dockerfile-tools'),
-				this.destinationPath(FILENAME_DOCKERFILE_TOOLS), {
-					applicationName
-				}
-			);
-		}
+		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE, 'swift/' + FILENAME_DOCKERFILE, {
+			dockerConfig					
+		});
+
+		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'swift/' + FILENAME_DOCKERFILE_TOOLS, {
+			dockerConfig
+		});
+
+		this._copyTemplateIfNotExists(FILENAME_SWIFT_BUILD, 'swift/' + FILENAME_SWIFT_BUILD, {
+			compilationOptions: compilationOptions
+		});
+
+		this._copyTemplateIfNotExists(FILENAME_SWIFT_TEST, 'swift/' + FILENAME_SWIFT_TEST, {
+			compilationOptions: compilationOptions
+		});
 
 		this.fs.copy(
 			this.templatePath('swift/dockerignore'),
 			this.destinationPath('.dockerignore')
 		);
-
 	}
 
 	_generateNodeJS() {
@@ -382,5 +345,18 @@ module.exports = class extends Generator {
 			cleanName = name.replace(/^[^a-zA-Z]*/, '').replace(/[^a-zA-Z0-9]/g, '');
 		}
 		return cleanName || 'APP';
+	}
+
+	_copyTemplateIfNotExists(targetFileName, sourceTemplatePath, ctx) {
+		if (this.fs.exists(this.destinationPath(targetFileName))){
+			console.info(targetFileName, "already exists, skipping.");
+		} else {
+			this.fs.copyTpl(
+				this.templatePath(sourceTemplatePath),
+				this.destinationPath(targetFileName),
+				ctx
+			);
+		}
+
 	}
 };
