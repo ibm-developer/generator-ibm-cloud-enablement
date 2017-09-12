@@ -1,0 +1,6 @@
+{
+    "postgresql": {
+        "package": "libpq-dev",
+        "compilationOptions": "-Xcc -I/usr/include/postgresql"
+    }
+}
