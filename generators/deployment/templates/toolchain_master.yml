@@ -52,10 +52,10 @@ deploy:
   service-category: pipeline
   parameters:
     app-name: {{name}}
-    dev-space: {{tag 'space'}}
-    dev-organization: {{tag 'organization'}}
-    dev-region: {{tag 'region'}}
+    dev-space: "{{tag 'space'}}"
+    dev-organization: "{{tag 'organization'}}"
+    dev-region: "{{tag 'region'}}"
     {{#has deployment.type 'Kube'}}
     kube-cluster-name: {{deployment.kubeClusterName}}
-    api-key: {{tag 'api-key'}}
+    api-key: "{{tag 'api-key'}}"
     {{/has}}
