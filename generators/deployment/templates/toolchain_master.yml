@@ -13,7 +13,7 @@ toolchain:
 repo:
   service_id: hostedgit
   parameters:
-    repo_url: "{{tag 'zip_url'}}"
+    repo_url: "{{tag '#zip_url'}}{{tag 'zip_url'}}{{tag '/zip_url'}}{{tag '^zip_url'}}{{tag 'repository'}}{{tag '/zip_url'}}"
     repo_name: "{{tag 'toolchain.name'}}"
     type: {{repoType}}
     has_issues: true
