@@ -234,6 +234,20 @@ class scaffolderSample {
 					"plan": "Basic"
 				},
 				"url": "https://gateway.watsonplatform.net/visual-recognition/api"
+			},
+			"mongodb": {
+				"uri": "mongodb://admin:password@bluemix.net,bluemix.net:20056/compose?ssl=true&authSource=admin"
+			},
+			"postgresql": {
+				"uri": "postgres://admin:password@bluemix.net:20058/compose"
+			},
+			"alertnotification": {
+				"url": "https://bluemix.net",
+				"name": "alertnotification",
+				"password": "alertnotification-password"
+			},
+			"redis": {
+				"uri": "redis://admin:password@bluemix.com:20051"
 			}
 		}
 	}
