@@ -32,7 +32,12 @@ module.exports = class extends Generator {
 		this.manifestConfig = {};
 		this.manifestConfig.env = {};
 		this.toolchainConfig = {};
-		this.pipelineConfig = {buildJobProps : {artifact_dir: "''"}, deployment: {type: 'CF', name: this.bluemix.name}};
+		this.pipelineConfig = {
+			buildJobProps : {artifact_dir: "''"},
+			services: this.bluemix.services,
+			deployment: {type: 'CF', name: this.bluemix.name}
+		};
+
 		this.name = undefined;
 		if(this.bluemix.server) {
 			this.name = this.bluemix.server.name;

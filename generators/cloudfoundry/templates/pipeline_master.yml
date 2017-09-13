@@ -178,6 +178,11 @@ stages:
     {{#has deployment.type 'CF'}}
     script: |-
       #!/bin/bash
+{{#each services}}
+   {{#each this}}
+      cf create-service "{{{this.label}}}" "{{{this.plan}}}" "{{{this.name}}}"
+   {{/each}}
+{{/each}}
       {{#if pushCommand}}
       {{{pushCommand}}}
       {{else}}
