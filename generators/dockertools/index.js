@@ -77,24 +77,17 @@ module.exports = class extends Generator {
 		const serviceItems = [];
 		
 		// Iterate over service keys to search for provisioned services
+		let compilationOptions = "";
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
 			if(this.bluemix.hasOwnProperty(servKey)) {
 				serviceItems.push(services[servKey]);
+				if (services[servKey].hasOwnProperty("compilationOptions")) {
+					compilationOptions = compilationOptions + " " + services[servKey].compilationOptions;
+				}
 			}		
 		}
-
-		// Create compilationOptions string by concatenating all options
-		const compilationOptions = serviceItems.reduce(
-			(accumulator, currentValue) => {
-				if (accumulator.length == 0) {
-					return currentValue.compilationOptions;
-				} else {
-					return accumulator + " " + currentValue.compilationOptions;
-				}
-			},
-			""
-		);
+		compilationOptions = compilationOptions.trim();
 
 		const applicationName = this._sanitizeAppName(this.bluemix.name);
 		const executableName = applicationName;
@@ -139,13 +132,15 @@ module.exports = class extends Generator {
 			dockerConfig
 		});
 
-		this._copyTemplateIfNotExists(FILENAME_SWIFT_BUILD, 'swift/' + FILENAME_SWIFT_BUILD, {
-			compilationOptions: compilationOptions
-		});
+		if (compilationOptions.length > 0) {
+			this._copyTemplateIfNotExists(FILENAME_SWIFT_BUILD, 'swift/' + FILENAME_SWIFT_BUILD, {
+				compilationOptions: compilationOptions
+			});
 
-		this._copyTemplateIfNotExists(FILENAME_SWIFT_TEST, 'swift/' + FILENAME_SWIFT_TEST, {
-			compilationOptions: compilationOptions
-		});
+			this._copyTemplateIfNotExists(FILENAME_SWIFT_TEST, 'swift/' + FILENAME_SWIFT_TEST, {
+				compilationOptions: compilationOptions
+			});
+		}
 
 		this.fs.copy(
 			this.templatePath('swift/dockerignore'),
