@@ -75,18 +75,16 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
 
-		it('create swift-build-linux file', function () {
-			assert.file([
+		it('no swift-build-linux file', function () {
+			assert.noFile([
 				'.swift-build-linux'
 			]);
-			assert.fileContent('.swift-build-linux', 'swift build -Xcc -I/usr/include/postgresql');
 		});
 
-		it('create swift-test-linux file', function () {
-			assert.file([
+		it('no swift-test-linux file', function () {
+			assert.noFile([
 				'.swift-test-linux'
 			]);
-			assert.fileContent('.swift-test-linux', 'swift test -Xcc -I/usr/include/postgresql');
 		});
 	});
 
