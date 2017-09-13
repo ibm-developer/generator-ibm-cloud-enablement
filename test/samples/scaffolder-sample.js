@@ -35,6 +35,12 @@ function getJsonNoServer(language) {
 	return get(language, bluemix);
 }
 
+function getJsonServerWithDeployment(language, deploymentType) {
+	let scaffolderSample = new sample.scaffolderSample();
+	let bluemix = scaffolderSample.serverDeployment(deploymentType);
+	return get(language, bluemix);
+}
+
 function get(language, bluemix) {
 	bluemix.backendPlatform = language;
 	if(language === 'JAVA') {
@@ -61,5 +67,6 @@ function get(language, bluemix) {
 module.exports = {
 	getJson : getJson,
 	getJsonNoServices : getJsonNoServices,
-	getJsonNoServer : getJsonNoServer
+	getJsonNoServer : getJsonNoServer,
+	getJsonServerWithDeployment: getJsonServerWithDeployment
 }
