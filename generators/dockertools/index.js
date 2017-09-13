@@ -83,11 +83,11 @@ module.exports = class extends Generator {
 			if(this.bluemix.hasOwnProperty(servKey)) {
 				serviceItems.push(services[servKey]);
 				if (services[servKey].hasOwnProperty("compilationOptions")) {
-					compilationOptions = (compilationOptions.length == 0) ?
-						services[servKey].compilationOptions : compilationOptions + " " + services[servKey].compilationOptions;
+					compilationOptions = compilationOptions + " " + services[servKey].compilationOptions;
 				}
 			}		
 		}
+		compilationOptions = compilationOptions.trim();
 
 		const applicationName = this._sanitizeAppName(this.bluemix.name);
 		const executableName = applicationName;
