@@ -23,6 +23,8 @@ const fs = require('fs');
 const scaffolderSample = require('./samples/scaffolder-sample');
 const scaffolderSampleDeploymentKube = scaffolderSample.getJsonServerWithDeployment('NODE', 'Kube');
 
+const applicationName = 'AcmeProject'; // from sample json files
+const chartLocation = 'chart/' + applicationName.toLowerCase();
 
 describe('cloud-enablement:deployment', function () {
 	this.timeout(5000);
@@ -102,6 +104,11 @@ describe('cloud-enablement:deployment', function () {
 				return val.key === 'kube-cluster-name';
 			});
 			assert(clusterName);
+		});
+
+		it('replaces Kube cluster name in hpa.yaml', function () {
+			let chartFile = chartLocation + '/templates/hpa.yaml';
+			assert.fileContent(chartFile, 'namespace: my_kube_namespace');
 		});
 	});
 });
