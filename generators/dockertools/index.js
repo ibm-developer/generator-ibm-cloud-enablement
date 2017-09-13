@@ -77,29 +77,17 @@ module.exports = class extends Generator {
 		const serviceItems = [];
 		
 		// Iterate over service keys to search for provisioned services
+		let compilationOptions = "";
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
 			if(this.bluemix.hasOwnProperty(servKey)) {
 				serviceItems.push(services[servKey]);
+				if (services[servKey].hasOwnProperty("compilationOptions")) {
+					compilationOptions = (compilationOptions.length == 0) ?
+						services[servKey].compilationOptions : compilationOptions + " " + services[servKey].compilationOptions;
+				}
 			}		
 		}
-
-		// Create compilationOptions string by concatenating all options
-		// Note that compilationOptions is an optional field
-		const compilationOptions = serviceItems.reduce(
-			(accumulator, currentServ) => {
-				if (currentServ.hasOwnProperty("compilationOptions")) {
-					if (accumulator.length == 0) {
-						return currentServ.compilationOptions;
-					} else {
-						return accumulator + " " + currentServ.compilationOptions;
-					}
-				} else {
-					return "";
-				}
-			},
-			""
-		);
 
 		const applicationName = this._sanitizeAppName(this.bluemix.name);
 		const executableName = applicationName;
