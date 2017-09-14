@@ -66,6 +66,11 @@ describe('cloud-enablement:cloudfoundry', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
 		});
+
+		it('pipeline.yml creates services', function () {
+			assert.file('.bluemix/pipeline.yml');
+			assert.fileContent('.bluemix/pipeline.yml', 'create-service');
+		});
 	});
 
 	describe('cloud-enablement:cloudfoundry with Node', function () {
@@ -85,11 +90,11 @@ describe('cloud-enablement:cloudfoundry', function () {
 			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
 		});
 	});
-	
+
 	let javaFrameworks = ['JAVA', 'SPRING'];
 	let javaBuildTypes = ['maven', 'gradle'];
 	let createTypes = ['enable/', 'microservice'];
-	
+
 	let assertYmlContent = function(actual, expected, label) {
 		assert.strictEqual(actual, expected, 'Expected ' + label + ' to be ' + expected + ', found ' + actual);
 	}
@@ -117,8 +122,8 @@ describe('cloud-enablement:cloudfoundry', function () {
 							assertYmlContent(manifestyml.applications[0].memory, '512M', 'manifestyml.applications[0].memory')
 							assertYmlContent(manifestyml.applications[0].buildpack, 'liberty-for-java', 'manifestyml.applications[0].buildpack')
 							assertYmlContent(manifestyml.applications[0].env.services_autoconfig_excludes, 'cloudantNoSQLDB=config Object-Storage=config', 'manifestyml.applications[0].env.services_autoconfig_excludes');
-						} 
-						
+						}
+
 						if ( language === 'SPRING' ) {
 							let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
 							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application-'+javaVersion+'.jar', 'manifestyml.applications[0].path');

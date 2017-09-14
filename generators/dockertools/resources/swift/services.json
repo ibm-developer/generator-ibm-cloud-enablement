@@ -1,0 +1,5 @@
+{
+    "postgresql": {
+        "package": "libpq-dev"
+    }
+}

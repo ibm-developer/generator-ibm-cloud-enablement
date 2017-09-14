@@ -42,6 +42,8 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file([
 				'Dockerfile'
 			]);
+			assert.fileContent('Dockerfile', 'RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y \\');
+			assert.fileContent('Dockerfile', '  libpq-dev \\');
 		});
 
 		it('should have the executableName property set in Dockerfile', function () {
@@ -52,12 +54,15 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file([
 				'Dockerfile-tools'
 			]);
+			assert.fileContent('Dockerfile-tools', 'RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y \\');
+			assert.fileContent('Dockerfile', '  libpq-dev \\');
 		});
 
 		it('create cli-config for CLI tool', function () {
 			assert.file(['cli-config.yml']);
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 			assert.fileContent('cli-config.yml', 'run-cmd : ""');
+			assert.fileContent('cli-config.yml', 'container-port-map-debug : "2048:1024,2049:1025"');
 		});
 
 		it('create dockerignore file', function () {
@@ -68,6 +73,18 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('should have the chart-path property set in cli-config.yml', function () {
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('no swift-build-linux file', function () {
+			assert.noFile([
+				'.swift-build-linux'
+			]);
+		});
+
+		it('no swift-test-linux file', function () {
+			assert.noFile([
+				'.swift-test-linux'
+			]);
 		});
 	});
 
