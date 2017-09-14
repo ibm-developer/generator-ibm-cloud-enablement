@@ -100,9 +100,13 @@ module.exports = class extends Generator {
 			this.manifestConfig.name = this.opts.appName;
 			this.name = this.opts.appName;
 		}
-		if (this.opts.createType === 'bff') {
+		if (this.opts.createType === 'bff/liberty') {
 			this.manifestConfig.env.OPENAPI_SPEC = `/${this.name}/swagger/api`;
 		}
+		if (this.opts.createType === 'bff/spring') {
+			this.manifestConfig.env.OPENAPI_SPEC = '/swagger-ui.html';
+		}
+		
 		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {
 			this.toolchainConfig.repoType = 'link';
 		}
