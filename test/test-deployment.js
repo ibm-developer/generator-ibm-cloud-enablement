@@ -40,6 +40,8 @@ describe('cloud-enablement:deployment', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.file('.bluemix/pipeline.yml');
 			assert.file('.bluemix/deploy.json');
+			assert.file('.bluemix/container_build.sh');
+			assert.file('.bluemix/kube_deploy.sh');
 		});
 
 		it('has toolchain.yml with correct content', function () {

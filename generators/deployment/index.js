@@ -45,6 +45,9 @@ module.exports = class extends Generator {
 			this.deployment = Object.assign(this.deployment, this.bluemix.server.cloudDeploymentOptions);
 			this.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
 			this.deployment.name = Utils.sanitizeAppName(this.name || this.bluemix.name).toLowerCase();
+			this.deployment.containerScriptPath = '.bluemix/container_build.sh';
+			this.deployment.kubeDeployScriptName = 'kube_deploy.sh';
+			this.deployment.kubeDeployScriptPath = `.bluemix/${this.deployment.kubeDeployScriptName}`;
 
 		} else {
 			this.name = this.bluemix.name;
@@ -182,6 +185,12 @@ module.exports = class extends Generator {
 			{name: this.name, repoType: this.toolchainConfig.repoType, deployment: this.deployment});
 
 		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json',
+			{deployment: this.deployment});
+
+		this._writeHandlebarsFile('container_build.sh', '.bluemix/container_build.sh',
+			{deployment: this.deployment});
+
+		this._writeHandlebarsFile('kube_deploy.sh', '.bluemix/kube_deploy.sh',
 			{deployment: this.deployment});
 
 		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml',
