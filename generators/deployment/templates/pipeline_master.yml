@@ -4,14 +4,14 @@ stages:
   - type: git
     branch: master
     service: ${REPO}
-{{#if triggersType}}
+{{#if config.triggersType}}
   triggers:
-    - type: {{triggersType}}
+    - type: {{config.triggersType}}
 {{/if}}
   jobs:
   - name: Build
     type: builder
-{{#each buildJobProps}}
+{{#each config.buildJobProps}}
     {{@key}} : {{{this}}}
 {{/each}}
   {{#has deployment.type 'Kube'}}
@@ -178,13 +178,13 @@ stages:
     {{#has deployment.type 'CF'}}
     script: |-
       #!/bin/bash
-{{#each services}}
+{{#each config.services}}
    {{#each this}}
       cf create-service "{{{this.label}}}" "{{{this.plan}}}" "{{{this.name}}}"
    {{/each}}
 {{/each}}
-      {{#if pushCommand}}
-      {{{pushCommand}}}
+      {{#if config.pushCommand}}
+      {{{config.pushCommand}}}
       {{else}}
       cf push "${CF_APP}"
       {{/if}}

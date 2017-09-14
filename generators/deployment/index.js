@@ -34,17 +34,17 @@ module.exports = class extends Generator {
 		this.toolchainConfig = {};
 		this.pipelineConfig = {
 			buildJobProps : {artifact_dir: "''"},
-			services: this.bluemix.services,
-			deployment: {type: 'CF', name: this.bluemix.name}
+			services: this.bluemix.services
 		};
+		this.deployment = {type: 'CF', name: this.bluemix.name};
 
 		this.name = undefined;
 		if(this.bluemix.server) {
 			this.name = this.bluemix.server.name;
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
-			this.pipelineConfig.deployment = Object.assign(this.pipelineConfig.deployment, this.bluemix.server.cloudDeploymentOptions);
-			this.pipelineConfig.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
-			this.pipelineConfig.deployment.name = Utils.sanitizeAppName(this.name || this.bluemix.name).toLowerCase();
+			this.deployment = Object.assign(this.deployment, this.bluemix.server.cloudDeploymentOptions);
+			this.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
+			this.deployment.name = Utils.sanitizeAppName(this.name || this.bluemix.name).toLowerCase();
 
 		} else {
 			this.name = this.bluemix.name;
@@ -179,12 +179,13 @@ module.exports = class extends Generator {
 
 		// create .bluemix directory for toolchain/devops related files
 		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml',
-			{name: this.name, repoType: this.toolchainConfig.repoType, deployment: this.pipelineConfig.deployment});
+			{name: this.name, repoType: this.toolchainConfig.repoType, deployment: this.deployment});
 
 		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json',
-			{deployment: this.pipelineConfig.deployment});
+			{deployment: this.deployment});
 
-		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml', this.pipelineConfig);
+		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml',
+			{config: this.pipelineConfig, deployment: this.deployment});
 	}
 
 	_writeHandlebarsFile(templateFile, destinationFile, data) {
