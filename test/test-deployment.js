@@ -60,20 +60,19 @@ describe('cloud-enablement:deployment', function () {
 
 		it('has pipeline.yml with correct content', function () {
 			let pipeline = yml.safeLoad(fs.readFileSync('.bluemix/pipeline.yml', 'utf8'));
-			let containerBuildJob = pipeline.stages[0].jobs[1];
-			assert.equal(containerBuildJob.name, 'Container Build');
+			let containerBuildJob = pipeline.stages[0].jobs[0];
+			assert.equal(containerBuildJob.name, 'Build');
 			assert.equal(containerBuildJob.extension_id, 'ibm.devops.services.pipeline.container.builder');
 			assert.equal(containerBuildJob.IMAGE_NAME, 'myapplication');
 
 			let containerBuildScript = fs.readFileSync(__dirname + '/samples/container-build-script.txt', 'utf8');
 			assert.equal(containerBuildJob.COMMAND, containerBuildScript);
 
-			// let containerBuildScript = fs.readFileSync(__dirname + '/samples/container-build-script.txt', 'utf8');
 			let deployStage = pipeline.stages[1];
 			let input = deployStage.inputs[0];
 			assert.equal(input.type, 'job');
 			assert.equal(input.stage, 'Build Stage');
-			assert.equal(input.job, 'Container Build');
+			assert.equal(input.job, 'Build');
 
 			let deployJob = deployStage.jobs[0];
 			assert.equal(deployJob.target.api_key, '${API_KEY}');
