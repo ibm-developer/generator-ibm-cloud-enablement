@@ -259,7 +259,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 		});
 		it('should contain the OPENAPI_SPEC env var', function () {
 			let manifestyml = yml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
-			assertYmlContent(manifestyml.applications[0].env["OPENAPI_SPEC"], '/swagger-ui.html', 'manifest.yml.env["OPENAPI_SPEC"]');
+			assertYmlContent(manifestyml.applications[0].env["OPENAPI_SPEC"], '/swagger/api', 'manifest.yml.env["OPENAPI_SPEC"]');
 		});
 	});
 
