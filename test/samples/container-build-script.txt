@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "source the container_build script to run in current shell"
+source .bluemix/container_build.sh

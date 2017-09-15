@@ -16,6 +16,7 @@
 const Generator = require('yeoman-generator');
 let _ = require('lodash');
 const Handlebars = require('../lib/helpers').handlebars;
+const Utils = require('../lib/utils');
 
 // suffix for other deployment
 const DEPLOYMENT_SUFFIX = '.deploy.yaml';
@@ -80,9 +81,9 @@ module.exports = class extends Generator {
 		// work out app name and language
 		this.opts.language = _.toLower(this.bluemix.backendPlatform);
 		if(this.opts.language === 'java' || this.opts.language === 'spring') {
-			this.opts.applicationName = this.opts.appName || this._sanitizeAppName(this.bluemix.name);
+			this.opts.applicationName = this.opts.appName || Utils.sanitizeAppName(this.bluemix.name);
 		} else {
-			this.opts.applicationName = this._sanitizeAppName(this.bluemix.name);
+			this.opts.applicationName = Utils.sanitizeAppName(this.bluemix.name);
 		}
 
 		this.opts.storages = typeof(this.opts.storages) === 'string' ? JSON.parse(this.opts.storages || '[]') : this.opts.storages;
@@ -113,6 +114,9 @@ module.exports = class extends Generator {
 			// TODO(gib): Can we get this from scaffolder (this.bluemix) somehow?
 			const namespace = this.bluemix.server.namespace ? this.bluemix.server.namespace : 'replace-me-namespace';
 			this.opts.repositoryURL= `registry.${this.bluemix.server.domain}/${namespace}/`;
+			this.opts.kubeClusterNamespace =
+				this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
+					this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace : 'default';
 		} else {
 			// TODO(gib): we seem to be hitting this, not sure how.
 
@@ -190,14 +194,6 @@ module.exports = class extends Generator {
 				}
 			})
 		}
-	}
-
-	_sanitizeAppName(name) {
-		let cleanName = "";
-		if (name != undefined) {
-			cleanName = name.replace(/^[^a-zA-Z]*/, '').replace(/[^a-zA-Z0-9]/g, '');
-		}
-		return cleanName || 'APP';
 	}
 
 	_writeHandlebarsFile(templateFile, destinationFile, data) {

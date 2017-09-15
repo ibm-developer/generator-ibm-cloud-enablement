@@ -13,7 +13,7 @@ toolchain:
 repo:
   service_id: hostedgit
   parameters:
-    repo_url: "{{tag 'zip_url'}}"
+    repo_url: "{{tag '#zip_url'}}{{tag 'zip_url'}}{{tag '/zip_url'}}{{tag '^zip_url'}}{{tag 'repository'}}{{tag '/zip_url'}}"
     repo_name: "{{tag 'toolchain.name'}}"
     type: {{repoType}}
     has_issues: true
@@ -33,6 +33,10 @@ build:
       CF_SPACE: "{{tag 'deploy.parameters.dev-space'}}"
       CF_ORGANIZATION: "{{tag 'deploy.parameters.dev-organization'}}"
       CF_REGION_ID: "{{tag 'deploy.parameters.dev-region'}}"
+      {{#has deployment.type 'Kube'}}
+      KUBE_CLUSTER_NAME: "{{tag 'deploy.parameters.kube-cluster-name'}}"
+      API_KEY: "{{tag 'deploy.parameters.api-key'}}"
+      {{/has}}
      execute: true
     services: ["repo"]
   hidden: ["form"]
@@ -48,6 +52,10 @@ deploy:
   service-category: pipeline
   parameters:
     app-name: {{name}}
-    dev-space: {{tag 'space'}}
-    dev-organization: {{tag 'organization'}}
-    dev-region: {{tag 'region'}}
+    dev-space: "{{tag 'space'}}"
+    dev-organization: "{{tag 'organization'}}"
+    dev-region: "{{tag 'region'}}"
+    {{#has deployment.type 'Kube'}}
+    kube-cluster-name: {{deployment.kubeClusterName}}
+    api-key: "{{tag 'api-key'}}"
+    {{/has}}
