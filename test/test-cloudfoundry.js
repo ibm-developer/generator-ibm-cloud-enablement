@@ -239,15 +239,27 @@ describe('cloud-enablement:cloudfoundry', function () {
 		});
 	});
 
-	describe('cloud-enablement:cloudfoundry with java-liberty and createType = bff', function () {
+	describe('cloud-enablement:cloudfoundry with java-liberty and createType = bff/liberty', function () {
 		beforeEach(function () {
 			let bluemixJson = scaffolderSampleJava;
 			return helpers.run(path.join(__dirname, '../generators/app'))
-				.withOptions({ bluemix: JSON.stringify(bluemixJson), createType: 'bff' })
+				.withOptions({ bluemix: JSON.stringify(bluemixJson), createType: 'bff/liberty' })
 		});
 		it('should contain the OPENAPI_SPEC env var', function () {
 			let manifestyml = yml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
 			assertYmlContent(manifestyml.applications[0].env["OPENAPI_SPEC"], '/my-application/swagger/api', 'manifest.yml.env["OPENAPI_SPEC"]');
+		});
+	});
+
+	describe('cloud-enablement:cloudfoundry with java-spring and createType = bff/spring', function () {
+		beforeEach(function () {
+			let bluemixJson = scaffolderSampleSpring;
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.withOptions({ bluemix: JSON.stringify(bluemixJson), createType: 'bff/spring' })
+		});
+		it('should contain the OPENAPI_SPEC env var', function () {
+			let manifestyml = yml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
+			assertYmlContent(manifestyml.applications[0].env["OPENAPI_SPEC"], '/swagger-ui.html', 'manifest.yml.env["OPENAPI_SPEC"]');
 		});
 	});
 
