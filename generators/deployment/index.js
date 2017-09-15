@@ -15,6 +15,7 @@
 
 const Handlebars = require('handlebars');
 const Generator = require('yeoman-generator');
+const Utils = require('../lib/utils');
 
 module.exports = class extends Generator {
 	constructor(args, opts) {
@@ -35,14 +36,24 @@ module.exports = class extends Generator {
 			buildJobProps : {artifact_dir: "''"},
 			services: this.bluemix.services
 		};
-		this.name = undefined
+		this.deployment = {type: 'CF', name: this.bluemix.name};
+
+		this.name = undefined;
 		if(this.bluemix.server) {
 			this.name = this.bluemix.server.name;
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
+			this.deployment = Object.assign(this.deployment, this.bluemix.server.cloudDeploymentOptions);
+			this.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
+			this.deployment.name = Utils.sanitizeAppName(this.name || this.bluemix.name).toLowerCase();
+			this.deployment.containerScriptPath = '.bluemix/container_build.sh';
+			this.deployment.kubeDeployScriptName = 'kube_deploy.sh';
+			this.deployment.kubeDeployScriptPath = `.bluemix/${this.deployment.kubeDeployScriptName}`;
+
 		} else {
 			this.name = this.bluemix.name;
 			this.manifestConfig.name = this.bluemix.name;
 		}
+
 		this.toolchainConfig.repoType = this.opts.repoType || "clone";
 		switch (this.bluemix.backendPlatform) {
 			case 'NODE':
@@ -174,14 +185,20 @@ module.exports = class extends Generator {
 		}
 
 		// create .bluemix directory for toolchain/devops related files
-		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml', {name: this.name, repoType: this.toolchainConfig.repoType});
+		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml',
+			{name: this.name, repoType: this.toolchainConfig.repoType, deployment: this.deployment});
 
-		this.fs.copy(
-			this.templatePath('deploy_master.json'),
-			this.destinationPath('.bluemix/deploy.json')
-		);
+		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json',
+			{deployment: this.deployment});
 
-		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml', this.pipelineConfig);
+		this._writeHandlebarsFile('container_build.sh', '.bluemix/container_build.sh',
+			{deployment: this.deployment});
+
+		this._writeHandlebarsFile('kube_deploy.sh', '.bluemix/kube_deploy.sh',
+			{deployment: this.deployment});
+
+		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml',
+			{config: this.pipelineConfig, deployment: this.deployment});
 	}
 
 	_writeHandlebarsFile(templateFile, destinationFile, data) {

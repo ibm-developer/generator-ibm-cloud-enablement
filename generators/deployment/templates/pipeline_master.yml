@@ -1,0 +1,86 @@
+stages:
+- name: Build Stage
+  inputs:
+  - type: git
+    branch: master
+    service: ${REPO}
+{{#if config.triggersType}}
+  triggers:
+    - type: {{config.triggersType}}
+{{/if}}
+  jobs:
+  - name: Build
+    type: builder
+{{#missing deployment.type 'Kube'}}
+{{#each config.buildJobProps}}
+    {{@key}} : {{{this}}}
+{{/each}}
+{{/missing}}
+  {{#has deployment.type 'Kube'}}
+    extension_id: ibm.devops.services.pipeline.container.builder
+    target:
+      region_id: ${CF_REGION_ID}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+    IMAGE_NAME: {{deployment.name}}
+    USE_CACHED_LAYERS: 'true'
+    COMMAND: |
+      #!/bin/bash
+      echo "source the container_build script to run in current shell"
+      source {{{deployment.containerScriptPath}}}
+  {{/has}}
+  - name: Post Build
+    type: builder
+    artifact_dir: ''
+    build_type: shell
+    script: |-
+      #!/bin/bash
+      if  [[ -f post_build.sh ]]; then
+        chmod +x post_build.sh;
+        echo "executing the post_build script";
+        sh post_build.sh;
+      else
+        echo "the post_build script does not exist";
+      fi
+- name: Deploy Stage
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  properties:
+  - name: buildProperties
+    value: build.properties
+    type: file
+  triggers:
+  - type: stage
+  jobs:
+  - name: Deploy
+    type: deployer
+    target:
+      region_id: ${CF_REGION_ID}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
+    {{#has deployment.type 'Kube'}}
+      api_key: ${API_KEY}
+      kubernetes_cluster: ${KUBE_CLUSTER_NAME}
+    script: |-
+      #!/bin/bash
+      echo "source the kube_deploy script to run in current shell"
+      source {{{deployment.kubeDeployScriptName}}}
+    {{/has}}
+    {{#has deployment.type 'CF'}}
+    script: |-
+      #!/bin/bash
+{{#each config.services}}
+   {{#each this}}
+      cf create-service "{{{this.label}}}" "{{{this.plan}}}" "{{{this.name}}}"
+   {{/each}}
+{{/each}}
+      {{#if config.pushCommand}}
+      {{{config.pushCommand}}}
+      {{else}}
+      cf push "${CF_APP}"
+      {{/if}}
+      # cf logs "${CF_APP}" --recent
+    {{/has}}
