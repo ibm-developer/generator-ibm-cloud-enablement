@@ -162,6 +162,11 @@ module.exports = class extends Generator {
 					target : 'istio.yaml',
 					process : true
 				}
+				this.fileLocations.basedeployment = {
+					source : 'java/basedeployment.yaml',
+					target : 'chartDir/templates/basedeployment.yaml',
+					process : true
+				}
 			}
 		}
 
