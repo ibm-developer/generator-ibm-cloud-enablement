@@ -280,6 +280,34 @@ class scaffolderSample {
 			"name": "AcmeProject"
 		}
 	}
+
+	serverDeployment(deploymentType) {
+		let bluemix = {
+			"name": "AcmeProject",
+			"server": {
+				"diskQuota": "512M",
+				"domain": "ng.bluemix.net",
+				"host": "myapp",
+				"instances": 3,
+				"memory": "1024M",
+				"name": "my-application",
+				"organization": "IMF_Sand",
+				"space": "mobilecategoryDev"
+			}
+		};
+
+		if (deploymentType) {
+			bluemix.server.cloudDeploymentType = deploymentType;
+			if (deploymentType === 'Kube') {
+				bluemix.server.cloudDeploymentOptions = {
+					kubeClusterName: 'my_kube_cluster',
+					kubeClusterNamespace: 'my_kube_namespace'
+				};
+			}
+		}
+
+		return bluemix;
+	}
 }
 
 module.exports = {
