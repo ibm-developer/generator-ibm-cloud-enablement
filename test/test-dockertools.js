@@ -183,7 +183,7 @@ describe('cloud-enablement:dockertools', function () {
 						assert.noFileContent('Dockerfile-tools', 'wlp/bin');
 					});
 					it('cli-config file run-cmd includes version', function () {
-						assert.fileContent('cli-config.yml', `run-cmd : "java -Dspring.profiles.active=local -jar ${applicationName}-${javaVersion}.jar"`);
+						assert.noFileContent('cli-config.yml', `run-cmd : "java -Dspring.profiles.active=local -jar ${applicationName}-${javaVersion}.jar"`);
 					});
 				} else  /* language === 'JAVA' */ {
 					it('.dockerignore ignores workarea and logs', function () {
