@@ -13,7 +13,7 @@
 
 'use strict';
 
-const Handlebars = require('handlebars');
+const Handlebars = require('../lib/helpers').handlebars;
 const Generator = require('yeoman-generator');
 const Utils = require('../lib/utils');
 
@@ -104,7 +104,7 @@ module.exports = class extends Generator {
 			this.manifestConfig.env.OPENAPI_SPEC = `/${this.name}/swagger/api`;
 		}
 		if (this.opts.createType === 'bff/spring') {
-			this.manifestConfig.env.OPENAPI_SPEC = '/swagger-ui.html';
+			this.manifestConfig.env.OPENAPI_SPEC = '/swagger/api';
 		}
 		
 		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {

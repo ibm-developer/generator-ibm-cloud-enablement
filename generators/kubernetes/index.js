@@ -113,7 +113,8 @@ module.exports = class extends Generator {
 		if (this.bluemix.server) {
 			// TODO(gib): Can we get this from scaffolder (this.bluemix) somehow?
 			const namespace = this.bluemix.server.namespace ? this.bluemix.server.namespace : 'replace-me-namespace';
-			this.opts.repositoryURL= `registry.${this.bluemix.server.domain}/${namespace}/`;
+			const domain = this.bluemix.server.domain ? this.bluemix.server.domain : 'ng.bluemix.net';
+			this.opts.repositoryURL= `registry.${domain}/${namespace}/`;
 			this.opts.kubeClusterNamespace =
 				this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
 					this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace : 'default';
@@ -160,6 +161,11 @@ module.exports = class extends Generator {
 				this.fileLocations.istiofile = {
 					source : 'java/istio.yaml',
 					target : 'istio.yaml',
+					process : true
+				}
+				this.fileLocations.basedeployment = {
+					source : 'java/basedeployment.yaml',
+					target : 'chartDir/templates/basedeployment.yaml',
 					process : true
 				}
 			}
