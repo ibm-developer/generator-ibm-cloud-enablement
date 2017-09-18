@@ -13,7 +13,7 @@
 
 'use strict';
 
-const Handlebars = require('handlebars');
+const Handlebars = require('../lib/helpers').handlebars;
 const Generator = require('yeoman-generator');
 const Utils = require('../lib/utils');
 

@@ -28,6 +28,12 @@ applications:
   {{else}}
   random-route: true
   {{/if ~}}
+  {{#if this.health-check-type}}
+  health-check-type: {{{this.health-check-type}}}
+  {{/if ~}}
+  {{#if this.health-check-http-endpoint}}
+  health-check-http-endpoint: {{{this.health-check-http-endpoint}}}
+  {{/if ~}}
   {{#if this.services }}
   services:
   {{#each this.services}}
