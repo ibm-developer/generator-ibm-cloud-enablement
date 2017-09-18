@@ -132,6 +132,7 @@ describe('cloud-enablement:kubernetes', function () {
 					assertYmlContent(valuesyml.service.servicePortHttps, undefined, 'valuesyml.service.servicePortHttps');
 				}
 				assertYmlContent(valuesyml.hpa.enabled, false, 'valuesyml.hpa.enabled');
+				assertYmlContent(valuesyml.base.enabled, false, 'valuesyml.base.enabled');
 				assertYmlContent(valuesyml.image.resources.requests.cpu, '200m', 'valuesyml.image.resources.requests.cpu');
 			});
 			it('has manifests/kube.deploy.yml with correct content', function () {
@@ -177,6 +178,9 @@ describe('cloud-enablement:kubernetes', function () {
 				});
 				it('does not have a istio.yaml', () => {
 					assert.noFile('istio.yaml');
+				});
+				it('does not have a istio.yaml', () => {
+					assert.noFile(chartLocation + '/templates/basedeployment.yaml');
 				});
 			}
 		});
