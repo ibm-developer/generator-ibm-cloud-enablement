@@ -9,6 +9,14 @@
       "description": "The Bluemix API key is used to access the IBM Container Service API and interact with the cluster. You can obtain your API key with 'bx iam api-key-create' or via the console at https://console.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once).",
       "type": "string"
     },
+    "image-registry-token": {
+      "description": "Container Registry access token. Retrievable via [bx cr tokens]",
+      "type": "string"
+    },
+    "image-pull-secret-name": {
+      "description": "A name for the imagePullSecret which will reference the registry access token",
+      "type": "string"
+    },
     "kube-cluster-name": {
       "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.bluemix.net/containers-kubernetes/home/clusters.",
       "type": "string"
@@ -31,7 +39,7 @@
       "type": "string"
     }
   },
-  "required": ["dev-region", "dev-organization", "dev-space", "app-name"{{#has deployment.type 'Kube'}}, "api-key", "kube-cluster-name"{{/has}}],
+  "required": ["dev-region", "dev-organization", "dev-space", "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],
   "form": [{
     "type": "validator",
     "url": "/devops/setup/bm-helper/helper.html"
@@ -42,6 +50,16 @@
     "readonly": false,
     "title": "Bluemix API Key",
     "key": "api-key"
+  }, {
+    "type": "password",
+    "readonly": false,
+    "title": "Container Registry access token",
+    "key": "image-registry-token"
+  }, {
+    "type": "text",
+    "readonly": false,
+    "title": "Name for the imagePullSecret",
+    "key": "image-pull-secret-name"
   }, {
     "type": "text",
     "readonly": false,

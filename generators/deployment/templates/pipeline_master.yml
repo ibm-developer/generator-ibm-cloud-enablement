@@ -47,10 +47,21 @@ stages:
   - type: job
     stage: Build Stage
     job: Build
+  {{#has deployment.type 'Kube'}}
   properties:
   - name: buildProperties
     value: build.properties
     type: file
+  - name: CLUSTER_NAMESPACE
+    value: {{deployment.kubeClusterNamespace}}
+    type: text
+  - name: IMAGE_PULL_SECRET_NAME
+    value: ${IMAGE_PULL_SECRET_NAME}
+    type: text
+  - name: IMAGE_REGISTRY_TOKEN
+    value: ${IMAGE_REGISTRY_TOKEN}
+    type: text
+  {{/has}}
   triggers:
   - type: stage
   jobs:
