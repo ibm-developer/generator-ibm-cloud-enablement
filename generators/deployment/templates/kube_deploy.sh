@@ -17,14 +17,14 @@ if ! kubectl get namespace $CLUSTER_NAMESPACE; then
     kubectl create namespace $CLUSTER_NAMESPACE
 fi
 
-# create imagePullSecret if it doesn't exist
+echo "create ${IMAGE_PULL_SECRET_NAME} imagePullSecret if it does not exist"
 if ! kubectl get secret ${IMAGE_PULL_SECRET_NAME} --namespace $CLUSTER_NAMESPACE; then
     echo "${IMAGE_PULL_SECRET_NAME} not found in $CLUSTER_NAMESPACE, creating it"
     # for Container Registry, docker username is 'token' and email does not matter
     kubectl --namespace $CLUSTER_NAMESPACE create secret docker-registry $IMAGE_PULL_SECRET_NAME --docker-server=$REGISTRY_HOST --docker-password=$IMAGE_REGISTRY_TOKEN --docker-username=token --docker-email=a@b.com
 fi
 
-# enable default serviceaccount to use the pull secret
+echo "enable default serviceaccount to use the pull secret"
 kubectl patch -n $CLUSTER_NAMESPACE serviceaccount/default -p '{"imagePullSecrets":[{"name":"'"$IMAGE_PULL_SECRET_NAME"'"}]}'
 echo "Namespace $CLUSTER_NAMESPACE is now authorized to pull from the private image registry"
 echo "default serviceAccount:"
