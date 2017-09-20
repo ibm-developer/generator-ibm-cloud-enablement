@@ -48,7 +48,9 @@ module.exports = class extends Generator {
 			this.deployment.containerScriptPath = '.bluemix/container_build.sh';
 			this.deployment.kubeDeployScriptName = 'kube_deploy.sh';
 			this.deployment.kubeDeployScriptPath = `.bluemix/${this.deployment.kubeDeployScriptName}`;
-
+			if (!this.deployment.kubeClusterNamespace) {
+				this.deployment.kubeClusterNamespace = 'default';
+			}
 		} else {
 			this.name = this.bluemix.name;
 			this.manifestConfig.name = this.bluemix.name;
