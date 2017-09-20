@@ -51,10 +51,16 @@ describe('cloud-enablement:deployment', function () {
 
 			it('has toolchain.yml with correct content', function () {
 				assert.fileContent('.bluemix/toolchain.yml', 'repo_url: "{{#zip_url}}{{zip_url}}{{/zip_url}}{{^zip_url}}{{repository}}{{/zip_url}}"');
+
 				assert.fileContent('.bluemix/toolchain.yml', 'KUBE_CLUSTER_NAME: "{{deploy.parameters.kube-cluster-name}}"');
 				assert.fileContent('.bluemix/toolchain.yml', 'API_KEY: "{{deploy.parameters.api-key}}"');
+				assert.fileContent('.bluemix/toolchain.yml', 'IMAGE_PULL_SECRET_NAME: "{{deploy.parameters.image-pull-secret-name}}"');
+				assert.fileContent('.bluemix/toolchain.yml', 'IMAGE_REGISTRY_TOKEN: "{{deploy.parameters.image-registry-token}}"');
+
 				assert.fileContent('.bluemix/toolchain.yml', 'kube-cluster-name: my_kube_cluster');
 				assert.fileContent('.bluemix/toolchain.yml', 'api-key: "{{api-key}}"');
+				assert.fileContent('.bluemix/toolchain.yml', 'image-pull-secret-name: "{{image-pull-secret-name}}"');
+				assert.fileContent('.bluemix/toolchain.yml', 'image-registry-token: "{{image-registry-token}}"');
 			});
 
 			it('has toolchain.yml with correct structure', function () {
@@ -63,6 +69,8 @@ describe('cloud-enablement:deployment', function () {
 				assert.ok(toolchainyml.build.parameters.configuration.env.API_KEY);
 				assert.ok(toolchainyml.deploy.parameters['kube-cluster-name']);
 				assert.ok(toolchainyml.deploy.parameters['api-key']);
+				assert.ok(toolchainyml.deploy.parameters['image-registry-token']);
+				assert.ok(toolchainyml.deploy.parameters['image-registry-token']);
 			});
 
 			it('has pipeline.yml with correct content', function () {
@@ -81,6 +89,10 @@ describe('cloud-enablement:deployment', function () {
 				assert.equal(input.stage, 'Build Stage');
 				assert.equal(input.job, 'Build');
 
+				let properties = deployStage.properties;
+				let expectedProperties = yml.safeLoad(fs.readFileSync(__dirname + '/samples/deploy-stage-properties.yaml', 'utf8'));
+				assert.deepEqual(properties, expectedProperties);
+
 				let deployJob = deployStage.jobs[0];
 				assert.equal(deployJob.target.api_key, '${API_KEY}');
 				assert.equal(deployJob.target.kubernetes_cluster, '${KUBE_CLUSTER_NAME}');
@@ -94,10 +106,14 @@ describe('cloud-enablement:deployment', function () {
 
 				let properties = deployJson.properties;
 				assert(properties['api-key']);
+				assert(properties['image-registry-token']);
+				assert(properties['image-pull-secret-name']);
 				assert(properties['kube-cluster-name']);
 
 				assert(deployJson.required);
 				assert(deployJson.required.includes('api-key'));
+				assert(deployJson.required.includes('image-registry-token'));
+				assert(deployJson.required.includes('image-pull-secret-name'));
 				assert(deployJson.required.includes('kube-cluster-name'));
 
 				let form = deployJson.form;
@@ -105,6 +121,16 @@ describe('cloud-enablement:deployment', function () {
 					return val.key === 'api-key';
 				});
 				assert(formApiKey);
+
+				let formRegistryToken = form.find(function (val) {
+					return val.key === 'image-registry-token';
+				});
+				assert(formRegistryToken);
+
+				let formPullSecret = form.find(function (val) {
+					return val.key === 'image-pull-secret-name';
+				});
+				assert(formPullSecret);
 
 				let clusterName = form.find(function (val) {
 					return val.key === 'kube-cluster-name';

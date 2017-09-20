@@ -60,8 +60,10 @@ cp {{deployment.kubeDeployScriptPath}} $ARCHIVE_DIR/
 echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
 # RELEASE_NAME from build.properties is used in Helm Chart deployment to set the release name
 echo "RELEASE_NAME=${IMAGE_NAME}" >> $ARCHIVE_DIR/build.properties
+# REGISTRY_HOST from build.properties is used to create imagePullSecret, ex: registry.ng.bluemix.net
+echo "REGISTRY_HOST=${CCS_REGISTRY_HOST}" >> $ARCHIVE_DIR/build.properties
 
-CHART_PATH=./chart/{{deployment.name}}
+CHART_PATH=./chart/$IMAGE_NAME
 if [ -f ${CHART_PATH}/values.yaml ]; then
     #Update Helm chart values.yml with image name and tag
     echo "UPDATING CHART VALUES:"
