@@ -14,7 +14,7 @@ spec:
         app: "{{tag '  .Chart.Name '}}-selector"
         version: "{{tag ' .Values.base.image.tag '}}"
     spec:
-     containers:
+      containers:
       - name: {{tag '  .Chart.Name  '}}
         image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.base.image.tag '}}"
         imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
@@ -37,8 +37,8 @@ spec:
         env:
           - name: PORT
             value: "{{tag ' .Values.service.servicePort '}}"
-{{#each storageDeploys.env}}
+          {{#each storageDeploys.env}}
           - name: {{@key}}
             value: {{{this}}}
-{{/each}}
+          {{/each}}
 {{tag ' end '}}

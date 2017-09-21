@@ -13,7 +13,7 @@ spec:
         app: "{{  .Chart.Name }}-selector"
         version: "{{ .Values.image.tag }}"
     spec:
-     containers:
+      containers:
       - name: {{  .Chart.Name  }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
