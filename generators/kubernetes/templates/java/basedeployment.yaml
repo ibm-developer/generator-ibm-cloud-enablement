@@ -12,12 +12,16 @@ spec:
     metadata:
       labels:
         app: "{{tag '  .Chart.Name '}}-selector"
-        version: "{{tag ' .Values.base.image.tag '}}"
+        version: "base"
     spec:
      containers:
       - name: {{tag '  .Chart.Name  '}}
         image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.base.image.tag '}}"
         imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
+{{#has language 'java'}}
+{{tag ' if .Values.istio.enabled '}}
+{{tag ' else '}}
+{{/has}}
         readinessProbe:
           httpGet:
           {{! healthEndpoint is configured in the index.js and is different for basicweb}}
@@ -30,6 +34,9 @@ spec:
             port: 8080
           {{/has}}
           initialDelaySeconds: 20
+{{#has language 'java'}}
+{{tag '  end '}}
+{{/has}}
         resources:
           requests:
             cpu: "{{tag ' .Values.image.resources.requests.cpu '}}"
