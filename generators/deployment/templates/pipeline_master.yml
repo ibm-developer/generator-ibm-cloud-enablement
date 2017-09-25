@@ -11,12 +11,13 @@ stages:
   jobs:
   - name: Build
     type: builder
-{{#missing deployment.type 'Kube'}}
 {{#each config.buildJobProps}}
     {{@key}} : {{{this}}}
 {{/each}}
-{{/missing}}
   {{#has deployment.type 'Kube'}}
+  - name: Build Container
+    type: builder
+    artifact_dir: ''
     extension_id: ibm.devops.services.pipeline.container.builder
     target:
       region_id: ${CF_REGION_ID}
@@ -46,7 +47,7 @@ stages:
   inputs:
   - type: job
     stage: Build Stage
-    job: Build
+    job: Build{{#has deployment.type 'Kube'}} Container{{/has}}
   {{#has deployment.type 'Kube'}}
   properties:
   - name: buildProperties
