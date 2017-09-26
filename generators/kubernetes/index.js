@@ -86,6 +86,8 @@ module.exports = class extends Generator {
 			this.opts.applicationName = Utils.sanitizeAlpaNum(this.bluemix.name);
 		}
 
+		this.opts.chartName = Utils.sanitizeAlpaNumLowerCase(this.opts.applicationName);
+
 		this.opts.storages = typeof(this.opts.storages) === 'string' ? JSON.parse(this.opts.storages || '[]') : this.opts.storages;
 		if(this.opts.storages) {
 			this.opts.storages.forEach(storage => {
@@ -140,7 +142,7 @@ module.exports = class extends Generator {
 		}
 		// setup output directory name for helm chart
 		// chart/<applicationName>/...
-		let chartDir = 'chart/' + Utils.sanitizeAlpaNumLowerCase(this.opts.applicationName);
+		let chartDir = 'chart/' + this.opts.chartName;
 
 		if(this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';
