@@ -4,18 +4,17 @@ kind: Deployment
 metadata:
   name: "{{tag '  .Chart.Name '}}-basedeployment"
   labels:
-    chart: "{{tag ' .Chart.Name '}}-{{{tag ' .Chart.Version | replace "+" "_" '}}}"
+    chart: "{{tag ' .Chart.Name '}}-{{{tag " .Chart.Version | replace '+' '_' "}}}"
 spec:
-  replicas:  {{tag ' .Values.base.replicaCount '}}
+  replicas: {{tag ' .Values.base.replicaCount '}}
   revisionHistoryLimit: {{tag ' .Values.revisionHistoryLimit '}}
   template:
     metadata:
       labels:
         app: "{{tag '  .Chart.Name '}}-selector"
-        version: "{{tag ' .Values.base.image.tag '}}"
     spec:
-     containers:
-      - name: {{tag '  .Chart.Name  '}}
+      containers:
+      - name: "{{tag '  .Chart.Name  '}}"
         image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.base.image.tag '}}"
         imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
         readinessProbe:
@@ -37,8 +36,8 @@ spec:
         env:
           - name: PORT
             value: "{{tag ' .Values.service.servicePort '}}"
-{{#each storageDeploys.env}}
+          {{#each storageDeploys.env}}
           - name: {{@key}}
             value: {{{this}}}
-{{/each}}
+          {{/each}}
 {{tag ' end '}}
