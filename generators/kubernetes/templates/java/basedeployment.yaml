@@ -4,10 +4,10 @@ kind: Deployment
 metadata:
   name: "{{tag '  .Chart.Name '}}-basedeployment"
   labels:
-    chart: "{{tag ' .Chart.Name '}}-{{{tag ' .Chart.Version | replace "+" "_" '}}}"
+    chart: "{{tag ' .Chart.Name '}}-{{{tag " .Chart.Version | replace '+' '_' "}}}"
 spec:
-  replicas:  {{tag ' .Values.base.replicaCount '}}
-  revisionHistoryLimit: {{tag ' .Values.revisionHistoryLimit '}}
+  replicas: "{{tag ' .Values.base.replicaCount '}}"
+  revisionHistoryLimit: "{{tag ' .Values.revisionHistoryLimit '}}"
   template:
     metadata:
       labels:
@@ -15,14 +15,14 @@ spec:
         version: "{{tag ' .Values.base.image.tag '}}"
     spec:
       containers:
-      - name: {{tag '  .Chart.Name  '}}
+      - name: "{{tag '  .Chart.Name  '}}"
         image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.base.image.tag '}}"
-        imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
+        imagePullPolicy: "{{tag ' .Values.image.pullPolicy '}}"
         readinessProbe:
           httpGet:
           {{! healthEndpoint is configured in the index.js and is different for basicweb}}
           {{#has language 'java'}}
-            path: /{{applicationName}}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}
+            path: /{{#toLowerCase applicationName}}{{/toLowerCase}}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}
             port: 9080
           {{/has}}
           {{#has language 'spring'}}

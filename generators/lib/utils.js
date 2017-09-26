@@ -24,7 +24,7 @@ function sanitizeAppName(name) {
 	if (name != undefined) {
 		cleanName = name.replace(REGEX_LEADING_ALPHA, '').replace(REGEX_ALPHA_NUM, '');
 	}
-	return cleanName || 'APP';
+	return (cleanName || 'APP').toLowerCase();
 }
 
 module.exports = {

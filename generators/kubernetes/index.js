@@ -81,7 +81,8 @@ module.exports = class extends Generator {
 		// work out app name and language
 		this.opts.language = _.toLower(this.bluemix.backendPlatform);
 		if(this.opts.language === 'java' || this.opts.language === 'spring') {
-			this.opts.applicationName = this.opts.appName || Utils.sanitizeAppName(this.bluemix.name);
+			let optsAppName = this.opts.appName ? Utils.sanitizeAppName(this.opts.appName) : null;
+			this.opts.applicationName = optsAppName || Utils.sanitizeAppName(this.bluemix.name);
 		} else {
 			this.opts.applicationName = Utils.sanitizeAppName(this.bluemix.name);
 		}
@@ -140,7 +141,7 @@ module.exports = class extends Generator {
 		}
 		// setup output directory name for helm chart
 		// chart/<applicationName>/...
-		let chartDir = 'chart/' + this.opts.applicationName.toLowerCase();
+		let chartDir = 'chart/' + this.opts.applicationName;
 
 		if(this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';

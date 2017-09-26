@@ -11,13 +11,12 @@ stages:
   jobs:
   - name: Build
     type: builder
-{{#each config.buildJobProps}}
-    {{@key}} : {{{this}}}
-{{/each}}
-  {{#has deployment.type 'Kube'}}
-  - name: Build Container
-    type: builder
-    artifact_dir: ''
+    {{#missing deployment.type 'Kube'}}
+    {{#each config.buildJobProps}}
+    {{@key}}: {{{this}}}
+    {{/each}}
+    {{/missing}}
+    {{#has deployment.type 'Kube'}}
     extension_id: ibm.devops.services.pipeline.container.builder
     target:
       region_id: ${CF_REGION_ID}
@@ -27,9 +26,13 @@ stages:
     USE_CACHED_LAYERS: 'true'
     COMMAND: |
       #!/bin/bash
+      {{#if config.javaBuildScriptContent}}
+      echo "Doing Java build..."
+      {{{config.javaBuildScriptContent}}}
+      {{/if}}
       echo "source the container_build script to run in current shell"
       source {{{deployment.containerScriptPath}}}
-  {{/has}}
+    {{/has}}
   - name: Post Build
     type: builder
     artifact_dir: ''
@@ -47,7 +50,7 @@ stages:
   inputs:
   - type: job
     stage: Build Stage
-    job: Build{{#has deployment.type 'Kube'}} Container{{/has}}
+    job: Build
   {{#has deployment.type 'Kube'}}
   properties:
   - name: buildProperties

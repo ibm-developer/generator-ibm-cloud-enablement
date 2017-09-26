@@ -114,12 +114,12 @@ module.exports = class extends Generator {
 		}
 		this.pipelineConfig.triggersType = 'commit';
 		let buildCommand = this.opts.buildType === 'maven' ? '      mvn install' : '      gradle build';
+		this.pipelineConfig.javaBuildScriptContent = 'export JAVA_HOME=$JAVA8_HOME\n' + buildCommand;
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',
 			script: '|\n' +
 			'      #!/bin/bash\n' +
-			'      export JAVA_HOME=$JAVA8_HOME\n' +
-			buildCommand
+			'      ' + this.pipelineConfig.javaBuildScriptContent
 		};
 	}
 

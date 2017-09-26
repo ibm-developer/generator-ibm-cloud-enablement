@@ -3,10 +3,10 @@ kind: Deployment
 metadata:
   name: "{{  .Chart.Name }}-deployment"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace '+' '_' }}"
 spec:
-  replicas:  {{ .Values.replicaCount }}
-  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  replicas: "{{ .Values.replicaCount }}"
+  revisionHistoryLimit: "{{ .Values.revisionHistoryLimit }}"
   template:
     metadata:
       labels:
@@ -14,15 +14,15 @@ spec:
         version: "{{ .Values.image.tag }}"
     spec:
       containers:
-      - name: {{  .Chart.Name  }}
+      - name: "{{  .Chart.Name  }}"
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
         livenessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.service.servicePort }}
-          initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds}}
-          periodSeconds: {{ .Values.livenessProbe.periodSeconds}}
+            port: "{{ .Values.service.servicePort }}"
+          initialDelaySeconds: "{{ .Values.livenessProbe.initialDelaySeconds}}"
+          periodSeconds: "{{ .Values.livenessProbe.periodSeconds}}"
         resources:
           requests:
             cpu: "{{ .Values.image.resources.requests.cpu }}"
