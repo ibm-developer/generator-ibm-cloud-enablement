@@ -5,8 +5,8 @@ metadata:
   labels:
     chart: "{{tag ' .Chart.Name '}}-{{{tag " .Chart.Version | replace '+' '_' "}}}"
 spec:
-  replicas: "{{tag ' .Values.replicaCount '}}"
-  revisionHistoryLimit: "{{tag ' .Values.revisionHistoryLimit '}}"
+  replicas: {{tag ' .Values.replicaCount '}}
+  revisionHistoryLimit: {{tag ' .Values.revisionHistoryLimit '}}
   template:
     metadata:
       labels:
@@ -16,13 +16,13 @@ spec:
       containers:
       - name: "{{tag '  .Chart.Name  '}}"
         image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.image.tag '}}"
-        imagePullPolicy: "{{tag ' .Values.image.pullPolicy '}}"
+        imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
         livenessProbe:
           httpGet:
             path: /health
-            port: "{{tag ' .Values.service.servicePort '}}"
-          initialDelaySeconds: "{{tag ' .Values.livenessProbe.initialDelaySeconds'}}"
-          periodSeconds: "{{tag ' .Values.livenessProbe.periodSeconds'}}"
+            port: {{tag ' .Values.service.servicePort '}}
+          initialDelaySeconds: {{tag ' .Values.livenessProbe.initialDelaySeconds'}}
+          periodSeconds: {{tag ' .Values.livenessProbe.periodSeconds'}}
         resources:
           requests:
             cpu: "{{tag ' .Values.image.resources.requests.cpu '}}"

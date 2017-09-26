@@ -5,8 +5,8 @@ metadata:
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace '+' '_' }}"
 spec:
-  replicas: "{{ .Values.replicaCount }}"
-  revisionHistoryLimit: "{{ .Values.revisionHistoryLimit }}"
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   template:
     metadata:
       labels:
@@ -16,7 +16,7 @@ spec:
       containers:
       - name: "{{  .Chart.Name  }}"
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-        imagePullPolicy: "{{ .Values.image.pullPolicy }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
         readinessProbe:
           httpGet:
             path: /acmeproject/health

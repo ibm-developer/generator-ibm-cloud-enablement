@@ -6,8 +6,8 @@ metadata:
   labels:
     chart: "{{tag ' .Chart.Name '}}-{{{tag " .Chart.Version | replace '+' '_' "}}}"
 spec:
-  replicas: "{{tag ' .Values.base.replicaCount '}}"
-  revisionHistoryLimit: "{{tag ' .Values.revisionHistoryLimit '}}"
+  replicas: {{tag ' .Values.base.replicaCount '}}
+  revisionHistoryLimit: {{tag ' .Values.revisionHistoryLimit '}}
   template:
     metadata:
       labels:
@@ -17,7 +17,7 @@ spec:
       containers:
       - name: "{{tag '  .Chart.Name  '}}"
         image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.base.image.tag '}}"
-        imagePullPolicy: "{{tag ' .Values.image.pullPolicy '}}"
+        imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
         readinessProbe:
           httpGet:
           {{! healthEndpoint is configured in the index.js and is different for basicweb}}
