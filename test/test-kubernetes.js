@@ -92,7 +92,7 @@ describe('cloud-enablement:kubernetes', function () {
 				let deploymentyml = yml.safeLoad(newdeploymentyml);
 				let readinessProbe = deploymentyml.spec.template.spec.containers[0].readinessProbe;
 				if(language === 'JAVA') {
-					assertYmlContent(readinessProbe.httpGet.path, '/acmeproject/health', 'readinessProbe.httpGet.path');
+					assertYmlContent(readinessProbe.httpGet.path, '/AcmeProject/health', 'readinessProbe.httpGet.path');
 					assertYmlContent(readinessProbe.httpGet.port, 9080, 'readinessProbe.httpGet.port');
 				}
 				if(language === 'SPRING') {
@@ -154,7 +154,7 @@ describe('cloud-enablement:kubernetes', function () {
 						case 1:
 							assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-deployment', 'doc1.metadata.name');
 							if(language === 'JAVA') {
-								assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/' + applicationName.toLowerCase() + '/health', 'doc1.spec.template.spec.containers[0].readinessProbe.httpGet.path');
+								assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/' + applicationName + '/health', 'doc1.spec.template.spec.containers[0].readinessProbe.httpGet.path');
 							}
 							if(language === 'SPRING') {
 								assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/health', 'doc1.data.spec.template.spec.containers[0].readinessProbe.httpGet.path');

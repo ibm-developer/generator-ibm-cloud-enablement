@@ -15,6 +15,7 @@
 
 const Generator = require('yeoman-generator');
 const Handlebars = require('../lib/helpers').handlebars;
+const Utils = require('../lib/utils');
 
 const FILENAME_CLI_CONFIG = "cli-config.yml";
 const FILENAME_DOCKERFILE = "Dockerfile";
@@ -89,7 +90,7 @@ module.exports = class extends Generator {
 		}
 		compilationOptions = compilationOptions.trim();
 
-		const applicationName = this._sanitizeAppName(this.bluemix.name);
+		const applicationName = Utils.sanitizeAlpaNum(this.bluemix.name);
 		const executableName = applicationName;
 
 		const cliConfig = {
@@ -149,7 +150,7 @@ module.exports = class extends Generator {
 	}
 
 	_generateNodeJS() {
-		const applicationName = this._sanitizeAppName(this.bluemix.name);
+		const applicationName = Utils.sanitizeAlpaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
 
 
@@ -215,7 +216,7 @@ module.exports = class extends Generator {
 
 	_generateJava() {
 		if(!this.opts.appName) {
-			this.opts.appName = this._sanitizeAppName(this.bluemix.name);
+			this.opts.appName = Utils.sanitizeAlpaNum(this.bluemix.name);
 		}
 		let dir = this.bluemix.backendPlatform.toLowerCase();
 
@@ -271,7 +272,7 @@ module.exports = class extends Generator {
 	}
 
 	_generatePython() {
-		const applicationName = this._sanitizeAppName(this.bluemix.name);
+		const applicationName = Utils.sanitizeAlpaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
 
 		const cliConfig = {
@@ -332,14 +333,6 @@ module.exports = class extends Generator {
 			this.templatePath('python/dockerignore'),
 			this.destinationPath('.dockerignore')
 		);
-	}
-
-	_sanitizeAppName(name) {
-		let cleanName = "";
-		if (name != undefined) {
-			cleanName = name.replace(/^[^a-zA-Z]*/, '').replace(/[^a-zA-Z0-9]/g, '');
-		}
-		return cleanName || 'APP';
 	}
 
 	_copyTemplateIfNotExists(targetFileName, sourceTemplatePath, ctx) {
