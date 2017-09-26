@@ -80,7 +80,9 @@ describe('cloud-enablement:deployment', function () {
 				assert.equal(containerBuildJob.extension_id, 'ibm.devops.services.pipeline.container.builder');
 				assert.equal(containerBuildJob.IMAGE_NAME, 'myapplication');
 
-				let containerBuildScript = fs.readFileSync(__dirname + '/samples/container-build-script.txt', 'utf8');
+				let buildScriptFilename = 'container-build-script';
+				buildScriptFilename += (lang === 'JAVA' || lang === 'SPRING') ? '-java' : '';
+				let containerBuildScript = fs.readFileSync(__dirname + `/samples/${buildScriptFilename}.txt`, 'utf8');
 				assert.equal(containerBuildJob.COMMAND, containerBuildScript);
 
 				let deployStage = pipeline.stages[1];
