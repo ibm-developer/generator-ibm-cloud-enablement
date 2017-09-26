@@ -52,6 +52,15 @@ Handlebars.registerHelper('tag', function(context) {
 	return "{{" + context + "}}";
 });
 
+Handlebars.registerHelper('firstAvailable', function() {
+	for(let i=0; i < arguments.length; i++) {
+		if (arguments[i] && typeof arguments[i] === 'string') {
+			return arguments[i];
+		}
+	}
+	return "undefined";
+});
+
 module.exports = {
 	handlebars : Handlebars
 }
