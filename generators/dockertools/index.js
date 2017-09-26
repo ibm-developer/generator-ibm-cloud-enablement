@@ -90,7 +90,7 @@ module.exports = class extends Generator {
 		}
 		compilationOptions = compilationOptions.trim();
 
-		const applicationName = Utils.sanitizeAlpaNum(this.bluemix.name);
+		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const executableName = applicationName;
 
 		const cliConfig = {
@@ -150,7 +150,7 @@ module.exports = class extends Generator {
 	}
 
 	_generateNodeJS() {
-		const applicationName = Utils.sanitizeAlpaNum(this.bluemix.name);
+		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
 
 
@@ -216,7 +216,7 @@ module.exports = class extends Generator {
 
 	_generateJava() {
 		if(!this.opts.appName) {
-			this.opts.appName = Utils.sanitizeAlpaNum(this.bluemix.name);
+			this.opts.appName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		}
 		let dir = this.bluemix.backendPlatform.toLowerCase();
 
@@ -272,7 +272,7 @@ module.exports = class extends Generator {
 	}
 
 	_generatePython() {
-		const applicationName = Utils.sanitizeAlpaNum(this.bluemix.name);
+		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
 
 		const cliConfig = {

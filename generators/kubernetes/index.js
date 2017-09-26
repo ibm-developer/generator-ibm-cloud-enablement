@@ -81,12 +81,12 @@ module.exports = class extends Generator {
 		// work out app name and language
 		this.opts.language = _.toLower(this.bluemix.backendPlatform);
 		if(this.opts.language === 'java' || this.opts.language === 'spring') {
-			this.opts.applicationName = this.opts.appName || Utils.sanitizeAlpaNum(this.bluemix.name);
+			this.opts.applicationName = this.opts.appName || Utils.sanitizeAlphaNum(this.bluemix.name);
 		} else {
-			this.opts.applicationName = Utils.sanitizeAlpaNum(this.bluemix.name);
+			this.opts.applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		}
 
-		this.opts.chartName = Utils.sanitizeAlpaNumLowerCase(this.opts.applicationName);
+		this.opts.chartName = Utils.sanitizeAlphaNumLowerCase(this.opts.applicationName);
 
 		this.opts.storages = typeof(this.opts.storages) === 'string' ? JSON.parse(this.opts.storages || '[]') : this.opts.storages;
 		if(this.opts.storages) {
