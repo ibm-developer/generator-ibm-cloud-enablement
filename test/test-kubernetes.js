@@ -32,7 +32,8 @@ const deploymentMongoSample = fs.readFileSync(path.join(__dirname, 'samples/depl
 const deploymentMongoJavaSample = fs.readFileSync(path.join(__dirname, 'samples/deployment-with-mongo-java.yaml'), 'utf-8');
 const valuesMongoSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo.yaml'), 'utf-8');
 const valuesMongoJavaSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo-java.yaml'), 'utf-8');
-const valuesMongoSwiftPythonSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo-swift-python.yaml'), 'utf-8');
+const valuesMongoSwiftSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo-swift.yaml'), 'utf-8');
+const valuesMongoPythonSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo-python.yaml'), 'utf-8');
 
 const applicationName = 'AcmeProject'; // from sample json files
 const chartLocation = 'chart/' + applicationName.toLowerCase();
@@ -415,7 +416,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have env variables for mongo in deployment ', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftPythonSample);
+			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftSample);
 		});
 	});
 
@@ -448,7 +449,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have env variables for mongo in deployment and values', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftPythonSample);
+			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftSample);
 		});
 
 	});
@@ -482,7 +483,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have env variables for mongo in deployment ', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftPythonSample);
+			assert.fileContent(chartLocation + '/values.yaml', valuesMongoPythonSample);
 		});
 	});
 
@@ -515,7 +516,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have env variables for mongo in deployment and values', function () {
 			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftPythonSample);
+			assert.fileContent(chartLocation + '/values.yaml', valuesMongoPythonSample);
 		});
 
 	});
