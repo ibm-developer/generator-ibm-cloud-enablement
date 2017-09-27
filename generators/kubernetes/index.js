@@ -39,7 +39,7 @@ const portDefault = {
 		http: '3000'
 	},
 	python: {
-		http: '8080'
+		http: '3000'
 	},
 	swift: {
 		http: '8080'
