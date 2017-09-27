@@ -44,7 +44,7 @@ module.exports = class extends Generator {
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
 			this.deployment = Object.assign(this.deployment, this.bluemix.server.cloudDeploymentOptions);
 			this.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
-			this.deployment.name = Utils.sanitizeAppName(this.name || this.bluemix.name).toLowerCase();
+			this.deployment.name = Utils.sanitizeAlphaNumLowerCase(this.name || this.bluemix.name);
 			this.deployment.containerScriptPath = '.bluemix/container_build.sh';
 			this.deployment.kubeDeployScriptName = 'kube_deploy.sh';
 			this.deployment.kubeDeployScriptPath = `.bluemix/${this.deployment.kubeDeployScriptName}`;
@@ -114,12 +114,12 @@ module.exports = class extends Generator {
 		}
 		this.pipelineConfig.triggersType = 'commit';
 		let buildCommand = this.opts.buildType === 'maven' ? '      mvn install' : '      gradle build';
+		this.pipelineConfig.javaBuildScriptContent = 'export JAVA_HOME=$JAVA8_HOME\n' + buildCommand;
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',
 			script: '|\n' +
 			'      #!/bin/bash\n' +
-			'      export JAVA_HOME=$JAVA8_HOME\n' +
-			buildCommand
+			'      ' + this.pipelineConfig.javaBuildScriptContent
 		};
 	}
 

@@ -19,14 +19,19 @@
 const REGEX_LEADING_ALPHA = /^[^a-zA-Z]*/;
 const REGEX_ALPHA_NUM = /[^a-zA-Z0-9]/g;
 
-function sanitizeAppName(name) {
-	let cleanName = "";
+function sanitizeAlphaNumLowerCase(name) {
+	return sanitizeAlphaNum(name).toLowerCase();
+}
+
+function sanitizeAlphaNum(name) {
+	let cleanName = '';
 	if (name != undefined) {
 		cleanName = name.replace(REGEX_LEADING_ALPHA, '').replace(REGEX_ALPHA_NUM, '');
 	}
-	return cleanName || 'APP';
+	return (cleanName || 'APP');
 }
 
 module.exports = {
-	sanitizeAppName: sanitizeAppName
+	sanitizeAlphaNum: sanitizeAlphaNum,
+	sanitizeAlphaNumLowerCase: sanitizeAlphaNumLowerCase
 };

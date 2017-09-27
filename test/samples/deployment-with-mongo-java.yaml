@@ -3,9 +3,9 @@ kind: Deployment
 metadata:
   name: "{{  .Chart.Name }}-deployment"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace '+' '_' }}"
 spec:
-  replicas:  {{ .Values.replicaCount }}
+  replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
   template:
     metadata:
@@ -13,8 +13,8 @@ spec:
         app: "{{  .Chart.Name }}-selector"
         version: "current"
     spec:
-     containers:
-      - name: {{  .Chart.Name  }}
+      containers:
+      - name: "{{  .Chart.Name  }}"
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
 {{ if .Values.istio.enabled }}
