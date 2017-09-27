@@ -11,16 +11,20 @@ spec:
     metadata:
       labels:
         app: "{{  .Chart.Name }}-selector"
+        version: "current"
     spec:
       containers:
       - name: "{{  .Chart.Name  }}"
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: {{ .Values.image.pullPolicy }}
+{{ if .Values.istio.enabled }}
+{{ else }}
         readinessProbe:
           httpGet:
             path: /AcmeProject/health
             port: 9080
           initialDelaySeconds: 20
+{{ end }}
         resources:
           requests:
             cpu: "{{ .Values.image.resources.requests.cpu }}"
