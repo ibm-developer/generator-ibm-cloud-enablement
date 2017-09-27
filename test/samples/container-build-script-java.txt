@@ -1,6 +1,17 @@
 #!/bin/bash
-echo "Doing Java build..."
+echo "Doing Java build"
+echo "DevOps sets LOG_DIR env var, which is used during Java build to check if server started, so unsetting"
+echo "LOG_DIR: ${LOG_DIR}"
+LOG_DIR_TEMP=$LOG_DIR
+unset LOG_DIR
+echo "LOG_DIR has been unset: ${LOG_DIR}"
+
 export JAVA_HOME=$JAVA8_HOME
 gradle build
+
+echo "Java build finished, setting LOG_DIR back to original"
+LOG_DIR=$LOG_DIR_TEMP
+echo "LOG_DIR: ${LOG_DIR}"
+
 echo "source the container_build script to run in current shell"
 source .bluemix/container_build.sh
