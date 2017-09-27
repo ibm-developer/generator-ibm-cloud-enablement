@@ -11,12 +11,12 @@ stages:
   jobs:
   - name: Build
     type: builder
-{{#missing deployment.type 'Kube'}}
-{{#each config.buildJobProps}}
-    {{@key}} : {{{this}}}
-{{/each}}
-{{/missing}}
-  {{#has deployment.type 'Kube'}}
+    {{#missing deployment.type 'Kube'}}
+    {{#each config.buildJobProps}}
+    {{@key}}: {{{this}}}
+    {{/each}}
+    {{/missing}}
+    {{#has deployment.type 'Kube'}}
     extension_id: ibm.devops.services.pipeline.container.builder
     target:
       region_id: ${CF_REGION_ID}
@@ -26,9 +26,13 @@ stages:
     USE_CACHED_LAYERS: 'true'
     COMMAND: |
       #!/bin/bash
+      {{#if config.javaBuildScriptContent}}
+      echo "Doing Java build..."
+      {{{config.javaBuildScriptContent}}}
+      {{/if}}
       echo "source the container_build script to run in current shell"
       source {{{deployment.containerScriptPath}}}
-  {{/has}}
+    {{/has}}
   - name: Post Build
     type: builder
     artifact_dir: ''
@@ -47,10 +51,21 @@ stages:
   - type: job
     stage: Build Stage
     job: Build
+  {{#has deployment.type 'Kube'}}
   properties:
   - name: buildProperties
     value: build.properties
     type: file
+  - name: CLUSTER_NAMESPACE
+    value: {{deployment.kubeClusterNamespace}}
+    type: text
+  - name: IMAGE_PULL_SECRET_NAME
+    value: ${IMAGE_PULL_SECRET_NAME}
+    type: text
+  - name: IMAGE_REGISTRY_TOKEN
+    value: ${IMAGE_REGISTRY_TOKEN}
+    type: text
+  {{/has}}
   triggers:
   - type: stage
   jobs:

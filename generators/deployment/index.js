@@ -13,7 +13,7 @@
 
 'use strict';
 
-const Handlebars = require('handlebars');
+const Handlebars = require('../lib/helpers').handlebars;
 const Generator = require('yeoman-generator');
 const Utils = require('../lib/utils');
 
@@ -44,11 +44,13 @@ module.exports = class extends Generator {
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
 			this.deployment = Object.assign(this.deployment, this.bluemix.server.cloudDeploymentOptions);
 			this.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
-			this.deployment.name = Utils.sanitizeAppName(this.name || this.bluemix.name).toLowerCase();
+			this.deployment.name = Utils.sanitizeAlphaNumLowerCase(this.name || this.bluemix.name);
 			this.deployment.containerScriptPath = '.bluemix/container_build.sh';
 			this.deployment.kubeDeployScriptName = 'kube_deploy.sh';
 			this.deployment.kubeDeployScriptPath = `.bluemix/${this.deployment.kubeDeployScriptName}`;
-
+			if (!this.deployment.kubeClusterNamespace) {
+				this.deployment.kubeClusterNamespace = 'default';
+			}
 		} else {
 			this.name = this.bluemix.name;
 			this.manifestConfig.name = this.bluemix.name;
@@ -92,7 +94,7 @@ module.exports = class extends Generator {
 		this.manifestConfig.buildpack = 'swift_buildpack';
 		this.manifestConfig.command = this.name ? (`${this.name}`) : undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
-		this.cfIgnoreContent = ['.build/*', 'Packages/*'];
+		this.cfIgnoreContent = ['.build/*', '.build-ubuntu/*', 'Packages/*'];
 	}
 
 	_configureJavaCommon() {
@@ -112,12 +114,12 @@ module.exports = class extends Generator {
 		}
 		this.pipelineConfig.triggersType = 'commit';
 		let buildCommand = this.opts.buildType === 'maven' ? '      mvn install' : '      gradle build';
+		this.pipelineConfig.javaBuildScriptContent = 'export JAVA_HOME=$JAVA8_HOME\n' + buildCommand;
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',
 			script: '|\n' +
 			'      #!/bin/bash\n' +
-			'      export JAVA_HOME=$JAVA8_HOME\n' +
-			buildCommand
+			'      ' + this.pipelineConfig.javaBuildScriptContent
 		};
 	}
 
