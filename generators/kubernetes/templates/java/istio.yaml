@@ -1,9 +1,19 @@
-type: route-rule
+{{tag ' if .Values.istio.enabled '}}
+apiVersion: config.istio.io/v1alpha2
+kind: RouteRule
+metadata:
+  name: "{{tag '  .Chart.Name '}}-default"
 spec:
-  name: {{#toLowerCase applicationName}}{{/toLowerCase}}-default
-  destination: {{#toLowerCase applicationName}}{{/toLowerCase}}.default.svc.cluster.local
+  destination:
+    name: "{{tag '  .Chart.Name '}}-service"
   precedence: 1
   route:
-  - tags:
-      version:latest
-    weight: 100
+  - labels:
+      version: "current"
+    weight: {{tag ' .Values.istio.weight '}}
+{{tag ' if .Values.base.enabled '}}
+  - labels:
+      version: "base"
+    weight: {{tag ' .Values.base.weight '}}
+{{tag ' end '}}
+{{tag ' end '}}
