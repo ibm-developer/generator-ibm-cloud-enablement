@@ -2,10 +2,10 @@ FROM ibmjava:8-sdk
 MAINTAINER IBM Java engineering at IBM Cloud
 
 {{#has buildType 'maven'}}
-COPY target/{{appName}}-{{version}}.jar /app.jar
+COPY target/{{#firstAvailable artifactId appName}}{{/firstAvailable}}-{{version}}.jar /app.jar
 {{/has}}
 {{#has buildType 'gradle'}}
-COPY build/libs/{{appName}}-{{version}}.jar /app.jar
+COPY build/libs/{{#firstAvailable artifactId appName}}{{/firstAvailable}}-{{version}}.jar /app.jar
 {{/has}}
 
 ENV JAVA_OPTS=""
