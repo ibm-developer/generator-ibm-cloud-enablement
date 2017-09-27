@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: "{{  .Chart.Name }}-deployment"
   labels:
-    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace '+' '_' }}"
+    chart: '{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}'
 spec:
   replicas: {{ .Values.replicaCount }}
   revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
