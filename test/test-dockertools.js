@@ -312,9 +312,9 @@ describe('cloud-enablement:dockertools', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
 		});
 
-		it('create Dockerfile with gunicorn', function () {
+		it('create Dockerfile with informative command', function () {
 			assert.file(['Dockerfile']);
-			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', 'echo');
 		});
 
 		it('create Dockerfile-tools with flask', function () {
@@ -323,7 +323,6 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'flask run');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
@@ -350,9 +349,9 @@ describe('cloud-enablement:dockertools', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
 		});
 
-		it('create Dockerfile with gunicorn', function () {
+		it('create Dockerfile with informative command', function () {
 			assert.file(['Dockerfile']);
-			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', 'echo');
 		});
 
 		it('create Dockerfile-tools with flask', function () {
@@ -361,7 +360,6 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'flask run');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
