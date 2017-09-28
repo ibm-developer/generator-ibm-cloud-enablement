@@ -69,14 +69,14 @@ module.exports = class extends Generator {
 		const FILENAME_SWIFT_BUILD = ".swift-build-linux";
 		const FILENAME_SWIFT_TEST = ".swift-test-linux";
 
-		// Define metadata for all services that 
+		// Define metadata for all services that
 		// require custom logic in Dockerfiles
 		const services = require('./resources/swift/services.json');
 
 		// Get array with all the keys for the services objects
 		const servKeys = Object.keys(services);
 		const serviceItems = [];
-		
+
 		// Iterate over service keys to search for provisioned services
 		let compilationOptions = "";
 		for (let index in servKeys) {
@@ -86,7 +86,7 @@ module.exports = class extends Generator {
 				if (services[servKey].hasOwnProperty("compilationOptions")) {
 					compilationOptions = compilationOptions + " " + services[servKey].compilationOptions;
 				}
-			}		
+			}
 		}
 		compilationOptions = compilationOptions.trim();
 
@@ -122,11 +122,11 @@ module.exports = class extends Generator {
 		}
 
 		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {
-			cliConfig					
+			cliConfig
 		});
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE, 'swift/' + FILENAME_DOCKERFILE, {
-			dockerConfig					
+			dockerConfig
 		});
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'swift/' + FILENAME_DOCKERFILE_TOOLS, {
@@ -226,8 +226,8 @@ module.exports = class extends Generator {
 				console.info(FILENAME_CLI_CONFIG, "already exists, skipping.");
 			} else {
 				this._writeHandlebarsFile(
-					dir + '/cli-config.yml.template', 
-					FILENAME_CLI_CONFIG, 
+					dir + '/cli-config.yml.template',
+					FILENAME_CLI_CONFIG,
 					this.opts
 				);
 			}
@@ -237,7 +237,7 @@ module.exports = class extends Generator {
 			} else {
 				this._writeHandlebarsFile(
 					dir + '/Dockerfile-tools.template',
-					FILENAME_DOCKERFILE_TOOLS, 
+					FILENAME_DOCKERFILE_TOOLS,
 					this.opts
 				);
 			}
@@ -248,7 +248,7 @@ module.exports = class extends Generator {
 		} else {
 			this._writeHandlebarsFile(
 				dir + '/Dockerfile.template',
-				FILENAME_DOCKERFILE, 
+				FILENAME_DOCKERFILE,
 				this.opts
 			);
 		}
@@ -258,12 +258,12 @@ module.exports = class extends Generator {
 		} else {
 			this._writeHandlebarsFile(
 				dir + '/dockerignore.template',
-				FILENAME_DOCKER_IGNORE, 
+				FILENAME_DOCKER_IGNORE,
 				this.opts
 			);
 		}
 	}
-	
+
 	_writeHandlebarsFile(templateFile, destinationFile, data) {
 		let template = this.fs.read(this.templatePath(templateFile));
 		let compiledTemplate = Handlebars.compile(template);
@@ -274,6 +274,17 @@ module.exports = class extends Generator {
 	_generatePython() {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
+
+		const FILENAME_REQUIREMENTS = "requirements.txt";
+		const FILENAME_README = "README.md"
+		const FILENAME_README_ALT = "IDT-Enable-Instructions.md"
+
+		// Determine what files are missing to configure the enable-fixes steps
+		const triage = {
+			missingDockerfile: !this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE)),
+			missingRequirements: !this.fs.exists(this.destinationPath(FILENAME_REQUIREMENTS)),
+			missingReadme: !this.fs.exists(this.destinationPath(FILENAME_README))
+		};
 
 		const cliConfig = {
 			containerNameRun: `${applicationName.toLowerCase()}-flask-run`,
@@ -288,12 +299,12 @@ module.exports = class extends Generator {
 			dockerFileTools: 'Dockerfile-tools',
 			imageNameRun: `${applicationName.toLowerCase()}-flask-run`,
 			imageNameTools: `${applicationName.toLowerCase()}-flask-tools`,
-			buildCmdRun: 'python -m compileall server test',
-			testCmd: 'python -m unittest tests.app_tests.ServerTestCase',
-			buildCmdDebug: 'python -m compileall server test',
+			buildCmdRun: 'python -m compileall .',
+			testCmd: 'echo No test command specified in cli-config',
+			buildCmdDebug: 'python -m compileall .',
 			runCmd: '',
 			stopCmd: '',
-			debugCmd: 'python -m flask run --host=0.0.0.0 --port=5858 --debugger',
+			debugCmd: 'echo No debug command specified in cli-config',
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
 
@@ -333,6 +344,18 @@ module.exports = class extends Generator {
 			this.templatePath('python/dockerignore'),
 			this.destinationPath('.dockerignore')
 		);
+
+		const fixesPath = triage.missingReadme ? FILENAME_README : FILENAME_README_ALT;
+		this.fs.copyTpl(
+			this.templatePath('python/IDT-Enable-Instructions.md'),
+			this.destinationPath(fixesPath), {
+				triage
+			}
+		);
+
+		if (!triage.missingReadme) {
+			this.log("Read IDT-Enable-Instructions.md for instructions to finish enabling your project to run on IBM Cloud.")
+		}
 	}
 
 	_copyTemplateIfNotExists(targetFileName, sourceTemplatePath, ctx) {
