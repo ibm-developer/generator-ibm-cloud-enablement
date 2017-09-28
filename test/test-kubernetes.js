@@ -86,7 +86,9 @@ describe('cloud-enablement:kubernetes', function () {
 			});
 
 			testOutput();
-/* This secrion is commented out temporarily bacasue js-yaml can not handle statement like {{ if Values. .... }}. 
+			/* This section is commented out temporarily because js/yaml can not handle statements like...
+ 			{{ if Values. .... }}.
+
 			it('has deployment.yaml with correct readinessProbe', function () {
 				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
 				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
@@ -169,8 +171,8 @@ describe('cloud-enablement:kubernetes', function () {
 				});
 				assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
 			});
-			if(language === 'JAVA') {
-				it('has Jenkinsfile with correct content', function () {
+			if(language === 'JAVA' || language === 'NODE') {
+				it('Java and Node have Jenkinsfile with correct content', function () {
 					assert.fileContent('Jenkinsfile', 'image = \''+ applicationName.toLowerCase() + '\'');
 				});
 			}
