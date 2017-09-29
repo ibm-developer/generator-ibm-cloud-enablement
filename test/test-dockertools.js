@@ -196,6 +196,12 @@ describe('cloud-enablement:dockertools', function () {
 					it('Dockerfile contains LICENSE_JAR_URL', function () {
 						assert.fileContent('Dockerfile', 'LICENSE_JAR_URL');
 					});
+                    			it('Dockerfile contains apmDataCollector-7.4', function () {
+                        			assert.fileContent('Dockerfile', 'apmDataCollector-7.4');
+                    			});
+                    			it('Dockerfile contains config_liberty_dc.sh', function () {
+                        			assert.fileContent('Dockerfile', 'config_liberty_dc.sh');
+                    			});
 					it('Dockerfile-tools contains wlp path', function () {
 						assert.fileContent('Dockerfile-tools', 'wlp/bin');
 					});
