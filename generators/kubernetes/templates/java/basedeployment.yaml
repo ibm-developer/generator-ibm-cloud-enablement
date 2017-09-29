@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: "{{tag '  .Chart.Name '}}-basedeployment"
   labels:
-    chart: "{{tag ' .Chart.Name '}}-{{{tag " .Chart.Version | replace '+' '_' "}}}"
+    chart: '{{tag ' .Chart.Name '}}-{{{tag ' .Chart.Version | replace "+" "_" '}}}'
 spec:
   replicas: {{tag ' .Values.base.replicaCount '}}
   revisionHistoryLimit: {{tag ' .Values.revisionHistoryLimit '}}
@@ -12,7 +12,6 @@ spec:
     metadata:
       labels:
         app: "{{tag '  .Chart.Name '}}-selector"
-        version: "base"
     spec:
       containers:
       - name: "{{tag '  .Chart.Name  '}}"

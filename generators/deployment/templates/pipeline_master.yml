@@ -27,9 +27,20 @@ stages:
     COMMAND: |
       #!/bin/bash
       {{#if config.javaBuildScriptContent}}
-      echo "Doing Java build..."
+      echo "Doing Java build"
+      echo "DevOps sets LOG_DIR env var, which is used during Java build to check if server started, so unsetting"
+      echo "LOG_DIR: ${LOG_DIR}"
+      LOG_DIR_TEMP=$LOG_DIR
+      unset LOG_DIR
+      echo "LOG_DIR has been unset: ${LOG_DIR}"
+
       {{{config.javaBuildScriptContent}}}
+
+      echo "Java build finished, setting LOG_DIR back to original"
+      LOG_DIR=$LOG_DIR_TEMP
+      echo "LOG_DIR: ${LOG_DIR}"
       {{/if}}
+
       echo "source the container_build script to run in current shell"
       source {{{deployment.containerScriptPath}}}
     {{/has}}
