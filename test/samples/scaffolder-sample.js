@@ -49,18 +49,6 @@ function get(language, bluemix) {
 	if(language === 'SPRING') {
 		bluemix.server.memory = "256M";
 	}
-	if(language === 'SWIFT') {
-		// The payload below simulates a short-term solution from generator-swiftserver
-		// which is used in the pipeline.yml create-service command.
-		bluemix.services = {
-			cloudant: [{
-				name: "gkghk-cloudantNo-1504851366275",
-				label: "cloudantNoSQLDB",
-				plan: "Lite",
-				credentials: {}
-			}]
-		};
-	}
 	return JSON.stringify(bluemix);
 }
 
