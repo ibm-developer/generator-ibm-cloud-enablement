@@ -34,7 +34,8 @@ module.exports = class extends Generator {
 		this.toolchainConfig = {};
 		this.pipelineConfig = {
 			buildJobProps : {artifact_dir: "''"},
-			services: this.bluemix.services
+			services: this.bluemix.services,
+			triggersType: 'commit'
 		};
 		this.deployment = {type: 'CF', name: this.bluemix.name};
 
@@ -44,12 +45,13 @@ module.exports = class extends Generator {
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
 			this.deployment = Object.assign(this.deployment, this.bluemix.server.cloudDeploymentOptions);
 			this.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
-			this.deployment.name = Utils.sanitizeAlphaNumLowerCase(this.name || this.bluemix.name);
-			this.deployment.containerScriptPath = '.bluemix/container_build.sh';
-			this.deployment.kubeDeployScriptName = 'kube_deploy.sh';
-			this.deployment.kubeDeployScriptPath = `.bluemix/${this.deployment.kubeDeployScriptName}`;
+			this.deployment.chartName = Utils.sanitizeAlphaNumLowerCase(this.name || this.bluemix.name);
+			this.deployment.scriptsDir = '.bluemix/scripts';
 			if (!this.deployment.kubeClusterNamespace) {
 				this.deployment.kubeClusterNamespace = 'default';
+			}
+			if (!this.deployment.imageRegistryNamespace) {
+				this.deployment.imageRegistryNamespace = 'my_registry_ns';
 			}
 		} else {
 			this.name = this.bluemix.name;
@@ -112,7 +114,6 @@ module.exports = class extends Generator {
 		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {
 			this.toolchainConfig.repoType = 'link';
 		}
-		this.pipelineConfig.triggersType = 'commit';
 		let buildCommand = this.opts.buildType === 'maven' ? '      mvn install -DskipTests' : '      gradle build';
 		this.pipelineConfig.javaBuildScriptContent = 'export JAVA_HOME=$JAVA8_HOME\n' + buildCommand;
 		this.pipelineConfig.buildJobProps = {
@@ -193,10 +194,10 @@ module.exports = class extends Generator {
 		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json',
 			{deployment: this.deployment});
 
-		this._writeHandlebarsFile('container_build.sh', '.bluemix/container_build.sh',
+		this._writeHandlebarsFile('container_build.sh', '.bluemix/scripts/container_build.sh',
 			{deployment: this.deployment});
 
-		this._writeHandlebarsFile('kube_deploy.sh', '.bluemix/kube_deploy.sh',
+		this._writeHandlebarsFile('kube_deploy.sh', '.bluemix/scripts/kube_deploy.sh',
 			{deployment: this.deployment});
 
 		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml',

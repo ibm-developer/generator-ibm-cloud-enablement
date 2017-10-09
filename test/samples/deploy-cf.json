@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "form": [
+    {
+      "type": "validator",
+      "url": "/devops/setup/bm-helper/helper.html"
+    },
+    {
+      "key": "app-name",
+      "readonly": false,
+      "title": "App Name",
+      "type": "text"
+    },
+    {
+      "columnCount": 3,
+      "items": [
+        {
+          "title": "Region",
+          "type": "label"
+        },
+        {
+          "title": "Organization",
+          "type": "label"
+        },
+        {
+          "title": "Space",
+          "type": "label"
+        },
+        {
+          "key": "dev-region",
+          "type": "select"
+        },
+        {
+          "key": "dev-organization",
+          "type": "select"
+        },
+        {
+          "key": "dev-space",
+          "readonly": false,
+          "type": "select"
+        }
+      ],
+      "type": "table",
+      "widths": [
+        "28%",
+        "28%",
+        "28%"
+      ]
+    }
+  ],
+  "longDescription": "The Delivery Pipeline automates continuous deployment.",
+  "properties": {
+    "app-name": {
+      "description": "app name",
+      "type": "string"
+    },
+    "dev-organization": {
+      "description": "The bluemix org",
+      "type": "string"
+    },
+    "dev-region": {
+      "description": "The bluemix region",
+      "type": "string"
+    },
+    "dev-space": {
+      "description": "The bluemix space",
+      "type": "string"
+    }
+  },
+  "required": [
+    "dev-region",
+    "dev-organization",
+    "dev-space",
+    "app-name"
+  ],
+  "title": "Sample Deploy Stage",
+  "type": "object"
+}

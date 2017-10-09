@@ -1,3 +1,0 @@
-#!/bin/bash
-echo "source the kube_deploy script to run in current shell"
-source kube_deploy.sh
