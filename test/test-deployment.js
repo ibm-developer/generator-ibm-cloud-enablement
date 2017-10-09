@@ -17,10 +17,20 @@
 const helpers = require('yeoman-test');
 const assert = require('yeoman-assert');
 const path = require('path');
-const yml = require('js-yaml');
 const fs = require('fs');
 
 const scaffolderSample = require('./samples/scaffolder-sample');
+
+const pipelineKubeSample = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube.yml'), 'utf-8');
+const pipelineKubeSampleJava = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-java.yml'), 'utf-8');
+const toolchainKubeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube.yml'), 'utf-8');
+
+const pipelineCFSample = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf.yml'), 'utf-8');
+const pipelineCFSampleJava = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf-java.yml'), 'utf-8');
+const pipelineCFSampleSpring = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf-spring.yml'), 'utf-8');
+const pipelineCFSampleSwift = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf-swift.yml'), 'utf-8');
+const toolchainCFSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-cf.yml'), 'utf-8');
+const deployCFSample = fs.readFileSync(path.join(__dirname, 'samples/deploy-cf.json'), 'utf-8');
 
 const applicationName = 'AcmeProject'; // from sample json files
 const chartLocation = 'chart/' + applicationName.toLowerCase();
@@ -29,8 +39,52 @@ describe('cloud-enablement:deployment', function () {
 	this.timeout(5000);
 
 	let languages = ['NODE', 'JAVA', 'SPRING', 'SWIFT'];
+
 	languages.forEach(lang => {
-		let options = {
+		let cfOptions = {
+			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'CF'))
+		};
+
+		describe(`cloud-enablement:deployment CF for language ${lang}`, function () {
+			beforeEach(function () {
+				return helpers.run(path.join(__dirname, '../generators/app'))
+					.inDir(path.join(__dirname, './tmp'))
+					.withOptions(cfOptions);
+			});
+
+			it('has all files', function () {
+				assert.file('.bluemix/toolchain.yml');
+				assert.file('.bluemix/pipeline.yml');
+				assert.file('.bluemix/deploy.json');
+				assert.file('.bluemix/scripts/container_build.sh');
+				assert.file('.bluemix/scripts/kube_deploy.sh');
+			});
+
+			it('has toolchain.yml with correct content', function () {
+				assert.fileContent('.bluemix/toolchain.yml', toolchainCFSample);
+			});
+
+			it('has pipeline.yml with correct content', function () {
+				if (lang === 'JAVA') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineCFSampleJava);
+				} else if (lang === 'SPRING') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineCFSampleSpring);
+				} else if (lang === 'SWIFT') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineCFSampleSwift);
+				} else {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineCFSample);
+				}
+			});
+
+			it('has deploy.json with correct content', function () {
+				let deployJson = JSON.parse(fs.readFileSync('.bluemix/deploy.json', 'utf8'));
+				assert.deepEqual(deployJson, JSON.parse(deployCFSample));
+			});
+		});
+	});
+
+	languages.forEach(lang => {
+		let kubeOptions = {
 			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube'))
 		};
 
@@ -38,69 +92,27 @@ describe('cloud-enablement:deployment', function () {
 			beforeEach(function () {
 				return helpers.run(path.join(__dirname, '../generators/app'))
 					.inDir(path.join(__dirname, './tmp'))
-					.withOptions(options);
+					.withOptions(kubeOptions);
 			});
 
 			it('has all files', function () {
 				assert.file('.bluemix/toolchain.yml');
 				assert.file('.bluemix/pipeline.yml');
 				assert.file('.bluemix/deploy.json');
-				assert.file('.bluemix/container_build.sh');
-				assert.file('.bluemix/kube_deploy.sh');
+				assert.file('.bluemix/scripts/container_build.sh');
+				assert.file('.bluemix/scripts/kube_deploy.sh');
 			});
 
 			it('has toolchain.yml with correct content', function () {
-				assert.fileContent('.bluemix/toolchain.yml', 'repo_url: "{{#zip_url}}{{zip_url}}{{/zip_url}}{{^zip_url}}{{repository}}{{/zip_url}}"');
-
-				assert.fileContent('.bluemix/toolchain.yml', 'KUBE_CLUSTER_NAME: "{{deploy.parameters.kube-cluster-name}}"');
-				assert.fileContent('.bluemix/toolchain.yml', 'API_KEY: "{{deploy.parameters.api-key}}"');
-				assert.fileContent('.bluemix/toolchain.yml', 'IMAGE_PULL_SECRET_NAME: "{{deploy.parameters.image-pull-secret-name}}"');
-				assert.fileContent('.bluemix/toolchain.yml', 'IMAGE_REGISTRY_TOKEN: "{{deploy.parameters.image-registry-token}}"');
-
-				assert.fileContent('.bluemix/toolchain.yml', 'kube-cluster-name: my_kube_cluster');
-				assert.fileContent('.bluemix/toolchain.yml', 'api-key: "{{api-key}}"');
-				assert.fileContent('.bluemix/toolchain.yml', 'image-pull-secret-name: "{{image-pull-secret-name}}"');
-				assert.fileContent('.bluemix/toolchain.yml', 'image-registry-token: "{{image-registry-token}}"');
-			});
-
-			it('has toolchain.yml with correct structure', function () {
-				let toolchainyml = yml.safeLoad(fs.readFileSync('.bluemix/toolchain.yml', 'utf8'));
-				assert.ok(toolchainyml.build.parameters.configuration.env.KUBE_CLUSTER_NAME);
-				assert.ok(toolchainyml.build.parameters.configuration.env.API_KEY);
-				assert.ok(toolchainyml.deploy.parameters['kube-cluster-name']);
-				assert.ok(toolchainyml.deploy.parameters['api-key']);
-				assert.ok(toolchainyml.deploy.parameters['image-registry-token']);
-				assert.ok(toolchainyml.deploy.parameters['image-registry-token']);
+				assert.fileContent('.bluemix/toolchain.yml', toolchainKubeSample);
 			});
 
 			it('has pipeline.yml with correct content', function () {
-				let pipeline = yml.safeLoad(fs.readFileSync('.bluemix/pipeline.yml', 'utf8'));
-				let containerBuildJob = pipeline.stages[0].jobs[0];
-				assert.equal(containerBuildJob.name, 'Build');
-				assert.equal(containerBuildJob.extension_id, 'ibm.devops.services.pipeline.container.builder');
-				assert.equal(containerBuildJob.IMAGE_NAME, 'myapplication');
-
-				let buildScriptFilename = 'container-build-script';
-				buildScriptFilename += (lang === 'JAVA' || lang === 'SPRING') ? '-java' : '';
-				let containerBuildScript = fs.readFileSync(__dirname + `/samples/${buildScriptFilename}.txt`, 'utf8');
-				assert.equal(containerBuildJob.COMMAND, containerBuildScript);
-
-				let deployStage = pipeline.stages[1];
-				let input = deployStage.inputs[0];
-				assert.equal(input.type, 'job');
-				assert.equal(input.stage, 'Build Stage');
-				assert.equal(input.job, 'Build');
-
-				let properties = deployStage.properties;
-				let expectedProperties = yml.safeLoad(fs.readFileSync(__dirname + '/samples/deploy-stage-properties.yaml', 'utf8'));
-				assert.deepEqual(properties, expectedProperties);
-
-				let deployJob = deployStage.jobs[0];
-				assert.equal(deployJob.target.api_key, '${API_KEY}');
-				assert.equal(deployJob.target.kubernetes_cluster, '${KUBE_CLUSTER_NAME}');
-
-				let deployScript = fs.readFileSync(__dirname + '/samples/kube-deploy-script.txt', 'utf8');
-				assert.equal(deployJob.script, deployScript);
+				if (lang === 'JAVA' || lang === 'SPRING') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleJava);
+				} else {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSample);
+				}
 			});
 
 			it('has deploy.json with correct content', function () {
