@@ -44,7 +44,6 @@ while true; do
 done
 helm version
 
-CHART_NAME=$RELEASE_NAME
 echo "CHART_NAME: $CHART_NAME"
 echo "RELEASE_NAME: $RELEASE_NAME"
 

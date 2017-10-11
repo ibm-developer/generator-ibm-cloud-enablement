@@ -536,7 +536,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/kubernetes'))
 				.withOptions({ bluemix: JSON.stringify(
-					{ backendPlatform: "NODE", server: { namespace: 'some-test-namespace' } }
+					{ backendPlatform: "NODE", server: { cloudDeploymentOptions: { imageRegistryNamespace: 'some-test-namespace' } }}
 				), port: '9876' })
 		});
 		it('should give us the default output with no project name', function () {

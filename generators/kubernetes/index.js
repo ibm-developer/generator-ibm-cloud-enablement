@@ -113,10 +113,10 @@ module.exports = class extends Generator {
 
 		this.opts.repositoryURL='';
 		if (this.bluemix.server) {
-			// TODO(gib): Can we get this from scaffolder (this.bluemix) somehow?
-			const namespace = this.bluemix.server.namespace ? this.bluemix.server.namespace : 'replace-me-namespace';
+			const registryNamespace = this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace ?
+				this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace : 'replace-me-namespace';
 			const domain = this.bluemix.server.domain ? this.bluemix.server.domain : 'ng.bluemix.net';
-			this.opts.repositoryURL= `registry.${domain}/${namespace}/`;
+			this.opts.repositoryURL= `registry.${domain}/${registryNamespace}/`;
 			this.opts.kubeClusterNamespace =
 				this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
 					this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace : 'default';
