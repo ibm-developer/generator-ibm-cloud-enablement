@@ -68,11 +68,11 @@ function testOutput() {
 function assertYmlContent(actual, expected, label) {
 	assert.strictEqual(actual, expected, 'Expected ' + label + ' to be ' + expected + ', found ' + actual);
 }
-/*
+
 function assertYmlContentExists(actual, label) {
 	assert.notStrictEqual(actual, undefined, 'Expected ' + label + ' to be defined, it was not');
 }
-*/
+
 describe('cloud-enablement:kubernetes', function () {
 	this.timeout(5000);
 
@@ -83,14 +83,15 @@ describe('cloud-enablement:kubernetes', function () {
 			beforeEach(function () {
 				return helpers.run(path.join(__dirname, '../generators/app'))
 					.inDir(path.join(__dirname, './tmp'))
-					.withOptions({bluemix: bluemix})
+					.withOptions({bluemix: bluemix});
 			});
 
 			testOutput();
-/* This secrion is commented out temporarily bacasue js-yaml can not handle statement like {{ if Values. .... }}. 
 			it('has deployment.yaml with correct readinessProbe', function () {
 				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
+				// escape double quotes and comment out helm conditionals so it can be parsed by js-yaml
+				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
+					.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
 				let deploymentyml = yml.safeLoad(newdeploymentyml);
 				let readinessProbe = deploymentyml.spec.template.spec.containers[0].readinessProbe;
 				if(language === 'JAVA') {
@@ -104,13 +105,15 @@ describe('cloud-enablement:kubernetes', function () {
 			});
 			it('has deployment.yaml with correct hpa settings', () => {
 				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
+				// escape double quotes and comment out helm conditionals so it can be parsed by js-yaml
+				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
+					.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
 				let deploymentyml = yml.safeLoad(newdeploymentyml);
 				let resources = deploymentyml.spec.template.spec.containers[0].resources;
 				assertYmlContentExists(resources.requests.cpu, 'resources.requests.cpu');
 				assertYmlContentExists(resources.requests.memory, 'resources.requests.memory');
 			});
-*/
+
 			it('has service.yaml with correct content', function () {
 				let rawserviceyml = fs.readFileSync(chartLocation + '/templates/service.yaml', 'utf8');
 				let newserviceyml = rawserviceyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
