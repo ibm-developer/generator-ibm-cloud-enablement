@@ -144,7 +144,15 @@ module.exports = class extends Generator {
 		// chart/<applicationName>/...
 		let chartDir = 'chart/' + this.opts.chartName;
 
-		if(this.opts.language === 'java' || this.opts.language === 'spring') {
+		// Tested this works OK with Microservice Builder
+		if (this.opts.language === 'node') {
+			this.fileLocations.jenkinsfile = {
+				source : 'node/Jenkinsfile',
+				target : 'Jenkinsfile',
+				process : true
+			}
+		// Handle Java and Spring
+		} else if (this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';
 			this.fileLocations.service.source = 'java/service.yaml';
 			this.fileLocations.service.process = true;
