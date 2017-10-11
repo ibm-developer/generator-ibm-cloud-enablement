@@ -173,8 +173,8 @@ describe('cloud-enablement:kubernetes', function () {
 				});
 				assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
 			});
-			if(language === 'JAVA') {
-				it('has Jenkinsfile with correct content', function () {
+			if(language === 'JAVA' || language === 'NODE') {
+				it('Java and Node have Jenkinsfile with correct content', function () {
 					assert.fileContent('Jenkinsfile', 'image = \''+ applicationName.toLowerCase() + '\'');
 				});
 			}
