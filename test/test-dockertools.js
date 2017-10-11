@@ -341,6 +341,38 @@ describe('cloud-enablement:dockertools', function () {
 		});
 	});
 
+	describe('cloud-enablement:dockertools with Python project with PostgreSQL', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
+		});
+
+		it('create Dockerfile with gunicorn and service package', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create Dockerfile-tools with flask  and service package', function () {
+			assert.file(['Dockerfile-tools']);
+			assert.fileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'flask run');
+			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
 	describe('cloud-enablement:dockertools with Python project and storage', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
