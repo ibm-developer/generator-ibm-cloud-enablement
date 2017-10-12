@@ -44,6 +44,10 @@ describe('cloud-enablement:deployment', function () {
 		let cfOptions = {
 			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'CF'))
 		};
+		if(lang === 'JAVA' || lang === 'SPRING') {
+			cfOptions.artifactId = 'testArtifact-id';
+			cfOptions.version = '0.0.1-SNAPSHOT';
+		}
 
 		describe(`cloud-enablement:deployment CF for language ${lang}`, function () {
 			beforeEach(function () {
