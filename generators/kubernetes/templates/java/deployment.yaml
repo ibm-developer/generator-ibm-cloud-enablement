@@ -11,6 +11,7 @@ spec:
     metadata:
       labels:
         app: "{{tag '  .Chart.Name '}}-selector"
+        version: "current"
     spec:
       containers:
       - name: "{{tag '  .Chart.Name  '}}"
@@ -46,3 +47,35 @@ spec:
           - name: {{@key}}
             value: {{{this}}}
           {{/each}}
+          - name: APPLICATION_NAME
+            value: "{{tag ' .Release.Name '}}"
+          - name: APM_BM_GATEWAY_URL
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: apm_bm_gateway_url
+                optional: true
+          - name: APM_KEYFILE
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: apm_keyfile
+                optional: true
+          - name: APM_KEYFILE_PSWD
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: apm_keyfile_pswd
+                optional: true
+          - name: IBAM_INGRESS_URL
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: ibam_ingress_url
+                optional: true
+          - name: IBAM_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: apm-server-config
+                key: ibam_token
+                optional: true

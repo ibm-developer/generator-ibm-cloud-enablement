@@ -113,10 +113,10 @@ module.exports = class extends Generator {
 
 		this.opts.repositoryURL='';
 		if (this.bluemix.server) {
-			// TODO(gib): Can we get this from scaffolder (this.bluemix) somehow?
-			const namespace = this.bluemix.server.namespace ? this.bluemix.server.namespace : 'replace-me-namespace';
+			const registryNamespace = this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace ?
+				this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace : 'replace-me-namespace';
 			const domain = this.bluemix.server.domain ? this.bluemix.server.domain : 'ng.bluemix.net';
-			this.opts.repositoryURL= `registry.${domain}/${namespace}/`;
+			this.opts.repositoryURL= `registry.${domain}/${registryNamespace}/`;
 			this.opts.kubeClusterNamespace =
 				this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
 					this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace : 'default';
@@ -144,7 +144,15 @@ module.exports = class extends Generator {
 		// chart/<applicationName>/...
 		let chartDir = 'chart/' + this.opts.chartName;
 
-		if(this.opts.language === 'java' || this.opts.language === 'spring') {
+		// Tested this works OK with Microservice Builder
+		if (this.opts.language === 'node') {
+			this.fileLocations.jenkinsfile = {
+				source : 'node/Jenkinsfile',
+				target : 'Jenkinsfile',
+				process : true
+			}
+		// Handle Java and Spring
+		} else if (this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';
 			this.fileLocations.service.source = 'java/service.yaml';
 			this.fileLocations.service.process = true;

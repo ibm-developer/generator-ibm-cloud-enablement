@@ -1,77 +1,88 @@
 #!/bin/bash
-# The following colors have been defined to help with presentation of logs: green, red, label_color, no_color.
-echo -e "${label_color}Starting build script${no_color}"
+#set -x
 
-# The IBM Container Service CLI (ice), Git client (git), IDS Inventory CLI (ids-inv) and Python 2.7.3 (python) have been installed.
-# Based on the organization and space selected in the Job credentials are in place for both IBM Container Service and IBM Bluemix
-#####################
-# Run unit tests    #
-#####################
-echo -e "${label_color}No unit tests cases have been checked in ${no_color}"
+echo -e "Build environment variables:"
+echo "REGISTRY_URL=${REGISTRY_URL}"
+echo "REGISTRY_NAMESPACE=${REGISTRY_NAMESPACE}"
+echo "IMAGE_NAME=${IMAGE_NAME}"
+echo "CHART_NAME=${CHART_NAME}"
+echo "BUILD_NUMBER=${BUILD_NUMBER}"
+echo "ARCHIVE_DIR=${ARCHIVE_DIR}"
 
-######################################
-# Build Container via Dockerfile     #
-######################################
+# Learn more about the available environment variables at:
+# https://console.bluemix.net/docs/services/ContinuousDelivery/pipeline_deploy_var.html#deliverypipeline_environment
 
-# REGISTRY_URL=${CCS_REGISTRY_HOST}/${NAMESPACE}
-# FULL_REPOSITORY_NAME=${REGISTRY_URL}/${IMAGE_NAME}:${APPLICATION_VERSION}
+# To review or change build options use:
+# bx cr build --help
 
-# Possible adding retries to build the image
+echo "=========================================================="
+echo "Checking for Dockerfile at the repository root"
 if [ -f Dockerfile ]; then
-    echo -e "${label_color}BUILDING ${FULL_REPOSITORY_NAME} ${no_color}"
-    ${EXT_DIR}/utilities/sendMessage.sh -l info -m "New container build requested for ${FULL_REPOSITORY_NAME}"
-    # build image
-    BUILD_COMMAND=""
-    if [ "${USE_CACHED_LAYERS}" == "true" ]; then
-        BUILD_COMMAND="build --pull --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}"
-        ice_retry ${BUILD_COMMAND}
-        RESULT=$?
-    else
-        BUILD_COMMAND="build --no-cache --tag ${FULL_REPOSITORY_NAME} ${WORKSPACE}"
-        ice_retry ${BUILD_COMMAND}
-        RESULT=$?
-    fi
-
-    if [ $RESULT -ne 0 ]; then
-        echo -e "${red}Error building image ${no_color}" | tee -a "$ERROR_LOG_FILE"
-        echo "Build command: ice ${BUILD_COMMAND}"
-        ice info
-        ice images
-        ${EXT_DIR}/print_help.sh
-        ${EXT_DIR}/utilities/sendMessage.sh -l bad -m "Container build of ${FULL_REPOSITORY_NAME} failed"
-        exit 1
-    else
-        ${EXT_DIR}/utilities/sendMessage.sh -l good -m "Container build of ${FULL_REPOSITORY_NAME} was successful"
-        echo -e "${green}Container build of ${FULL_REPOSITORY_NAME} was successful ${no_color}"
-    fi
+   echo "Dockerfile found"
 else
-    echo -e "${red}Dockerfile not found at the repository root${no_color}"
+    echo "Dockerfile not found"
     exit 1
 fi
 
-######################################################################################
-# Copy any artifacts that will be needed for deployment and testing to $WORKSPACE    #
-######################################################################################
-# copy deploy script
-echo "Copying kube_deploy.sh script to WORKSPACE"
-cp {{deployment.kubeDeployScriptPath}} $ARCHIVE_DIR/
+echo "=========================================================="
+echo "Checking registry current plan and quota"
+bx cr plan
+bx cr quota
+echo "If needed, discard older images using: bx cr image-rm"
+
+echo "Checking registry namespace: ${REGISTRY_NAMESPACE}"
+ns=$( bx cr namespaces | grep ${REGISTRY_NAMESPACE} ||: )
+if [ -z $ns ]; then
+    echo "Registry namespace ${REGISTRY_NAMESPACE} not found, creating it."
+    bx cr namespace-add ${REGISTRY_NAMESPACE}
+    echo "Registry namespace ${REGISTRY_NAMESPACE} created."
+else
+    echo "Registry namespace ${REGISTRY_NAMESPACE} found."
+fi
+
+echo -e "Existing images in registry"
+bx cr images
+
+echo "=========================================================="
+echo -e "Building container image: ${IMAGE_NAME}:${BUILD_NUMBER}"
+set -x
+bx cr build -t $REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$BUILD_NUMBER .
+set +x
+bx cr image-inspect $REGISTRY_URL/$REGISTRY_NAMESPACE/$IMAGE_NAME:$BUILD_NUMBER
+
+echo "=========================================================="
+echo "Copying artifacts needed for deployment and testing"
+
+echo -e "Checking archive dir presence"
+mkdir -p $ARCHIVE_DIR
 
 # IMAGE_NAME from build.properties is used by Vulnerability Advisor job to reference the image qualified location in registry
-echo "IMAGE_NAME=${FULL_REPOSITORY_NAME}" >> $ARCHIVE_DIR/build.properties
-# RELEASE_NAME from build.properties is used in Helm Chart deployment to set the release name
-echo "RELEASE_NAME=${IMAGE_NAME}" >> $ARCHIVE_DIR/build.properties
-# REGISTRY_HOST from build.properties is used to create imagePullSecret, ex: registry.ng.bluemix.net
-echo "REGISTRY_HOST=${CCS_REGISTRY_HOST}" >> $ARCHIVE_DIR/build.properties
+echo "IMAGE_NAME=${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}:${BUILD_NUMBER}" >> $ARCHIVE_DIR/build.properties
 
-CHART_PATH=./chart/$IMAGE_NAME
-if [ -f ${CHART_PATH}/values.yaml ]; then
+# RELEASE_NAME from build.properties is used in Helm Chart deployment to set the release name
+echo "RELEASE_NAME=${CHART_NAME}" >> $ARCHIVE_DIR/build.properties
+
+# REGISTRY_HOST from build.properties is used to create imagePullSecret, ex: registry.ng.bluemix.net
+echo "REGISTRY_HOST=${REGISTRY_URL}" >> $ARCHIVE_DIR/build.properties
+
+# Copy scripts (incl. deploy scripts)
+if [ ! -d $ARCHIVE_DIR/$SCRIPTS_DIR ]; then # no need to copy if working in ./ already
+    echo "Copying scripts to ${ARCHIVE_DIR}/${SCRIPTS_DIR}"
+    mkdir -p $ARCHIVE_DIR/$SCRIPTS_DIR
+    cp -r $SCRIPTS_DIR/ $ARCHIVE_DIR/$SCRIPTS_DIR/
+fi
+
+if [ -f ./chart/${CHART_NAME}/values.yaml ]; then
     #Update Helm chart values.yml with image name and tag
     echo "UPDATING CHART VALUES:"
-    sed -i "s~^\([[:blank:]]*\)repository:.*$~\1repository: ${REGISTRY_URL}/${IMAGE_NAME}~" ${CHART_PATH}/values.yaml
-    sed -i "s~^\([[:blank:]]*\)tag:.*$~\1tag: ${APPLICATION_VERSION}~" ${CHART_PATH}/values.yaml
-    cat ${CHART_PATH}/values.yaml
-    cp -r ./chart/ $ARCHIVE_DIR/
+    sed -i "s~^\([[:blank:]]*\)repository:.*$~\1repository: ${REGISTRY_URL}/${REGISTRY_NAMESPACE}/${IMAGE_NAME}~" ./chart/${CHART_NAME}/values.yaml
+    sed -i "s~^\([[:blank:]]*\)tag:.*$~\1tag: ${BUILD_NUMBER}~" ./chart/${CHART_NAME}/values.yaml
+    cat ./chart/${CHART_NAME}/values.yaml
+    if [ ! -d $ARCHIVE_DIR/chart/ ]; then # no need to copy if working in ./ already
+        echo "Copying chart to ${ARCHIVE_DIR}"
+        cp -r ./chart/ $ARCHIVE_DIR/
+    fi
 else
-    echo -e "${red}Helm chart values for Kubernetes deployment (/${CHART_PATH}/values.yaml) not found.${no_color}"
+    echo -e "${red}Helm chart values for Kubernetes deployment (/chart/${CHART_NAME}/values.yaml) not found.${no_color}"
     exit 1
 fi
