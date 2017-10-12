@@ -312,9 +312,9 @@ describe('cloud-enablement:dockertools', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
 		});
 
-		it('create Dockerfile with informative command', function () {
+		it('create Dockerfile with gunicorn', function () {
 			assert.file(['Dockerfile']);
-			assert.fileContent('Dockerfile', 'echo');
+			assert.fileContent('Dockerfile', 'gunicorn');
 		});
 
 		it('create Dockerfile-tools with flask', function () {
@@ -323,6 +323,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'flask run');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
@@ -332,13 +333,38 @@ describe('cloud-enablement:dockertools', function () {
 				'.dockerignore'
 			]);
 		});
+	});
 
-		it('create README with instructions for fixes', function () {
-			assert.file(['README.md']);
-			assert.fileContent('README.md', '### Dockerfile');
-			assert.fileContent('README.md', '### manifest.yml');
-			assert.fileContent('README.md', '### requirements.txt');
-			assert.fileContent('README.md', '### cli-config.yml');
+	describe('cloud-enablement:dockertools with Python project -- bx dev enable', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({
+					bluemix: JSON.stringify(scaffolderSamplePython),
+					enable: true
+				})
+		});
+
+		it('create Dockerfile with informative echo prompt', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'echo');
+		});
+
+		it('create Dockerfile-tools with flask', function () {
+			assert.file(['Dockerfile-tools']);
+		})
+
+		it('create CLI-config file with informative echo prompt', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'echo');
+			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
 		});
 	});
 
@@ -349,9 +375,9 @@ describe('cloud-enablement:dockertools', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
 		});
 
-		it('create Dockerfile with informative command', function () {
+		it('create Dockerfile with gunicorn', function () {
 			assert.file(['Dockerfile']);
-			assert.fileContent('Dockerfile', 'echo');
+			assert.fileContent('Dockerfile', 'gunicorn');
 		});
 
 		it('create Dockerfile-tools with flask', function () {
@@ -360,6 +386,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'flask run');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});

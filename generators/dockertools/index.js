@@ -275,17 +275,6 @@ module.exports = class extends Generator {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
 
-		const FILENAME_REQUIREMENTS = "requirements.txt";
-		const FILENAME_README = "README.md"
-		const FILENAME_README_ALT = "IDT-Enable-Instructions.md"
-
-		// Determine what files are missing to configure the enable-fixes steps
-		const triage = {
-			missingDockerfile: !this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE)),
-			missingRequirements: !this.fs.exists(this.destinationPath(FILENAME_REQUIREMENTS)),
-			missingReadme: !this.fs.exists(this.destinationPath(FILENAME_README))
-		};
-
 		const cliConfig = {
 			containerNameRun: `${applicationName.toLowerCase()}-flask-run`,
 			containerNameTools: `${applicationName.toLowerCase()}-flask-tools`,
@@ -300,11 +289,15 @@ module.exports = class extends Generator {
 			imageNameRun: `${applicationName.toLowerCase()}-flask-run`,
 			imageNameTools: `${applicationName.toLowerCase()}-flask-tools`,
 			buildCmdRun: 'python -m compileall .',
-			testCmd: 'echo No test command specified in cli-config',
+			testCmd: this.opts.enable
+				? 'echo No test command specified in cli-config'
+				: 'python -m unittest tests.app_tests.ServerTestCase',
 			buildCmdDebug: 'python -m compileall .',
 			runCmd: '',
 			stopCmd: '',
-			debugCmd: 'echo No debug command specified in cli-config',
+			debugCmd: this.opts.enable
+				? 'echo No debug command specified in cli-config'
+				: 'python -m flask run --host=0.0.0.0 --port=5858 --debugger',
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
 
@@ -325,7 +318,8 @@ module.exports = class extends Generator {
 			this.fs.copyTpl(
 				this.templatePath('python/Dockerfile'),
 				this.destinationPath(FILENAME_DOCKERFILE), {
-					port: port
+					port: port,
+					enable: this.opts.enable
 				}
 			);
 		}
@@ -344,18 +338,6 @@ module.exports = class extends Generator {
 			this.templatePath('python/dockerignore'),
 			this.destinationPath('.dockerignore')
 		);
-
-		const fixesPath = triage.missingReadme ? FILENAME_README : FILENAME_README_ALT;
-		this.fs.copyTpl(
-			this.templatePath('python/IDT-Enable-Instructions.md'),
-			this.destinationPath(fixesPath), {
-				triage
-			}
-		);
-
-		if (!triage.missingReadme) {
-			this.log("Read IDT-Enable-Instructions.md for instructions to finish enabling your project to run on IBM Cloud.")
-		}
 	}
 
 	_copyTemplateIfNotExists(targetFileName, sourceTemplatePath, ctx) {
