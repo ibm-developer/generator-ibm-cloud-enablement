@@ -104,8 +104,9 @@ describe('cloud-enablement:cloudfoundry', function () {
 
 				describe('cloud-enablement:cloudfoundry with ' + language + ' with buildType ' + buildType + ' and createType ' + createType, function () {
 					let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
+					let artifactId = 'testArtifact-id';
 					let javaVersion = '1.0-SNAPSHOT';
-					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType, version: javaVersion};
+					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType, artifactId: artifactId, version: javaVersion};
 					beforeEach(function () {
 						return helpers.run(path.join(__dirname, '../generators/app'))
 							.inDir(path.join(__dirname, './tmp'))
@@ -116,9 +117,9 @@ describe('cloud-enablement:cloudfoundry', function () {
 						assert.file('manifest.yml');
 						let manifestyml = yml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
 
-						if ( language === 'JAVA ' ) {
+						if ( language === 'JAVA' ) {
 							let targetDir = buildType === 'maven' ? 'target' : 'build'
-							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application.zip', 'manifestyml.applications[0].path');
+							assertYmlContent(manifestyml.applications[0].path, './' + targetDir + '/' + artifactId + '-' + javaVersion +'.zip', 'manifestyml.applications[0].path');
 							assertYmlContent(manifestyml.applications[0].memory, '512M', 'manifestyml.applications[0].memory')
 							assertYmlContent(manifestyml.applications[0].buildpack, 'liberty-for-java', 'manifestyml.applications[0].buildpack')
 							assertYmlContent(manifestyml.applications[0].env.services_autoconfig_excludes, 'cloudantNoSQLDB=config Object-Storage=config', 'manifestyml.applications[0].env.services_autoconfig_excludes');
@@ -126,7 +127,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 
 						if ( language === 'SPRING' ) {
 							let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
-							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/my-application-'+javaVersion+'.jar', 'manifestyml.applications[0].path');
+							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/' + artifactId + '-'+javaVersion+'.jar', 'manifestyml.applications[0].path');
 							assertYmlContent(manifestyml.applications[0].memory, '256M', 'manifestyml.applications[0].memory')
 							assertYmlContent(manifestyml.applications[0].buildpack, 'java_buildpack', 'manifestyml.applications[0].buildpack')
 						}
@@ -173,14 +174,14 @@ describe('cloud-enablement:cloudfoundry', function () {
 								assertYmlContent(postBuildScript, stage.jobs[1].script, 'pipelineyml.stages[0].jobs[1].script');
 							}
 							if(stage.name === 'Deploy Stage') {
-								if ( language === 'JAVA ' ) {
+								if ( language === 'JAVA' ) {
 									let targetDir = buildType === 'maven' ? 'target' : 'build'
-									let deployCommand = 'cf push "${CF_APP}" -p '+targetDir+'/my-application.zip';
+									let deployCommand = 'cf push "${CF_APP}" -p ' + targetDir + '/' + artifactId + '-' + javaVersion + '.zip';
 									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
 								}
 								if ( language === 'SPRING' ) {
 									let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
-									let deployCommand = 'cf push "${CF_APP}" -p '+targetDir+'/my-application-'+javaVersion+'.jar'
+									let deployCommand = 'cf push "${CF_APP}" -p ' + targetDir + '/' + artifactId + '-' + javaVersion + '.jar'
 									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
 								}
 							}
