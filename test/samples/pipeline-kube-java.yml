@@ -4,25 +4,15 @@ stages:
   - type: git
     branch: master
     service: ${REPO}
-  {{#if config.triggersType}}
   triggers:
-  - type: {{config.triggersType}}
-  {{/if}}
-  {{#has deployment.type 'Kube'}}
+  - type: commit
   properties:
   - name: CHART_NAME
     value: ${CHART_NAME}
     type: text
-  {{/has}}
   jobs:
   - name: Build
     type: builder
-    {{#missing deployment.type 'Kube'}}
-    {{#each config.buildJobProps}}
-    {{@key}}: {{{this}}}
-    {{/each}}
-    {{/missing}}
-    {{#has deployment.type 'Kube'}}
     build_type: cr
     artifact_dir: ''
     target:
@@ -32,7 +22,6 @@ stages:
     image_name: ${CHART_NAME}
     script: |-
       #!/bin/bash
-      {{#if config.javaBuildScriptContent}}
       echo "Doing Java build"
       echo "DevOps sets LOG_DIR env var, which is used during Java build to check if server started, so unsetting"
       echo "LOG_DIR: ${LOG_DIR}"
@@ -40,17 +29,16 @@ stages:
       unset LOG_DIR
       echo "LOG_DIR has been unset: ${LOG_DIR}"
 
-      {{{config.javaBuildScriptContent}}}
+      export JAVA_HOME=$JAVA8_HOME
+      gradle build
 
       echo "Java build finished, setting LOG_DIR back to original"
       LOG_DIR=$LOG_DIR_TEMP
       echo "LOG_DIR: ${LOG_DIR}"
-      {{/if}}
 
       echo "source the container_build script to run in current shell"
-      SCRIPTS_DIR={{{deployment.scriptsDir}}} # SCRIPTS_DIR is used in container_build.sh
+      SCRIPTS_DIR=.bluemix/scripts # SCRIPTS_DIR is used in container_build.sh
       source ${SCRIPTS_DIR}/container_build.sh
-    {{/has}}
   - name: Post Build
     type: builder
     artifact_dir: ''
@@ -69,7 +57,6 @@ stages:
   - type: job
     stage: Build Stage
     job: Build
-  {{#has deployment.type 'Kube'}}
   properties:
   - name: buildProperties
     value: build.properties
@@ -86,7 +73,6 @@ stages:
   - name: IMAGE_REGISTRY_TOKEN
     value: ${IMAGE_REGISTRY_TOKEN}
     type: text
-  {{/has}}
   triggers:
   - type: stage
   jobs:
@@ -97,26 +83,9 @@ stages:
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
       application: ${CF_APP}
-    {{#has deployment.type 'Kube'}}
       api_key: ${API_KEY}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
       echo "source the kube_deploy script to run in current shell"
-      source {{{deployment.scriptsDir}}}/kube_deploy.sh
-    {{/has}}
-    {{#has deployment.type 'CF'}}
-    script: |-
-      #!/bin/bash
-{{#each config.services}}
-   {{#each this}}
-      cf create-service "{{{this.label}}}" "{{{this.plan}}}" "{{{this.name}}}"
-   {{/each}}
-{{/each}}
-      {{#if config.pushCommand}}
-      {{{config.pushCommand}}}
-      {{else}}
-      cf push "${CF_APP}"
-      {{/if}}
-      # cf logs "${CF_APP}" --recent
-    {{/has}}
+      source .bluemix/scripts/kube_deploy.sh
