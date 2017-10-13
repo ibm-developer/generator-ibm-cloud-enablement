@@ -128,7 +128,9 @@ module.exports = class extends Generator {
 		this.cfIgnoreContent = ['/.classpath', '/.project', '/.settings', '/src/main/liberty/config/server.env', 'target/', 'build/'];
 		this.manifestConfig.buildpack = 'liberty-for-java';
 		this.manifestConfig.memory = this.manifestConfig.memory || '512M';
-		this.manifestConfig.path = (this.opts.buildType && this.opts.buildType === 'gradle') ? `./build/${this.name}.zip` : `./target/${this.name}.zip`;
+		let buildDir = (this.opts.buildType && this.opts.buildType === 'gradle') ? 'build' : 'target';
+		let zipPath = `${buildDir}/${this.opts.artifactId}-${this.opts.version}.zip`
+		this.manifestConfig.path = `./${zipPath}`;
 		let excludes = [];
 		if (this.bluemix.cloudant) {
 			excludes.push('cloudantNoSQLDB=config');
@@ -142,17 +144,17 @@ module.exports = class extends Generator {
 		if(excludes.length === 2) {
 			this.manifestConfig.env.services_autoconfig_excludes = excludes[0] + ' ' + excludes[1];
 		}
-		let fileLocation = (this.opts.buildType && this.opts.buildType === 'gradle') ? `build/${this.name}.zip` : `target/${this.name}.zip`;
-		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + fileLocation;
+		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + zipPath;
 	}
 
 	_configureSpring() {
 		this.cfIgnoreContent = ['/.classpath', '/.project', '/.settings', '/src/main/resources/application-local.properties', 'target/', 'build/'];
 		this.manifestConfig.buildpack = 'java_buildpack';
 		this.manifestConfig.memory = this.manifestConfig.memory || '256M';
-		this.manifestConfig.path = (this.opts.buildType && this.opts.buildType === 'gradle') ? `./build/libs/${this.name}-${this.opts.version}.jar` : `./target/${this.name}-${this.opts.version}.jar`;
-		let fileLocation = (this.opts.buildType && this.opts.buildType === 'gradle') ? `build/libs/${this.name}-${this.opts.version}.jar` : `target/${this.name}-${this.opts.version}.jar`;
-		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + fileLocation;
+		let buildDir = (this.opts.buildType && this.opts.buildType === 'gradle') ? 'build/libs' : 'target';
+		let jarPath = `${buildDir}/${this.opts.artifactId}-${this.opts.version}.jar`;
+		this.manifestConfig.path = `./${jarPath}`;
+		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + jarPath;
 	}
 
 	_configurePython() {
