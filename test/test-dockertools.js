@@ -343,7 +343,7 @@ describe('cloud-enablement:dockertools', function () {
 		});
 	});
 
-  describe('cloud-enablement:dockertools with Python project -- bx dev enable', function () {
+	describe('cloud-enablement:dockertools with Python project -- bx dev enable', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
@@ -365,7 +365,7 @@ describe('cloud-enablement:dockertools', function () {
 		it('create CLI-config file with informative echo prompt', function () {
 			assert.file(['cli-config.yml']);
 			assert.fileContent('cli-config.yml', 'echo');
-      assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
+			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
 
