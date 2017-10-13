@@ -12,8 +12,12 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-
   && pip install --upgrade -r /tmp/requirements.txt\
   && apk del build-dependencies
 
-ENV FLASK_APP=server
-
 COPY . /app
-
+<% if (!enable) { %>
+ENV FLASK_APP=server
+<% } %>
+<% if (enable) { %>
+CMD ["echo", "Enable incomplete. See README/IDT-Enable-Instructions to finish the enable process""]
+<% } else { %>
 CMD ["gunicorn", "-b", "0.0.0.0:<%= port %>", "server:app"]
+<% } %>

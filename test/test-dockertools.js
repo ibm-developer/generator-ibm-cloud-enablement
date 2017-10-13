@@ -151,7 +151,7 @@ describe('cloud-enablement:dockertools', function () {
 				let artifactId = 'testArtifact-id';
 				let javaVersion = '1.0-SNAPSHOT';
 				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, artifactId: artifactId, version: javaVersion};
-				
+
 				beforeEach(function () {
 					return helpers.run(path.join(__dirname, '../generators/app'))
 						.inDir(path.join(__dirname, './tmp'))
@@ -173,7 +173,7 @@ describe('cloud-enablement:dockertools', function () {
 				it('create cli-config chart path includes application name', function () {
 					assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 				});
-				
+
 				if ( language === "SPRING" ) {
 					it('Dockerfile contains full jar name and app.jar', function () {
 						assert.fileContent('Dockerfile', `${artifactId}-${javaVersion}.jar /app.jar`);
@@ -208,7 +208,7 @@ describe('cloud-enablement:dockertools', function () {
 						assert.fileContent('Dockerfile-tools', 'wlp/bin');
 					});
 				}
-				
+
 				if ( buildType === "gradle" ) {
 					it('Dockerfile references build directory', function () {
 						assert.fileContent('Dockerfile', 'build');
@@ -237,7 +237,7 @@ describe('cloud-enablement:dockertools', function () {
 					});
 				}
 			});
-			
+
 			/* Verify CLI platform included */
 			describe('cloud-enablement:dockertools for ['+language+'] project using [' + buildType + '] (cli included)', function () {
 				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
@@ -252,7 +252,7 @@ describe('cloud-enablement:dockertools', function () {
 					assert.file(['Dockerfile', '.dockerignore', 'Dockerfile-tools', 'cli-config.yml']);
 				});
 			});
-			
+
 			/* Verify CLI platform excluded */
 			describe('cloud-enablement:dockertools for ['+language+'] project using [' + buildType + '] (cli excluded)', function () {
 				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
@@ -270,7 +270,7 @@ describe('cloud-enablement:dockertools', function () {
 					assert.noFile(['Dockerfile-tools', 'cli-config.yml']);
 				});
 			});
-			
+
 			/* Java Metrics enabled */
 			describe('cloud-enablement:dockertools for ['+ language +'] project using [' + buildType + '] with javametrics enabled', function () {
 				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
@@ -332,6 +332,39 @@ describe('cloud-enablement:dockertools', function () {
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
 			assert.fileContent('cli-config.yml', 'flask run');
+			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Python project -- bx dev enable', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({
+					bluemix: JSON.stringify(scaffolderSamplePython),
+					enable: true
+				})
+		});
+
+		it('create Dockerfile with informative echo prompt', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'echo');
+		});
+
+		it('create Dockerfile-tools with flask', function () {
+			assert.file(['Dockerfile-tools']);
+		})
+
+		it('create CLI-config file with informative echo prompt', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'echo');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
