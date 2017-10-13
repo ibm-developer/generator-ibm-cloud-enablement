@@ -30,15 +30,23 @@ bx cr plan
 bx cr quota
 echo "If needed, discard older images using: bx cr image-rm"
 
-echo "Checking registry namespace: ${REGISTRY_NAMESPACE}"
-ns=$( bx cr namespaces | grep ${REGISTRY_NAMESPACE} ||: )
-if [ -z $ns ]; then
-    echo "Registry namespace ${REGISTRY_NAMESPACE} not found, creating it."
-    bx cr namespace-add ${REGISTRY_NAMESPACE}
-    echo "Registry namespace ${REGISTRY_NAMESPACE} created."
-else
-    echo "Registry namespace ${REGISTRY_NAMESPACE} found."
-fi
+# TODO this check for namespace is not enough, namespace has to be unique per region.
+# This only checks for existence of namespace in user's account. When creating namespace,
+# need to handle case where it's already taken, and perhaps generate a unique one.
+# Rules for namespace:
+# The namespace must be unique and not taken in registry region.
+# The namespace must be 4-30 characters long.
+# The namespace must start with at least one letter or number.
+# The namespace can only contain lowercase letters, numbers or underscores (_).
+#echo "Checking registry namespace: ${REGISTRY_NAMESPACE}"
+#ns=$( bx cr namespaces | grep ${REGISTRY_NAMESPACE} ||: )
+#if [ -z $ns ]; then
+#    echo "Registry namespace ${REGISTRY_NAMESPACE} not found, creating it."
+#    bx cr namespace-add ${REGISTRY_NAMESPACE}
+#    echo "Registry namespace ${REGISTRY_NAMESPACE} created."
+#else
+#    echo "Registry namespace ${REGISTRY_NAMESPACE} found."
+#fi
 
 echo -e "Existing images in registry"
 bx cr images
