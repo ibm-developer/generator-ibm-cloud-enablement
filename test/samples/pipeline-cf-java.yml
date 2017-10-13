@@ -44,5 +44,5 @@ stages:
       application: ${CF_APP}
     script: |-
       #!/bin/bash
-      cf push "${CF_APP}" -p target/my-application.zip
+      cf push "${CF_APP}" -p target/testArtifact-id-0.0.1-SNAPSHOT.zip
       # cf logs "${CF_APP}" --recent

@@ -148,8 +148,9 @@ describe('cloud-enablement:dockertools', function () {
 		javaFrameworks.forEach(language => {
 			describe('cloud-enablement:dockertools for ['+ language +'] project using [' + buildType + ']', function () {
 				let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
+				let artifactId = 'testArtifact-id';
 				let javaVersion = '1.0-SNAPSHOT';
-				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, version: javaVersion};
+				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, artifactId: artifactId, version: javaVersion};
 				
 				beforeEach(function () {
 					return helpers.run(path.join(__dirname, '../generators/app'))
@@ -175,7 +176,7 @@ describe('cloud-enablement:dockertools', function () {
 				
 				if ( language === "SPRING" ) {
 					it('Dockerfile contains full jar name and app.jar', function () {
-						assert.fileContent('Dockerfile', `${applicationName}-${javaVersion}.jar /app.jar`);
+						assert.fileContent('Dockerfile', `${artifactId}-${javaVersion}.jar /app.jar`);
 					});
 					it('.dockerignore does not contain wlp', function () {
 						assert.noFileContent('.dockerignore', 'wlp');
@@ -183,8 +184,8 @@ describe('cloud-enablement:dockertools', function () {
 					it('Dockerfile-tools does not contain wlp', function () {
 						assert.noFileContent('Dockerfile-tools', 'wlp/bin');
 					});
-					it('cli-config file run-cmd includes version', function () {
-						assert.noFileContent('cli-config.yml', `run-cmd : "java -Dspring.profiles.active=local -jar ${applicationName}-${javaVersion}.jar"`);
+					it('cli-config file does not have a run-cmd', function () {
+						assert.noFileContent('cli-config.yml', 'run-cmd');
 					});
 				} else  /* language === 'JAVA' */ {
 					it('.dockerignore ignores workarea and logs', function () {
