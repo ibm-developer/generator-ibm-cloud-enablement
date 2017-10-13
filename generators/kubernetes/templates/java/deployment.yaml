@@ -48,33 +48,33 @@ spec:
           {{/each}}
           - name: APPLICATION_NAME
             value: "{{tag ' .Release.Name '}}"
-          - name: APM_BM_GATEWAY_URL
+          - name: IBM_APM_SERVER_URL
             valueFrom:
               secretKeyRef:
                 name: apm-server-config
-                key: apm_bm_gateway_url
+                key: ibm_apm_server_url
                 optional: true
-          - name: APM_KEYFILE
+          - name: IBM_APM_KEYFILE
             valueFrom:
               secretKeyRef:
                 name: apm-server-config
-                key: apm_keyfile
+                key: ibm_apm_keyfile
                 optional: true
-          - name: APM_KEYFILE_PSWD
+          - name: IBM_APM_KEYFILE_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: apm-server-config
-                key: apm_keyfile_pswd
+                key: ibm_apm_keyfile_password
                 optional: true
-          - name: IBAM_INGRESS_URL
+          - name: IBM_APM_INGRESS_URL
             valueFrom:
               secretKeyRef:
                 name: apm-server-config
-                key: ibam_ingress_url
+                key: ibm_apm_ingress_url
                 optional: true
-          - name: IBAM_TOKEN
+          - name: IBM_APM_ACCESS_TOKEN
             valueFrom:
               secretKeyRef:
                 name: apm-server-config
-                key: ibam_token
+                key: ibm_apm_access_token
                 optional: true
