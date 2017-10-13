@@ -275,6 +275,24 @@ module.exports = class extends Generator {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
 
+		// Define metadata for all services that
+		// require custom logic in Dockerfiles
+		const services = require('./resources/python/services.json');
+
+		// Get array with all the keys for the services objects
+		const servKeys = Object.keys(services);
+		const servicesPackages = [];
+
+		// Iterate over service keys to search for provisioned services
+		for (let index in servKeys) {
+			const servKey = servKeys[index];
+			if (this.bluemix.hasOwnProperty(servKey)) {
+				if (services[servKey].package) {
+					servicesPackages.push(services[servKey].package);
+				}
+			}
+		}
+
 		const cliConfig = {
 			containerNameRun: `${applicationName.toLowerCase()}-flask-run`,
 			containerNameTools: `${applicationName.toLowerCase()}-flask-tools`,
@@ -319,7 +337,8 @@ module.exports = class extends Generator {
 				this.templatePath('python/Dockerfile'),
 				this.destinationPath(FILENAME_DOCKERFILE), {
 					port: port,
-					enable: this.opts.enable
+					enable: this.opts.enable,
+					servicesPackages: servicesPackages
 				}
 			);
 		}
@@ -330,6 +349,7 @@ module.exports = class extends Generator {
 			this.fs.copyTpl(
 				this.templatePath('python/Dockerfile-tools'),
 				this.destinationPath(FILENAME_DOCKERFILE_TOOLS), {
+					servicesPackages: servicesPackages
 				}
 			);
 		}

@@ -25,6 +25,7 @@ const scaffolderSampleSwift = scaffolderSample.getJson('SWIFT');
 const scaffolderSampleJava = scaffolderSample.getJson('JAVA');
 const scaffolderSampleSpring = scaffolderSample.getJson('SPRING');
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
+const scaffolderSamplePythonNoServices = scaffolderSample.getJsonNoServices('PYTHON');
 
 const applicationName = "AcmeProject"; // From all scaffolder samples
 
@@ -342,7 +343,7 @@ describe('cloud-enablement:dockertools', function () {
 		});
 	});
 
-	describe('cloud-enablement:dockertools with Python project -- bx dev enable', function () {
+  describe('cloud-enablement:dockertools with Python project -- bx dev enable', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
@@ -364,6 +365,70 @@ describe('cloud-enablement:dockertools', function () {
 		it('create CLI-config file with informative echo prompt', function () {
 			assert.file(['cli-config.yml']);
 			assert.fileContent('cli-config.yml', 'echo');
+      assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Python project with no services', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePythonNoServices)})
+		});
+
+		it('create Dockerfile with gunicorn and service package', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create Dockerfile-tools with flask  and service package', function () {
+			assert.file(['Dockerfile-tools']);
+			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'flask run');
+			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Python project with PostgreSQL', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
+		});
+
+		it('create Dockerfile with gunicorn and service package', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create Dockerfile-tools with flask  and service package', function () {
+			assert.file(['Dockerfile-tools']);
+			assert.fileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'flask run');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
