@@ -22,6 +22,7 @@ const fs = require('fs');
 const scaffolderSample = require('./samples/scaffolder-sample');
 
 const pipelineKubeSample = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube.yml'), 'utf-8');
+const pipelineKubeSampleSwift = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-swift.yml'), 'utf-8');
 const pipelineKubeSampleJava = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-java.yml'), 'utf-8');
 const toolchainKubeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube.yml'), 'utf-8');
 
@@ -114,6 +115,8 @@ describe('cloud-enablement:deployment', function () {
 			it('has pipeline.yml with correct content', function () {
 				if (lang === 'JAVA' || lang === 'SPRING') {
 					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleJava);
+				} else if (lang === 'SWIFT') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleSwift);
 				} else {
 					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSample);
 				}
