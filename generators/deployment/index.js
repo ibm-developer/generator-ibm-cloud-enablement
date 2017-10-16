@@ -96,7 +96,7 @@ module.exports = class extends Generator {
 		this.manifestConfig.buildpack = 'swift_buildpack';
 		this.manifestConfig.command = this.name ? (`${this.name}`) : undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
-		if (this.deployment.type == "Kube") this.pipelineConfig.swiftKubeBuildContent = true;
+		this.pipelineConfig.swift = true;
 		this.cfIgnoreContent = ['.build/*', '.build-ubuntu/*', 'Packages/*'];
 	}
 

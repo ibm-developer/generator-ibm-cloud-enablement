@@ -46,7 +46,7 @@ stages:
       LOG_DIR=$LOG_DIR_TEMP
       echo "LOG_DIR: ${LOG_DIR}"
       {{/if}}
-      {{#if config.swiftKubeBuildContent}}
+      {{#if config.swift}}
       echo "Modifying Dockerfiles for Swift Kubernetes DevOps Toolchain deployment"
       echo "RUN cd /swift-project && /swift-utils/tools-utils.sh build release" >> Dockerfile-tools
       sed -i 's/COPY.*/COPY --from=0 \/swift-project .\/swift-project/' Dockerfile
