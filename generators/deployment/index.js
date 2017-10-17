@@ -96,6 +96,7 @@ module.exports = class extends Generator {
 		this.manifestConfig.buildpack = 'swift_buildpack';
 		this.manifestConfig.command = this.name ? (`${this.name}`) : undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
+		this.pipelineConfig.swift = true;
 		this.cfIgnoreContent = ['.build/*', '.build-ubuntu/*', 'Packages/*'];
 	}
 
@@ -110,7 +111,7 @@ module.exports = class extends Generator {
 		if (this.opts.createType === 'bff/spring') {
 			this.manifestConfig.env.OPENAPI_SPEC = '/swagger/api';
 		}
-		
+
 		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {
 			this.toolchainConfig.repoType = 'link';
 		}
@@ -160,7 +161,9 @@ module.exports = class extends Generator {
 	_configurePython() {
 		// buildpack is left blank; bluemix will auto detect
 		this.manifestConfig.buildpack = 'python_buildpack';
-		this.manifestConfig.command = 'gunicorn server:app -b 0.0.0.0:$PORT';
+		this.manifestConfig.command = this.opts.enable
+			? 'echo No run command specified in manifest.yml'
+			: 'gunicorn server:app -b 0.0.0.0:$PORT';
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.manifestConfig.env.FLASK_APP = 'server';
 		this.manifestConfig.env.FLASK_DEBUG = 'true';
