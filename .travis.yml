@@ -3,7 +3,7 @@ language: node_js
 node_js:
 - '8'
 
-script: npm test && npm run coveralls && ./npm_patch.sh
+script: npm test && npm run coveralls && ./npm_version_upgrade.sh
 
 branches:
   only:
