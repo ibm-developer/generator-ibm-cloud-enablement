@@ -13,10 +13,10 @@ git config push.default simple
 npm run version
 
 echo "Determining next version"
-PKG_VER_NEXT=`node -e "console.log(require('./package.json').version);"`
-NEXT_PKG_VER_MAJOR=`node -e "console.log(require('./package.json').version.split('.')[0]);"`
-NEXT_PKG_VER_MINOR=`node -e "console.log(require('./package.json').version.split('.')[1]);"`
-NEXT_PKG_VER_FIX=`node -e "console.log(require('./package.json').version.split('.')[2]);"`
+PKG_VER_NEXT=$(node -e "console.log(require('./package.json').version);")
+NEXT_PKG_VER_MAJOR=$(node -e "console.log(require('./package.json').version.split('.')[0]);")
+NEXT_PKG_VER_MINOR=$(node -e "console.log(require('./package.json').version.split('.')[1]);")
+NEXT_PKG_VER_FIX=$(node -e "console.log(require('./package.json').version.split('.')[2]);")
 
 echo "Creating git branch"
 BRANCH="updateTo${PKG_VER_NEXT}"
