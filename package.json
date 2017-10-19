@@ -1,6 +1,6 @@
 {
   "name": "generator-ibm-cloud-enablement",
-  "version": "0.1.0-0",
+  "version": "0.1.0-alpha.0",
   "description": "This generator adds IBM Cloud enablement to applications",
   "main": "generators/app/index.js",
   "license": "Apache-2.0",
