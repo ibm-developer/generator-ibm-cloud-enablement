@@ -208,10 +208,14 @@ module.exports = class extends Generator {
 			);
 		}
 
-		this.fs.copyTpl(
-			this.templatePath('node/dockerignore'),
-			this.destinationPath('.dockerignore')
-		);
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))){
+			console.info(FILENAME_DOCKER_IGNORE, "already exists, skipping.");
+		} else {
+			this.fs.copyTpl(
+				this.templatePath('node/dockerignore'),
+				this.destinationPath('.dockerignore')
+			);
+		}
 	}
 
 	_generateJava() {
