@@ -17,7 +17,7 @@ COPY . /app
 ENV FLASK_APP=server
 <% } %>
 <% if (enable) { %>
-CMD ["echo", "Enable incomplete. See README/IDT-Enable-Instructions to finish the enable process""]
+CMD ["echo", "No run command specified in Dockerfile"]
 <% } else { %>
 CMD ["gunicorn", "-b", "0.0.0.0:<%= port %>", "server:app"]
 <% } %>
