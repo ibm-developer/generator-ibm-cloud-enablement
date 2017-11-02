@@ -8,6 +8,7 @@
 [![DownloadsMonthly][img-npm-downloads-monthly]][url-npm]
 [![DownloadsTotal][img-npm-downloads-total]][url-npm]
 [![License][img-license]][url-npm]
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
 
 [img-bluemix-powered]: https://img.shields.io/badge/bluemix-powered-blue.svg
 [url-bluemix]: http://bluemix.net
@@ -43,7 +44,7 @@ npm install -g generator-ibm-cloud-enablement
 ## Usage
 
 Following command line arguments are supported
-* `--bluemix {stringified-json}` -  used by Scaffolder to supply project information from `pman`. This will be referred as `projectConfig` in this document. You can also supply a local file containing compatible JSON object by using `--bluemix file:path/to/file.json` or pass the JSON in the CLI like `--bluemix "{\"backendPlatform\":\"NODE\"}"`. You will need at least a backendPlatform to run it locally.
+* `--bluemix {stringified-json}` -  used by Scaffolder to supply project information from `pman`. You can also supply a local file containing compatible JSON object by using `--bluemix file:path/to/file.json` or pass the JSON in the CLI like `--bluemix "{\"backendPlatform\":\"NODE\"}"`. You will need at least a backendPlatform to run it locally.
 * `--storages {stringified-array}` - used to add storage deployment to helm charts
 * `--isDeployableContainer` -  if true add `container` to `deploy-target` in `cli-config.yaml`
 
@@ -70,5 +71,5 @@ In order to publish changes, you will need to fork the repository or ask to join
 Once you are finished with your changes, run `npm test` to make sure all tests pass.
 
 Do a pull request against `development`, make sure the build passes. A team member will review and merge your pull request. 
-Once merged to development, the version will be auto-incremented.
-Do a pull request against master, once that PR is reviewed and merged, a new version will be published.
+Once merged to development to master, the version will be auto-incremented and published according to the commit. Please follow the [conventional commit specification](https://conventionalcommits.org/)
+before contributing. To help you with commit a commit template is provide. Run `config.sh` to initialize the commit template to your `.git/config`. 
