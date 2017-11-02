@@ -26,6 +26,5 @@ deploy:
   on:
     branch: master
     condition: $NPM_VER != $PKG_VER
-    - development
 after_deploy:
   - node /tmp/changelog-generator-slack-notification/index.js --html "$HTML" --name "$PKG_NAME" --api "$SLACK_WEBHOOK" --v "$PKG_VER"
