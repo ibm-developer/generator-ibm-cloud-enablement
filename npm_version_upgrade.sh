@@ -11,9 +11,9 @@ echo "$PKG_NAME : version = $PKG_VER, npm version = $NPM_VER"
 HTML=$(markdown CHANGELOG.md)
 
 if [ $TRAVIS_BRANCH = "master" ]; then
-    echo "Build targetting development - checking if this is a PR or not"
+    echo "Build targetting master - checking if this is a PR or not"
     if [[ "${TRAVIS_PULL_REQUEST}" = "false" ]]; then
-        echo "This is a build on development, performing additional steps"
+        echo "This is a build on master, performing additional steps"
         if [ $NPM_VER == $PKG_VER ]; then
              echo "Version numbers match, so changing version and committing changes"
              ./prerelease.sh
