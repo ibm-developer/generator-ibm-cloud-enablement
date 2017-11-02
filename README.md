@@ -1,6 +1,6 @@
 # IBM Cloud Enablement Generator
 
-[![Bluemix powered][img-bluemix-powered]][url-bluemix]
+[![IBM Cloud powered][img-bluemix-powered]][url-bluemix]
 [![Travis][img-travis-master]][url-travis-master]
 [![Coveralls][img-coveralls-master]][url-coveralls-master]
 [![Codacy][img-codacy]][url-codacy]
