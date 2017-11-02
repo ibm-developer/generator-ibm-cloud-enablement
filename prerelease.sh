@@ -1,38 +1,24 @@
-#!/usr/bin/env bash
+#!/bin/bash
+set -x
 
 echo "Running pre-release checks and scans"
-echo "Determining current version"
-CURRENT_PKG_VER_MAJOR=`node -e "console.log(require('./package.json').version.split('.')[0]);"`
-CURRENT_PKG_VER_MINOR=`node -e "console.log(require('./package.json').version.split('.')[1]);"`
-CURRENT_PKG_VER_FIX=`node -e "console.log(require('./package.json').version.split('.')[2]);"`
+CURRENT_PKG_VER=`node -e "console.log(require('./package.json').version);"`
+echo "Determining current version: ${CURRENT_PKG_VER}"
+LINE="bumping version in package.json from ${CURRENT_PKG_VER} to"
+PKG_VER_NEXT=$(standard-version --dry-run | grep 'package.json from' | awk -v FS="${LINE}" -v OFS="" '{$1 = ""; print}')
+PKG_VER_NEXT="$(echo -e "${PKG_VER_NEXT}" | tr -d '[:space:]')"
 
-git config user.email "travisci@travis.ibm.com"
+echo "Determining next version: ${PKG_VER_NEXT}"
+
+git config user.email "travisci@travis.com"
 git config user.name "Travis CI"
 git config push.default simple
-
-npm run version
-
-echo "Determining next version"
-PKG_VER_NEXT=$(node -e "console.log(require('./package.json').version);")
-NEXT_PKG_VER_MAJOR=$(node -e "console.log(require('./package.json').version.split('.')[0]);")
-NEXT_PKG_VER_MINOR=$(node -e "console.log(require('./package.json').version.split('.')[1]);")
-NEXT_PKG_VER_FIX=$(node -e "console.log(require('./package.json').version.split('.')[2]);")
 
 echo "Creating git branch"
 BRANCH="updateTo${PKG_VER_NEXT}"
 git checkout -b $BRANCH
 
-if [[ $CURRENT_PKG_VER_MAJOR !=  $NEXT_PKG_VER_MAJOR ]]; then
-    echo "Major version change detected, running OSS scan"
-    npm run changelog
-    if [ $? != 0 ]; then
-        echo "WARNING : scan failed, see logs for more details"
-    fi
-
-
-MSG="[Travis - npm version update] Increment version to ${PKG_VERS_NEXT}"
-
-git status
-git commit -m "${MSG}"
-#this branch will need to be reviewed and approved in the usual manner
+npm run version
 git push --follow-tags origin $BRANCH
+hub pull-request -b development -m "chore: Merging CHANGELOG and package.json changes"
+hub pull-request -b master -m "chore: Merging CHANGELOG and package.json changes"
