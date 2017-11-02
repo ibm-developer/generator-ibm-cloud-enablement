@@ -21,8 +21,6 @@ if [ $TRAVIS_BRANCH = "master" ]; then
             if [[ $retval != 0 ]]; then
                 exit $retval
             fi
-        else
-
         fi
     fi
 fi
