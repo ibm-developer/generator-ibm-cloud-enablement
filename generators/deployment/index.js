@@ -85,16 +85,16 @@ module.exports = class extends Generator {
 		}
 
 
-		this.pipelineConfig.customBuildScript = this.fs.read(this.templatePath('post_build.sh'));
+		this.pipelineConfig.postBuildScript = this.fs.read(this.templatePath('post_build.txt'));
 
 		if (this.pipelineConfig.buildJobProps && this.pipelineConfig.buildJobProps.script) {
-			this.pipelineConfig.buildJobProps.script += '\n\n      ' + this.pipelineConfig.customBuildScript;
+			this.pipelineConfig.buildJobProps.script += '\n\n' + this.pipelineConfig.postBuildScript;
 		} else if (!this.pipelineConfig.buildJobProps.script) {
 			Object.assign(this.pipelineConfig.buildJobProps, {
 				build_type: 'shell',
 				script: '|-\n' +
                 '      #!/bin/bash\n' +
-                '      ' + this.pipelineConfig.customBuildScript
+                this.pipelineConfig.postBuildScript
 			});
 		}
 
