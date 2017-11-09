@@ -79,6 +79,25 @@ class scaffolderSample {
 				"url": "https://gateway.watsonplatform.net/conversation/api",
 				"username": "0ec0f025-54r2-4e84-944f-8224a66217f2"
 			},
+			"dashDb": {
+				"db": "BLUDB",
+				"dsn": "DATABASE=BLUDB;HOSTNAME=ys1-dashdb-small-bm01-im-dal06-env4.services.dal.bluemix.net;PORT=50000;PROTOCOL=TCPIP;UID=dash105642;PWD=_qFv_9yCH8Al;",
+				"host": "ys1-dashdb-small-bm01-im-dal06-env4.services.dal.bluemix.net",
+				"hostname": "ys1-dashdb-small-bm01-im-dal06-env4.services.dal.bluemix.net",
+				"https_url": "https://ys1-dashdb-small-bm01-im-dal06-env4.services.dal.bluemix.net:8443",
+				"jdbcurl": "jdbc:db2://ys1-dashdb-small-bm01-im-dal06-env4.services.dal.bluemix.net:50000/BLUDB",
+				"password": "_qFv_9yCH8Al",
+				"port": 50000,
+				"serviceInfo": {
+					"label": "MyAnalyticsLabel",
+					"name": "MyAnalyticsService",
+					"plan": "Basic"
+				},
+				"ssldsn": "DATABASE=BLUDB;HOSTNAME=ys1-dashdb-small-bm01-im-dal06-env4.services.dal.bluemix.net;PORT=50001;PROTOCOL=TCPIP;UID=dash105642;PWD=_qFv_9yCH8Al;Security=SSL;",
+				"ssljdbcurl": "jdbc:db2://ys1-dashdb-small-bm01-im-dal06-env4.services.dal.bluemix.net:50001/BLUDB:sslConnection=true;",
+				"uri": "db2://dash105642:_qFv_9yCH8Al@ys1-dashdb-small-bm01-im-dal06-env4.services.dal.bluemix.net:50000/BLUDB",
+				"username": "dash105642"
+			},
 			"discovery": {
 				"password": "IDgoZXBCGsDe",
 				"serviceInfo": {
@@ -312,4 +331,4 @@ class scaffolderSample {
 
 module.exports = {
 	scaffolderSample : scaffolderSample
-}
+};

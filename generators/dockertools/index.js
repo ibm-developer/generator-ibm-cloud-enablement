@@ -153,6 +153,23 @@ module.exports = class extends Generator {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
 
+		// Define metadata for all services that
+		// require custom logic in Dockerfiles
+		const services = require('./resources/node/services.json');
+
+		// Get array with all the keys for the services objects
+		const servKeys = Object.keys(services);
+		const servicesPackages = [];
+
+		// Iterate over service keys to search for provisioned services
+		for (let index in servKeys) {
+			const servKey = servKeys[index];
+			if (this.bluemix.hasOwnProperty(servKey)) {
+				if (services[servKey].package) {
+					servicesPackages.push(services[servKey].package);
+				}
+			}
+		}
 
 		const cliConfig = {
 			containerNameRun: `${applicationName.toLowerCase()}-express-run`,
@@ -193,6 +210,7 @@ module.exports = class extends Generator {
 				this.templatePath('node/Dockerfile'),
 				this.destinationPath(FILENAME_DOCKERFILE), {
 					port: port,
+					servicesPackages: servicesPackages
 				}
 			);
 		}

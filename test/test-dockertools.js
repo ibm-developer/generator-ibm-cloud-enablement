@@ -141,6 +141,19 @@ describe('cloud-enablement:dockertools', function () {
 		});
 	});
 
+	describe('cloud-enablement:dockertools with NodeJS project with dashDB', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode)})
+		});
+
+		it('create Dockerfile for running', function () {
+			assert.file(['Dockerfile', 'cli-config.yml', 'Dockerfile-tools']);
+			assert.fileContent('Dockerfile', '&& apt-get install -y libxml2 \\');
+		});
+	});
+
 	/* Common Java Project characteristics: Spring or Liberty, maven or gradle */
 	let javaBuildTypes = ['maven', 'gradle'];
 	let javaFrameworks = ['JAVA', 'SPRING'];
@@ -327,7 +340,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create Dockerfile-tools with flask', function () {
 			assert.file(['Dockerfile-tools']);
-		})
+		});
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
@@ -360,7 +373,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create Dockerfile-tools with flask', function () {
 			assert.file(['Dockerfile-tools']);
-		})
+		});
 
 		it('create CLI-config file with informative echo prompt', function () {
 			assert.file(['cli-config.yml']);
@@ -454,7 +467,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create Dockerfile-tools with flask', function () {
 			assert.file(['Dockerfile-tools']);
-		})
+		});
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
