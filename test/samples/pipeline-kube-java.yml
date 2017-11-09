@@ -39,12 +39,7 @@ stages:
       echo "source the container_build script to run in current shell"
       SCRIPTS_DIR=.bluemix/scripts # SCRIPTS_DIR is used in container_build.sh
       source ${SCRIPTS_DIR}/container_build.sh
-  - name: Post Build
-    type: builder
-    artifact_dir: ''
-    build_type: shell
-    script: |-
-      #!/bin/bash
+
       if  [[ -f post_build.sh ]]; then
         chmod +x post_build.sh;
         echo "executing the post_build script";
