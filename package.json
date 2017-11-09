@@ -1,40 +1,41 @@
 {
-	"name": "generator-ibm-cloud-enablement",
-	"version": "0.0.115",
-	"description": "This generator adds IBM Cloud enablement to applications",
-	"main": "generators/app/index.js",
-	"license": "Apache-2.0",
-	"files": [
-		"generators"
-	],
-	"keywords": [
-		"yeoman-generator"
-	],
-	"scripts": {
-		"test": "npm run lint && npm run mocha",
-		"testcf": "npm run mocha test/test-cloudfoundry.js",
-		"testdocker": "npm run mocha test/test-dockertools.js",
-		"testkube": "npm run mocha test/test-kubernetes.js",
-		"testdeploy": "npm run mocha test/test-deployment.js",
-		"lint": "eslint .",
-		"mocha": "nyc mocha --recursive",
-		"coveralls": "nyc report --reporter=text-lcov | coveralls"
-	},
-	"dependencies": {
-		"fs-extra": "^2.0.0",
-		"handlebars": "^4.0.10",
-		"js-yaml": "^3.9.0",
-		"lodash": "^4.17.4",
-		"yeoman-generator": "^1.1.0"
-	},
-	"devDependencies": {
-		"coveralls": "^2.13.1",
-		"eslint": "^3.1.1",
-		"eslint-plugin-ejs": "0.0.2",
-		"mocha": "^3.2.0",
-		"nyc": "^10.3.0",
-		"yeoman-assert": "^2.2.2",
-		"yeoman-test": "^1.6.0"
-	},
-	"repository": "https://github.com/ibm-developer/generator-ibm-cloud-enablement"
+  "name": "generator-ibm-cloud-enablement",
+  "version": "0.0.115",
+  "description": "This generator adds IBM Cloud enablement to applications",
+  "main": "generators/app/index.js",
+  "license": "Apache-2.0",
+  "files": [
+    "generators"
+  ],
+  "keywords": [
+    "yeoman-generator"
+  ],
+  "scripts": {
+    "test": "npm run lint && npm run mocha",
+    "testcf": "npm run mocha test/test-cloudfoundry.js",
+    "testdocker": "npm run mocha test/test-dockertools.js",
+    "testkube": "npm run mocha test/test-kubernetes.js",
+    "testdeploy": "npm run mocha test/test-deployment.js",
+    "lint": "eslint .",
+    "mocha": "nyc mocha --recursive",
+    "coveralls": "nyc report --reporter=text-lcov | coveralls",
+    "version": "standard-version"
+  },
+  "dependencies": {
+    "fs-extra": "^2.0.0",
+    "handlebars": "^4.0.10",
+    "js-yaml": "^3.9.0",
+    "lodash": "^4.17.4",
+    "yeoman-generator": "^1.1.0"
+  },
+  "devDependencies": {
+    "coveralls": "^2.13.1",
+    "eslint": "^3.1.1",
+    "eslint-plugin-ejs": "0.0.2",
+    "mocha": "^3.2.0",
+    "nyc": "^10.3.0",
+    "standard-version": "^4.2.0",
+    "yeoman-assert": "^2.2.2",
+    "yeoman-test": "^1.6.0"
+  }
 }
