@@ -69,4 +69,4 @@ module.exports = {
 	getJsonNoServices : getJsonNoServices,
 	getJsonNoServer : getJsonNoServer,
 	getJsonServerWithDeployment: getJsonServerWithDeployment
-}
+};
