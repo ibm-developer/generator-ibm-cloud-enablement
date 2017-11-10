@@ -9,6 +9,7 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-
   <%- servicesPackages[index] %> \
 <% } -%>
   && pip install --upgrade pip \
+  && pip install --upgrade pipenv\
   && pip install --upgrade -r /tmp/requirements.txt\
   && apk del build-dependencies
 
