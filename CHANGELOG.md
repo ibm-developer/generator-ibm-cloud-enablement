@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.3.0...v0.3.1) (2017-11-11)
 
+### Bug Fixes
+* **docs:** clarified contribution section ([72e5ef4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/pull/148/commits/72e5ef40bb9081b007bee4aa76a760af1100fe98))
 
 
 <a name="0.3.0"></a>
