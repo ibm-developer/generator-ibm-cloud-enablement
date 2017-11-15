@@ -310,16 +310,16 @@ module.exports = class extends Generator {
 			dockerFileTools: 'Dockerfile-tools',
 			imageNameRun: `${applicationName.toLowerCase()}-flask-run`,
 			imageNameTools: `${applicationName.toLowerCase()}-flask-tools`,
-			buildCmdRun: 'python -m compileall .',
+			buildCmdRun: 'python manage.py build',
 			testCmd: this.opts.enable
 				? 'echo No test command specified in cli-config'
-				: 'python -m unittest tests.app_tests.ServerTestCase',
-			buildCmdDebug: 'python -m compileall .',
+				: 'python manage.py test',
+			buildCmdDebug: 'python manage.py build',
 			runCmd: '',
 			stopCmd: '',
 			debugCmd: this.opts.enable
 				? 'echo No debug command specified in cli-config'
-				: 'python -m flask run --host=0.0.0.0 --port=5858 --debugger',
+				: 'python manage.py debug',
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
 
@@ -356,6 +356,18 @@ module.exports = class extends Generator {
 					servicesPackages: servicesPackages
 				}
 			);
+		}
+
+		const FILENAME_MANAGEMENT = "manage.py";
+		if (!this.opts.enable) {
+			if (this.fs.exists(this.destinationPath(FILENAME_MANAGEMENT))){
+				console.info(FILENAME_MANAGEMENT, "already exists, skipping.");
+			} else {
+				this.fs.copy(
+					this.templatePath('python/manage.py'),
+					this.destinationPath(FILENAME_MANAGEMENT)
+				);
+			}
 		}
 
 		this.fs.copy(

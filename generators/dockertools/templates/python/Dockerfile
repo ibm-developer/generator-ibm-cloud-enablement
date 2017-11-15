@@ -20,5 +20,5 @@ ENV FLASK_APP=server
 <% if (enable) { %>
 CMD ["echo", "No run command specified in Dockerfile"]
 <% } else { %>
-CMD ["gunicorn", "-b", "0.0.0.0:<%= port %>", "server:app"]
+CMD ["python", "manage.py", "start", "0.0.0.0:<%= port %>"]
 <% } %>
