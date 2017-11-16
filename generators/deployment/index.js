@@ -86,6 +86,21 @@ module.exports = class extends Generator {
 		if (this.manifestConfig && this.manifestConfig.ignorePaths) {
 			this.cfIgnoreContent = this.cfIgnoreContent.concat(this.manifestConfig.ignorePaths);
 		}
+
+
+		this.pipelineConfig.postBuildScript = this.fs.read(this.templatePath('post_build.txt'));
+
+		if (this.pipelineConfig.buildJobProps && this.pipelineConfig.buildJobProps.script) {
+			this.pipelineConfig.buildJobProps.script += '\n\n' + this.pipelineConfig.postBuildScript;
+		} else if (!this.pipelineConfig.buildJobProps.script) {
+			Object.assign(this.pipelineConfig.buildJobProps, {
+				build_type: 'shell',
+				script: '|-\n' +
+                '      #!/bin/bash\n' +
+                this.pipelineConfig.postBuildScript
+			});
+		}
+
 	}
 
 	_configureNode() {
@@ -166,10 +181,10 @@ module.exports = class extends Generator {
 		this.manifestConfig.buildpack = 'python_buildpack';
 		this.manifestConfig.command = this.opts.enable
 			? 'echo No run command specified in manifest.yml'
-			: 'gunicorn server:app -b 0.0.0.0:$PORT';
+			: 'python manage.py start 0.0.0.0:$PORT';
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.manifestConfig.env.FLASK_APP = 'server';
-		this.manifestConfig.env.FLASK_DEBUG = 'true';
+		this.manifestConfig.env.FLASK_DEBUG = 'false';
 		this.cfIgnoreContent = ['.pyc', '.egg-info'];
 	}
 
