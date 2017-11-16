@@ -66,7 +66,7 @@ yo ibm-cloud-enablement
 
 ## Publishing Changes
 
-In order to publish changes, you will need to fork the repository or ask to join the `ibm-developer` org and branch off the development branch.
+In order to publish changes, you will need to fork the repository or ask to join the `ibm-developer` org and branch off the `development` branch.
 
 Make sure to follow the [conventional commit specification](https://conventionalcommits.org/) before contributing. To help you with commit a commit template is provide. 
 Run `config.sh` to initialize the commit template to your `.git/config`. 
@@ -74,4 +74,4 @@ Run `config.sh` to initialize the commit template to your `.git/config`.
 Once you are finished with your changes, run `npm test` to make sure all tests pass.
 
 Do a pull request against `development`, make sure the build passes. A team member will review and merge your pull request. 
-Once merged to `development` to `master` one pull request will be created against development. Merge the pull request then create another pull request from `development` into `master`. Once the final pull request has been merged the generator will be published to npm.  Make sure that the CHANGELOG.md and the package.json is correct before merging the auto generated pull request. 
+Once merged from `development` to `master` one pull request will be created against `development`. Merge the pull request then create another pull request from `development` into `master`. Once the final pull request has been merged the generator will be published to npm.  Make sure that the CHANGELOG.md and the package.json is correct before merging the auto generated pull request. 
