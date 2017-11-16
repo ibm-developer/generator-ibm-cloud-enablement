@@ -320,9 +320,9 @@ describe('cloud-enablement:dockertools', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
 		});
 
-		it('create Dockerfile with gunicorn', function () {
+		it('create Dockerfile with start command', function () {
 			assert.file(['Dockerfile']);
-			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', '"python", "manage.py", "start"');
 		});
 
 		it('create Dockerfile-tools with flask', function () {
@@ -331,10 +331,15 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'flask run');
+			assert.fileContent('cli-config.yml', 'python manage.py');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
+
+		it('create manage.py file for flask', function () {
+			assert.file(['manage.py']);
+			assert.fileContent('manage.py', 'flask run');
+		})
 
 		it('create dockerignore file', function () {
 			assert.file([
@@ -369,6 +374,10 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
 
+		it('does not create manage.py file for flask', function () {
+			assert.noFile(['manage.py']);
+		})
+
 		it('create dockerignore file', function () {
 			assert.file([
 				'.dockerignore'
@@ -383,9 +392,9 @@ describe('cloud-enablement:dockertools', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePythonNoServices)})
 		});
 
-		it('create Dockerfile with gunicorn and service package', function () {
+		it('create Dockerfile with start command and service package', function () {
 			assert.file(['Dockerfile']);
-			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', '"python", "manage.py", "start"');
 			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
 		});
 
@@ -396,10 +405,15 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'flask run');
+			assert.fileContent('cli-config.yml', 'python manage.py');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
+
+		it('create manage.py file for flask', function () {
+			assert.file(['manage.py']);
+			assert.fileContent('manage.py', 'flask run');
+		})
 
 		it('create dockerignore file', function () {
 			assert.file([
@@ -415,9 +429,9 @@ describe('cloud-enablement:dockertools', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
 		});
 
-		it('create Dockerfile with gunicorn and service package', function () {
+		it('create Dockerfile with start command and service package', function () {
 			assert.file(['Dockerfile']);
-			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', '"python", "manage.py", "start"');
 			assert.fileContent('Dockerfile', 'postgresql-dev \\');
 		});
 
@@ -428,10 +442,15 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'flask run');
+			assert.fileContent('cli-config.yml', 'python manage.py');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
+
+		it('create manage.py file for flask', function () {
+			assert.file(['manage.py']);
+			assert.fileContent('manage.py', 'flask run');
+		})
 
 		it('create dockerignore file', function () {
 			assert.file([
@@ -447,9 +466,9 @@ describe('cloud-enablement:dockertools', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
 		});
 
-		it('create Dockerfile with gunicorn', function () {
+		it('create Dockerfile with start command', function () {
 			assert.file(['Dockerfile']);
-			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', '"python", "manage.py", "start"');
 		});
 
 		it('create Dockerfile-tools with flask', function () {
@@ -458,10 +477,15 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'flask run');
+			assert.fileContent('cli-config.yml', 'python manage.py');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
+
+		it('create manage.py file for flask', function () {
+			assert.file(['manage.py']);
+			assert.fileContent('manage.py', 'flask run');
+		})
 
 		it('create dockerignore file', function () {
 			assert.file([
