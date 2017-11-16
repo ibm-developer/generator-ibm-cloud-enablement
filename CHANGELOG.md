@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.4.0"></a>
+# [0.4.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.3.1...v0.4.0) (2017-11-16)
+
+
+### Bug Fixes
+
+* **docs:** clarify README for contributing and publishing ([4ccb571](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4ccb571))
+* Prevent python apps from deploying in debug mode ([2257220](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2257220))
+
+
+### Features
+
+* Added manage.py file for Python starters ([78e349a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/78e349a))
+
+
+
 <a name="0.3.1"></a>
 ## [0.3.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.3.0...v0.3.1) (2017-11-11)
 
