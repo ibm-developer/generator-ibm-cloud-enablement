@@ -59,6 +59,9 @@ module.exports = class extends Generator {
 			case 'PYTHON':
 				this._generatePython();
 				break;
+			case 'DJANGO':
+				this._generateDjango();
+				break;
 			default:
 				throw new Error(`No language ${this.bluemix.backendPlatform} found`);
 		}
@@ -342,7 +345,9 @@ module.exports = class extends Generator {
 				this.destinationPath(FILENAME_DOCKERFILE), {
 					port: port,
 					enable: this.opts.enable,
-					servicesPackages: servicesPackages
+					servicesPackages: servicesPackages,
+					language: this.bluemix.backendPlatform,
+					name: this.bluemix.name
 				}
 			);
 		}
@@ -353,7 +358,102 @@ module.exports = class extends Generator {
 			this.fs.copyTpl(
 				this.templatePath('python/Dockerfile-tools'),
 				this.destinationPath(FILENAME_DOCKERFILE_TOOLS), {
-					servicesPackages: servicesPackages
+					servicesPackages: servicesPackages,
+					language: this.bluemix.backendPlatform,
+					name: this.bluemix.name
+				}
+			);
+		}
+
+		this.fs.copy(
+			this.templatePath('python/dockerignore'),
+			this.destinationPath('.dockerignore')
+		);
+	}
+
+	_generateDjango() {
+		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
+		const port = this.opts.port ? this.opts.port : '3000';
+
+		// Define metadata for all services that
+		// require custom logic in Dockerfiles
+		const services = require('./resources/python/services.json');
+
+		// Get array with all the keys for the services objects
+		const servKeys = Object.keys(services);
+		const servicesPackages = [];
+
+		// Iterate over service keys to search for provisioned services
+		for (let index in servKeys) {
+			const servKey = servKeys[index];
+			if (this.bluemix.hasOwnProperty(servKey)) {
+				if (services[servKey].package) {
+					servicesPackages.push(services[servKey].package);
+				}
+			}
+		}
+
+		const cliConfig = {
+			containerNameRun: `${applicationName.toLowerCase()}-django-run`,
+			containerNameTools: `${applicationName.toLowerCase()}-django-tools`,
+			hostPathRun: '.',
+			hostPathTools: '.',
+			containerPathRun: '/app',
+			containerPathTools: '/app',
+			containerPortMap: `${port}:${port}`,
+			containerPortMapDebug: '5858:5858',
+			dockerFileRun: 'Dockerfile',
+			dockerFileTools: 'Dockerfile-tools',
+			imageNameRun: `${applicationName.toLowerCase()}-django-run`,
+			imageNameTools: `${applicationName.toLowerCase()}-django-tools`,
+			buildCmdRun: 'python -m compileall .',
+			testCmd: this.opts.enable
+				? 'echo No test command specified in cli-config'
+				: 'python -m unittest tests.app_tests.ServerTestCase',
+			buildCmdDebug: 'python -m compileall .',
+			runCmd: '',
+			stopCmd: '',
+			debugCmd: this.opts.enable
+				? 'echo No debug command specified in cli-config'
+				: 'python -m django run --host=0.0.0.0 --port=5858 --debugger',
+			chartPath: `chart/${applicationName.toLowerCase()}`
+		};
+
+		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
+			console.info(FILENAME_CLI_CONFIG, "already exists, skipping.");
+		} else {
+			this.fs.copyTpl(
+				this.templatePath('cli-config-common.yml'),
+				this.destinationPath(FILENAME_CLI_CONFIG), {
+					cliConfig
+				}
+			);
+		}
+
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
+			console.info(FILENAME_DOCKERFILE, "already exists, skipping.");
+		} else {
+			this.fs.copyTpl(
+				this.templatePath('python/Dockerfile'),
+				this.destinationPath(FILENAME_DOCKERFILE), {
+					port: port,
+					enable: this.opts.enable,
+					servicesPackages: servicesPackages,
+					language: this.bluemix.backendPlatform,
+					name: this.bluemix.name
+				}
+			);
+		}
+
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))){
+			console.info(FILENAME_DOCKERFILE_TOOLS, "already exists, skipping.");
+		} else {
+			this.fs.copyTpl(
+				this.templatePath('python/Dockerfile-tools'),
+				this.destinationPath(FILENAME_DOCKERFILE_TOOLS), {
+					servicesPackages: servicesPackages,
+					language: this.bluemix.backendPlatform,
+					name: this.bluemix.name
 				}
 			);
 		}

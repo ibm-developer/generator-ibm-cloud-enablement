@@ -28,6 +28,7 @@ const scaffolderSampleJava = scaffolderSample.getJson('JAVA');
 const scaffolderSampleSpring = scaffolderSample.getJson('SPRING');
 const scaffolderSampleJavaNoServices = scaffolderSample.getJsonNoServices('JAVA');
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
+const scaffolderSampleDjango = scaffolderSample.getJson('DJANGO');
 
 describe('cloud-enablement:cloudfoundry', function () {
 	this.timeout(5000);
@@ -37,6 +38,24 @@ describe('cloud-enablement:cloudfoundry', function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)});
+		});
+
+		it('manifest.yml has memory', function () {
+			assert.file('manifest.yml');
+			assert.fileContent('manifest.yml', 'memory: 1024M');
+		});
+
+		it('toolchain.yml repo type is clone', function () {
+			assert.file('.bluemix/toolchain.yml');
+			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
+		});
+	});
+
+	describe('cloud-enablement:cloudfoundry with Django', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjango)});
 		});
 
 		it('manifest.yml has memory', function () {
