@@ -181,7 +181,7 @@ module.exports = class extends Generator {
 			: 'python manage.py start 0.0.0.0:$PORT';
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.manifestConfig.env.FLASK_APP = 'server';
-		this.manifestConfig.env.FLASK_DEBUG = 'true';
+		this.manifestConfig.env.FLASK_DEBUG = 'false';
 		this.cfIgnoreContent = ['.pyc', '.egg-info'];
 	}
 
