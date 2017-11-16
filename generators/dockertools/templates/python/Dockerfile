@@ -17,8 +17,6 @@ COPY . /app
 <% if (!enable) { %>
 <% if (language === "PYTHON") { %>
 ENV FLASK_APP=server
-<% } else { %>
-ENV DJANGO_APP=<%= name %>
 <% } %>
 <% } %>
 <% if (enable) { %>

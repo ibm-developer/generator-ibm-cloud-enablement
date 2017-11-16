@@ -195,9 +195,6 @@ module.exports = class extends Generator {
 			? 'echo No run command specified in manifest.yml'
 			: `gunicorn ${this.bluemix.name}.wsgi -b 0.0.0.0:$PORT`;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
-		this.manifestConfig.env.DJANGO_APP = 'server';
-		this.manifestConfig.env.DJANGO_DEBUG = 'true';
-		this.manifestConfig.env.DISABLE_COLLECTSTATIC = 'DISABLE_COLLECTSTATIC';
 		this.cfIgnoreContent = ['.pyc', '.egg-info'];
 	}
 
