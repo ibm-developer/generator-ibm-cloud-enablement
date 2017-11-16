@@ -345,9 +345,9 @@ module.exports = class extends Generator {
 				this.destinationPath(FILENAME_DOCKERFILE), {
 					port: port,
 					enable: this.opts.enable,
-					servicesPackages: servicesPackages,
 					language: this.bluemix.backendPlatform,
-					name: this.bluemix.name
+					name: this.bluemix.name,
+					servicesPackages: servicesPackages
 				}
 			);
 		}
@@ -363,6 +363,18 @@ module.exports = class extends Generator {
 					name: this.bluemix.name
 				}
 			);
+		}
+
+		const FILENAME_MANAGEMENT = "manage.py";
+		if (!this.opts.enable) {
+			if (this.fs.exists(this.destinationPath(FILENAME_MANAGEMENT))){
+				console.info(FILENAME_MANAGEMENT, "already exists, skipping.");
+			} else {
+				this.fs.copy(
+					this.templatePath('python/manage.py'),
+					this.destinationPath(FILENAME_MANAGEMENT)
+				);
+			}
 		}
 
 		this.fs.copy(
