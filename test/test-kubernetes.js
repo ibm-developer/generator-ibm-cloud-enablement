@@ -173,15 +173,12 @@ describe('cloud-enablement:kubernetes', function () {
 				});
 				assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
 			});
-			if(language === 'JAVA' || language === 'NODE') {
-				it('Java and Node have Jenkinsfile with correct content', function () {
+			if(language === 'JAVA' || language === 'NODE' || language == 'SPRING' ) {
+				it('Java, Node and Spring have Jenkinsfile with correct content', function () {
 					assert.fileContent('Jenkinsfile', 'image = \''+ applicationName.toLowerCase() + '\'');
 				});
 			}
 			if(language === 'SPRING') {
-				it('does not have a Jenkinsfile', function () {
-					assert.noFile('Jenkinsfile');
-				});
 				it('does not have a istio.yaml', () => {
 					assert.noFile('/templates/istio.yaml');
 				});
