@@ -32,9 +32,6 @@ module.exports = class extends Generator {
 	}
 
 	initializing() {
-		this.composeWith(require.resolve('../dockertools'), this.opts);
-		this.composeWith(require.resolve('../kubernetes'), this.opts);
-		this.composeWith(require.resolve('../deployment'), this.opts);
 	}
 
 	prompting() {
@@ -85,6 +82,9 @@ module.exports = class extends Generator {
 	}
 
 	configuring() {
+		this.composeWith(require.resolve('../dockertools'), this.opts);
+		this.composeWith(require.resolve('../kubernetes'), this.opts);
+		this.composeWith(require.resolve('../deployment'), this.opts);
 	}
 
 	_processAnswers(answers) {
