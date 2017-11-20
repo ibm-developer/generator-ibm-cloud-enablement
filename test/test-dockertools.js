@@ -26,6 +26,8 @@ const scaffolderSampleJava = scaffolderSample.getJson('JAVA');
 const scaffolderSampleSpring = scaffolderSample.getJson('SPRING');
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
 const scaffolderSamplePythonNoServices = scaffolderSample.getJsonNoServices('PYTHON');
+const scaffolderSampleDjango = scaffolderSample.getJson('DJANGO');
+const scaffolderSampleDjangoNoServices = scaffolderSample.getJsonNoServices('DJANGO');
 
 const applicationName = "AcmeProject"; // From all scaffolder samples
 
@@ -486,6 +488,164 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file(['manage.py']);
 			assert.fileContent('manage.py', 'flask run');
 		})
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
+
+	describe('cloud-enablement:dockertools with Django project', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjango)})
+		});
+
+		it('create Dockerfile with gunicorn', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'gunicorn');
+		});
+
+		it('create Dockerfile-tools with django', function () {
+			assert.file(['Dockerfile-tools']);
+		})
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'django run');
+			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Django project -- bx dev enable', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({
+					bluemix: JSON.stringify(scaffolderSampleDjango),
+					enable: true
+				})
+		});
+
+		it('create Dockerfile with informative echo prompt', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'echo');
+		});
+
+		it('create Dockerfile-tools with django', function () {
+			assert.file(['Dockerfile-tools']);
+		})
+
+		it('create CLI-config file with informative echo prompt', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'echo');
+			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Django project with no services', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjangoNoServices)})
+		});
+
+		it('create Dockerfile with gunicorn and service package', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create Dockerfile-tools with django  and service package', function () {
+			assert.file(['Dockerfile-tools']);
+			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'django run');
+			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Django project with PostgreSQL', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjango)})
+		});
+
+		it('create Dockerfile with gunicorn and service package', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'gunicorn');
+			assert.fileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create Dockerfile-tools with django  and service package', function () {
+			assert.file(['Dockerfile-tools']);
+			assert.fileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'django run');
+			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Django project and storage', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjango)})
+		});
+
+		it('create Dockerfile with gunicorn', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'gunicorn');
+		});
+
+		it('create Dockerfile-tools with django', function () {
+			assert.file(['Dockerfile-tools']);
+		})
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'django run');
+			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
 
 		it('create dockerignore file', function () {
 			assert.file([

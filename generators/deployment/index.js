@@ -76,8 +76,11 @@ module.exports = class extends Generator {
 			case 'PYTHON':
 				this._configurePython();
 				break;
+			case 'DJANGO':
+				this._configureDjango();
+				break;
 			default:
-				throw new Error(`Language ${this.bluemix.backendPlatform} was not one of the valid languages: NODE, SWIFT, JAVA, SPRING or PYTHON`);
+				throw new Error(`Language ${this.bluemix.backendPlatform} was not one of the valid languages: NODE, SWIFT, JAVA, SPRING, DJANGO or PYTHON`);
 		}
 		if (this.manifestConfig && this.manifestConfig.ignorePaths) {
 			this.cfIgnoreContent = this.cfIgnoreContent.concat(this.manifestConfig.ignorePaths);
@@ -180,7 +183,17 @@ module.exports = class extends Generator {
 			: 'python manage.py start 0.0.0.0:$PORT';
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.manifestConfig.env.FLASK_APP = 'server';
-		this.manifestConfig.env.FLASK_DEBUG = 'true';
+		this.manifestConfig.env.FLASK_DEBUG = 'false';
+		this.cfIgnoreContent = ['.pyc', '.egg-info'];
+	}
+
+	_configureDjango() {
+		// buildpack is left blank; bluemix will auto detect
+		this.manifestConfig.buildpack = 'python_buildpack';
+		this.manifestConfig.command = this.opts.enable
+			? 'echo No run command specified in manifest.yml'
+			: `gunicorn ${this.bluemix.name}.wsgi -b 0.0.0.0:$PORT`;
+		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.cfIgnoreContent = ['.pyc', '.egg-info'];
 	}
 

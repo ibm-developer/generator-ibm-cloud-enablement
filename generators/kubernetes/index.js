@@ -43,6 +43,9 @@ const portDefault = {
 	},
 	swift: {
 		http: '8080'
+	},
+	django: {
+		http: '3000'
 	}
 }
 
@@ -162,12 +165,12 @@ module.exports = class extends Generator {
 				target : 'manifests/kube.deploy.yml',
 				process : true
 			}
+			this.fileLocations.jenkinsfile = {
+				source : 'java/Jenkinsfile',
+				target : 'Jenkinsfile',
+				process : true
+			}
 			if(this.opts.language === 'java') {
-				this.fileLocations.jenkinsfile = {
-					source : 'java/Jenkinsfile',
-					target : 'Jenkinsfile',
-					process : true
-				}
 				this.fileLocations.istiofile = {
 					source : 'java/istio.yaml',
 					target : 'chartDir/templates/istio.yaml',
