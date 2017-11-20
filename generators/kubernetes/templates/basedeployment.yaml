@@ -2,11 +2,16 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: "{{tag '  .Chart.Name '}}-basedeployment"
+  name: "{{tag '  .Chart.Name '}}-deployment"
   labels:
     chart: '{{tag ' .Chart.Name '}}-{{{tag ' .Chart.Version | replace "+" "_" '}}}'
 spec:
-  replicas: {{tag ' .Values.base.replicaCount '}}
+  replicas: {{tag ' .Values.replicaCount '}}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
   revisionHistoryLimit: {{tag ' .Values.revisionHistoryLimit '}}
   template:
     metadata:
@@ -16,30 +21,21 @@ spec:
     spec:
       containers:
       - name: "{{tag '  .Chart.Name  '}}"
-        image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.base.image.tag '}}"
+        image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.image.tag '}}"
         imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
-{{tag ' if .Values.istio.enabled '}}
-{{tag ' else '}}
-        readinessProbe:
+        livenessProbe:
           httpGet:
-          {{! healthEndpoint is configured in the index.js and is different for basicweb}}
-          {{#has language 'java'}}
-            path: /{{applicationName}}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}
-            port: 9080
-          {{/has}}
-          {{#has language 'spring'}}
-            path: /{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}
-            port: 8080
-          {{/has}}
-          initialDelaySeconds: 20
-{{tag '  end '}}
+            path: /health
+            port: {{tag ' .Values.service.servicePort '}}
+          initialDelaySeconds: {{tag ' .Values.livenessProbe.initialDelaySeconds'}}
+          periodSeconds: {{tag ' .Values.livenessProbe.periodSeconds'}}
         resources:
           requests:
             cpu: "{{tag ' .Values.image.resources.requests.cpu '}}"
             memory: "{{tag ' .Values.image.resources.requests.memory '}}"
         env:
           - name: PORT
-            value: "{{tag ' .Values.service.servicePort '}}"
+            value : "{{tag ' .Values.service.servicePort '}}"
           {{#each storageDeploys.env}}
           - name: {{@key}}
             value: {{{this}}}

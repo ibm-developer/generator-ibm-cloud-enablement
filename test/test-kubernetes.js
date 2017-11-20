@@ -178,14 +178,6 @@ describe('cloud-enablement:kubernetes', function () {
 					assert.fileContent('Jenkinsfile', 'image = \''+ applicationName.toLowerCase() + '\'');
 				});
 			}
-			if(language === 'SPRING') {
-				it('does not have a istio.yaml', () => {
-					assert.noFile('/templates/istio.yaml');
-				});
-				it('does not have a istio.yaml', () => {
-					assert.noFile(chartLocation + '/templates/basedeployment.yaml');
-				});
-			}
 		});
 	});
 
@@ -195,15 +187,6 @@ describe('cloud-enablement:kubernetes', function () {
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSpring), healthEndpoint: 'customHealth'})
 		});
-
-		it('has deployment.yml with correct readinessProbe health endpoint', function () {
-			let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-			let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
-			let deploymentyml = yml.safeLoad(newdeploymentyml);
-			let readinessProbe = deploymentyml.spec.template.spec.containers[0].readinessProbe;
-			assertYmlContent(readinessProbe.httpGet.path, '/customHealth', 'readinessProbe.httpGet.path');
-		});
-
 		it('has manifests/kube.deploy.yml with correct content', function () {
 			assert.file('manifests/kube.deploy.yml');
 			let i = 0;
