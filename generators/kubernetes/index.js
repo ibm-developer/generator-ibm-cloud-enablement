@@ -76,6 +76,8 @@ module.exports = class extends Generator {
 			deployment: {source : 'deployment.yaml', target : 'chartDir/templates/deployment.yaml', process: true},
 			service: {source : 'service.yaml', target : 'chartDir/templates/service.yaml', process: false},
 			hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
+			istio: {source : 'istio.yaml', target : 'chartDir/templates/istio.yaml', process: true},
+			basedeployment: {source : 'basedeployment.yaml', target : 'chartDir/templates/basedeployment.yaml', process: true},
 			values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true}
 		}
 	}
@@ -157,6 +159,7 @@ module.exports = class extends Generator {
 		// Handle Java and Spring
 		} else if (this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';
+			this.fileLocations.basedeployment.source = 'java/basedeployment.yaml';
 			this.fileLocations.service.source = 'java/service.yaml';
 			this.fileLocations.service.process = true;
 			this.fileLocations.values.source = 'java/values.yaml';
@@ -169,18 +172,6 @@ module.exports = class extends Generator {
 				source : 'java/Jenkinsfile',
 				target : 'Jenkinsfile',
 				process : true
-			}
-			if(this.opts.language === 'java') {
-				this.fileLocations.istiofile = {
-					source : 'java/istio.yaml',
-					target : 'chartDir/templates/istio.yaml',
-					process : true
-				}
-				this.fileLocations.basedeployment = {
-					source : 'java/basedeployment.yaml',
-					target : 'chartDir/templates/basedeployment.yaml',
-					process : true
-				}
 			}
 		}
 

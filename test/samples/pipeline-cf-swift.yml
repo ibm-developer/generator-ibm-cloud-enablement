@@ -37,6 +37,5 @@ stages:
       application: ${CF_APP}
     script: |-
       #!/bin/bash
-      cf create-service "cloudantNoSQLDB" "Lite" "gkghk-cloudantNo-1504851366275"
       cf push "${CF_APP}"
       # cf logs "${CF_APP}" --recent

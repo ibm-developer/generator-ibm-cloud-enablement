@@ -16,6 +16,7 @@ spec:
     metadata:
       labels:
         app: "{{tag '  .Chart.Name '}}-selector"
+        version: "current"
     spec:
       containers:
       - name: "{{tag '  .Chart.Name  '}}"
