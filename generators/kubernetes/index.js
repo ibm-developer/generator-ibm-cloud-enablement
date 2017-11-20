@@ -43,6 +43,9 @@ const portDefault = {
 	},
 	swift: {
 		http: '8080'
+	},
+	django: {
+		http: '3000'
 	}
 }
 

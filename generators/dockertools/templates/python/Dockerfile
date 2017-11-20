@@ -15,10 +15,16 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-
 
 COPY . /app
 <% if (!enable) { %>
+<% if (language === "PYTHON") { %>
 ENV FLASK_APP=server
+<% } %>
 <% } %>
 <% if (enable) { %>
 CMD ["echo", "No run command specified in Dockerfile"]
 <% } else { %>
+<% if (language === "PYTHON") { %>
 CMD ["python", "manage.py", "start", "0.0.0.0:<%= port %>"]
+<% } else { %>
+CMD ["gunicorn", "-b", "0.0.0.0:<%= port %>", "<%= name %>.wsgi"]
+<% } %>
 <% } %>
