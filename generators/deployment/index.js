@@ -195,6 +195,7 @@ module.exports = class extends Generator {
 			: `gunicorn ${this.bluemix.name}.wsgi -b 0.0.0.0:$PORT`;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.cfIgnoreContent = ['.pyc', '.egg-info'];
+		this.manifestConfig.env.DISABLE_COLLECTSTATIC = '1';
 	}
 
 	cleanUpPass() {

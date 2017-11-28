@@ -15,7 +15,7 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-
 ENV FLASK_APP=server
 ENV FLASK_DEBUG=true
 <% }else { %>
-DEBUG = true
+ENV DEBUG = true
 <% } %>
 
 ARG bx_dev_user=root
