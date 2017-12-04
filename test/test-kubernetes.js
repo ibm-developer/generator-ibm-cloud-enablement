@@ -446,6 +446,15 @@ describe('cloud-enablement:kubernetes', function () {
 		});
 
 		testOutput();
+
+		it('Python has Prometheus configuration with correct content', function () {
+			let promConfig = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-config.yaml', 'utf8'));
+			let promDeploy = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-deployment.yaml', 'utf8'));
+			let promService = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-service.yaml', 'utf8'));
+			assertYmlContent(promConfig.kind, 'ConfigMap', 'promConfig.kind');
+			assertYmlContent(promDeploy.kind, 'Deployment', 'promDeploy.kind');
+			assertYmlContent(promService.kind, 'Service', 'promService.kind');
+		});
 	});
 
 	describe('kubernetes:app with Python project and mongo deployment', function () {
