@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.0"></a>
+# [0.6.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.5.3...v0.6.0) (2017-12-04)
+
+
+### Features
+
+* Adding Prometheus support for Kubernetes on Python Flask starters ([27df22a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/27df22a))
+
+
+
 <a name="0.5.3"></a>
 ## [0.5.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.5.2...v0.5.3) (2017-11-28)
 
