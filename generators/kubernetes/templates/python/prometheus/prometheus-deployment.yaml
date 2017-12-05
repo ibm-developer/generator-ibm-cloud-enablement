@@ -16,7 +16,7 @@ spec:
             - "-config.file=/etc/prometheus/conf/prometheus.yml"
             - "-storage.local.path=/prometheus/"
           ports:
-            - containerPort: {{servicePorts.prometheus}}
+            - containerPort: 9090
           volumeMounts:
             - name: prometheus-config-volume
               mountPath: /etc/prometheus/conf/

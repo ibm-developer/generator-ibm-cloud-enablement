@@ -39,8 +39,7 @@ const portDefault = {
 		http: '3000'
 	},
 	python: {
-		http: '3000',
-		prometheus: '9000'
+		http: '3000'
 	},
 	swift: {
 		http: '8080'
@@ -176,9 +175,9 @@ module.exports = class extends Generator {
 			};
 		}
 		else if (this.opts.language === 'python') {
-			this.fileLocations.promConfig = {source : 'python/prometheus/prometheus-config.yaml', target : 'chartDir/templates/prometheus/prometheus-config.yaml', process: true};
-			this.fileLocations.promDeploy = {source : 'python/prometheus/prometheus-deployment.yaml', target : 'chartDir/templates/prometheus/prometheus-deployment.yaml', process: true};
-			this.fileLocations.promService = {source : 'python/prometheus/prometheus-service.yaml', target : 'chartDir/templates/prometheus/prometheus-service.yaml', process: true};
+			this.fileLocations.promConfig = {source : 'python/prometheus/prometheus-config.yaml', target : 'chartDir/templates/prometheus/prometheus-config.yaml', process: false};
+			this.fileLocations.promDeploy = {source : 'python/prometheus/prometheus-deployment.yaml', target : 'chartDir/templates/prometheus/prometheus-deployment.yaml', process: false};
+			this.fileLocations.promService = {source : 'python/prometheus/prometheus-service.yaml', target : 'chartDir/templates/prometheus/prometheus-service.yaml', process: false};
 		}
 
 		// iterate over file names
