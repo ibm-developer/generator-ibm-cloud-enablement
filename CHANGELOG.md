@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.2"></a>
+## [0.6.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.1...v0.6.2) (2017-12-06)
+
+
+### Bug Fixes
+
+* fixed dockertools bug and manifest bug ([35df1ae](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/35df1ae))
+* Use Maven 3.5.0 in pipeline build ([1c4f0f5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/1c4f0f5))
+
+
+
 <a name="0.6.1"></a>
 ## [0.6.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.0...v0.6.1) (2017-12-05)
 
