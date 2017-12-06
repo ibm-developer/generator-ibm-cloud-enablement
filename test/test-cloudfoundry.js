@@ -180,7 +180,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 							if(stage.name === 'Build Stage') {
 								assertYmlContent(stage.triggers[0].type, 'commit', 'pipelineyml.stages[0].triggers[0].type');
 								assertYmlContent(stage.jobs[0].build_type, 'shell', 'pipelineyml.stages[0].jobs[0].build_type');
-								let buildCommand = buildType === 'maven' ? 'mvn install' : 'gradle build';
+								let buildCommand = buildType === 'maven' ? './mvnw install' : 'gradle build';
 								assert(stage.jobs[0].script.includes('#!/bin/bash'), 'Expected pipelineyml.stages[0].jobs[0].script to include "#!/bin/bash", found : ' + stage.jobs[0].script);
 								assert(stage.jobs[0].script.includes('export JAVA_HOME=$JAVA8_HOME'), 'Expected pipelineyml.stages[0].jobs[0].script to include "export JAVA_HOME=$JAVA8_HOME", found : ' + stage.jobs[0].script);
 								assert(stage.jobs[0].script.includes(buildCommand), 'Expected pipelineyml.stages[0].jobs[0].script to include "' + buildCommand + '", found : ' + stage.jobs[0].script);
