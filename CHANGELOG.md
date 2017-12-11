@@ -9,8 +9,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 * add test and update basedeploy ([a5c6c87](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f1c0cd8))
 
-
-
 <a name="0.6.3"></a>
 ## [0.6.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.2...v0.6.3) (2017-12-10)
 
