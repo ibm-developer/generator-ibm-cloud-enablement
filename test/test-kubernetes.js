@@ -63,6 +63,10 @@ function testOutput() {
 	it('has kubernetes config for HPA', function () {
 		assert.file(chartLocation + '/templates/hpa.yaml');
 	});
+
+	it('has kubernetes config for basedeployment', function () {
+		assert.file(chartLocation + '/templates/basedeployment.yaml');
+	});
 }
 
 function assertYmlContent(actual, expected, label) {
@@ -140,6 +144,17 @@ describe('cloud-enablement:kubernetes', function () {
 				assertYmlContent(valuesyml.hpa.enabled, false, 'valuesyml.hpa.enabled');
 				assertYmlContent(valuesyml.base.enabled, false, 'valuesyml.base.enabled');
 				assertYmlContent(valuesyml.image.resources.requests.cpu, '200m', 'valuesyml.image.resources.requests.cpu');
+			});
+			it('has basedeployment.yaml with correct content', function () {
+				let rawbasedeploymentyml = fs.readFileSync(chartLocation + '/templates/basedeployment.yaml', 'utf8');
+				let newbasedeploymentyml = rawbasedeploymentyml.replace('{{ if .Values.base.enabled }}', '')
+					.replace('{{ if .Values.istio.enabled }}', '').replace('{{ else }}', '').replace('{{ end }}', '').replace('{{ end }}', '');
+				let basedeploymentyml = yml.safeLoad(newbasedeploymentyml);
+				assert.ok(-1 != newbasedeploymentyml.search('replicas: {{ .Values.base.replicaCount }}'));
+				assertYmlContent(basedeploymentyml.metadata.name, '{{  .Chart.Name }}-basedeployment', 'basedeploymentyml.metadata.name');
+				assertYmlContent(basedeploymentyml.spec.template.spec.containers[0].image, '{{ .Values.image.repository }}:{{ .Values.base.image.tag }}',
+					'basedeploymentyml.spec.template.spec.containers.image');
+				assertYmlContent(basedeploymentyml.spec.template.metadata.labels.version, 'base', 'basedeploymentyml.spec.template.metadata.labels.version');
 			});
 			it('has manifests/kube.deploy.yml with correct content', function () {
 				assert.file('manifests/kube.deploy.yml');

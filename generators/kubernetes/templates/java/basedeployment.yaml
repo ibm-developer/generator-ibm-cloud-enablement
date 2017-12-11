@@ -32,7 +32,7 @@ spec:
             port: 8080
           {{/has}}
           initialDelaySeconds: 20
-{{tag '  end '}}
+{{tag ' end '}}
         resources:
           requests:
             cpu: "{{tag ' .Values.image.resources.requests.cpu '}}"

@@ -6,7 +6,7 @@ metadata:
   labels:
     chart: '{{tag ' .Chart.Name '}}-{{{tag ' .Chart.Version | replace "+" "_" '}}}'
 spec:
-  replicas: {{tag ' .Values.replicaCount '}}
+  replicas: {{tag ' .Values.base.replicaCount '}}
   strategy:
     type: RollingUpdate
     rollingUpdate:
@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
       - name: "{{tag '  .Chart.Name  '}}"
-        image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.image.tag '}}"
+        image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.base.image.tag '}}"
         imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
         livenessProbe:
           httpGet:
