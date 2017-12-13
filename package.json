@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "fs-extra": "^2.0.0",
-    "handlebars": "^4.0.10",
+    "handlebars": "^4.0.11",
     "js-yaml": "^3.9.0",
     "lodash": "^4.17.4",
     "yeoman-generator": "^1.1.0"

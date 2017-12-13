@@ -421,13 +421,13 @@ module.exports = class extends Generator {
 			buildCmdRun: 'python -m compileall .',
 			testCmd: this.opts.enable
 				? 'echo No test command specified in cli-config'
-				: 'python -m unittest tests.app_tests.ServerTestCase',
+				: 'python manage.py test',
 			buildCmdDebug: 'python -m compileall .',
 			runCmd: '',
 			stopCmd: '',
 			debugCmd: this.opts.enable
 				? 'echo No debug command specified in cli-config'
-				: 'python -m django run --host=0.0.0.0 --port=5858 --debugger',
+				: `python manage.py runserver --noreload`,
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
 
