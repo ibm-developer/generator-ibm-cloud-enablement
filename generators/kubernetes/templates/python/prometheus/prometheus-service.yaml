@@ -1,11 +1,13 @@
+{{tag ' if .Values.prometheus.enabled '}}
 apiVersion: v1
 kind: Service
 metadata:
-  name: prometheus-service
+  name: "prometheus-service-{{ .Chart.Name }}"
 spec:
   selector:
-    app: prometheus-server
+    app: "prometheus-server-{{ .Chart.Name }}"
   type: NodePort
   ports:
     - port: 80
       targetPort: 9090
+{{tag ' end '}}
