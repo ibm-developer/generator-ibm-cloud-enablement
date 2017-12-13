@@ -515,7 +515,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'django run');
+			assert.fileContent('cli-config.yml', 'python manage.py runserver --noreload');
 			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
@@ -580,7 +580,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'django run');
+			assert.fileContent('cli-config.yml', 'python manage.py runserver --noreload');
 			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
@@ -612,7 +612,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'django run');
+			assert.fileContent('cli-config.yml', 'python manage.py runserver --noreload');
 			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
@@ -642,7 +642,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
-			assert.fileContent('cli-config.yml', 'django run');
+			assert.fileContent('cli-config.yml', 'python manage.py runserver --noreload');
 			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
