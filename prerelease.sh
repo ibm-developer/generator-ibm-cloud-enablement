@@ -22,4 +22,4 @@ npm run version
 git remote rm origin
 git remote add origin $GITHUB_URL_SECURED
 git push --follow-tags --set-upstream origin $BRANCH
-hub pull-request -b development -m "chore: Merging CHANGELOG and package.json changes"
+hub pull-request -b master -m "chore: Merging CHANGELOG and package.json changes"
