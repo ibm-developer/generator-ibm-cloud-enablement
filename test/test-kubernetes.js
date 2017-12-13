@@ -399,6 +399,11 @@ describe('cloud-enablement:kubernetes', function () {
 		});
 
 		testOutput();
+
+		it('Swift has Prometheus disabled', function () {
+			let values = yml.safeLoad(fs.readFileSync(chartLocation + '/values.yaml', 'utf8'));
+			assertYmlContent(values.prometheus.enabled, false, 'values.prometheus.enabled');
+		});
 	});
 
 	describe('kubernetes:app with Swift project and mongo deployment', function () {
@@ -467,13 +472,15 @@ describe('cloud-enablement:kubernetes', function () {
 
 		testOutput();
 
+		it('Python has Prometheus enabled', function () {
+			let values = yml.safeLoad(fs.readFileSync(chartLocation + '/values.yaml', 'utf8'));
+			assertYmlContent(values.prometheus.enabled, true, 'values.prometheus.enabled');
+		});
+
 		it('Python has Prometheus configuration with correct content', function () {
-			let promConfig = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-config.yaml', 'utf8'));
-			let promDeploy = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-deployment.yaml', 'utf8'));
-			let promService = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-service.yaml', 'utf8'));
-			assertYmlContent(promConfig.kind, 'ConfigMap', 'promConfig.kind');
-			assertYmlContent(promDeploy.kind, 'Deployment', 'promDeploy.kind');
-			assertYmlContent(promService.kind, 'Service', 'promService.kind');
+			assert.fileContent(chartLocation + '/templates/prometheus/prometheus-config.yaml', 'kind: ConfigMap');
+			assert.fileContent(chartLocation + '/templates/prometheus/prometheus-deployment.yaml', 'kind: Deployment');
+			assert.fileContent(chartLocation + '/templates/prometheus/prometheus-service.yaml', 'kind: Service');
 		});
 	});
 

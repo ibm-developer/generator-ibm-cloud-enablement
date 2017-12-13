@@ -1,13 +1,14 @@
+{{tag ' if .Values.prometheus.enabled '}}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: prometheus-deployment
+  name: "prometheus-deployment-{{ .Chart.Name }}"
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        app: prometheus-server
+        app: "prometheus-server-{{ .Chart.Name }}"
     spec:
       containers:
         - name: prometheus
@@ -25,6 +26,7 @@ spec:
       volumes:
         - name: prometheus-config-volume
           configMap:
-            name: prometheus-config
+            name: "prometheus-config-{{ .Chart.Name }}"
         - name: prometheus-storage-volume
           emptyDir: {}
+{{tag ' end '}}

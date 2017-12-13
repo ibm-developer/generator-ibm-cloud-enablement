@@ -180,6 +180,10 @@ module.exports = class extends Generator {
 			this.fileLocations.promService = {source : 'python/prometheus/prometheus-service.yaml', target : 'chartDir/templates/prometheus/prometheus-service.yaml', process: false};
 		}
 
+		// Currently only Python starters include a Prometheus Kube config
+		this.opts.prometheus = {}
+		this.opts.prometheus.enabled = (this.opts.language === 'python') ? 'true' : 'false';
+
 		// iterate over file names
 		let files = Object.keys(this.fileLocations);
 		files.forEach(file => {
