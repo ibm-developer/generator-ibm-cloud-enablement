@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file. See [standa
 <a name="0.6.7"></a>
 ## [0.6.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.6...v0.6.7) (2017-12-13)
 
+### Bug Fixes
+
+* refactor: refactored Prometheus files to abide to chart values and bind names to chart-name
+
 
 
 <a name="0.6.6"></a>
