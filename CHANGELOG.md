@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.6"></a>
+## [0.6.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.5...v0.6.6) (2017-12-13)
+
+
+### Bug Fixes
+
+* adjusted configurations for Django project for manifest, Docker, and Dockerfile-tools ([567854c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/567854c))
+
+
+
 <a name="0.6.5"></a>
 ## [0.6.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.4...v0.6.5) (2017-12-13)
 
