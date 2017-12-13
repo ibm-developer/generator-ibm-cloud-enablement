@@ -1,7 +1,8 @@
+{{tag ' if .Values.prometheus.enabled '}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: prometheus-config
+  name: "prometheus-config-{{ .Chart.Name }}"
   labels:
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     heritage: "{{ .Release.Service }}"
@@ -23,3 +24,4 @@ data:
           - source_labels: [__meta_kubernetes_pod_label_app]
             regex: "{{ .Chart.Name }}-selector"
             action: keep
+{{tag ' end '}}
