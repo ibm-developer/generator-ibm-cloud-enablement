@@ -35,3 +35,12 @@ services:
      name: comments
      env: production
 {{/has}}
+base:
+  enabled: false
+  replicaCount: 1
+  image:
+    tag : v0.9.9
+  weight: 100
+istio:
+  enabled: false
+  weight: 100

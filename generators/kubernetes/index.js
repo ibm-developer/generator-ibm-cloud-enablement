@@ -76,8 +76,10 @@ module.exports = class extends Generator {
 			deployment: {source : 'deployment.yaml', target : 'chartDir/templates/deployment.yaml', process: true},
 			service: {source : 'service.yaml', target : 'chartDir/templates/service.yaml', process: false},
 			hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
+			istio: {source : 'istio.yaml', target : 'chartDir/templates/istio.yaml', process: true},
+			basedeployment: {source : 'basedeployment.yaml', target : 'chartDir/templates/basedeployment.yaml', process: true},
 			values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true}
-		}
+		};
 	}
 
 	configuring() {
@@ -154,9 +156,10 @@ module.exports = class extends Generator {
 				target : 'Jenkinsfile',
 				process : true
 			}
-		// Handle Java and Spring
-		} else if (this.opts.language === 'java' || this.opts.language === 'spring') {
+		}
+		else if (this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';
+			this.fileLocations.basedeployment.source = 'java/basedeployment.yaml';
 			this.fileLocations.service.source = 'java/service.yaml';
 			this.fileLocations.service.process = true;
 			this.fileLocations.values.source = 'java/values.yaml';
@@ -164,24 +167,17 @@ module.exports = class extends Generator {
 				source : 'java/manifests/kube.deploy.yml',
 				target : 'manifests/kube.deploy.yml',
 				process : true
-			}
+			};
 			this.fileLocations.jenkinsfile = {
 				source : 'java/Jenkinsfile',
 				target : 'Jenkinsfile',
 				process : true
-			}
-			if(this.opts.language === 'java') {
-				this.fileLocations.istiofile = {
-					source : 'java/istio.yaml',
-					target : 'chartDir/templates/istio.yaml',
-					process : true
-				}
-				this.fileLocations.basedeployment = {
-					source : 'java/basedeployment.yaml',
-					target : 'chartDir/templates/basedeployment.yaml',
-					process : true
-				}
-			}
+			};
+		}
+		else if (this.opts.language === 'python') {
+			this.fileLocations.promConfig = {source : 'python/prometheus/prometheus-config.yaml', target : 'chartDir/templates/prometheus/prometheus-config.yaml', process: false};
+			this.fileLocations.promDeploy = {source : 'python/prometheus/prometheus-deployment.yaml', target : 'chartDir/templates/prometheus/prometheus-deployment.yaml', process: false};
+			this.fileLocations.promService = {source : 'python/prometheus/prometheus-service.yaml', target : 'chartDir/templates/prometheus/prometheus-service.yaml', process: false};
 		}
 
 		// iterate over file names

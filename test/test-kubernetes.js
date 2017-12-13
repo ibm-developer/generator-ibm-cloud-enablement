@@ -63,6 +63,10 @@ function testOutput() {
 	it('has kubernetes config for HPA', function () {
 		assert.file(chartLocation + '/templates/hpa.yaml');
 	});
+
+	it('has kubernetes config for basedeployment', function () {
+		assert.file(chartLocation + '/templates/basedeployment.yaml');
+	});
 }
 
 function assertYmlContent(actual, expected, label) {
@@ -76,10 +80,10 @@ function assertYmlContentExists(actual, label) {
 describe('cloud-enablement:kubernetes', function () {
 	this.timeout(5000);
 
-	let languages = ['JAVA', 'SPRING'];
+	let languages = ['JAVA', 'SPRING', 'NODE'];
 	languages.forEach(language => {
 		describe('kubernetes:app with Java-' + language +' project',function () {
-			let bluemix = language === 'SPRING' ? JSON.stringify(scaffolderSampleSpring) : JSON.stringify(scaffolderSampleJava);
+			let bluemix = language === 'SPRING' ? JSON.stringify(scaffolderSampleSpring) : language === 'JAVA' ? JSON.stringify(scaffolderSampleJava) : JSON.stringify(scaffolderSampleNode);
 			beforeEach(function () {
 				return helpers.run(path.join(__dirname, '../generators/app'))
 					.inDir(path.join(__dirname, './tmp'))
@@ -126,6 +130,9 @@ describe('cloud-enablement:kubernetes', function () {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 					assertYmlContent(serviceyml.spec.ports[1], undefined, 'serviceyml.spec.ports[1]');
 				}
+				if(language === 'NODE') {
+					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
+				}
 			});
 			it('has values.yaml with correct content', function () {
 				let valuesyml = yml.safeLoad(fs.readFileSync(chartLocation + '/values.yaml', 'utf8'));
@@ -141,49 +148,54 @@ describe('cloud-enablement:kubernetes', function () {
 				assertYmlContent(valuesyml.base.enabled, false, 'valuesyml.base.enabled');
 				assertYmlContent(valuesyml.image.resources.requests.cpu, '200m', 'valuesyml.image.resources.requests.cpu');
 			});
+			it('has basedeployment.yaml with correct content', function () {
+				let rawbasedeploymentyml = fs.readFileSync(chartLocation + '/templates/basedeployment.yaml', 'utf8');
+				let newbasedeploymentyml = rawbasedeploymentyml.replace('{{ if .Values.base.enabled }}', '')
+					.replace('{{ if .Values.istio.enabled }}', '').replace('{{ else }}', '').replace('{{ end }}', '').replace('{{ end }}', '');
+				let basedeploymentyml = yml.safeLoad(newbasedeploymentyml);
+				assert.ok(-1 != newbasedeploymentyml.search('replicas: {{ .Values.base.replicaCount }}'));
+				assertYmlContent(basedeploymentyml.metadata.name, '{{  .Chart.Name }}-basedeployment', 'basedeploymentyml.metadata.name');
+				assertYmlContent(basedeploymentyml.spec.template.spec.containers[0].image, '{{ .Values.image.repository }}:{{ .Values.base.image.tag }}',
+					'basedeploymentyml.spec.template.spec.containers.image');
+				assertYmlContent(basedeploymentyml.spec.template.metadata.labels.version, 'base', 'basedeploymentyml.spec.template.metadata.labels.version');
+			});
 			it('has manifests/kube.deploy.yml with correct content', function () {
-				assert.file('manifests/kube.deploy.yml');
-				let i = 0;
-				yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
-					switch(i) {
-						case 0:
-							assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-service', 'doc0.data.metadata.name');
-							if(language === 'JAVA') {
-								assertYmlContent(data.spec.ports[0].port, 9080, 'doc0.spec.ports[0].port');
-								assertYmlContent(data.spec.ports[1].port, 9443, 'doc0.spec.ports[1].port');
-							}
-							if(language === 'SPRING') {
-								assertYmlContent(data.spec.ports[0].port, 8080, 'doc0.spec.ports[0].port');
-							}
-							i++;
-							break;
-						case 1:
-							assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-deployment', 'doc1.metadata.name');
-							if(language === 'JAVA') {
-								assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/' + applicationName + '/health', 'doc1.spec.template.spec.containers[0].readinessProbe.httpGet.path');
-							}
-							if(language === 'SPRING') {
-								assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/health', 'doc1.data.spec.template.spec.containers[0].readinessProbe.httpGet.path');
-							}
-							i++;
-							break;
-						default:
-							assert.fail(i, 'i < 2', 'Yaml file contains more documents than expected');
-					}
-				});
-				assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
+				if(language === 'JAVA' || language === 'SPRING') {
+					assert.file('manifests/kube.deploy.yml');
+					let i = 0;
+					yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
+						switch(i) {
+							case 0:
+								assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-service', 'doc0.data.metadata.name');
+								if(language === 'JAVA') {
+									assertYmlContent(data.spec.ports[0].port, 9080, 'doc0.spec.ports[0].port');
+									assertYmlContent(data.spec.ports[1].port, 9443, 'doc0.spec.ports[1].port');
+								}
+								if(language === 'SPRING') {
+									assertYmlContent(data.spec.ports[0].port, 8080, 'doc0.spec.ports[0].port');
+								}
+								i++;
+								break;
+							case 1:
+								assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-deployment', 'doc1.metadata.name');
+								if(language === 'JAVA') {
+									assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/' + applicationName + '/health', 'doc1.spec.template.spec.containers[0].readinessProbe.httpGet.path');
+								}
+								if(language === 'SPRING') {
+									assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/health', 'doc1.data.spec.template.spec.containers[0].readinessProbe.httpGet.path');
+								}
+								i++;
+								break;
+							default:
+								assert.fail(i, 'i < 2', 'Yaml file contains more documents than expected');
+						}
+					});
+					assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
+				}
 			});
 			if(language === 'JAVA' || language === 'NODE' || language == 'SPRING' ) {
 				it('Java, Node and Spring have Jenkinsfile with correct content', function () {
 					assert.fileContent('Jenkinsfile', 'image = \''+ applicationName.toLowerCase() + '\'');
-				});
-			}
-			if(language === 'SPRING') {
-				it('does not have a istio.yaml', () => {
-					assert.noFile('/templates/istio.yaml');
-				});
-				it('does not have a istio.yaml', () => {
-					assert.noFile(chartLocation + '/templates/basedeployment.yaml');
 				});
 			}
 		});
@@ -195,15 +207,6 @@ describe('cloud-enablement:kubernetes', function () {
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSpring), healthEndpoint: 'customHealth'})
 		});
-
-		it('has deployment.yml with correct readinessProbe health endpoint', function () {
-			let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-			let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
-			let deploymentyml = yml.safeLoad(newdeploymentyml);
-			let readinessProbe = deploymentyml.spec.template.spec.containers[0].readinessProbe;
-			assertYmlContent(readinessProbe.httpGet.path, '/customHealth', 'readinessProbe.httpGet.path');
-		});
-
 		it('has manifests/kube.deploy.yml with correct content', function () {
 			assert.file('manifests/kube.deploy.yml');
 			let i = 0;
@@ -463,6 +466,15 @@ describe('cloud-enablement:kubernetes', function () {
 		});
 
 		testOutput();
+
+		it('Python has Prometheus configuration with correct content', function () {
+			let promConfig = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-config.yaml', 'utf8'));
+			let promDeploy = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-deployment.yaml', 'utf8'));
+			let promService = yml.safeLoad(fs.readFileSync(chartLocation + '/templates/prometheus/prometheus-service.yaml', 'utf8'));
+			assertYmlContent(promConfig.kind, 'ConfigMap', 'promConfig.kind');
+			assertYmlContent(promDeploy.kind, 'Deployment', 'promDeploy.kind');
+			assertYmlContent(promService.kind, 'Service', 'promService.kind');
+		});
 	});
 
 	describe('kubernetes:app with Python project and mongo deployment', function () {

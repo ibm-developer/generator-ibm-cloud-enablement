@@ -470,17 +470,6 @@ module.exports = class extends Generator {
 			);
 		}
 
-		const FILENAME_MANAGEMENT = "manage.py";
-		if (!this.opts.enable) {
-			if (this.fs.exists(this.destinationPath(FILENAME_MANAGEMENT))){
-				console.info(FILENAME_MANAGEMENT, "already exists, skipping.");
-			} else {
-				this.fs.copy(
-					this.templatePath('python/manage.py'),
-					this.destinationPath(FILENAME_MANAGEMENT)
-				);
-			}
-		}
 
 		this.fs.copy(
 			this.templatePath('python/dockerignore'),
