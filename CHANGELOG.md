@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.10"></a>
+## [0.6.10](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.9...v0.6.10) (2017-12-14)
+
+
+### Bug Fixes
+
+* correct issue with hpa on kube 18 and up ([3a5b1dd](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3a5b1dd))
+
+
+
 <a name="0.6.9"></a>
 ## [0.6.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.8...v0.6.9) (2017-12-14)
 
