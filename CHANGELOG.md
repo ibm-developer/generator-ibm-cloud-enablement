@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.9"></a>
+## [0.6.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.8...v0.6.9) (2017-12-14)
+
+
+### Bug Fixes
+
+* Removing tags from Prometheus charts ([ede2071](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ede2071))
+
+
+
+<a name="0.6.8"></a>
+## [0.6.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.7...v0.6.8) (2017-12-13)
+
+
+### Bug Fixes
+
+* fixed a bug with Django dockerfile ([4800e48](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4800e48))
+* trying to fix version error ([5c1dcb3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5c1dcb3))
+
+
+
+<a name="0.6.7"></a>
+## [0.6.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.6...v0.6.7) (2017-12-13)
+
+### Bug Fixes
+
+* refactor: refactored Prometheus files to abide to chart values and bind names to chart-name
+
+
+
 <a name="0.6.6"></a>
 ## [0.6.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.5...v0.6.6) (2017-12-13)
 

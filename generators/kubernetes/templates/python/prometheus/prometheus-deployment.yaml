@@ -1,4 +1,4 @@
-{{tag ' if .Values.prometheus.enabled '}}
+{{ if .Values.prometheus.enabled }}
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
@@ -29,4 +29,4 @@ spec:
             name: "prometheus-config-{{ .Chart.Name }}"
         - name: prometheus-storage-volume
           emptyDir: {}
-{{tag ' end '}}
+{{ end }}

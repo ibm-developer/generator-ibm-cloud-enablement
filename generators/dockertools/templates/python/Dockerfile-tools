@@ -16,6 +16,7 @@ ENV FLASK_APP=server
 ENV FLASK_DEBUG=true
 <% } %>
 
+
 ARG bx_dev_user=root
 ARG bx_dev_userid=1000
 
