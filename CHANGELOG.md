@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.9"></a>
+## [0.6.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.8...v0.6.9) (2017-12-14)
+
+
+### Bug Fixes
+
+* Removing tags from Prometheus charts ([ede2071](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ede2071))
+
+
+
 <a name="0.6.8"></a>
 ## [0.6.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.7...v0.6.8) (2017-12-13)
 
