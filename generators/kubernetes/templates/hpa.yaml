@@ -1,27 +1,27 @@
-{{tag ' if .Values.hpa.enabled '}}
-{{tag ' if and (eq .Capabilities.KubeVersion.Major "1") (ge .Capabilities.KubeVersion.Minor "8") '}}
+{{{tag ' if .Values.hpa.enabled '}}}
+{{{tag ' if and (eq .Capabilities.KubeVersion.Major "1") (ge .Capabilities.KubeVersion.Minor "8") '}}}
 apiVersion: autoscaling/v2beta1
-{{tag ' else '}}
+{{{tag ' else '}}}
 apiVersion: autoscaling/v2alpha1
-{{tag ' end '}}
+{{{tag ' end '}}}
 kind: HorizontalPodAutoscaler
 metadata:
-  name: "{{tag ' .Chart.Name ' }}-hpa-policy"
-  namespace: {{kubeClusterNamespace}}
+  name: "{{{tag ' .Chart.Name ' }}}-hpa-policy"
+  namespace: {{{kubeClusterNamespace}}}
 spec:
   scaleTargetRef:
     apiVersion: apps/v1beta1
     kind: Deployment
-    name: "{{tag ' .Chart.Name ' }}-deployment"
-  minReplicas: {{tag ' .Values.hpa.minReplicas '}}
-  maxReplicas: {{tag ' .Values.hpa.maxReplicas '}}
+    name: "{{{tag ' .Chart.Name ' }}}-deployment"
+  minReplicas: {{{tag ' .Values.hpa.minReplicas '}}}
+  maxReplicas: {{{tag ' .Values.hpa.maxReplicas '}}}
   metrics:
   - type: Resource
     resource:
       name: cpu
-      targetAverageUtilization: {{tag ' .Values.hpa.metrics.cpu.targetAverageUtilization '}}
+      targetAverageUtilization: {{{tag ' .Values.hpa.metrics.cpu.targetAverageUtilization '}}}
   - type: Resource
     resource:
       name: memory
-      targetAverageUtilization: {{tag ' .Values.hpa.metrics.memory.targetAverageUtilization '}}
-{{tag ' end '}}
+      targetAverageUtilization: {{{tag ' .Values.hpa.metrics.memory.targetAverageUtilization '}}}
+{{{tag ' end '}}}
