@@ -63,6 +63,7 @@ function testOutput() {
 	it('has kubernetes config for HPA', function () {
 		assert.file(chartLocation + '/templates/hpa.yaml');
 	});
+	assertHpaYmlContent();
 
 	it('has kubernetes config for basedeployment', function () {
 		assert.file(chartLocation + '/templates/basedeployment.yaml');
@@ -75,6 +76,19 @@ function assertYmlContent(actual, expected, label) {
 
 function assertYmlContentExists(actual, label) {
 	assert.notStrictEqual(actual, undefined, 'Expected ' + label + ' to be defined, it was not');
+}
+
+function assertHpaYmlContent() {
+	it('has templates/hpa.yaml file with correct contents', function() {
+		assert.fileContent(chartLocation + '/templates/hpa.yaml', '{{ if .Values.hpa.enabled }}');
+		assert.fileContent(chartLocation + '/templates/hpa.yaml', '{{ if and (eq .Capabilities.KubeVersion.Major "1") (ge .Capabilities.KubeVersion.Minor "8") }}');
+		assert.fileContent(chartLocation + '/templates/hpa.yaml', 'apiVersion: autoscaling/v2beta1\n{{ else }}\napiVersion: autoscaling/v2alpha1\n{{ end }}');
+		assert.fileContent(chartLocation + '/templates/hpa.yaml', 'name: "{{ .Chart.Name }}-hpa-policy"');
+		assert.fileContent(chartLocation + '/templates/hpa.yaml', 'minReplicas: {{ .Values.hpa.minReplicas }}');
+		assert.fileContent(chartLocation + '/templates/hpa.yaml', 'maxReplicas: {{ .Values.hpa.maxReplicas }}');
+		assert.fileContent(chartLocation + '/templates/hpa.yaml', 'targetAverageUtilization: {{ .Values.hpa.metrics.cpu.targetAverageUtilization }}');
+		assert.fileContent(chartLocation + '/templates/hpa.yaml', 'targetAverageUtilization: {{ .Values.hpa.metrics.memory.targetAverageUtilization }}');
+	});
 }
 
 describe('cloud-enablement:kubernetes', function () {
