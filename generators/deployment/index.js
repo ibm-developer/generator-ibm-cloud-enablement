@@ -111,7 +111,7 @@ module.exports = class extends Generator {
 
 	_configureSwift() {
 		this.manifestConfig.buildpack = 'swift_buildpack';
-		this.manifestConfig.command = this.name ? (`${this.name}`) : undefined;
+		this.manifestConfig.command = this.bluemix.name ? (`${this.bluemix.name}`) : undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.pipelineConfig.swift = true;
 		this.cfIgnoreContent = ['.build/*', '.build-ubuntu/*', 'Packages/*'];
