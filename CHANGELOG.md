@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.11"></a>
+## [0.6.11](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.10...v0.6.11) (2018-01-02)
+
+
+### Bug Fixes
+
+* **templates:** Fix tag helper to always return a safe string so it will not be escaped by Handlebars ([29eb3f7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/29eb3f7))
+
+
+
 <a name="0.6.10"></a>
 ## [0.6.10](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.9...v0.6.10) (2017-12-14)
 

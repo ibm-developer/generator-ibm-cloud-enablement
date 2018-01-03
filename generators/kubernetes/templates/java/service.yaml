@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: "{{tag '  .Chart.Name '}}-service"
   labels:
-    chart: "{{tag ' .Chart.Name '}}-{{{tag ' .Chart.Version | replace "+" "_" '}}}"
+    chart: "{{tag ' .Chart.Name '}}-{{tag ' .Chart.Version | replace "+" "_" '}}"
 spec:
   type: {{tag ' .Values.service.type '}}
   ports:

@@ -49,7 +49,7 @@ Handlebars.registerHelper('toLowerCase', function(context) {
 });
 
 Handlebars.registerHelper('tag', function(context) {
-	return "{{" + context + "}}";
+	return new Handlebars.SafeString("{{" + context + "}}");
 });
 
 Handlebars.registerHelper('firstAvailable', function() {
