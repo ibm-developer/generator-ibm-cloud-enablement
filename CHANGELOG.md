@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.12"></a>
+## [0.6.12](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.11...v0.6.12) (2018-01-03)
+
+
+### Bug Fixes
+
+* use bluemix.name for launch command on Swift ([1edcc50](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/1edcc50))
+
+
+
 <a name="0.6.11"></a>
 ## [0.6.11](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.10...v0.6.11) (2018-01-02)
 
