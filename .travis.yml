@@ -2,11 +2,14 @@ language: node_js
 node_js:
 - '8'
 before_install:
+- wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-386-2.2.9.tgz
+- wget https://kubernetes-helm.storage.googleapis.com/helm-v2.7.2-linux-amd64.tar.gz
+- shasum -a 256 -c ./sha256.txt
+- tar -xvzf hub-linux-386-2.2.9.tgz
+- tar -xvf helm-v2.7.2-linux-amd64.tar.gz
+- export PATH=${PATH}:$PWD/hub-linux-386-2.2.9/bin/:$PWD/linux-amd64
 - npm i -g makeshift && makeshift -r https://registry.npmjs.org
 - npm i -g markdown-to-html
-- wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-386-2.2.9.tgz
-- tar -xvzf hub-linux-386-2.2.9.tgz
-- export PATH=${PATH}:$PWD/hub-linux-386-2.2.9/bin/
 before_script:
 - cd /tmp
 - git clone -b master https://github.com/ibm-developer/changelog-generator-slack-notification.git
