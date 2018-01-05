@@ -20,6 +20,7 @@ const assert = require('yeoman-assert');
 const path = require('path');
 const fs = require('fs');
 const yml = require('js-yaml');
+const exec = require('child_process').exec;
 
 const scaffolderSample = require('./samples/scaffolder-sample');
 const scaffolderSampleNode = scaffolderSample.getJson('NODE');
@@ -67,6 +68,12 @@ function testOutput() {
 
 	it('has kubernetes config for basedeployment', function () {
 		assert.file(chartLocation + '/templates/basedeployment.yaml');
+	});
+
+	it('has valid kubernetes chart when running helm lint', function(done) {
+		exec('helm lint ' + chartLocation + '/', {maxBuffer: 20 * 1024 * 1024}, (error, stdout) => {
+			error ? done(new Error(stdout)) : done();
+		})
 	});
 }
 
