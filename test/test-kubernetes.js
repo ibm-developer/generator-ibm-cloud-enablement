@@ -71,7 +71,7 @@ function testOutput() {
 	});
 
 	it('has valid kubernetes chart when running helm lint', function(done) {
-		exec('helm lint ' + chartLocation + '/', {maxBuffer: 20 * 1024 * 1024}, (error, stdout, stderr) => {
+		exec('helm lint ' + chartLocation + '/', {maxBuffer: 20 * 1024 * 1024}, (error, stdout) => {
 			error ? done(new Error(stdout)) : done();
 		})
 	});
