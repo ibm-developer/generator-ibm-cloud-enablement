@@ -7,7 +7,7 @@ before_install:
 - shasum -a 256 -c ./sha256.txt
 - tar -xvzf hub-linux-386-2.2.9.tgz
 - tar -xvf helm-v2.7.2-linux-amd64.tar.gz
-- export PATH=${PATH}:$PWD/hub-linux-386-2.2.9/bin/:$PWD/linux-amd64/helm
+- export PATH=${PATH}:$PWD/hub-linux-386-2.2.9/bin/:$PWD/linux-amd64
 - npm i -g makeshift && makeshift -r https://registry.npmjs.org
 - npm i -g markdown-to-html
 before_script:
@@ -15,7 +15,6 @@ before_script:
 - git clone -b master https://github.com/ibm-developer/changelog-generator-slack-notification.git
 - npm install changelog-generator-slack-notification
 - cd -
-- helm version
 script: npm test && npm run coveralls && ./npm_version_upgrade.sh
 branches:
   only:
