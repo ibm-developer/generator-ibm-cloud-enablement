@@ -15,6 +15,7 @@ before_script:
 - git clone -b master https://github.com/ibm-developer/changelog-generator-slack-notification.git
 - npm install changelog-generator-slack-notification
 - cd -
+- helm version
 script: npm test && npm run coveralls && ./npm_version_upgrade.sh
 branches:
   only:
