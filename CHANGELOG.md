@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.13"></a>
+## [0.6.13](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.12...v0.6.13) (2018-01-08)
+
+
+### Bug Fixes
+
+* **prompt:** Fix prompting so chosen options are used in generation ([559fa50](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/559fa50))
+* **test:** Add helm linting to kubernetes tests ([d9690f7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/d9690f7))
+
+
+
 <a name="0.6.12"></a>
 ## [0.6.12](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.11...v0.6.12) (2018-01-03)
 
