@@ -27,8 +27,21 @@ module.exports = class extends Generator {
 
 		this._sanitizeOption(this.options, OPTION_BLUEMIX);
 		this._sanitizeOption(this.options, OPTION_STARTER);
-		
+
 		this.opts = opts;
+
+		this.shouldPrompt = this.opts.bluemix ? false : true;
+
+		/*
+		Yeoman copies the opts when doing compose with so create own object reference 
+		that can be updated in prompting
+		*/
+		if(this.opts.bluemix) {
+			this.bluemix = this.opts.bluemix;
+		} else {
+			this.bluemix = {};
+			this.opts.bluemix = this.bluemix;
+		}
 	}
 
 	initializing() {
@@ -38,48 +51,34 @@ module.exports = class extends Generator {
 	}
 
 	prompting() {
-		if (this.opts.bluemix !== undefined) {
+		if (!this.shouldPrompt) {
 			return;
 		}
 		const prompts = [];
-		if (this.opts.bluemix === undefined) {
-			this.opts.bluemix = {};
-			prompts.push({
-				type: 'input',
-				name: 'name',
-				message: 'Project name',
-				default: path.basename(process.cwd())
-			});
-			prompts.push({
-				type: 'list',
-				name: 'language',
-				message: 'Language Runtime',
-				choices: [
-					'JAVA',
-					'SPRING',
-					'NODE',
-					'PYTHON',
-					'SWIFT'
-				]
-			});
-			prompts.push({
-				type: 'input',
-				name: 'dockerRegistry',
-				message: 'Docker Registry (space for none)',
-				default: 'registry.ng.bluemix.net/' + os.userInfo().username
-			});
-			prompts.push({
-				when: function(answers) {return answers.language === 'JAVA'},
-				type: 'list',
-				name: 'buildType',
-				message: 'Java build tools',
-				choices: [
-					'maven',
-					'gradle'
-				],
-				default: 'maven'
-			});
-		}
+		prompts.push({
+			type: 'input',
+			name: 'name',
+			message: 'Project name',
+			default: path.basename(process.cwd())
+		});
+		prompts.push({
+			type: 'list',
+			name: 'language',
+			message: 'Language Runtime',
+			choices: [
+				'JAVA',
+				'SPRING',
+				'NODE',
+				'PYTHON',
+				'SWIFT'
+			]
+		});
+		prompts.push({
+			type: 'input',
+			name: 'dockerRegistry',
+			message: 'Docker Registry (space for none)',
+			default: 'registry.ng.bluemix.net/' + os.userInfo().username
+		});
 
 		return this.prompt(prompts).then(this._processAnswers.bind(this));
 	}
@@ -88,11 +87,10 @@ module.exports = class extends Generator {
 	}
 
 	_processAnswers(answers) {
-		this.opts.bluemix.backendPlatform = answers.language || this.opts.bluemix.backendPlatform;
-		this.opts.bluemix.name = answers.name || this.opts.bluemix.name;
+		this.bluemix.backendPlatform = answers.language;
+		this.bluemix.name = answers.name;
 		answers.dockerRegistry = answers.dockerRegistry.trim();
-		this.opts.bluemix.dockerRegistry = answers.dockerRegistry.length > 0 ? answers.dockerRegistry : '';
-		this.opts.buildType = answers.buildType || this.opts.buildType;
+		this.bluemix.dockerRegistry = answers.dockerRegistry.length > 0 ? answers.dockerRegistry : '';
 	}
 
 	_sanitizeOption(options, name) {
