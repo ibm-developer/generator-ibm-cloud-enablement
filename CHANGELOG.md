@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.6.14"></a>
+## [0.6.14](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.13...v0.6.14) (2018-01-10)
+
+
+### Bug Fixes
+
+* **templates:** Fix bx dev build failure for java app in Windows 10 ([3dcc178](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3dcc178))
+
+
+
 <a name="0.6.13"></a>
 ## [0.6.13](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.12...v0.6.13) (2018-01-08)
 
