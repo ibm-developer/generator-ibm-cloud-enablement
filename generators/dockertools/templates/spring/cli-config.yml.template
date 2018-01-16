@@ -1,5 +1,5 @@
 # The IBM version of this configuration
-version : 0.0.2
+version : 0.0.3
 
 # The container name used for the run container
 container-name-run : "{{#toLowerCase appName}}{{/toLowerCase}}"
