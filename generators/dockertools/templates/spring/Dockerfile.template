@@ -1,4 +1,4 @@
-FROM ibmjava:8-sfj-alpine
+FROM ibmjava:8-sfj
 MAINTAINER IBM Java engineering at IBM Cloud
 
 {{#has buildType 'maven'}}
