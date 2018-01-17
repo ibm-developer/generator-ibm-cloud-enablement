@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.7.0"></a>
+# [0.7.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.14...v0.7.0) (2018-01-17)
+
+
+### Features
+
+* Move to cli-config version 0.0.3 ([#216](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/216)) ([86a8908](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/86a8908))
+
+
+
 <a name="0.6.14"></a>
 ## [0.6.14](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.13...v0.6.14) (2018-01-10)
 
