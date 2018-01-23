@@ -174,15 +174,6 @@ module.exports = class extends Generator {
 				process : true
 			};
 		}
-		else if (this.opts.language === 'python') {
-			this.fileLocations.promConfig = {source : 'python/prometheus/prometheus-config.yaml', target : 'chartDir/templates/prometheus/prometheus-config.yaml', process: false};
-			this.fileLocations.promDeploy = {source : 'python/prometheus/prometheus-deployment.yaml', target : 'chartDir/templates/prometheus/prometheus-deployment.yaml', process: false};
-			this.fileLocations.promService = {source : 'python/prometheus/prometheus-service.yaml', target : 'chartDir/templates/prometheus/prometheus-service.yaml', process: false};
-		}
-
-		// Currently only Python starters include a Prometheus Kube config
-		this.opts.prometheus = {}
-		this.opts.prometheus.enabled = (this.opts.language === 'python') ? 'true' : 'false';
 
 		// iterate over file names
 		let files = Object.keys(this.fileLocations);
