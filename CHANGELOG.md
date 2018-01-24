@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.0"></a>
+# [0.8.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.14...v0.8.0) (2018-01-24)
+
+
+### Features
+
+* Move to cli-config version 0.0.3 ([#216](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/216)) ([86a8908](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/86a8908))
+* Removing Helm Charts for auto-Prometheus deploying ([f59c5f4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f59c5f4))
+
+
+
 <a name="0.7.0"></a>
 # [0.7.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.14...v0.7.0) (2018-01-17)
 
