@@ -44,5 +44,3 @@ base:
 istio:
   enabled: false
   weight: 100
-prometheus:
-  enabled: {{prometheus.enabled}}
