@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.1"></a>
+## [0.8.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.0...v0.8.1) (2018-01-26)
+
+
+### Bug Fixes
+
+* **templates:** Fix mvn install command in Java cli-config yml file ([d13472d](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/d13472d))
+
+
+
 <a name="0.8.0"></a>
 # [0.8.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.6.14...v0.8.0) (2018-01-24)
 
