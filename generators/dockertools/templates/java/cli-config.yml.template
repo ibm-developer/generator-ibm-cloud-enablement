@@ -27,13 +27,13 @@ image-name-tools : "bx-dev-java-maven-tools"
 host-path-run : "target"
 
 # The command to build the code and docker image for RUN
-build-cmd-run : "mvn install -Dmaven.repo.local=/project/.m2/repository -DoutputDirectory=/tmp/liberty"
+build-cmd-run : "mvn install -Dmaven.repo.local=/project/.m2/repository -Pbx-dev-build"
 
 # The command to execute tests for the code in the tools container
-test-cmd : "mvn install -Dmaven.repo.local=/project/.m2/repository -DoutputDirectory=/tmp/liberty"
+test-cmd : "mvn install -Dmaven.repo.local=/project/.m2/repository -Pbx-dev-build"
 
 # The command to build the code and docker image for DEBUG
-build-cmd-debug : "mvn install -Dmaven.repo.local=/project/.m2/repository -DoutputDirectory=/tmp/liberty"
+build-cmd-debug : "mvn install -Dmaven.repo.local=/project/.m2/repository -Pbx-dev-build"
 {{/has}}
 {{#has buildType 'gradle'}}
 # The name of image to create from dockerfile-tools
