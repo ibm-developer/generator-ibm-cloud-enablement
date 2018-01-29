@@ -60,7 +60,7 @@ cm.add(Command(
 	}))
 
 cm.add(Command(
-	"runserver",
+	"run",
 	"runs dev server using Flask's native debugger & backend reloader",
 	lambda c: 'python -m flask run --host={0} --port={1} --debugger --reload'.format(c['host'], c['port']),
 	{
