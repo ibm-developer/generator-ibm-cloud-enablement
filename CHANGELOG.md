@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.2"></a>
+## [0.8.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.1...v0.8.2) (2018-01-29)
+
+
+### Bug Fixes
+
+* changed python manage.py runserver to run ([218faa2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/218faa2))
+
+
+
 <a name="0.8.1"></a>
 ## [0.8.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.0...v0.8.1) (2018-01-26)
 
