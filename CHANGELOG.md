@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.3"></a>
+## [0.8.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.2...v0.8.3) (2018-02-01)
+
+
+### Bug Fixes
+
+* **CF:** bump memory to 384M ([269cfdc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/269cfdc))
+
+
+
 <a name="0.8.2"></a>
 ## [0.8.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.1...v0.8.2) (2018-01-29)
 
