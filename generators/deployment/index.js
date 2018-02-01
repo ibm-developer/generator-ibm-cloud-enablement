@@ -105,7 +105,7 @@ module.exports = class extends Generator {
 	_configureNode() {
 		this.manifestConfig.buildpack = 'sdk-for-nodejs';
 		this.manifestConfig.command = 'npm start';
-		this.manifestConfig.memory = this.manifestConfig.memory || '256M';
+		this.manifestConfig.memory = this.manifestConfig.memory || '384M';
 		this.cfIgnoreContent = ['.git/', 'node_modules/', 'test/', 'vcap-local.js'];
 	}
 
