@@ -15,6 +15,7 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-
 ENV FLASK_APP=server/__init__.py
 ENV FLASK_DEBUG=true
 COPY run-dev /bin
+RUN chmod 777 /bin/run-dev
 RUN /bin/run-dev
 
 <% } %>
