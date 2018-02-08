@@ -16,7 +16,7 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-
 COPY . /app
 <% if (!enable) { %>
 <% if (language === "PYTHON") { %>
-ENV FLASK_APP=server
+ENV FLASK_APP=server/__init__.py
 <% } %>
 <% } %>
 <% if (enable) { %>
