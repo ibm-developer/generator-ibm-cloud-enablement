@@ -19,7 +19,6 @@ ENV FLASK_DEBUG=true
 <% } %>
 COPY run-dev /bin
 RUN chmod 777 /bin/run-dev
-RUN /bin/run-dev
 
 ARG bx_dev_user=root
 ARG bx_dev_userid=1000
