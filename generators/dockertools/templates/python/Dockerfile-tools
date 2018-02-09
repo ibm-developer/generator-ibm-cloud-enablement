@@ -14,12 +14,12 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-
 <% if (language === "PYTHON") { %>
 ENV FLASK_APP=server/__init__.py
 ENV FLASK_DEBUG=true
-COPY run-dev /bin
-RUN chmod 777 /bin/run-dev
-RUN /bin/run-dev
+
 
 <% } %>
-
+COPY . /app
+COPY run-dev /bin
+RUN chmod 777 /bin/run-dev
 
 ARG bx_dev_user=root
 ARG bx_dev_userid=1000
