@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.5"></a>
+## [0.8.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.4...v0.8.5) (2018-02-09)
+
+
+### Bug Fixes
+
+* made it so django starter can use run-dev ([27d659a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/27d659a))
+
+
+
 <a name="0.8.4"></a>
 ## [0.8.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.3...v0.8.4) (2018-02-09)
 
