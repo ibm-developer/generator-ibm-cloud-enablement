@@ -18,8 +18,9 @@ ENV FLASK_DEBUG=true
 
 <% } %>
 COPY . /app
-COPY run-dev /bin
-RUN chmod 777 /bin/run-dev
+RUN if -f /app/run-dev; then cp /app/run-dev /bin
+RUN if -f run-dev; then chmod 777 /bin/run-dev
+
 
 ARG bx_dev_user=root
 ARG bx_dev_userid=1000
