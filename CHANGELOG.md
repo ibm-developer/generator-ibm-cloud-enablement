@@ -6,6 +6,10 @@ All notable changes to this project will be documented in this file. See [standa
 ## [0.8.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.5...v0.8.6) (2018-02-15)
 
 
+### Bug Fixes
+
+* escape swift command ([77567e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/pull/232/commits/77567ec94e967448e4716d4594d59ae463a9b770))
+
 
 <a name="0.8.5"></a>
 ## [0.8.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.4...v0.8.5) (2018-02-09)
