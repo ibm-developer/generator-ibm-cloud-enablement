@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.7"></a>
+## [0.8.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.6...v0.8.7) (2018-02-21)
+
+
+### Bug Fixes
+
+* escape swift command ([77567ec](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/77567ec))
+* update kube-related template scripts ([646e78c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/646e78c))
+* update kube-related template scripts -- oops, fix mustache tag syntax ([33f7139](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/33f7139))
+* update kube-related template scripts -- oops, tests.  I'm so ashamed. ([e9ed32a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e9ed32a))
+
+
+
 <a name="0.8.6"></a>
 ## [0.8.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.5...v0.8.6) (2018-02-15)
 
