@@ -19,7 +19,7 @@ spec:
         version: "current"
     spec:
       imagePullSecrets:
-      - name: {{ .Values.image.pullSecret }}
+      - name: "{{tag ' .Values.image.pullSecret '}}"
       containers:
       - name: "{{tag '  .Chart.Name  '}}"
         image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.image.tag '}}"
