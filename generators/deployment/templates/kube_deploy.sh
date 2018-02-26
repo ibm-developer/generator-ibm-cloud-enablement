@@ -19,16 +19,6 @@ else
   echo -e "Namespace ${CLUSTER_NAMESPACE} created."
 fi
 
-echo -e "Configuring access to private image registry from namespace ${CLUSTER_NAMESPACE}"
-echo -e "Checking for presence of ${IMAGE_PULL_SECRET_NAME} imagePullSecret for this toolchain"
-if ! kubectl get secret ${IMAGE_PULL_SECRET_NAME} --namespace ${CLUSTER_NAMESPACE}; then
-  echo -e "${IMAGE_PULL_SECRET_NAME} not found in ${CLUSTER_NAMESPACE}, creating it"
-  # for Container Registry, docker username is 'token' and email does not matter
-  kubectl --namespace ${CLUSTER_NAMESPACE} create secret docker-registry ${IMAGE_PULL_SECRET_NAME} --docker-server=${REGISTRY_URL} --docker-password=${PIPELINE_BLUEMIX_API_KEY} --docker-username=iamapikey --docker-email=a@b.com
-else
-  echo -e "Namespace ${CLUSTER_NAMESPACE} already has an imagePullSecret for this toolchain."
-fi
-
 echo "Configuring Tiller (Helm's server component)"
 helm init --upgrade
 kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system

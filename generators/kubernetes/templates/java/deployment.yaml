@@ -13,8 +13,6 @@ spec:
         app: "{{tag '  .Chart.Name '}}-selector"
         version: "current"
     spec:
-      imagePullSecrets:
-      - name: "{{tag ' .Values.image.pullSecret '}}"
       containers:
       - name: "{{tag '  .Chart.Name  '}}"
         image: "{{tag ' .Values.image.repository '}}:{{tag ' .Values.image.tag '}}"
