@@ -128,13 +128,11 @@ describe('cloud-enablement:deployment', function () {
 				let properties = deployJson.properties;
 				assert(properties['api-key']);
 				assert(properties['image-registry-token']);
-				assert(properties['image-pull-secret-name']);
 				assert(properties['kube-cluster-name']);
 
 				assert(deployJson.required);
 				assert(deployJson.required.includes('api-key'));
 				assert(deployJson.required.includes('image-registry-token'));
-				assert(deployJson.required.includes('image-pull-secret-name'));
 				assert(deployJson.required.includes('kube-cluster-name'));
 
 				let form = deployJson.form;
@@ -147,11 +145,6 @@ describe('cloud-enablement:deployment', function () {
 					return val.key === 'image-registry-token';
 				});
 				assert(formRegistryToken);
-
-				let formPullSecret = form.find(function (val) {
-					return val.key === 'image-pull-secret-name';
-				});
-				assert(formPullSecret);
 
 				let clusterName = form.find(function (val) {
 					return val.key === 'kube-cluster-name';
