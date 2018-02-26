@@ -6,7 +6,6 @@ image:
   repository: {{repositoryURL}}{{#toLowerCase applicationName}}{{/toLowerCase}}
   tag: v1.0.0
   pullPolicy: Always
-  pullSecret: regsecret
   resources:
     requests:
       cpu: 200m

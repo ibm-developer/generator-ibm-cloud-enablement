@@ -38,7 +38,6 @@ build:
       KUBE_CLUSTER_NAME: "{{tag 'deploy.parameters.kube-cluster-name'}}"
       CLUSTER_NAMESPACE: "{{tag 'deploy.parameters.cluster-namespace'}}"
       API_KEY: "{{tag 'deploy.parameters.api-key'}}"
-      IMAGE_PULL_SECRET_NAME: "{{tag 'deploy.parameters.image-pull-secret-name'}}"
       IMAGE_REGISTRY_TOKEN: "{{tag 'deploy.parameters.image-registry-token'}}"
       REGISTRY_NAMESPACE: "{{tag 'deploy.parameters.registry-namespace'}}"
       {{/has}}

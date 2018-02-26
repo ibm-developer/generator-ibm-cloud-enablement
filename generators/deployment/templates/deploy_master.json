@@ -54,11 +54,6 @@
   }, {
     "type": "text",
     "readonly": false,
-    "title": "Name for the imagePullSecret",
-    "key": "image-pull-secret-name"
-  }, {
-    "type": "text",
-    "readonly": false,
     "title": "Kubernetes Cluster Name",
     "key": "kube-cluster-name"
   },
