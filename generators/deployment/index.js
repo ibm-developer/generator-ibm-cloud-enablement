@@ -21,6 +21,7 @@ module.exports = class extends Generator {
 	constructor(args, opts) {
 		super(args, opts);
 		this.opts = opts.cloudContext || opts;
+		this.opts.libertyBeta = opts.libertyBeta
 		if (typeof (opts.bluemix) === 'string') {
 			this.bluemix = JSON.parse(opts.bluemix || '{}');
 		} else if (typeof (opts.bluemix) === 'object') {
@@ -33,13 +34,18 @@ module.exports = class extends Generator {
 		this.manifestConfig.env = {};
 		this.toolchainConfig = {};
 		this.pipelineConfig = {
-			buildJobProps : {artifact_dir: "''"},
+			buildJobProps: {
+				artifact_dir: "''"
+			},
 			triggersType: 'commit'
 		};
-		this.deployment = {type: 'CF', name: this.bluemix.name};
+		this.deployment = {
+			type: 'CF',
+			name: this.bluemix.name
+		};
 
 		this.name = undefined;
-		if(this.bluemix.server) {
+		if (this.bluemix.server) {
 			this.name = this.bluemix.server.name;
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
 			this.deployment = Object.assign(this.deployment, this.bluemix.server.cloudDeploymentOptions);
@@ -95,8 +101,8 @@ module.exports = class extends Generator {
 			Object.assign(this.pipelineConfig.buildJobProps, {
 				build_type: 'shell',
 				script: '|-\n' +
-                '      #!/bin/bash\n' +
-                this.pipelineConfig.postBuildScript
+					'      #!/bin/bash\n' +
+					this.pipelineConfig.postBuildScript
 			});
 		}
 
@@ -118,7 +124,7 @@ module.exports = class extends Generator {
 	}
 
 	_configureJavaCommon() {
-		if(this.opts.appName) {
+		if (this.opts.appName) {
 			this.manifestConfig.name = this.opts.appName;
 			this.name = this.opts.appName;
 		}
@@ -137,8 +143,8 @@ module.exports = class extends Generator {
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',
 			script: '|\n' +
-			'      #!/bin/bash\n' +
-			'      ' + this.pipelineConfig.javaBuildScriptContent
+				'      #!/bin/bash\n' +
+				'      ' + this.pipelineConfig.javaBuildScriptContent
 		};
 	}
 
@@ -150,16 +156,20 @@ module.exports = class extends Generator {
 		let zipPath = `${buildDir}/${this.opts.artifactId}-${this.opts.version}.zip`
 		this.manifestConfig.path = `./${zipPath}`;
 		let excludes = [];
+		if (this.opts.libertyBeta) {
+			this.manifestConfig.env.IBM_LIBERTY_BETA = "true";
+			this.manifestConfig.env.JBP_CONFIG_LIBERTY = "version: +";
+		}
 		if (this.bluemix.cloudant) {
 			excludes.push('cloudantNoSQLDB=config');
 		}
 		if (this.bluemix.objectStorage) {
 			excludes.push('Object-Storage=config');
 		}
-		if(excludes.length === 1) {
+		if (excludes.length === 1) {
 			this.manifestConfig.env.services_autoconfig_excludes = excludes[0];
 		}
-		if(excludes.length === 2) {
+		if (excludes.length === 2) {
 			this.manifestConfig.env.services_autoconfig_excludes = excludes[0] + ' ' + excludes[1];
 		}
 		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + zipPath;
@@ -178,9 +188,9 @@ module.exports = class extends Generator {
 	_configurePython() {
 		// buildpack is left blank; bluemix will auto detect
 		this.manifestConfig.buildpack = 'python_buildpack';
-		this.manifestConfig.command = this.opts.enable
-			? 'echo No run command specified in manifest.yml'
-			: 'python manage.py start 0.0.0.0:$PORT';
+		this.manifestConfig.command = this.opts.enable ?
+			'echo No run command specified in manifest.yml' :
+			'python manage.py start 0.0.0.0:$PORT';
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.manifestConfig.env.FLASK_APP = 'server';
 		this.manifestConfig.env.FLASK_DEBUG = 'false';
@@ -190,9 +200,9 @@ module.exports = class extends Generator {
 	_configureDjango() {
 		// buildpack is left blank; bluemix will auto detect
 		this.manifestConfig.buildpack = 'python_buildpack';
-		this.manifestConfig.command = this.opts.enable
-			? 'echo No run command specified in manifest.yml'
-			: `gunicorn --env DJANGO_SETTINGS_MODULE=${this.bluemix.name}.settings.production ${this.bluemix.name}.wsgi -b 0.0.0.0:$PORT`;
+		this.manifestConfig.command = this.opts.enable ?
+			'echo No run command specified in manifest.yml' :
+			`gunicorn --env DJANGO_SETTINGS_MODULE=${this.bluemix.name}.settings.production ${this.bluemix.name}.wsgi -b 0.0.0.0:$PORT`;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.cfIgnoreContent = ['.pyc', '.egg-info'];
 	}
@@ -208,7 +218,7 @@ module.exports = class extends Generator {
 
 	writing() {
 		//skip writing files if platforms is specified via options and it doesn't include bluemix
-		if(this.opts.platforms && !this.opts.platforms.includes('bluemix')) {
+		if (this.opts.platforms && !this.opts.platforms.includes('bluemix')) {
 			return;
 		}
 		// write manifest.yml file
@@ -220,20 +230,28 @@ module.exports = class extends Generator {
 		}
 
 		// create .bluemix directory for toolchain/devops related files
-		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml',
-			{name: this.name, repoType: this.toolchainConfig.repoType, deployment: this.deployment});
+		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml', {
+			name: this.name,
+			repoType: this.toolchainConfig.repoType,
+			deployment: this.deployment
+		});
 
-		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json',
-			{deployment: this.deployment});
+		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json', {
+			deployment: this.deployment
+		});
 
-		this._writeHandlebarsFile('container_build.sh', '.bluemix/scripts/container_build.sh',
-			{deployment: this.deployment});
+		this._writeHandlebarsFile('container_build.sh', '.bluemix/scripts/container_build.sh', {
+			deployment: this.deployment
+		});
 
-		this._writeHandlebarsFile('kube_deploy.sh', '.bluemix/scripts/kube_deploy.sh',
-			{deployment: this.deployment});
+		this._writeHandlebarsFile('kube_deploy.sh', '.bluemix/scripts/kube_deploy.sh', {
+			deployment: this.deployment
+		});
 
-		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml',
-			{config: this.pipelineConfig, deployment: this.deployment});
+		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml', {
+			config: this.pipelineConfig,
+			deployment: this.deployment
+		});
 	}
 
 	_writeHandlebarsFile(templateFile, destinationFile, data) {
