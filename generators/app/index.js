@@ -30,10 +30,10 @@ module.exports = class extends Generator {
 
 		this.opts = opts;
 
-		const generatorOptionsString = opts.generatorOptions
-		if (generatorOptionsString) {
-			const generatorOptions = JSON.parse(generatorOptionsString)
-			if (generatorOptions && generatorOptions.libertyVersion === 'beta') {
+		const generatorOptions = opts.generatorOptions
+		if (typeof generatorOptions === 'string') {
+			const generatorOptionsObject = JSON.parse(generatorOptions)
+			if (generatorOptionsObject && generatorOptionsObject.libertyVersion === 'beta') {
 				this.opts.libertyBeta = true
 			}
 		}
