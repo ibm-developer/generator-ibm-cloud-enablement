@@ -20,8 +20,12 @@ const Utils = require('../lib/utils');
 module.exports = class extends Generator {
 	constructor(args, opts) {
 		super(args, opts);
-		this.opts = opts.cloudContext || opts;
-		this.opts.libertyBeta = opts.libertyBeta
+		if (opts.cloudContext) {
+			this.opts = opts.cloudContext
+			this.opts.libertyBeta = opts.libertyBeta
+		} else {
+			this.opts = opts
+		}
 		if (typeof (opts.bluemix) === 'string') {
 			this.bluemix = JSON.parse(opts.bluemix || '{}');
 		} else if (typeof (opts.bluemix) === 'object') {
