@@ -161,8 +161,8 @@ module.exports = class extends Generator {
 		this.manifestConfig.path = `./${zipPath}`;
 		let excludes = [];
 		if (this.opts.libertyBeta) {
-			this.manifestConfig.env.IBM_LIBERTY_BETA = "true";
-			this.manifestConfig.env.JBP_CONFIG_LIBERTY = "version: +";
+			this.manifestConfig.env.IBM_LIBERTY_BETA = 'true'
+			this.manifestConfig.env.JBP_CONFIG_LIBERTY = '\"version: +\"'
 		}
 		if (this.bluemix.cloudant) {
 			excludes.push('cloudantNoSQLDB=config');

@@ -145,7 +145,7 @@ describe('cloud-enablement:dockertools', function () {
 
 	/* Common Java Project characteristics: Spring or Liberty, maven or gradle */
 	let javaBuildTypes = ['maven', 'gradle'];
-	let javaFrameworks = ['JAVA', 'SPRING'];
+	let javaFrameworks = ['JAVA', 'libertyBeta', 'SPRING'];
 	javaBuildTypes.forEach(buildType => {
 		javaFrameworks.forEach(language => {
 			describe('cloud-enablement:dockertools for ['+ language +'] project using [' + buildType + ']', function () {
@@ -153,6 +153,9 @@ describe('cloud-enablement:dockertools', function () {
 				let artifactId = 'testArtifact-id';
 				let javaVersion = '1.0-SNAPSHOT';
 				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, artifactId: artifactId, version: javaVersion};
+				if (language === 'libertyBeta') {
+					options.generatorOptions = JSON.stringify({'libertyVersion': 'beta'})
+				}
 
 				beforeEach(function () {
 					return helpers.run(path.join(__dirname, '../generators/app'))
@@ -189,7 +192,8 @@ describe('cloud-enablement:dockertools', function () {
 					it('cli-config file does not have a run-cmd', function () {
 						assert.noFileContent('cli-config.yml', 'run-cmd');
 					});
-				} else  /* language === 'JAVA' */ {
+				} 
+				if (language === 'JAVA' || language === 'libertyBeta') {
 					it('.dockerignore ignores workarea and logs', function () {
 						assert.fileContent('.dockerignore', 'workarea');
 						assert.fileContent('.dockerignore', 'logs');
@@ -209,6 +213,16 @@ describe('cloud-enablement:dockertools', function () {
 					it('Dockerfile-tools contains wlp path', function () {
 						assert.fileContent('Dockerfile-tools', 'wlp/bin');
 					});
+				}
+				if (language === 'JAVA') {
+					it('Dockerfile contains correct Liberty image', function() {
+						assert.fileContent('Dockerfile', 'FROM websphere-liberty:webProfile7')
+					})
+				}
+				if (language === 'libertyBeta') {
+					it('Dockerfile contains correct Liberty beta image', function() {
+						assert.fileContent('Dockerfile', 'FROM websphere-liberty:beta')
+					})
 				}
 
 				if ( buildType === "gradle" ) {
