@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.10-alpha.0"></a>
+## [0.8.10-alpha.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.9...v0.8.10-alpha.0) (2018-03-09)
+
+
+### Bug Fixes
+
+* Add Liberty beta support ([ac5a625](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ac5a625))
+
+
+
 <a name="0.8.9"></a>
 ## [0.8.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.8...v0.8.9) (2018-02-26)
 
