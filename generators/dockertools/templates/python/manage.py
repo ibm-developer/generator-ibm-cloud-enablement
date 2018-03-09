@@ -107,9 +107,8 @@ try:
 		'host': addr[0],
 		'port': addr[1],
 	})
+	cm.run(cmd)
 except:
 	if len(sys.argv) == 1:
 		print(cm.availableCommands())
 	sys.exit(0)
-else:
-	cm.run(cmd)
