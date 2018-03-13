@@ -123,7 +123,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 
 					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType, artifactId: artifactId, version: javaVersion};
 					if (language === 'libertyBeta') {
-						options.generatorOptions = JSON.stringify({'libertyVersion': 'beta'})
+						options.generatorOptions = JSON.stringify({'options':{'libertyVersion': 'beta'}})
 					}
 
 					beforeEach(function () {
