@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.9.0...v0.10.0) (2018-03-13)
+
+
+### Bug Fixes
+
+* Corrected run command location ([0cd12d3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/0cd12d3))
+
+
+### Features
+
+* new function to check for rogue livereload ([3098d8f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3098d8f))
+
+
+
 <a name="0.9.0"></a>
 # [0.9.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.9...v0.9.0) (2018-03-13)
 
