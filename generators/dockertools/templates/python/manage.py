@@ -1,7 +1,7 @@
 import os, sys, argparse, subprocess
 
 # Project defaults
-FLASK_APP = 'server'
+FLASK_APP = 'server/__init__.py'
 DEFAULT_IP = '0.0.0.0:3000'
 
 class Command:

@@ -16,7 +16,7 @@ RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-
 COPY . /app
 <% if (!enable) { %>
 <% if (language === "PYTHON") { %>
-ENV FLASK_APP=server
+ENV FLASK_APP=server/__init__.py
 <% } %>
 <% } %>
 <% if (enable) { %>
@@ -25,6 +25,6 @@ CMD ["echo", "No run command specified in Dockerfile"]
 <% if (language === "PYTHON") { %>
 CMD ["python", "manage.py", "start", "0.0.0.0:<%= port %>"]
 <% } else { %>
-CMD ["gunicorn", "-b", "0.0.0.0:3000", "--env", "DJANGO_SETTINGS_MODULE=<%= name %>.settings.production", "<%= name %>.wsgi"]
+CMD ["gunicorn", "-b", "0.0.0.0:3000", "--env", "DJANGO_SETTINGS_MODULE=<%= name %>.settings.production", "<%= name %>.wsgi", "--timeout 120"]
 <% } %>
 <% } %>

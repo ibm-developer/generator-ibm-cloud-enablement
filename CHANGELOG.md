@@ -2,6 +2,68 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.8.9"></a>
+## [0.8.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.8...v0.8.9) (2018-02-26)
+
+
+### Bug Fixes
+
+* also remove unused env var and script lines ([59e7f01](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/59e7f01))
+
+
+
+<a name="0.8.8"></a>
+## [0.8.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.7...v0.8.8) (2018-02-26)
+
+
+### Bug Fixes
+
+* no need to specify imagePullSecret; assume using 'default' namespace; makes output compatible with both public and private ([95bdb35](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/95bdb35))
+
+
+
+<a name="0.8.7"></a>
+## [0.8.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.6...v0.8.7) (2018-02-21)
+
+
+### Bug Fixes
+
+* escape swift command ([77567ec](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/77567ec))
+* update kube-related template scripts ([646e78c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/646e78c))
+* update kube-related template scripts -- oops, fix mustache tag syntax ([33f7139](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/33f7139))
+* update kube-related template scripts -- oops, tests.  I'm so ashamed. ([e9ed32a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e9ed32a))
+
+
+
+<a name="0.8.6"></a>
+## [0.8.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.5...v0.8.6) (2018-02-15)
+
+
+### Bug Fixes
+
+* escape swift command ([77567e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/pull/232/commits/77567ec94e967448e4716d4594d59ae463a9b770))
+
+
+<a name="0.8.5"></a>
+## [0.8.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.4...v0.8.5) (2018-02-09)
+
+
+### Bug Fixes
+
+* made it so django starter can use run-dev ([27d659a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/27d659a))
+
+
+
+<a name="0.8.4"></a>
+## [0.8.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.3...v0.8.4) (2018-02-09)
+
+
+### Bug Fixes
+
+* fixed FLASK_APP variable and added support for run-dev script ([13930fd](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/13930fd))
+
+
+
 <a name="0.8.3"></a>
 ## [0.8.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.2...v0.8.3) (2018-02-01)
 

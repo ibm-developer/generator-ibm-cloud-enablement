@@ -13,10 +13,6 @@
       "description": "Container Registry access token. Retrievable via [bx cr tokens]",
       "type": "string"
     },
-    "image-pull-secret-name": {
-      "description": "A name for the imagePullSecret which will reference the registry access token",
-      "type": "string"
-    },
     "kube-cluster-name": {
       "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.bluemix.net/containers-kubernetes/home/clusters.",
       "type": "string"
@@ -55,11 +51,6 @@
     "readonly": false,
     "title": "Container Registry access token",
     "key": "image-registry-token"
-  }, {
-    "type": "text",
-    "readonly": false,
-    "title": "Name for the imagePullSecret",
-    "key": "image-pull-secret-name"
   }, {
     "type": "text",
     "readonly": false,
