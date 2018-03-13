@@ -29,12 +29,6 @@ const scaffolderSampleSwift = scaffolderSample.getJson('SWIFT');
 const scaffolderSampleJava = scaffolderSample.getJson('JAVA');
 const scaffolderSampleSpring = scaffolderSample.getJson('SPRING');
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
-const deploymentMongoSample = fs.readFileSync(path.join(__dirname, 'samples/deployment-with-mongo.yaml'), 'utf-8');
-const deploymentMongoJavaSample = fs.readFileSync(path.join(__dirname, 'samples/deployment-with-mongo-java.yaml'), 'utf-8');
-const valuesMongoSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo.yaml'), 'utf-8');
-const valuesMongoJavaSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo-java.yaml'), 'utf-8');
-const valuesMongoSwiftSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo-swift.yaml'), 'utf-8');
-const valuesMongoPythonSample = fs.readFileSync(path.join(__dirname, 'samples/values-with-mongo-python.yaml'), 'utf-8');
 
 const applicationName = 'AcmeProject'; // from sample json files
 const chartLocation = 'chart/' + applicationName.toLowerCase();
@@ -70,7 +64,7 @@ function testOutput() {
 		assert.file(chartLocation + '/templates/basedeployment.yaml');
 	});
 
-	it('has valid kubernetes chart when running helm lint', function(done) {
+	it('has valid kubernetes chart when running helm lint', function (done) {
 		exec('helm lint ' + chartLocation + '/', {maxBuffer: 20 * 1024 * 1024}, (error, stdout) => {
 			error ? done(new Error(stdout)) : done();
 		})
@@ -85,8 +79,33 @@ function assertYmlContentExists(actual, label) {
 	assert.notStrictEqual(actual, undefined, 'Expected ' + label + ' to be defined, it was not');
 }
 
+function assertYmlMongoContent() {
+	it('should have env variables for mongo in deployment and values', function () {
+		const rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
+		const newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
+			.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
+
+		const newvaluesyml = fs.readFileSync(chartLocation + '/values.yaml', 'utf8');
+
+
+		const deploymentyml = yml.safeLoad(newdeploymentyml);
+
+
+		const valuesyml = yml.safeLoad(newvaluesyml);
+
+		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[7].name, 'MONGO_URL');
+		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[7].value, '{{ .Values.services.mongo.url }}');
+		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[8].name, 'MONGO_DB_NAME');
+		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[8].value, '{{ .Values.services.mongo.name }}');
+		assertYmlContentExists(valuesyml.services.mongo, 'services.mongo');
+		assertYmlContent(valuesyml.services.mongo.url, 'mongo', 'services.mongo.url');
+		assertYmlContent(valuesyml.services.mongo.name, 'comments', 'services.mongo.name');
+		assertYmlContent(valuesyml.services.mongo.env, 'production', 'services.mongo.env');
+	});
+}
+
 function assertHpaYmlContent() {
-	it('has templates/hpa.yaml file with correct contents', function() {
+	it('has templates/hpa.yaml file with correct contents', function () {
 		assert.fileContent(chartLocation + '/templates/hpa.yaml', '{{ if .Values.hpa.enabled }}');
 		assert.fileContent(chartLocation + '/templates/hpa.yaml', '{{ if and (eq .Capabilities.KubeVersion.Major "1") (ge .Capabilities.KubeVersion.Minor "8") }}');
 		assert.fileContent(chartLocation + '/templates/hpa.yaml', 'apiVersion: autoscaling/v2beta1\n{{ else }}\napiVersion: autoscaling/v2alpha1\n{{ end }}');
@@ -103,7 +122,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 	let languages = ['JAVA', 'SPRING', 'NODE'];
 	languages.forEach(language => {
-		describe('kubernetes:app with Java-' + language +' project',function () {
+		describe('kubernetes:app with Java-' + language + ' project', function () {
 			let bluemix = language === 'SPRING' ? JSON.stringify(scaffolderSampleSpring) : language === 'JAVA' ? JSON.stringify(scaffolderSampleJava) : JSON.stringify(scaffolderSampleNode);
 			beforeEach(function () {
 				return helpers.run(path.join(__dirname, '../generators/app'))
@@ -119,11 +138,11 @@ describe('cloud-enablement:kubernetes', function () {
 					.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
 				let deploymentyml = yml.safeLoad(newdeploymentyml);
 				let readinessProbe = deploymentyml.spec.template.spec.containers[0].readinessProbe;
-				if(language === 'JAVA') {
+				if (language === 'JAVA') {
 					assertYmlContent(readinessProbe.httpGet.path, '/AcmeProject/health', 'readinessProbe.httpGet.path');
 					assertYmlContent(readinessProbe.httpGet.port, 9080, 'readinessProbe.httpGet.port');
 				}
-				if(language === 'SPRING') {
+				if (language === 'SPRING') {
 					assertYmlContent(readinessProbe.httpGet.path, '/health', 'readinessProbe.httpGet.path');
 					assertYmlContent(readinessProbe.httpGet.port, 8080, 'readinessProbe.httpGet.port');
 				}
@@ -138,30 +157,43 @@ describe('cloud-enablement:kubernetes', function () {
 				assertYmlContentExists(resources.requests.cpu, 'resources.requests.cpu');
 				assertYmlContentExists(resources.requests.memory, 'resources.requests.memory');
 			});
+			it('has deployment.yaml with correct env settings for APM', () => {
+				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
+				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
+					.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
+				let deploymentyml = yml.safeLoad(newdeploymentyml);
+				let spec = deploymentyml.spec.template.spec;
+				assertYmlContent(spec.containers[0].env[1].name, 'APPLICATION_NAME', 'spec.containers[0].env[1].name');
+				assertYmlContent(spec.containers[0].env[2].name, 'IBM_APM_SERVER_URL', 'spec.containers[0].env[2].name');
+				assertYmlContent(spec.containers[0].env[3].name, 'IBM_APM_KEYFILE', 'spec.containers[0].env[3].name');
+				assertYmlContent(spec.containers[0].env[4].name, 'IBM_APM_KEYFILE_PASSWORD', 'spec.containers[0].env[4].name');
+				assertYmlContent(spec.containers[0].env[5].name, 'IBM_APM_INGRESS_URL', 'spec.containers[0].env[5].name');
+				assertYmlContent(spec.containers[0].env[6].name, 'IBM_APM_ACCESS_TOKEN', 'spec.containers[0].env[6].name');
+			});
 
 			it('has service.yaml with correct content', function () {
 				let rawserviceyml = fs.readFileSync(chartLocation + '/templates/service.yaml', 'utf8');
 				let newserviceyml = rawserviceyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
 				let serviceyml = yml.safeLoad(newserviceyml);
-				if(language === 'JAVA') {
+				if (language === 'JAVA') {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 					assertYmlContent(serviceyml.spec.ports[1].name, 'https', 'serviceyml.spec.ports[1].name');
 				}
-				if(language === 'SPRING') {
+				if (language === 'SPRING') {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 					assertYmlContent(serviceyml.spec.ports[1], undefined, 'serviceyml.spec.ports[1]');
 				}
-				if(language === 'NODE') {
+				if (language === 'NODE') {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 				}
 			});
 			it('has values.yaml with correct content', function () {
 				let valuesyml = yml.safeLoad(fs.readFileSync(chartLocation + '/values.yaml', 'utf8'));
-				if(language === 'JAVA') {
+				if (language === 'JAVA') {
 					assertYmlContent(valuesyml.service.servicePort, 9080, 'valuesyml.service.servicePort');
 					assertYmlContent(valuesyml.service.servicePortHttps, 9443, 'valuesyml.service.servicePortHttps');
 				}
-				if(language === 'SPRING') {
+				if (language === 'SPRING') {
 					assertYmlContent(valuesyml.service.servicePort, 8080, 'valuesyml.service.servicePort');
 					assertYmlContent(valuesyml.service.servicePortHttps, undefined, 'valuesyml.service.servicePortHttps');
 				}
@@ -181,28 +213,28 @@ describe('cloud-enablement:kubernetes', function () {
 				assertYmlContent(basedeploymentyml.spec.template.metadata.labels.version, 'base', 'basedeploymentyml.spec.template.metadata.labels.version');
 			});
 			it('has manifests/kube.deploy.yml with correct content', function () {
-				if(language === 'JAVA' || language === 'SPRING') {
+				if (language === 'JAVA' || language === 'SPRING') {
 					assert.file('manifests/kube.deploy.yml');
 					let i = 0;
 					yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
-						switch(i) {
+						switch (i) {
 							case 0:
 								assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-service', 'doc0.data.metadata.name');
-								if(language === 'JAVA') {
+								if (language === 'JAVA') {
 									assertYmlContent(data.spec.ports[0].port, 9080, 'doc0.spec.ports[0].port');
 									assertYmlContent(data.spec.ports[1].port, 9443, 'doc0.spec.ports[1].port');
 								}
-								if(language === 'SPRING') {
+								if (language === 'SPRING') {
 									assertYmlContent(data.spec.ports[0].port, 8080, 'doc0.spec.ports[0].port');
 								}
 								i++;
 								break;
 							case 1:
 								assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-deployment', 'doc1.metadata.name');
-								if(language === 'JAVA') {
+								if (language === 'JAVA') {
 									assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/' + applicationName + '/health', 'doc1.spec.template.spec.containers[0].readinessProbe.httpGet.path');
 								}
-								if(language === 'SPRING') {
+								if (language === 'SPRING') {
 									assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/health', 'doc1.data.spec.template.spec.containers[0].readinessProbe.httpGet.path');
 								}
 								i++;
@@ -214,9 +246,9 @@ describe('cloud-enablement:kubernetes', function () {
 					assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
 				}
 			});
-			if(language === 'JAVA' || language === 'NODE' || language == 'SPRING' ) {
+			if (language === 'JAVA' || language === 'NODE' || language == 'SPRING') {
 				it('Java, Node and Spring have Jenkinsfile with correct content', function () {
-					assert.fileContent('Jenkinsfile', 'image = \''+ applicationName.toLowerCase() + '\'');
+					assert.fileContent('Jenkinsfile', 'image = \'' + applicationName.toLowerCase() + '\'');
 				});
 			}
 		});
@@ -232,7 +264,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file('manifests/kube.deploy.yml');
 			let i = 0;
 			yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
-				switch(i) {
+				switch (i) {
 					case 0:
 						i++;
 						break;
@@ -308,10 +340,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/deployment.yaml');
 		});
 
-		it('should have env variables for mongo in deployment ', function () {
-			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoJavaSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoJavaSample);
-		});
+		assertYmlMongoContent();
 	});
 
 	describe('kubernetes:app with Java project and  unsupported deployment', function () {
@@ -340,10 +369,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have env variables for mongo in deployment and values', function () {
-			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoJavaSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoJavaSample);
-		});
+		assertYmlMongoContent();
 
 	});
 
@@ -373,9 +399,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/deployment.yaml');
 		});
 
-		it('should have env variables for mongo in deployment ', function () {
-			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample)
-		});
+		assertYmlMongoContent();
 	});
 
 	describe('kubernetes:app with Node project and  unsupported deployment', function () {
@@ -405,11 +429,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have env variables for mongo in deployment and values', function () {
-			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample)
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSample);
-		});
-
+		assertYmlMongoContent();
 	});
 
 	describe('kubernetes:app with Swift project', function () {
@@ -431,17 +451,14 @@ describe('cloud-enablement:kubernetes', function () {
 		});
 
 		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation+ '/templates/mongo.deploy.yaml');
+			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
 		it('should have deployment.yaml', function () {
 			assert.file(chartLocation + '/templates/deployment.yaml');
 		});
 
-		it('should have env variables for mongo in deployment ', function () {
-			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftSample);
-		});
+		assertYmlMongoContent();
 	});
 
 	describe('kubernetes:app with Swift project and  unsupported deployment', function () {
@@ -471,10 +488,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have env variables for mongo in deployment and values', function () {
-			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoSwiftSample);
-		});
+		assertYmlMongoContent();
 
 	});
 
@@ -494,10 +508,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/deployment.yaml');
 		});
 
-		it('should have env variables for mongo in deployment ', function () {
-			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoPythonSample);
-		});
+		assertYmlMongoContent();
 	});
 
 	describe('kubernetes:app with Python project and  unsupported deployment', function () {
@@ -527,10 +538,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 		});
 
-		it('should have env variables for mongo in deployment and values', function () {
-			assert.fileContent(chartLocation + '/templates/deployment.yaml', deploymentMongoSample);
-			assert.fileContent(chartLocation + '/values.yaml', valuesMongoPythonSample);
-		});
+		assertYmlMongoContent();
 
 	});
 
@@ -546,9 +554,14 @@ describe('cloud-enablement:kubernetes', function () {
 	describe('cloud-enablement:kubernetes with empty bluemix object', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/kubernetes'))
-				.withOptions({ bluemix: JSON.stringify(
-					{ backendPlatform: "NODE", server: { cloudDeploymentOptions: { imageRegistryNamespace: 'some-test-namespace' } }}
-				), port: '9876' })
+				.withOptions({
+					bluemix: JSON.stringify(
+						{
+							backendPlatform: "NODE",
+							server: {cloudDeploymentOptions: {imageRegistryNamespace: 'some-test-namespace'}}
+						}
+					), port: '9876'
+				})
 		});
 		it('should give us the default output with no project name', function () {
 			assert.file('chart/app');
