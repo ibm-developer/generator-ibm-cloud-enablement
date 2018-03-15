@@ -37,6 +37,8 @@ module.exports = class extends Generator {
 		} else {
 			this.opts = opts.cloudContext || opts;
 		}
+
+		this.opts.libertyBeta = opts.libertyBeta
 	}
 
 	configuring() {

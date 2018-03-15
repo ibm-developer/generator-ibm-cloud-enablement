@@ -153,8 +153,9 @@ describe('cloud-enablement:dockertools', function () {
 				let artifactId = 'testArtifact-id';
 				let javaVersion = '1.0-SNAPSHOT';
 				let options = {bluemix: JSON.stringify(bluemixJson), buildType: buildType, artifactId: artifactId, version: javaVersion};
+
 				if (language === 'libertyBeta') {
-					options.generatorOptions = JSON.stringify({'options':{'libertyVersion': 'beta'}})
+					options.libertyVersion = 'beta'
 				}
 
 				beforeEach(function () {

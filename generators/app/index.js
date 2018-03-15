@@ -30,12 +30,8 @@ module.exports = class extends Generator {
 
 		this.opts = opts;
 
-		const generatorOptions = opts.generatorOptions
-		if (typeof generatorOptions === 'string') {
-			const generatorOptionsObject = JSON.parse(generatorOptions)
-			if (generatorOptionsObject.options.libertyVersion === 'beta') {
-				this.opts.libertyBeta = true
-			}
+		if (this.options.libertyVersion === 'beta') {
+			this.options.libertyBeta = true
 		}
 
 		this.shouldPrompt = this.opts.bluemix ? false : true;

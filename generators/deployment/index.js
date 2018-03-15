@@ -22,7 +22,7 @@ module.exports = class extends Generator {
 		super(args, opts);
 		if (opts.cloudContext) {
 			this.opts = opts.cloudContext
-			this.opts.libertyBeta = opts.libertyBeta
+			this.opts.libertyVersion = opts.libertyVersion
 		} else {
 			this.opts = opts
 		}
@@ -160,7 +160,7 @@ module.exports = class extends Generator {
 		let zipPath = `${buildDir}/${this.opts.artifactId}-${this.opts.version}.zip`
 		this.manifestConfig.path = `./${zipPath}`;
 		let excludes = [];
-		if (this.opts.libertyBeta) {
+		if (this.opts.libertyVersion === 'beta') {
 			this.manifestConfig.env.IBM_LIBERTY_BETA = 'true'
 			this.manifestConfig.env.JBP_CONFIG_LIBERTY = '\"version: +\"'
 		}
