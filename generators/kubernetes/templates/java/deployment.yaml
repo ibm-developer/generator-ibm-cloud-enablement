@@ -39,10 +39,6 @@ spec:
         env:
           - name: PORT
             value: "{{tag ' .Values.service.servicePort '}}"
-          {{#each storageDeploys.env}}
-          - name: {{@key}}
-            value: {{{this}}}
-          {{/each}}
           - name: APPLICATION_NAME
             value: "{{tag ' .Release.Name '}}"
           - name: IBM_APM_SERVER_URL
@@ -75,3 +71,7 @@ spec:
                 name: apm-server-config
                 key: ibm_apm_access_token
                 optional: true
+          {{#each storageDeploys.env}}
+          - name: {{@key}}
+            value: {{{this}}}
+          {{/each}}
