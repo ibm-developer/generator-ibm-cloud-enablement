@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.10.1"></a>
+## [0.10.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.10.0...v0.10.1) (2018-03-14)
+
+
+### Bug Fixes
+
+* change shell commands and port num ([ee04eab](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ee04eab))
+
+
+
+<a name="0.10.0"></a>
+# [0.10.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.9.0...v0.10.0) (2018-03-13)
+
+
+### Bug Fixes
+
+* Corrected run command location ([0cd12d3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/0cd12d3))
+
+
+### Features
+
+* new function to check for rogue livereload ([3098d8f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3098d8f))
+
+
+
+<a name="0.9.0"></a>
+# [0.9.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.9...v0.9.0) (2018-03-13)
+
+
+### Features
+
+* **apm:** add env variables ([d7a242f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/d7a242f))
+
+
+
 <a name="0.8.9"></a>
 ## [0.8.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.8.8...v0.8.9) (2018-02-26)
 

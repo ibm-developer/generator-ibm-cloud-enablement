@@ -1,4 +1,4 @@
-import os, sys, argparse, subprocess
+import os, sys, argparse, subprocess, signal
 
 # Project defaults
 FLASK_APP = 'server/__init__.py'
@@ -97,7 +97,17 @@ parser = argparse.ArgumentParser(description=cm.availableCommands(),
 parser.add_argument("subcommand", help="subcommand to run (see list above)")
 parser.add_argument("ipaddress", nargs='?', default=DEFAULT_IP,
 					help="address and port to run on (i.e. {0})".format(DEFAULT_IP))
-
+def livereload_check():
+	check = subprocess.call("lsof -n -i4TCP:3000", shell=True)
+	if (check == 0):
+		output = subprocess.check_output("pgrep Python", shell=True)
+		pypid = int(output)
+		os.kill(pypid, signal.SIGKILL)
+		print("Discovered rogue Python process: {0}".format(pypid))
+		print("Killing PID {0}...".format(pypid))
+	else: 
+		print(" No rogue Python process running")
+		
 # Take in command line input for configuration
 try:
 	args = parser.parse_args()
@@ -107,9 +117,11 @@ try:
 		'host': addr[0],
 		'port': addr[1],
 	})
+	cm.run(cmd)
+except KeyboardInterrupt:
+	if 'FLASK_LIVE_RELOAD' in os.environ and os.environ['FLASK_LIVE_RELOAD'] == 'true':
+		livereload_check()
 except:
 	if len(sys.argv) == 1:
 		print(cm.availableCommands())
 	sys.exit(0)
-else:
-	cm.run(cmd)
