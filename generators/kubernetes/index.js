@@ -157,6 +157,15 @@ module.exports = class extends Generator {
 				process : true
 			}
 		}
+		
+		// Tested this works OK with Microservice Builder/Microclimate as well
+		if (this.opts.language === 'swift') {
+			this.fileLocations.jenkinsfile = {
+				source : 'swift/Jenkinsfile',
+				target : 'Jenkinsfile',
+				process : true
+			}
+		}
 		else if (this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';
 			this.fileLocations.basedeployment.source = 'java/basedeployment.yaml';
