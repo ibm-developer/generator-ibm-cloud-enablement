@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.11.0"></a>
+# [0.11.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.10.1...v0.11.0) (2018-03-22)
+
+
+### Features
+
+* **swift:** add Jenkinsfile for deployment ([79373cb](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/79373cb))
+
+
+
 <a name="0.10.1"></a>
 ## [0.10.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.10.0...v0.10.1) (2018-03-14)
 
