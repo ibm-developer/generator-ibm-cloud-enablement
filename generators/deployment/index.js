@@ -26,6 +26,7 @@ module.exports = class extends Generator {
 		} else if (typeof (opts.bluemix) === 'object') {
 			this.bluemix = opts.bluemix;
 		}
+
 	}
 
 	configuring() {
@@ -102,10 +103,45 @@ module.exports = class extends Generator {
 
 	}
 
+	/***
+	 * Get the highest memory size available 
+	 * 
+	 * @params manifestMemoryConfig {string} the memory allocaated h
+	 */
+	_getHighestMemorySize(manifestMemoryConfig, userDefinedMinMemory){
+		if(!userDefinedMinMemory) {
+			return manifestMemoryConfig;
+		} else if (!manifestMemoryConfig && userDefinedMinMemory) {
+			return userDefinedMinMemory;
+		}
+			
+		const memMap = {
+			k: 1,
+			m: 2,
+			g: 3
+		};
+		const manifestSize = manifestMemoryConfig.replace(/[^MmGgKk]/g, '');
+		const userDefinedMinSize = userDefinedMinMemory.replace(/[^MmGgKk]/g, '');
+		let highestAvailableSize;
+ 
+		if(memMap[manifestSize.toLowerCase()] > memMap[userDefinedMinSize.toLowerCase()]){
+			highestAvailableSize = manifestMemoryConfig;
+		} else if (memMap[manifestSize.toLowerCase()] < memMap[userDefinedMinSize.toLowerCase()]){
+			highestAvailableSize = userDefinedMinMemory;
+		} else {
+			const manifestValue = parseInt(manifestSize.replace(/[M,m,G,g,K,k]/g, ''));
+			const definedValue = parseInt(userDefinedMinSize.replace(/[M,m,G,g,K,k]/g, ''));
+
+			highestAvailableSize = manifestValue > definedValue ? manifestMemoryConfig : userDefinedMinMemory;
+		}
+
+		return highestAvailableSize;
+	}
+
 	_configureNode() {
 		this.manifestConfig.buildpack = 'sdk-for-nodejs';
 		this.manifestConfig.command = 'npm start';
-		this.manifestConfig.memory = this.manifestConfig.memory || '384M';
+		this.manifestConfig.memory = this._getHighestMemorySize(this.manifestConfig.memory, this.opts.nodeCFMinMemory);
 		this.cfIgnoreContent = ['.git/', 'node_modules/', 'test/', 'vcap-local.js'];
 	}
 
