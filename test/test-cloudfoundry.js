@@ -103,6 +103,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
 		});
+
 	});
 
 	let javaFrameworks = ['JAVA', 'SPRING'];
@@ -289,6 +290,29 @@ describe('cloud-enablement:cloudfoundry', function () {
 			assert.fileContent('manifest.yml', 'random-route: true');
 			assert.noFileContent('manifest.yml', 'env:');
 		});
+
+		it('toolchain.yml repo type is link', function () {
+			assert.file('.bluemix/toolchain.yml');
+			assert.fileContent('.bluemix/toolchain.yml', 'type: link');
+		});
+	});
+	describe('cloud-enablement:cloudfoundry with node and minimum memory defined', function () {
+		const  minMem = '384M';
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNodeNoServer), repoType: "link", nodeCFMinMemory: minMem});
+		});
+
+		it('manifest has no server details', function () {
+			assert.file('manifest.yml');
+			assert.fileContent('manifest.yml', 'name: AcmeProject');
+			assert.fileContent('manifest.yml', 'random-route: true');
+			assert.fileContent('manifest.yml', `memory: ${minMem}`); 
+			assert.noFileContent('manifest.yml', 'env:');
+		});
+
+		
 
 		it('toolchain.yml repo type is link', function () {
 			assert.file('.bluemix/toolchain.yml');
