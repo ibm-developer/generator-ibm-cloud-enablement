@@ -30,13 +30,17 @@ module.exports = class extends Generator {
 
 		this.opts = opts;
 
+		if (this.options.libertyVersion === 'beta') {
+			this.options.libertyBeta = true
+		}
+
 		this.shouldPrompt = this.opts.bluemix ? false : true;
 
 		/*
 		Yeoman copies the opts when doing compose with so create own object reference 
 		that can be updated in prompting
 		*/
-		if(this.opts.bluemix) {
+		if (this.opts.bluemix) {
 			this.bluemix = this.opts.bluemix;
 		} else {
 			this.bluemix = {};
@@ -83,8 +87,7 @@ module.exports = class extends Generator {
 		return this.prompt(prompts).then(this._processAnswers.bind(this));
 	}
 
-	configuring() {
-	}
+	configuring() {}
 
 	_processAnswers(answers) {
 		this.bluemix.backendPlatform = answers.language;
