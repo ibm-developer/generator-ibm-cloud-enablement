@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.12.0"></a>
+# [0.12.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.11.0...v0.12.0) (2018-03-23)
+
+
+### Features
+
+* **node:** added option to set minimum memory for node cf deployment ([90ff990](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/90ff990))
+
+
+
 <a name="0.11.0"></a>
 # [0.11.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.10.1...v0.11.0) (2018-03-22)
 
