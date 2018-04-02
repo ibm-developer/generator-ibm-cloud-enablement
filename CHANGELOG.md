@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.13.2"></a>
+## [0.13.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.13.1...v0.13.2) (2018-04-02)
+
+
+### Bug Fixes
+
+* **apm:** remove duplicate apm key-value pairs in deployment.yaml ([b1bb232](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b1bb232))
+
+
+
 <a name="0.13.1"></a>
 ## [0.13.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.12.0...v0.13.1) (2018-03-27)
 
