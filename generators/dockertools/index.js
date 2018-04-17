@@ -167,7 +167,7 @@ module.exports = class extends Generator {
 			containerPathRun: '/app',
 			containerPathTools: '/app',
 			containerPortMap: `${port}:${port}`,
-			containerPortMapDebug: '5858:5858',
+			containerPortMapDebug: '9229:9229',
 			dockerFileRun: 'Dockerfile',
 			dockerFileTools: 'Dockerfile-tools',
 			imageNameRun: `${applicationName.toLowerCase()}-express-run`,
