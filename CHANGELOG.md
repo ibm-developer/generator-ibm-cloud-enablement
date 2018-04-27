@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.14.0"></a>
+# [0.14.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.13.7...v0.14.0) (2018-04-27)
+
+
+### Features
+
+* password no longer required for sudo in tools container ([39c1e14](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/39c1e14))
+
+
+
 <a name="0.13.7"></a>
 ## [0.13.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.13.6...v0.13.7) (2018-04-17)
 
