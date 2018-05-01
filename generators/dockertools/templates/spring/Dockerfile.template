@@ -1,5 +1,5 @@
 FROM ibmjava:8-sfj
-MAINTAINER IBM Java engineering at IBM Cloud
+LABEL maintainer="IBM Java Engineering at IBM Cloud"
 
 {{#has buildType 'maven'}}
 COPY target/{{artifactId}}-{{version}}.jar /app.jar
