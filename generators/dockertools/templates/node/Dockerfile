@@ -1,4 +1,4 @@
-FROM ibmcom/ibmnode
+FROM node:8
 
 ADD . /app
 
