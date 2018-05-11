@@ -31,7 +31,18 @@ function sanitizeAlphaNum(name) {
 	return (cleanName || 'APP');
 }
 
+function createUniqueName(name) {
+	const hexString = new Buffer(name, 'base64').toString('hex');
+
+	const chars = hexString.length > 5 ? 5 : 4;
+
+	return new Buffer(name, 'base64').toString('hex').substring(0,chars);
+
+}
+
 module.exports = {
-	sanitizeAlphaNum: sanitizeAlphaNum,
-	sanitizeAlphaNumLowerCase: sanitizeAlphaNumLowerCase
+	sanitizeAlphaNum,
+	sanitizeAlphaNumLowerCase,
+	createUniqueName
+
 };

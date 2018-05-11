@@ -204,10 +204,11 @@ module.exports = class extends Generator {
 
 		if(this.opts.storages){
 			this.opts.storages.forEach(storage => {
+				const uniqueServiceSuffix = `${storage}-${Utils.createUniqueName(this.bluemix.name)}`;
 				if(_.includes(supportingStorageTypes, storage)){
-					this.fs.copy(
+					this.fs.copyTpl(
 						this.templatePath(STORAGE_DIR + storage + DEPLOYMENT_SUFFIX),
-						this.destinationPath(chartDir + '/templates/' + storage + DEPLOYMENT_SUFFIX));
+						this.destinationPath(chartDir + '/templates/' + storage + DEPLOYMENT_SUFFIX), {uniqueServiceSuffix});
 				} else {
 					console.error(storage + ' is not supported');
 				}

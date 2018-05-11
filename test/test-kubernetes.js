@@ -81,17 +81,17 @@ function assertYmlContentExists(actual, label) {
 
 function assertYmlMongoContent() {
 	it('should have env variables for mongo in deployment and values', function () {
-		const rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-		const newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
+		let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
+		let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
 			.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
 
-		const newvaluesyml = fs.readFileSync(chartLocation + '/values.yaml', 'utf8');
+		let newvaluesyml = fs.readFileSync(chartLocation + '/values.yaml', 'utf8');
 
 
-		const deploymentyml = yml.safeLoad(newdeploymentyml);
+		let deploymentyml = yml.safeLoad(newdeploymentyml);
 
 
-		const valuesyml = yml.safeLoad(newvaluesyml);
+		let valuesyml = yml.safeLoad(newvaluesyml);
 
 		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[7].name, 'MONGO_URL');
 		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[7].value, '{{ .Values.services.mongo.url }}');
@@ -101,6 +101,9 @@ function assertYmlMongoContent() {
 		assertYmlContent(valuesyml.services.mongo.url, 'mongo', 'services.mongo.url');
 		assertYmlContent(valuesyml.services.mongo.name, 'comments', 'services.mongo.name');
 		assertYmlContent(valuesyml.services.mongo.env, 'production', 'services.mongo.env');
+
+
+
 	});
 }
 
