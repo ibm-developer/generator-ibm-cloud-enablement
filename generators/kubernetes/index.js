@@ -78,7 +78,8 @@ module.exports = class extends Generator {
 			hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
 			istio: {source : 'istio.yaml', target : 'chartDir/templates/istio.yaml', process: true},
 			basedeployment: {source : 'basedeployment.yaml', target : 'chartDir/templates/basedeployment.yaml', process: true},
-			values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true}
+			values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true},
+			bindings: {source : 'bindings.yaml', target : 'chartDir/bindings.yaml', process: true}
 		};
 	}
 

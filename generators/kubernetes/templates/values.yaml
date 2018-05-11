@@ -44,3 +44,5 @@ base:
 istio:
   enabled: false
   weight: 100
+generatedBindings:
+  enabled: true
