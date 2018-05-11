@@ -74,4 +74,5 @@ spec:
           {{#each storageDeploys.env}}
           - name: {{@key}}
             value: {{{this}}}
+            optional: true
           {{/each}}
