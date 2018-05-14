@@ -3,7 +3,7 @@ FROM websphere-liberty:beta
 {{else}}
 FROM websphere-liberty:webProfile7
 {{/libertyBeta}}
-MAINTAINER IBM Java engineering at IBM Cloud
+LABEL maintainer="IBM Java Engineering at IBM Cloud"
 {{#has buildType 'maven'}}
 COPY /target/liberty/wlp/usr/servers/defaultServer /config/
 {{#javametrics}}
