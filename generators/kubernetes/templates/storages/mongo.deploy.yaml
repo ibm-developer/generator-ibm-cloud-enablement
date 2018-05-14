@@ -29,7 +29,7 @@ spec:
         app: "mongo-selector"
     spec:
       containers:
-      - name: mongo
+      - name: <%= uniqueServiceSuffix %>
         image: mongo:latest
         # resources:
         #   requests:
