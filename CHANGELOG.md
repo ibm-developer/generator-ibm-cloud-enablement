@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.14.1"></a>
+## [0.14.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.14.0...v0.14.1) (2018-05-14)
+
+
+### Bug Fixes
+
+* **services:** Make service names from docker images unique ([cd845d7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/cd845d7))
+
+
+
 <a name="0.14.0"></a>
 # [0.14.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.13.7...v0.14.0) (2018-04-27)
 
