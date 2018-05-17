@@ -65,8 +65,6 @@ module.exports = class extends Generator {
 		} else {
 			this.opts = opts.cloudContext || opts;
 		}
-
-		this.opts.storageDeploys = {env: {}};
 	}
 
 
@@ -95,16 +93,6 @@ module.exports = class extends Generator {
 		this.opts.chartName = Utils.sanitizeAlphaNumLowerCase(this.opts.applicationName);
 
 		this.opts.storages = typeof(this.opts.storages) === 'string' ? JSON.parse(this.opts.storages || '[]') : this.opts.storages;
-		if(this.opts.storages) {
-			this.opts.storages.forEach(storage => {
-				switch(storage) {
-					case 'mongo' :
-						this.opts.storageDeploys.env.MONGO_URL = "\"{{ .Values.services.mongo.url }}\"";
-						this.opts.storageDeploys.env.MONGO_DB_NAME = "\"{{ .Values.services.mongo.name }}\"";
-						break;
-				}
-			});
-		}
 
 		this.opts.servicePorts = {};
 		//use port if passed in

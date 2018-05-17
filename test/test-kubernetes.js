@@ -47,6 +47,11 @@ function testOutput() {
 		assert.file(valuesFile);
 	});
 
+	it('has kubernetes config for bindings.yaml', function () {
+		let valuesFile = chartLocation + '/bindings.yaml';
+		assert.file(valuesFile);
+	});
+
 	it('has kubernetes config for deployment', function () {
 		assert.file(chartLocation + '/templates/deployment.yaml');
 	});
@@ -79,30 +84,33 @@ function assertYmlContentExists(actual, label) {
 	assert.notStrictEqual(actual, undefined, 'Expected ' + label + ' to be defined, it was not');
 }
 
+// We rely on running helm lint to ensure the charts are valid.
+// Here, we're commenting out the block processing that helm would
+// perform so that we can evaluate content as tho it were normal yaml
+function getSafeYaml(fileName) {
+	const rawyml = fs.readFileSync(fileName, 'utf8');
+
+	const newyml = rawyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
+		.replace(/^{{(-? if)/gm, '#$1')
+		.replace(/^{{ else/gm,  '# else')
+		.replace(/^{{(-? end)/gm, '#$1')
+		.replace(/{{.Files/, '#.Files');
+
+	return  yml.safeLoad(newyml);
+}
+
 function assertYmlMongoContent() {
 	it('should have env variables for mongo in deployment and values', function () {
-		let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-		let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
-			.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
+		const valuesyml = getSafeYaml(chartLocation + '/values.yaml');
 
-		let newvaluesyml = fs.readFileSync(chartLocation + '/values.yaml', 'utf8');
-
-
-		let deploymentyml = yml.safeLoad(newdeploymentyml);
-
-
-		let valuesyml = yml.safeLoad(newvaluesyml);
-
-		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[7].name, 'MONGO_URL');
-		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[7].value, '{{ .Values.services.mongo.url }}');
-		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[8].name, 'MONGO_DB_NAME');
-		assertYmlContent(deploymentyml.spec.template.spec.containers[0].env[8].value, '{{ .Values.services.mongo.name }}');
+		assert.fileContent(chartLocation + '/bindings.yaml', '- name: MONGO_URL');
+		assert.fileContent(chartLocation + '/bindings.yaml', '  value: {{ .Values.services.mongo.url }}');
+		assert.fileContent(chartLocation + '/bindings.yaml', '- name: MONGO_DB_NAME');
+		assert.fileContent(chartLocation + '/bindings.yaml', '  value: {{ .Values.services.mongo.name }}');
 		assertYmlContentExists(valuesyml.services.mongo, 'services.mongo');
 		assertYmlContent(valuesyml.services.mongo.url, 'mongo', 'services.mongo.url');
 		assertYmlContent(valuesyml.services.mongo.name, 'comments', 'services.mongo.name');
 		assertYmlContent(valuesyml.services.mongo.env, 'production', 'services.mongo.env');
-
-
 
 	});
 }
@@ -135,11 +143,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 			testOutput();
 			it('has deployment.yaml with correct readinessProbe', function () {
-				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-				// escape double quotes and comment out helm conditionals so it can be parsed by js-yaml
-				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
-					.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
-				let deploymentyml = yml.safeLoad(newdeploymentyml);
+				let deploymentyml = getSafeYaml(chartLocation + '/templates/deployment.yaml');
 				let readinessProbe = deploymentyml.spec.template.spec.containers[0].readinessProbe;
 				if (language === 'JAVA') {
 					assertYmlContent(readinessProbe.httpGet.path, '/AcmeProject/health', 'readinessProbe.httpGet.path');
@@ -150,34 +154,29 @@ describe('cloud-enablement:kubernetes', function () {
 					assertYmlContent(readinessProbe.httpGet.port, 8080, 'readinessProbe.httpGet.port');
 				}
 			});
+
 			it('has deployment.yaml with correct hpa settings', () => {
-				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-				// escape double quotes and comment out helm conditionals so it can be parsed by js-yaml
-				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
-					.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
-				let deploymentyml = yml.safeLoad(newdeploymentyml);
+				let deploymentyml = getSafeYaml(chartLocation + '/templates/deployment.yaml');
 				let resources = deploymentyml.spec.template.spec.containers[0].resources;
 				assertYmlContentExists(resources.requests.cpu, 'resources.requests.cpu');
 				assertYmlContentExists(resources.requests.memory, 'resources.requests.memory');
 			});
+
 			it('has deployment.yaml with correct env settings for APM', () => {
-				let rawdeploymentyml = fs.readFileSync(chartLocation + '/templates/deployment.yaml', 'utf8');
-				let newdeploymentyml = rawdeploymentyml.replace('"+" "_"', '\\"+\\" \\"_\\"')
-					.replace('{{ if', '#').replace('{{ else', '#').replace('{{ end', '#');
-				let deploymentyml = yml.safeLoad(newdeploymentyml);
+				let deploymentyml = getSafeYaml(chartLocation + '/templates/deployment.yaml');
 				let spec = deploymentyml.spec.template.spec;
 				assertYmlContent(spec.containers[0].env[1].name, 'APPLICATION_NAME', 'spec.containers[0].env[1].name');
-				assertYmlContent(spec.containers[0].env[2].name, 'IBM_APM_SERVER_URL', 'spec.containers[0].env[2].name');
-				assertYmlContent(spec.containers[0].env[3].name, 'IBM_APM_KEYFILE', 'spec.containers[0].env[3].name');
-				assertYmlContent(spec.containers[0].env[4].name, 'IBM_APM_KEYFILE_PASSWORD', 'spec.containers[0].env[4].name');
-				assertYmlContent(spec.containers[0].env[5].name, 'IBM_APM_INGRESS_URL', 'spec.containers[0].env[5].name');
-				assertYmlContent(spec.containers[0].env[6].name, 'IBM_APM_ACCESS_TOKEN', 'spec.containers[0].env[6].name');
+
+				let bindingsyml = getSafeYaml(chartLocation + '/bindings.yaml');
+				assertYmlContent(bindingsyml[0].name, 'IBM_APM_SERVER_URL', 'bindingsyml[0].name');
+				assertYmlContent(bindingsyml[1].name, 'IBM_APM_KEYFILE', 'bindingsyml[1].name');
+				assertYmlContent(bindingsyml[2].name, 'IBM_APM_KEYFILE_PASSWORD', 'bindingsyml[2].name');
+				assertYmlContent(bindingsyml[3].name, 'IBM_APM_INGRESS_URL', 'bindingsyml[3].name');
+				assertYmlContent(bindingsyml[4].name, 'IBM_APM_ACCESS_TOKEN', 'bindingsyml[4].name');
 			});
 
 			it('has service.yaml with correct content', function () {
-				let rawserviceyml = fs.readFileSync(chartLocation + '/templates/service.yaml', 'utf8');
-				let newserviceyml = rawserviceyml.replace('"+" "_"', '\\"+\\" \\"_\\"');
-				let serviceyml = yml.safeLoad(newserviceyml);
+				let serviceyml = getSafeYaml(chartLocation + '/templates/service.yaml');
 				if (language === 'JAVA') {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 					assertYmlContent(serviceyml.spec.ports[1].name, 'https', 'serviceyml.spec.ports[1].name');
@@ -190,8 +189,9 @@ describe('cloud-enablement:kubernetes', function () {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 				}
 			});
+
 			it('has values.yaml with correct content', function () {
-				let valuesyml = yml.safeLoad(fs.readFileSync(chartLocation + '/values.yaml', 'utf8'));
+				let valuesyml = getSafeYaml(chartLocation + '/values.yaml');
 				if (language === 'JAVA') {
 					assertYmlContent(valuesyml.service.servicePort, 9080, 'valuesyml.service.servicePort');
 					assertYmlContent(valuesyml.service.servicePortHttps, 9443, 'valuesyml.service.servicePortHttps');
@@ -204,17 +204,18 @@ describe('cloud-enablement:kubernetes', function () {
 				assertYmlContent(valuesyml.base.enabled, false, 'valuesyml.base.enabled');
 				assertYmlContent(valuesyml.image.resources.requests.cpu, '200m', 'valuesyml.image.resources.requests.cpu');
 			});
+
 			it('has basedeployment.yaml with correct content', function () {
-				let rawbasedeploymentyml = fs.readFileSync(chartLocation + '/templates/basedeployment.yaml', 'utf8');
-				let newbasedeploymentyml = rawbasedeploymentyml.replace('{{ if .Values.base.enabled }}', '')
-					.replace('{{ if .Values.istio.enabled }}', '').replace('{{ else }}', '').replace('{{ end }}', '').replace('{{ end }}', '');
-				let basedeploymentyml = yml.safeLoad(newbasedeploymentyml);
-				assert.ok(-1 != newbasedeploymentyml.search('replicas: {{ .Values.base.replicaCount }}'));
+				let basedeploymentyml = getSafeYaml(chartLocation + '/templates/basedeployment.yaml');
+
+				assert.fileContent(chartLocation + '/templates/basedeployment.yaml', 'replicas: {{ .Values.base.replicaCount }}');
+
 				assertYmlContent(basedeploymentyml.metadata.name, '{{  .Chart.Name }}-basedeployment', 'basedeploymentyml.metadata.name');
 				assertYmlContent(basedeploymentyml.spec.template.spec.containers[0].image, '{{ .Values.image.repository }}:{{ .Values.base.image.tag }}',
 					'basedeploymentyml.spec.template.spec.containers.image');
 				assertYmlContent(basedeploymentyml.spec.template.metadata.labels.version, 'base', 'basedeploymentyml.spec.template.metadata.labels.version');
 			});
+
 			it('has manifests/kube.deploy.yml with correct content', function () {
 				if (language === 'JAVA' || language === 'SPRING') {
 					assert.file('manifests/kube.deploy.yml');
@@ -319,6 +320,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/hpa.yaml');
 			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
 			assert.file(chartLocation + '/templates/istio.yaml');
+			assert.file(chartLocation + '/bindings.yaml');
 			assert.file(chartLocation + '/values.yaml');
 			assert.file(chartLocation + '/Chart.yaml');
 			assert.file('Jenkinsfile');

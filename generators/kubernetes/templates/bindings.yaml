@@ -28,8 +28,9 @@
       name: apm-server-config
       key: ibm_apm_access_token
       optional: true
-{{#each storageDeploys.env}}
-- name: {{@key}}
-  value: {{{this}}}
-  optional: true
-{{/each}}
+{{#has storages 'mongo'}}
+- name: MONGO_URL
+  value: {{tag ' .Values.services.mongo.url '}}
+- name: MONGO_DB_NAME
+  value: {{tag ' .Values.services.mongo.name '}}
+{{/has}}
