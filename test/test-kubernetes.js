@@ -69,9 +69,27 @@ function testOutput() {
 		assert.file(chartLocation + '/templates/basedeployment.yaml');
 	});
 
-	it('has valid kubernetes chart when running helm lint', function (done) {
+	it('has valid helm chart when running helm lint', function (done) {
 		exec('helm lint ' + chartLocation + '/', {maxBuffer: 20 * 1024 * 1024}, (error, stdout) => {
 			error ? done(new Error(stdout)) : done();
+		})
+	});
+
+	it('renders a valid chart using helm template', function (done) {
+		exec('helm template ' + chartLocation + '/', {maxBuffer: 20 * 1024 * 1024}, (error, stdout) => {
+			// Uncomment to view locally rendered helm charts
+			// console.log(stdout);
+			if ( error ) {
+				done(new Error(stdout))
+			} else {
+				// template command will render two charts: service and Deployment
+				let charts = yml.safeLoadAll(stdout);
+				assertYmlContent(charts[1].kind, 'Deployment', 'charts[1].kind');
+				// bindings (including APM attributes) should have been rendered in-line in deployment.yaml
+				assertYmlContent(charts[1].spec.template.spec.containers[0].env[2].name, 'IBM_APM_SERVER_URL',
+												'charts[1].spec.template.spec.containers[0].env[2].name');
+				done();
+			}
 		})
 	});
 }
@@ -103,10 +121,8 @@ function assertYmlMongoContent() {
 	it('should have env variables for mongo in deployment and values', function () {
 		const valuesyml = getSafeYaml(chartLocation + '/values.yaml');
 
-		assert.fileContent(chartLocation + '/bindings.yaml', '- name: MONGO_URL');
-		assert.fileContent(chartLocation + '/bindings.yaml', '  value: {{ .Values.services.mongo.url }}');
-		assert.fileContent(chartLocation + '/bindings.yaml', '- name: MONGO_DB_NAME');
-		assert.fileContent(chartLocation + '/bindings.yaml', '  value: {{ .Values.services.mongo.name }}');
+		assert.fileContent(chartLocation + '/bindings.yaml', '- name: MONGO_URL\n  value: {{ .Values.services.mongo.url }}');
+		assert.fileContent(chartLocation + '/bindings.yaml', '- name: MONGO_DB_NAME\n  value: {{ .Values.services.mongo.name }}');
 		assertYmlContentExists(valuesyml.services.mongo, 'services.mongo');
 		assertYmlContent(valuesyml.services.mongo.url, 'mongo', 'services.mongo.url');
 		assertYmlContent(valuesyml.services.mongo.name, 'comments', 'services.mongo.name');
