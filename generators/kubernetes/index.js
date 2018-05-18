@@ -65,8 +65,6 @@ module.exports = class extends Generator {
 		} else {
 			this.opts = opts.cloudContext || opts;
 		}
-
-		this.opts.storageDeploys = {env: {}};
 	}
 
 
@@ -78,7 +76,8 @@ module.exports = class extends Generator {
 			hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
 			istio: {source : 'istio.yaml', target : 'chartDir/templates/istio.yaml', process: true},
 			basedeployment: {source : 'basedeployment.yaml', target : 'chartDir/templates/basedeployment.yaml', process: true},
-			values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true}
+			values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true},
+			bindings: {source : 'bindings.yaml', target : 'chartDir/bindings.yaml', process: true}
 		};
 	}
 
@@ -94,16 +93,6 @@ module.exports = class extends Generator {
 		this.opts.chartName = Utils.sanitizeAlphaNumLowerCase(this.opts.applicationName);
 
 		this.opts.storages = typeof(this.opts.storages) === 'string' ? JSON.parse(this.opts.storages || '[]') : this.opts.storages;
-		if(this.opts.storages) {
-			this.opts.storages.forEach(storage => {
-				switch(storage) {
-					case 'mongo' :
-						this.opts.storageDeploys.env.MONGO_URL = "\"{{ .Values.services.mongo.url }}\"";
-						this.opts.storageDeploys.env.MONGO_DB_NAME = "\"{{ .Values.services.mongo.name }}\"";
-						break;
-				}
-			});
-		}
 
 		this.opts.servicePorts = {};
 		//use port if passed in
