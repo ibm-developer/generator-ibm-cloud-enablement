@@ -1,0 +1,8 @@
+{
+  "dashDb": {
+    "package": "libxml2"
+  },
+  "mongo": {
+	"envs": {"MONGO_URL": "mongo", "MONGO_DB_NAME": "comments"}
+  }
+}
