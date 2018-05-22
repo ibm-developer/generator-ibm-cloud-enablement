@@ -117,11 +117,11 @@ describe('cloud-enablement:dockertools', function () {
 		});
 	});
 
-	describe('cloud-enablement:dockertools with NodeJS project and storage', function () {
+	describe('cloud-enablement:dockertools with NodeJS project with mongo', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode)})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), storages: JSON.stringify(['mongo'])})
 		});
 
 		it('create Dockerfile for running', function () {
@@ -136,6 +136,15 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file([
 				'.dockerignore'
 			]);
+		});
+		
+		it('should have the dockerfile-run property set as compose files cli-config.yml', function () {
+			assert.fileContent('cli-config.yml', `dockerfile-run : "docker-compose.yml"`);
+			assert.fileContent('cli-config.yml', `dockerfile-tools : "docker-compose-tools.yml"`);
+		});
+		
+		it('create docker-compose.yml and docker-compose-tools.yml for running', function () {
+			assert.file(['docker-compose.yml', 'docker-compose-tools.yml']);
 		});
 
 		it('should have the chart-path property set in cli-config.yml', function () {
@@ -476,20 +485,33 @@ describe('cloud-enablement:dockertools', function () {
 		});
 	});
 
-	describe('cloud-enablement:dockertools with Python project and storage', function () {
+	describe('cloud-enablement:dockertools with Python project with mongo', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)})
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongo'])})
 		});
 
 		it('create Dockerfile with start command', function () {
 			assert.file(['Dockerfile']);
 			assert.fileContent('Dockerfile', '"python", "manage.py", "start"');
 		});
+		
+		it('should have the dockerfile-run property set as compose files cli-config.yml', function () {
+			assert.fileContent('cli-config.yml', `dockerfile-run : "docker-compose.yml"`);
+			assert.fileContent('cli-config.yml', `dockerfile-tools : "docker-compose-tools.yml"`);
+		});
 
 		it('create Dockerfile-tools with flask', function () {
 			assert.file(['Dockerfile-tools']);
+		})
+		it('create docker-compose.yml with flask', function () {
+			assert.file(['docker-compose.yml']);
+		});
+
+		
+		it('docker-compose-tools.yml with flask', function () {
+			assert.file(['docker-compose-tools.yml']);
 		})
 
 		it('create CLI-config file', function () {
@@ -639,11 +661,11 @@ describe('cloud-enablement:dockertools', function () {
 		});
 	});
 
-	describe('cloud-enablement:dockertools with Django project and storage', function () {
+	describe('cloud-enablement:dockertools with Django project with mongo', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjango)})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjango), services: JSON.stringify(['mongo'])})
 		});
 
 		it('create Dockerfile with gunicorn', function () {
@@ -655,10 +677,16 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file(['Dockerfile-tools']);
 		})
 
+		it('create docker-compose and docker-compose-tools django', function () {
+			assert.file(['docker-compose.yml', 'docker-compose-tools.yml']);
+		})
+
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
 			assert.fileContent('cli-config.yml', 'python manage.py runserver --noreload');
 			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
+			assert.fileContent('cli-config.yml', `dockerfile-run : "docker-compose.yml"`);
+			assert.fileContent('cli-config.yml', `dockerfile-tools : "docker-compose-tools.yml"`);
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
 
