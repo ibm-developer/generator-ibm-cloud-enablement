@@ -15,17 +15,17 @@
 
 const Generator = require('yeoman-generator');
 let _ = require('lodash');
-const Handlebars = require('../lib/helpers').handlebars;
+const Handlebars = require('../lib/handlebars.js');
 const Utils = require('../lib/utils');
 
 // suffix for other deployment
 const DEPLOYMENT_SUFFIX = '.deploy.yaml';
 
-// list of supporting deployments
-const supportingStorageTypes = ['mongo'];
+// list of supporting services
+const supportingServicesTypes = ['mongo'];
 
 // storage directory
-const STORAGE_DIR = 'storages/';
+const SERVICE_DIR = 'services/';
 
 const portDefault = {
 	java: {
@@ -92,7 +92,7 @@ module.exports = class extends Generator {
 
 		this.opts.chartName = Utils.sanitizeAlphaNumLowerCase(this.opts.applicationName);
 
-		this.opts.storages = typeof(this.opts.storages) === 'string' ? JSON.parse(this.opts.storages || '[]') : this.opts.storages;
+		this.opts.services = typeof(this.opts.services) === 'string' ? JSON.parse(this.opts.services || '[]') : this.opts.services;
 
 		this.opts.servicePorts = {};
 		//use port if passed in
@@ -191,15 +191,15 @@ module.exports = class extends Generator {
 			}
 		});
 
-		if(this.opts.storages){
-			this.opts.storages.forEach(storage => {
-				const uniqueServiceSuffix = `${storage}-${Utils.createUniqueName(this.bluemix.name)}`;
-				if(_.includes(supportingStorageTypes, storage)){
+		if(this.opts.services){
+			this.opts.services.forEach(service => {
+				const uniqueServiceSuffix = `${service}-${Utils.createUniqueName(this.bluemix.name)}`;
+				if(_.includes(supportingServicesTypes, service)){
 					this.fs.copyTpl(
-						this.templatePath(STORAGE_DIR + storage + DEPLOYMENT_SUFFIX),
-						this.destinationPath(chartDir + '/templates/' + storage + DEPLOYMENT_SUFFIX), {uniqueServiceSuffix});
+						this.templatePath(SERVICE_DIR + service + DEPLOYMENT_SUFFIX),
+						this.destinationPath(chartDir + '/templates/' + service + DEPLOYMENT_SUFFIX), {uniqueServiceSuffix});
 				} else {
-					console.error(storage + ' is not supported');
+					console.error(service + ' is not supported');
 				}
 			})
 		}

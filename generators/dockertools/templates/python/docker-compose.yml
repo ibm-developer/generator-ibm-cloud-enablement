@@ -1,0 +1,18 @@
+version: '2'
+services:
+  web:
+    build: .
+    image: "<%= image %>"
+    container_name: "<%= containerName %>"
+    command: npm run start
+    ports:
+        - "<%= port %>:<%= port %>"
+    links: <% links.forEach(link => { %>
+      - <%= link %><% }); %>
+    environment:
+      NODE_ENV: "development"
+      PORT: <%= port %><% envs.forEach(env => { for(key in env){ %>
+      <%= key %>: <%= env[key] %><%}});%> <% images.forEach(image => {%>
+  <%=image%>:
+    image: <%=image%>
+  <%});%>

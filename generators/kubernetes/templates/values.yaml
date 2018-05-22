@@ -26,7 +26,7 @@ hpa:
       targetAverageUtilization: 70
     memory:
       targetAverageUtilization: 70
-{{#has storages 'mongo'}}
+{{#has services 'mongo'}}
 services:
   mongo:
      url: mongo

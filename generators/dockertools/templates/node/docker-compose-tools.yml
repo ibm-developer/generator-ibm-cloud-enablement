@@ -1,0 +1,24 @@
+version: '2'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile-tools
+    tty: true
+    image: "<%= image %>"
+    container_name: "<%= containerName %>"
+    ports: <% ports.forEach(port => { -%>
+      -  <%= port %>
+    <%}) -%>
+    volumes:
+      - .:/app
+      - ./node_modules_linux:/app/node_modules
+    links:
+      - mongo
+    environment:
+      NODE_ENV: "development"
+      PORT: 3100 <% envs.forEach(env => { for(key in env){ %>
+      <%= key %>: <%= env[key] %><%}});%> <% images.forEach(image => {%>
+  <%=image%>:
+    image: <%=image%>
+  <%});%>
