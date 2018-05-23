@@ -32,7 +32,8 @@ Creates the files required to deploy projects to Kubernetes (using Helm Charts) 
 ## Pre-requisites
 
 Install [Yeoman](http://yeoman.io)
-
+Install [Helm](https://github.com/kubernetes/helm#install) 
+ * Required to run unit tests
 ```bash
 npm install -g yo
 ```
@@ -51,9 +52,10 @@ yo ibm-cloud-enablement
 
 Following command line arguments are supported:
 * `--bluemix {stringified-json}` -  used by Scaffolder to supply project information from `pman`. You can also supply a local file containing compatible JSON object by using `--bluemix file:path/to/file.json`. Other options include `--bluemix='{"name":"<project-name>","backendPlatform":"<platform>"}'`
-* `--storages {stringified-array}` - used to add storage deployment to helm charts
-* `--isDeployableContainer` -  if true add `container` to `deploy-target` in `cli-config.yaml`
+* `--services {stringified-array}` - used to add service images and environments to helm charts deployment files. (e.g. mongo) 
 * `--nodeCFMinMemory` - used to defined a minimum requirement for node CF deployment. (e.g 384M)
+
+**Note**: Will generate and use `docker-compose and docker-compose-tools` for docker containers.
 
 ## Artifacts
 
@@ -61,8 +63,10 @@ Here is a list of the files and folders you receive after executing the generato
 
 File  | Purpose
 ---       | ---
-Dockerfile | Configuration file for the run container
-Dockerfile-tools | Configuration file for the tools container
+Dockerfile | Configuration file for the run container.
+docker-compose.yml | Configuration for the run container *if requiresDockerCompose option is true*
+Dockerfile-tools | Configuration file for the tools container 
+docker-compose-tools.yml | Configuration file for the tool container, *if requiresDockerCompose option is true* 
 Jenkinsfile | Groovy script used in conjunction with deploying to Cloud Foundry
 chart/* | Folder containing all the Helm yaml files required to deploy to Kubernetes
 cli-config.yml | Yaml file containing mappings for various commands, files, and settings, utilized by the cli commands
@@ -84,9 +88,14 @@ In a separate directory invoke the generator via
 yo ibm-cloud-enablement 
 ```
 
+## Supported Services
+`generator-ibm-cloud-enablement` will create the proper deployment files for docker, docker-tools, docker-compose, and docker-compose-tools if you provide the `--services` option. The following services are supported
+
+* Mongo (`--services "[\"mongo\"]"`)
+
 ## Testing
 
-To run the unit tests
+To run the unit tests. Remember to install [Helm](https://github.com/kubernetes/helm#install) if you have not already before running the tests.
 
 ```
 npm test
@@ -101,4 +110,4 @@ Make sure to follow the [conventional commit specification](https://conventional
 Once you are finished with your changes, run `npm test` to make sure all tests pass.
 
 Do a pull request against `master`, make sure the build passes. A team member will review and merge your pull request.
-Once merged to `master` an auto generated pull request will be created against master to update the changelog. Make sure that the CHANGELOG.md and the package.json is correct before merging the pull request. After the auto generated pull request has been merged to `master` the version will be bumped and published to Artifactory.
+Once merged to `master` an auto generated pull request will be created against master to update the changelog. Make sure that the CHANGELOG.md and the package.json is correct before merging the pull request. After the auto generated pull request has been merged to `master` the version will be bumped and published to public npm.

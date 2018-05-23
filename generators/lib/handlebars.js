@@ -61,6 +61,4 @@ Handlebars.registerHelper('firstAvailable', function() {
 	return "undefined";
 });
 
-module.exports = {
-	handlebars : Handlebars
-}
+module.exports = Handlebars;

@@ -327,7 +327,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['kube'], storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['kube'], services: JSON.stringify(['mongo'])})
 		});
 
 		it('should not have kubernetes files', function () {
@@ -350,7 +350,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should have mongo.deploy.yaml', function () {
@@ -370,7 +370,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
@@ -383,7 +383,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), storages: "[\"mongo\"]"})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should have mongo.deploy.yaml', function () {
@@ -409,7 +409,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should have mongo.deploy.yaml', function () {
@@ -429,7 +429,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
@@ -443,7 +443,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), storages: "[\"mongo\"]"})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should have mongo.deploy.yaml', function () {
@@ -468,7 +468,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should have mongo.deploy.yaml', function () {
@@ -488,7 +488,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
@@ -502,7 +502,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), storages: "[\"mongo\"]"})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should have mongo.deploy.yaml', function () {
@@ -518,7 +518,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should have mongo.deploy.yaml', function () {
@@ -538,7 +538,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), storages: ['mongo']})
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
@@ -552,7 +552,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), storages: "[\"mongo\"]"})
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongo'])})
 		});
 
 		it('should have mongo.deploy.yaml', function () {
