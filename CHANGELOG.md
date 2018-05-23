@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="0.15.0"></a>
+# [0.15.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.14.3...v0.15.0) (2018-05-23)
+
+
+### Features
+
+* **deployment:** added docker-compose files and renamed storages opts ([9e4d812](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9e4d812))
+
+
+
 <a name="0.14.3"></a>
 ## [0.14.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.14.2...v0.14.3) (2018-05-18)
 
