@@ -8,7 +8,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Features
 
-* **deployment:** added docker-compose files and renamed storages opts ([f78a4e4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f78a4e4))
 * **deployment:** added docker-compose files and renamed storages opts ([9e4d812](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9e4d812))
 * **docker:** Switch base docker image to node:8 instead of ibmnode ([5e887d0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5e887d0))
 
