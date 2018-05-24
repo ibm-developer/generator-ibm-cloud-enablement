@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.0"></a>
+# [1.0.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.14.3...v1.0.0) (2018-05-24)
+
+
+### Features
+
+* **deployment:** added docker-compose files and renamed storages opts ([f78a4e4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f78a4e4))
+* **deployment:** added docker-compose files and renamed storages opts ([9e4d812](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9e4d812))
+* **docker:** Switch base docker image to node:8 instead of ibmnode ([5e887d0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5e887d0))
+
+
+### BREAKING CHANGES
+
+* **docker:** Switching Dockerfile and Dockerfile-tools base image to the official node:8 tag
+
+
+
 <a name="0.14.3"></a>
 ## [0.14.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v0.14.2...v0.14.3) (2018-05-18)
 
