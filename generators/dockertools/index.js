@@ -110,7 +110,7 @@ module.exports = class extends Generator {
 		compilationOptions = compilationOptions.trim();
 
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
-		const executableName = applicationName;
+		const executableName = this.bluemix.name;
 
 		const cliConfig = {
 			containerNameRun: `${applicationName.toLowerCase()}-swift-run`,
