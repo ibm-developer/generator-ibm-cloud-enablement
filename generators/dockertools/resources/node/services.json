@@ -2,7 +2,9 @@
   "dashDb": {
     "package": "libxml2"
   },
-  "mongo": {
-	"envs": {"MONGO_URL": "mongo", "MONGO_DB_NAME": "comments"}
+  "mongodb": {
+	"envs": {"MONGO_URL": "mongo", "MONGO_DB_NAME": "comments"},
+    "port": 27017,
+    "imageName": "mongo"
   }
 }

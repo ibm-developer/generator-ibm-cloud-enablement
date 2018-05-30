@@ -22,7 +22,7 @@ const Utils = require('../lib/utils');
 const DEPLOYMENT_SUFFIX = '.deploy.yaml';
 
 // list of supporting services
-const supportingServicesTypes = ['mongo'];
+const supportingServicesTypes = ['mongodb'];
 
 // storage directory
 const SERVICE_DIR = 'services/';

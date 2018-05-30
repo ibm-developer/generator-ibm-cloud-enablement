@@ -121,7 +121,7 @@ describe('cloud-enablement:dockertools', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), storages: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongodb'])})
 		});
 
 		it('create Dockerfile for running', function () {
@@ -489,7 +489,7 @@ describe('cloud-enablement:dockertools', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongodb'])})
 		});
 
 		it('create Dockerfile with start command', function () {
@@ -665,7 +665,7 @@ describe('cloud-enablement:dockertools', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjango), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleDjango), services: JSON.stringify(['mongodb'])})
 		});
 
 		it('create Dockerfile with gunicorn', function () {
@@ -700,7 +700,8 @@ describe('cloud-enablement:dockertools', function () {
 	describe('cloud-enablement:dockertools with empty bluemix object', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/dockertools'))
-				.withOptions({ bluemix: '{"backendPlatform":"NODE"}' })
+				.withOptions({ bluemix: JSON.stringify({backendPlatform: 'NODE' })
+				});
 		});
 		it('should give us the default output with no project name', function () {
 			assert.file('Dockerfile');
