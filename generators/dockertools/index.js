@@ -186,6 +186,8 @@ module.exports = class extends Generator {
 				images: serviceImageNames
 			};
 			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'swift/docker-compose.yml', dockerComposeConfig);
+			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-swift-tools`;
+			dockerComposeConfig.image = `${applicationName.toLowerCase()}-swift-tools`;
 			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'swift/docker-compose-tools.yml', dockerComposeConfig);
 		}
 
@@ -282,6 +284,8 @@ module.exports = class extends Generator {
 				images: serviceImageNames
 			};
 			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'node/docker-compose.yml', dockerComposeConfig);
+			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-express-tools`;
+			dockerComposeConfig.image = `${applicationName.toLowerCase()}-express-tools`,
 			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'node/docker-compose-tools.yml', dockerComposeConfig);
 		}
 
@@ -434,6 +438,8 @@ module.exports = class extends Generator {
 				images: serviceImageNames
 			};
 			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', dockerComposeConfig);
+			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-flask-tools`;
+			dockerComposeConfig.image = `${applicationName.toLowerCase()}-flask-tools`;
 			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', dockerComposeConfig);
 		}
 
@@ -613,14 +619,16 @@ module.exports = class extends Generator {
 
 		if(this.opts.services.length > 0){
 			const dockerComposeConfig =  {
-				containerName: `${applicationName.toLowerCase()}-flask-run`,
-				image: `${applicationName.toLowerCase()}-flask-run`,
+				containerName: `${applicationName.toLowerCase()}-django-run`,
+				image: `${applicationName.toLowerCase()}-django-run`,
 				ports: [port, debugPort].concat(servicePorts), 
 				envs: serviceEnvs,
 				appPort: port,
 				images: serviceImageNames
 			};
 			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', dockerComposeConfig);
+			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-django-tools`;
+			dockerComposeConfig.image = `${applicationName.toLowerCase()}-django-tools`;
 			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', dockerComposeConfig);
 		}
 
