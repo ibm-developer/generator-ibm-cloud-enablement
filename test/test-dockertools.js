@@ -141,6 +141,11 @@ describe('cloud-enablement:dockertools', function () {
 		it('should have the dockerfile-run property set as compose files cli-config.yml', function () {
 			assert.fileContent('cli-config.yml', `dockerfile-run : "docker-compose.yml"`);
 			assert.fileContent('cli-config.yml', `dockerfile-tools : "docker-compose-tools.yml"`);
+			assert.fileContent('docker-compose.yml', `container_name: "${applicationName.toLowerCase()}-express-run"`);
+			assert.fileContent('docker-compose.yml', `image: "${applicationName.toLowerCase()}-express-run"`);
+			assert.fileContent('docker-compose-tools.yml', `container_name: "${applicationName.toLowerCase()}-express-tools"`);
+			assert.fileContent('docker-compose-tools.yml', `image: "${applicationName.toLowerCase()}-express-tools"`);
+
 		});
 		
 		it('create docker-compose.yml and docker-compose-tools.yml for running', function () {
@@ -509,6 +514,13 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file(['docker-compose.yml']);
 		});
 
+		it('should have the correct image name and container name for docker-compose and docker-compose-tools', function() {
+			assert.fileContent('docker-compose.yml', `container_name: "${applicationName.toLowerCase()}-flask-run"`);
+			assert.fileContent('docker-compose.yml', `image: "${applicationName.toLowerCase()}-flask-run"`);
+			assert.fileContent('docker-compose-tools.yml', `container_name: "${applicationName.toLowerCase()}-flask-tools"`);
+			assert.fileContent('docker-compose-tools.yml', `image: "${applicationName.toLowerCase()}-flask-tools"`);
+		});
+
 		
 		it('docker-compose-tools.yml with flask', function () {
 			assert.file(['docker-compose-tools.yml']);
@@ -679,6 +691,10 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('create docker-compose and docker-compose-tools django', function () {
 			assert.file(['docker-compose.yml', 'docker-compose-tools.yml']);
+			assert.fileContent('docker-compose.yml', `container_name: "${applicationName.toLowerCase()}-django-run"`);
+			assert.fileContent('docker-compose.yml', `image: "${applicationName.toLowerCase()}-django-run"`);
+			assert.fileContent('docker-compose-tools.yml', `container_name: "${applicationName.toLowerCase()}-django-tools"`);
+			assert.fileContent('docker-compose-tools.yml', `image: "${applicationName.toLowerCase()}-django-tools"`);
 		})
 
 		it('create CLI-config file', function () {
