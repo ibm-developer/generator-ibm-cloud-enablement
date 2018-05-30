@@ -7,18 +7,16 @@ services:
     tty: true
     image: "<%= image %>"
     container_name: "<%= containerName %>"
-    ports: <% ports.forEach(port => { -%>
-      -  <%= port %>
-    <%}) -%>
+    ports:
+      - "8080:8080"
+      - "2048:1024"
+      - "2049:1025"
     volumes:
-      - .:/app
-      - ./node_modules_linux:/app/node_modules
-    links:
-      - mongo
-    environment:
-      MONGO_URL: "mongo"
-      MONGO_DB_NAME: "comments"
-      NODE_ENV: "development"
-      PORT: 3100
-  mongo:
-    image: mongo
+      - .:/swift-project <%if(images.length > 0){ %>
+    links: <% images.forEach(image => { %>
+      -  <%= image %> <%})} %>
+    environment: <% envs.forEach(env => { for(key in env){ %>
+      <%= key %>: <%= env[key] %><%}});%> <% images.forEach(image => {%>
+  <%=image%>:
+    image: <%=image%>
+  <%});%>

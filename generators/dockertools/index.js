@@ -81,7 +81,6 @@ module.exports = class extends Generator {
 		// Files to contain custom build and test commands
 		const FILENAME_SWIFT_BUILD = ".swift-build-linux";
 		const FILENAME_SWIFT_TEST = ".swift-test-linux";
-		const port = 8080;
 
 		// Define metadata for all services that
 		// require custom logic in Dockerfiles
@@ -91,6 +90,8 @@ module.exports = class extends Generator {
 		const servKeys = Object.keys(services);
 		const serviceItems = [];
 		const serviceEnvs = [];
+		const serviceImageNames = [];
+		const servicePorts = [];
 
 		// Iterate over service keys to search for provisioned services
 		let compilationOptions = "";
@@ -102,11 +103,26 @@ module.exports = class extends Generator {
 					compilationOptions = compilationOptions + " " + services[servKey].compilationOptions;
 				}
 			}
-			
-			if(services[servKey].envs){
+		}
+
+        // Iterate over services key deployed under docker images
+		// Retrieve envs, port and images names if availables for each services
+		for (let index = 0; index < this.opts.services.length; index++){
+			const servKey = this.opts.services[index];
+			if(services[servKey].hasOwnProperty('envs')){
 				serviceEnvs.push(services[servKey].envs);
 			}
+
+			if(services[servKey].hasOwnProperty('imageName')){
+				serviceImageNames.push(services[servKey].imageName);
+			}
+
+			if(services[servKey].hasOwnProperty('port')){
+				servicePorts.push(services[servKey].port);
+			}
 		}
+      
+      
 		compilationOptions = compilationOptions.trim();
 
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
@@ -163,22 +179,14 @@ module.exports = class extends Generator {
 		}
 		
 		if(this.opts.services.length > 0){
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'swift/docker-compose.yml', {
+			const dockerComposeConfig =  {
 				containerName: `${applicationName.toLowerCase()}-swift-run`,
 				image: `${applicationName.toLowerCase()}-swift-run`,
-				port,
-				links: this.opts.services,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				images: this.opts.services
-			});
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'swift/docker-compose-tools.yml', { 
-				image: `${applicationName.toLowerCase()}-swift-run`,
-				containerName: `${applicationName.toLowerCase()}-swift-run`,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				ports: [port],
-				images: this.opts.services
-				
-			});
+				envs: serviceEnvs,
+				images: serviceImageNames
+			};
+			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'swift/docker-compose.yml', dockerComposeConfig);
+			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'swift/docker-compose-tools.yml', dockerComposeConfig);
 		}
 
 
@@ -193,6 +201,7 @@ module.exports = class extends Generator {
 		const dockerFileRun = this.opts.services ? 'docker-compose.yml' : 'Dockerfile';
 		const dockerFileTools = this.opts.services ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '3000';
+		const debugPort = '5858';
 
 		// Define metadata for all services that
 		// require custom logic in Dockerfiles
@@ -202,6 +211,8 @@ module.exports = class extends Generator {
 		const servKeys = Object.keys(services);
 		const servicesPackages = [];
 		const serviceEnvs = [];
+		const serviceImageNames = [];
+		const servicePorts = [];
 
 		// Iterate over service keys to search for provisioned services and their environments
 		for (let index in servKeys) {
@@ -211,9 +222,21 @@ module.exports = class extends Generator {
 					servicesPackages.push(services[servKey].package);
 				}
 			}
+		}
 			
-			if(services[servKey].envs){
+          // Iterate over services key deployed under docker images
+          // Retrieve envs, port and images names if availables for each services
+		for (let index = 0; index < this.opts.services.length; index++){
+			const servKey = this.opts.services[index];
+			if(services[servKey].hasOwnProperty('envs')){
 				serviceEnvs.push(services[servKey].envs);
+			}
+
+			if(services[servKey].hasOwnProperty('imageName')){
+				serviceImageNames.push(services[servKey].imageName);
+			}
+			if(services[servKey].hasOwnProperty('port')){
+				servicePorts.push(services[servKey].port);
 			}
 		} 
 
@@ -226,7 +249,7 @@ module.exports = class extends Generator {
 			containerPathRun: '/app',
 			containerPathTools: '/app',
 			containerPortMap: `${port}:${port}`,
-			containerPortMapDebug: '9229:9229',
+			containerPortMapDebug: `${debugPort}:${debugPort}`,
 			dockerFileRun,
 			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-express-run`,
@@ -248,23 +271,18 @@ module.exports = class extends Generator {
 		this._copyTemplateIfNotExists(FILENAME_DOCKER_IGNORE, 'node/dockerignore', {});
 		
 
-		if(this.opts.services){
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'node/docker-compose.yml', {
+		if(this.opts.services.length > 0){
+
+			const dockerComposeConfig =  {
 				containerName: `${applicationName.toLowerCase()}-express-run`,
 				image: `${applicationName.toLowerCase()}-express-run`,
-				port,
-				links: this.opts.services,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				images: this.opts.services
-			});
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'node/docker-compose-tools.yml', { 
-				image: `${applicationName.toLowerCase()}-express-run`,
-				containerName: `${applicationName.toLowerCase()}-express-run`,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				images: this.opts.services,
-				ports: [port]
-				
-			});
+				ports: [port, debugPort].concat(servicePorts), 
+				appPort: port,
+				envs: serviceEnvs,
+				images: serviceImageNames
+			};
+			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'node/docker-compose.yml', dockerComposeConfig);
+			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'node/docker-compose-tools.yml', dockerComposeConfig);
 		}
 
 
@@ -340,6 +358,7 @@ module.exports = class extends Generator {
 		const port = this.opts.port ? this.opts.port : '3000';
 		const dockerFileRun = this.opts.services ? 'docker-compose.yml' : 'Dockerfile';
 		const dockerFileTools = this.opts.services ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
+		const debugPort = '5858';
 
 		// Define metadata for all services that
 		// require custom logic in Dockerfiles
@@ -349,6 +368,9 @@ module.exports = class extends Generator {
 		const servKeys = Object.keys(services);
 		const servicesPackages = [];
 		const serviceEnvs = [];
+		const serviceImageNames = [];
+		const servicePorts = [];
+
 
 		// Iterate over service keys to search for provisioned services
 		for (let index in servKeys) {
@@ -358,10 +380,22 @@ module.exports = class extends Generator {
 					servicesPackages.push(services[servKey].package);
 				}
 			}
+		}
 			
-			if(services[servKey].envs){
+        // Iterate over services key deployed under docker images
+		// Retrieve envs, port and images names if availables for each services
+		for (let index = 0; index < this.opts.services.length; index++){
+			const servKey = this.opts.services[index];
+			if(services[servKey].hasOwnProperty('envs')){
 				serviceEnvs.push(services[servKey].envs);
 			}
+			if(services[servKey].hasOwnProperty('imageName')){
+				serviceImageNames.push(services[servKey].imageName);
+			}
+			if(services[servKey].hasOwnProperty('port')){
+				servicePorts.push(services[servKey].port);
+			}
+
 		}
 
 		const cliConfig = {
@@ -372,7 +406,7 @@ module.exports = class extends Generator {
 			containerPathRun: '/app',
 			containerPathTools: '/app',
 			containerPortMap: `${port}:${port}`,
-			containerPortMapDebug: '5858:5858',
+			containerPortMapDebug: `${debugPort}:${debugPort}`,
 			dockerFileRun,
 			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-flask-run`,
@@ -391,21 +425,16 @@ module.exports = class extends Generator {
 		};
 		
 		if(this.opts.services.length > 0){
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', {
+			const dockerComposeConfig =  {
 				containerName: `${applicationName.toLowerCase()}-flask-run`,
 				image: `${applicationName.toLowerCase()}-flask-run`,
-				port,
-				links: this.opts.services,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				images: this.opts.services
-			});
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', { 
-				image: `${applicationName.toLowerCase()}-flask-run`,
-				containerName: `${applicationName.toLowerCase()}-flask-run`,
-				ports: [port],
-				images: this.opts.services
-				
-			});
+				ports: [port, debugPort].concat(servicePorts), 
+				appPort: port,
+				envs: serviceEnvs,
+				images: serviceImageNames
+			};
+			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', dockerComposeConfig);
+			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', dockerComposeConfig);
 		}
 
 		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
@@ -464,30 +493,11 @@ module.exports = class extends Generator {
 			this.destinationPath('.dockerignore')
 		);
 		
-		if(this.opts.services.length > 0){
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', {
-				containerName: `${applicationName.toLowerCase()}-express-run`,
-				image: `${applicationName.toLowerCase()}-express-run`,
-				port,
-				links: this.opts.services,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				images: this.opts.services
-			});
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', { 
-				image: `${applicationName.toLowerCase()}-express-run`,
-				containerName: `${applicationName.toLowerCase()}-express-run`,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				images: this.opts.services,
-				ports: [port]
-				
-			});
-		}
-
 	}
-
 	_generateDjango() {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
+		const debugPort = '5858';
 		
 		const dockerFileRun = this.opts.services ? 'docker-compose.yml' : 'Dockerfile';
 		const dockerFileTools = this.opts.services ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
@@ -496,10 +506,12 @@ module.exports = class extends Generator {
 		// require custom logic in Dockerfiles
 		const services = require('./resources/python/services.json');
 
-		// Get array with all the keys for the services objects
+		// Get array with all the keys for the services objects and docker services
 		const servKeys = Object.keys(services);
 		const servicesPackages = [];
 		const serviceEnvs = [];
+		const serviceImageNames = [];
+		const servicePorts = [];
 
 		// Iterate over service keys to search for provisioned services
 		for (let index in servKeys) {
@@ -510,11 +522,29 @@ module.exports = class extends Generator {
 				}
 			}
 
-			if(services[servKey].envs){
-				serviceEnvs.push(services[servKey].envs);
-			}
 		}
 
+        // Iterate over services key deployed under docker images
+		// Retrieve envs, port and images names if availables for each services
+		for (let index = 0; index < this.opts.services.length; index++){
+			const servKey = this.opts.services[index];
+
+			if(services[servKey].hasOwnProperty('envs')){
+				serviceEnvs.push(services[servKey].envs);
+			}
+
+			if(services[servKey].hasOwnProperty('imageName')){
+				serviceImageNames.push(services[servKey].imageName);
+			}
+
+			if(services[servKey].hasOwnProperty('imageName')){
+				serviceImageNames.push(services[servKey].imageName);
+			}
+			if(services[servKey].hasOwnProperty('port')){
+
+				servicePorts.push(services[servKey].port);
+			}
+		}
 
 		const cliConfig = {
 			containerNameRun: `${applicationName.toLowerCase()}-django-run`,
@@ -524,7 +554,7 @@ module.exports = class extends Generator {
 			containerPathRun: '/app',
 			containerPathTools: '/app',
 			containerPortMap: `${port}:${port}`,
-			containerPortMapDebug: '5858:5858',
+			containerPortMapDebug: `${debugPort}:${debugPort}`,
 			dockerFileRun,
 			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-django-run`,
@@ -580,24 +610,18 @@ module.exports = class extends Generator {
 				}
 			);
 		}
-		
+
 		if(this.opts.services.length > 0){
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', {
-				containerName: `${applicationName.toLowerCase()}-express-run`,
-				image: `${applicationName.toLowerCase()}-django-run`,
-				port,
-				links: this.opts.services,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				images: this.opts.services
-			});
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', { 
-				image: `${applicationName.toLowerCase()}-django-run`,
-				containerName: `${applicationName.toLowerCase()}-django-run`,
-				envs: this.opts.services.length > 0 ? serviceEnvs : [],
-				images: this.opts.services,
-				ports: [port]
-				
-			});
+			const dockerComposeConfig =  {
+				containerName: `${applicationName.toLowerCase()}-flask-run`,
+				image: `${applicationName.toLowerCase()}-flask-run`,
+				ports: [port, debugPort].concat(servicePorts), 
+				envs: serviceEnvs,
+				appPort: port,
+				images: serviceImageNames
+			};
+			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', dockerComposeConfig);
+			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', dockerComposeConfig);
 		}
 
 

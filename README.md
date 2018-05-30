@@ -52,10 +52,10 @@ yo ibm-cloud-enablement
 
 Following command line arguments are supported:
 * `--bluemix {stringified-json}` -  used by Scaffolder to supply project information from `pman`. You can also supply a local file containing compatible JSON object by using `--bluemix file:path/to/file.json`. Other options include `--bluemix='{"name":"<project-name>","backendPlatform":"<platform>"}'`
-* `--services {stringified-array}` - used to add service images and environments to helm charts deployment files. (e.g. mongo) 
+* `--services {stringified-array}` - used to add an extra service container for `docker-compose`.
 * `--nodeCFMinMemory` - used to defined a minimum requirement for node CF deployment. (e.g 384M)
 
-**Note**: Will generate and use `docker-compose and docker-compose-tools` for docker containers.
+**Note**: Adding the `--services` option will generate and use `docker-compose and docker-compose-tools` for docker containers.
 
 ## Artifacts
 
@@ -64,9 +64,9 @@ Here is a list of the files and folders you receive after executing the generato
 File  | Purpose
 ---       | ---
 Dockerfile | Configuration file for the run container.
-docker-compose.yml | Configuration for the run container *if requiresDockerCompose option is true*
+docker-compose.yml | Configuration for the run container *if services option is added*
 Dockerfile-tools | Configuration file for the tools container 
-docker-compose-tools.yml | Configuration file for the tool container, *if requiresDockerCompose option is true* 
+docker-compose-tools.yml | Configuration file for the tool container, *if services option is added* 
 Jenkinsfile | Groovy script used in conjunction with deploying to Cloud Foundry
 chart/* | Folder containing all the Helm yaml files required to deploy to Kubernetes
 cli-config.yml | Yaml file containing mappings for various commands, files, and settings, utilized by the cli commands
@@ -88,10 +88,16 @@ In a separate directory invoke the generator via
 yo ibm-cloud-enablement 
 ```
 
-## Supported Services
-`generator-ibm-cloud-enablement` will create the proper deployment files for docker, docker-tools, docker-compose, and docker-compose-tools if you provide the `--services` option. The following services are supported
+## Supported Docker-Compose Services
+You can use Docker images to create instances for somes services services. By passing in the `--services` option the generator will create the `docker-compose` and `docker-compose-tools.yml`.
+Below is the services using `docker-compose`.
 
-* Mongo (`--services "[\"mongo\"]"`)
+| Service Name | Key Name |           Example            |
+|--------------|----------|------------------------------|
+| Mongo        | mongodb  | `--services "[\"mongodb\"]"` |
+
+
+**Note**: Currently only supported by *Node*, *Swift*, and *Python*.
 
 ## Testing
 

@@ -312,7 +312,7 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.noFile(chartLocation + '/templates/service.yaml');
 			assert.noFile(chartLocation + '/templates/deployment.yaml');
 			assert.noFile(chartLocation + '/templates/hpa.yaml');
-			assert.noFile(chartLocation + '/templates/mongo.deploy.yaml');
+			assert.noFile(chartLocation + '/templates/mongodb.deploy.yaml');
 			assert.noFile(chartLocation + '/templates/istio.yaml');
 			assert.noFile(chartLocation + '/values.yaml');
 			assert.noFile(chartLocation + '/Chart.yaml');
@@ -327,14 +327,14 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['kube'], services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), platforms: ['kube'], services: JSON.stringify(['mongodb'])})
 		});
 
 		it('should not have kubernetes files', function () {
 			assert.file(chartLocation + '/templates/service.yaml');
 			assert.file(chartLocation + '/templates/deployment.yaml');
 			assert.file(chartLocation + '/templates/hpa.yaml');
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 			assert.file(chartLocation + '/templates/istio.yaml');
 			assert.file(chartLocation + '/bindings.yaml');
 			assert.file(chartLocation + '/values.yaml');
@@ -350,11 +350,11 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongodb'])})
 		});
 
-		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+		it('should have mongodb.deploy.yaml', function () {
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 		});
 
 		it('should have deployment.yaml', function () {
@@ -370,7 +370,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongodb'])})
 		});
 
 		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
@@ -383,11 +383,11 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleJava), services: JSON.stringify(['mongodb'])})
 		});
 
-		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+		it('should have mongodb.deploy.yaml', function () {
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 		});
 
 		assertYmlMongoContent();
@@ -409,11 +409,11 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongodb'])})
 		});
 
-		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+		it('should have mongodb.deploy.yaml', function () {
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 		});
 
 		it('should have deployment.yaml', function () {
@@ -429,7 +429,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongodb'])})
 		});
 
 		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
@@ -443,11 +443,11 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode), services: JSON.stringify(['mongodb'])})
 		});
 
-		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+		it('should have mongodb.deploy.yaml', function () {
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 		});
 
 		assertYmlMongoContent();
@@ -468,11 +468,11 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongodb'])})
 		});
 
-		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+		it('should have mongodb.deploy.yaml', function () {
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 		});
 
 		it('should have deployment.yaml', function () {
@@ -488,7 +488,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongodb'])})
 		});
 
 		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
@@ -502,11 +502,11 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongodb'])})
 		});
 
-		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+		it('should have mongodb.deploy.yaml', function () {
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 		});
 
 		assertYmlMongoContent();
@@ -518,11 +518,11 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongodb'])})
 		});
 
-		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+		it('should have mongodb.deploy.yaml', function () {
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 		});
 
 		it('should have deployment.yaml', function () {
@@ -538,7 +538,7 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongodb'])})
 		});
 
 		it('should not have ' + WRONG_DEPLOY + '.deploy.yaml', function () {
@@ -552,11 +552,11 @@ describe('cloud-enablement:kubernetes', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
-				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongo'])})
+				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython), services: JSON.stringify(['mongodb'])})
 		});
 
-		it('should have mongo.deploy.yaml', function () {
-			assert.file(chartLocation + '/templates/mongo.deploy.yaml');
+		it('should have mongodb.deploy.yaml', function () {
+			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 		});
 
 		assertYmlMongoContent();
