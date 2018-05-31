@@ -255,6 +255,8 @@ module.exports = class extends Generator {
 			containerPathTools: '/app',
 			containerPortMap: `${port}:${port}`,
 			containerPortMapDebug: `${debugPort}:${debugPort}`,
+			containerMountsRun: '"./node_modules_linux": "/app/node_modules"',
+			containerMountsTools: '"./node_modules_linux": "/app/node_modules"',
 			dockerFileRun,
 			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-express-run`,

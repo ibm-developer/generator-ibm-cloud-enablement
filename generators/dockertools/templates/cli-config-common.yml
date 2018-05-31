@@ -18,6 +18,14 @@ container-port-map : "<%= cliConfig.containerPortMap %>"
 # The port mappings between the host and the container for the debug port in the form [host:container]
 container-port-map-debug : "<%= cliConfig.containerPortMapDebug %>"
 
+<% if(cliConfig.containerMountsRun && cliConfig.containerMountsTools){ %>
+# The list of additional mounts between the host and the run container in the form [host_path:container_path]
+container-mounts-run:
+   - <%- cliConfig.containerMountsRun %>
+# The list of additional mounts between the host and the tools container in the form [host_path:container_path]
+container-mounts-tools:
+   - <%- cliConfig.containerMountsTools %>
+<%}%>
 # The name for the dockerfile for the run container
 dockerfile-run : "<%= cliConfig.dockerFileRun %>"
 # The name for the dockerfile for the tools container
