@@ -81,6 +81,9 @@ module.exports = class extends Generator {
 		// Files to contain custom build and test commands
 		const FILENAME_SWIFT_BUILD = ".swift-build-linux";
 		const FILENAME_SWIFT_TEST = ".swift-test-linux";
+		
+		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
+		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 
 		// Define metadata for all services that
 		// require custom logic in Dockerfiles
@@ -137,8 +140,8 @@ module.exports = class extends Generator {
 			containerPathTools: '/swift-project',
 			containerPortMap: '8080:8080',
 			containerPortMapDebug: '2048:1024,2049:1025',
-			dockerFileRun: 'Dockerfile',
-			dockerFileTools: 'Dockerfile-tools',
+			dockerFileRun,
+			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-swift-run`,
 			imageNameTools: `${applicationName.toLowerCase()}-swift-tools`,
 			buildCmdRun: '/swift-utils/tools-utils.sh build release',
@@ -200,8 +203,8 @@ module.exports = class extends Generator {
 
 	_generateNodeJS() {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
-		const dockerFileRun = this.opts.services ? 'docker-compose.yml' : 'Dockerfile';
-		const dockerFileTools = this.opts.services ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
+		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
+		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '3000';
 		const debugPort = '5858';
 
@@ -252,6 +255,8 @@ module.exports = class extends Generator {
 			containerPathTools: '/app',
 			containerPortMap: `${port}:${port}`,
 			containerPortMapDebug: `${debugPort}:${debugPort}`,
+			containerMountsRun: '"./node_modules_linux": "/app/node_modules"',
+			containerMountsTools: '"./node_modules_linux": "/app/node_modules"',
 			dockerFileRun,
 			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-express-run`,
@@ -360,8 +365,8 @@ module.exports = class extends Generator {
 	_generatePython() {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const port = this.opts.port ? this.opts.port : '3000';
-		const dockerFileRun = this.opts.services ? 'docker-compose.yml' : 'Dockerfile';
-		const dockerFileTools = this.opts.services ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
+		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
+		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 		const debugPort = '5858';
 
 		// Define metadata for all services that
@@ -505,8 +510,8 @@ module.exports = class extends Generator {
 		const port = this.opts.port ? this.opts.port : '3000';
 		const debugPort = '5858';
 		
-		const dockerFileRun = this.opts.services ? 'docker-compose.yml' : 'Dockerfile';
-		const dockerFileTools = this.opts.services ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
+		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
+		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 
 		// Define metadata for all services that
 		// require custom logic in Dockerfiles

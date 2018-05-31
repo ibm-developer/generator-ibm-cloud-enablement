@@ -16,6 +16,8 @@ RUN apt-get update \
 COPY package.json /app/
 RUN cd /app; npm install --production
 
+COPY . /app
+
 ENV NODE_ENV production
 ENV PORT <%= port %>
 
