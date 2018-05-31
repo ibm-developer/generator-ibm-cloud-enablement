@@ -66,6 +66,8 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 			assert.fileContent('cli-config.yml', 'run-cmd : ""');
 			assert.fileContent('cli-config.yml', 'container-port-map-debug : "2048:1024,2049:1025"');
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
 		});
 
 		it('create dockerignore file', function () {
@@ -102,6 +104,11 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file(['Dockerfile', 'cli-config.yml', 'Dockerfile-tools']);
 		});
 
+		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
+		});
+
 		it('has correct default port', function () {
 			assert.fileContent('cli-config.yml', '3000:3000');
 		});
@@ -111,6 +118,7 @@ describe('cloud-enablement:dockertools', function () {
 				'.dockerignore'
 			]);
 		});
+
 
 		it('should have the chart-path property set in cli-config.yml', function () {
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
@@ -360,6 +368,12 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file(['Dockerfile-tools']);
 		})
 
+
+		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
+		});
+
 		it('create CLI-config file', function () {
 			assert.file(['cli-config.yml']);
 			assert.fileContent('cli-config.yml', 'python manage.py');
@@ -405,6 +419,11 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 		});
 
+		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
+		});
+
 		it('does not create manage.py file for flask', function () {
 			assert.noFile(['manage.py']);
 		})
@@ -428,8 +447,13 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('Dockerfile', '"python", "manage.py", "start"');
 			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
 		});
+		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
+		});
 
-		it('create Dockerfile-tools with flask  and service package', function () {
+
+		it('create Dockerfile-tools with flask	and service package', function () {
 			assert.file(['Dockerfile-tools']);
 			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
 		});
@@ -466,7 +490,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('Dockerfile', 'postgresql-dev \\');
 		});
 
-		it('create Dockerfile-tools with flask  and service package', function () {
+		it('create Dockerfile-tools with flask	and service package', function () {
 			assert.file(['Dockerfile-tools']);
 			assert.fileContent('Dockerfile', 'postgresql-dev \\');
 		});
@@ -476,6 +500,8 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'python manage.py');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
 		});
 
 		it('create manage.py file for flask', function () {
@@ -567,6 +593,8 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'python manage.py runserver --noreload');
 			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
 		});
 
 		it('create dockerignore file', function () {
@@ -594,6 +622,13 @@ describe('cloud-enablement:dockertools', function () {
 		it('create Dockerfile-tools with django', function () {
 			assert.file(['Dockerfile-tools']);
 		})
+
+
+		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
+		});
+
 
 		it('create CLI-config file with informative echo prompt', function () {
 			assert.file(['cli-config.yml']);
@@ -632,6 +667,8 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'python manage.py runserver --noreload');
 			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
 		});
 
 		it('create dockerignore file', function () {
@@ -664,6 +701,8 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'python manage.py runserver --noreload');
 			assert.fileContent('cli-config.yml', 'acmeproject-django-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
 		});
 
 		it('create dockerignore file', function () {
