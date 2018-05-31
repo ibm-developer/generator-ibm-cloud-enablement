@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.5"></a>
+## [1.0.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.0.4...v1.0.5) (2018-05-31)
+
+
+### Bug Fixes
+
+* **deployment:** added more testing and validation dockerfile-run and dockerfile-tools in cli-config ([4d7875e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4d7875e))
+* **deployments:** added missing additional mounts for node; added missing copy cmd in docker to add ([4f1534d](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4f1534d))
+
+
+
 <a name="1.0.4"></a>
 ## [1.0.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.0.3...v1.0.4) (2018-05-30)
 
