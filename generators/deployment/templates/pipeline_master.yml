@@ -93,7 +93,9 @@ stages:
     type: deployer
     target:
       region_id: ${REGION_ID}
+      {{#has deployment.type 'CF'}}
       organization: ${CF_ORGANIZATION}
+      {{/has}}
       space: ${CF_SPACE}
       application: ${CF_APP}
     {{#has deployment.type 'Kube'}}
