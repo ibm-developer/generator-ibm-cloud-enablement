@@ -261,9 +261,9 @@ module.exports = class extends Generator {
 			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-express-run`,
 			imageNameTools: `${applicationName.toLowerCase()}-express-tools`,
-			buildCmdRun: 'npm install --production --unsafe-perm',
+			buildCmdRun: 'npm install' ,
 			testCmd: 'npm run test',
-			buildCmdDebug: 'npm install --unsafe-perm',
+			buildCmdDebug: 'npm install',
 			runCmd: '',
 			stopCmd: "npm stop",
 			chartPath: `chart/${applicationName.toLowerCase()}`
