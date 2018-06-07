@@ -39,6 +39,12 @@ spec:
             value : "{{tag ' .Values.service.servicePort '}}"
           - name: APPLICATION_NAME
             value: "{{tag ' .Release.Name '}}"
+          {{#has services 'mongodb'}}
+          - name: MONGO_URL
+            value: {{tag ' .Values.services.mongo.url '}}
+          - name: MONGO_DB_NAME
+            value: {{tag ' .Values.services.mongo.name '}}
+          {{/has}}
 {{tag '- if .Values.generatedBindings.enabled '}}
 {{tag '.Files.Get "bindings.yaml" | indent 10 '}}
 {{tag '- end '}}

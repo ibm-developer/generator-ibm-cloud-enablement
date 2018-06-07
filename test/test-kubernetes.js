@@ -121,8 +121,8 @@ function assertYmlMongoContent() {
 	it('should have env variables for mongo in deployment and values', function () {
 		const valuesyml = getSafeYaml(chartLocation + '/values.yaml');
 
-		assert.fileContent(chartLocation + '/bindings.yaml', '- name: MONGO_URL\n  value: {{ .Values.services.mongo.url }}');
-		assert.fileContent(chartLocation + '/bindings.yaml', '- name: MONGO_DB_NAME\n  value: {{ .Values.services.mongo.name }}');
+		assert.fileContent(chartLocation + '/templates/deployment.yaml', '- name: MONGO_URL\n            value: {{ .Values.services.mongo.url }}');
+		assert.fileContent(chartLocation + '/templates/deployment.yaml', '- name: MONGO_DB_NAME\n            value: {{ .Values.services.mongo.name }}');
 		assertYmlContentExists(valuesyml.services.mongo, 'services.mongo');
 		assertYmlContent(valuesyml.services.mongo.url, 'mongo', 'services.mongo.url');
 		assertYmlContent(valuesyml.services.mongo.name, 'comments', 'services.mongo.name');
