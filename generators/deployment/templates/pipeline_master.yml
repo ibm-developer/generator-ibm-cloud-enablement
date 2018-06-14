@@ -1,3 +1,4 @@
+---
 stages:
 - name: Build Stage
   inputs:
@@ -95,8 +96,8 @@ stages:
       region_id: ${REGION_ID}
       {{#has deployment.type 'CF'}}
       organization: ${CF_ORGANIZATION}
-      {{/has}}
       space: ${CF_SPACE}
+      {{/has}}
       application: ${CF_APP}
     {{#has deployment.type 'Kube'}}
       api_key: ${API_KEY}

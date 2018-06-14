@@ -1,70 +1,77 @@
 {{! This file is processed with handlebars. The tag helper will return the provided string in double braces}}
-name: Continuous Delivery Toolchain
-description: "This toolchain includes tools to develop and deploy your app. Depending on your app, when you create the toolchain, the GitHub repository will either be empty or will contain source code from your app.\n\nThis toolchain uses tools that are part of the Continuous Delivery service. If an instance of that service isn't already in your organization, when you click **Create**, it is automatically added at no cost to you. For more information and terms, see the [IBM Cloud catalog](/catalog/services/continuous-delivery/).\n\nTo get started, click **Create**."
-version: 0.2
-required:
- - deploy
- - repo
+version: '2'
+template:
+  name: Continuous Delivery Toolchain
+  description: "This toolchain includes tools to develop and deploy your app. Depending on your app, when you create the toolchain, the GitHub repository will either be empty or will contain source code from your app.\n\nThis toolchain uses tools that are part of the Continuous Delivery service. If an instance of that service isn't already in your organization, when you click **Create**, it is automatically added at no cost to you. For more information and terms, see the [IBM Cloud catalog](/catalog/services/continuous-delivery/).\n\nTo get started, click **Create**."
+  required:
+    - repo
+    - build
 
 toolchain:
   name: {{name}}
 
-# Github repos
-repo:
-  service_id: hostedgit
-  parameters:
-    repo_url: "{{tag '#zip_url'}}{{tag 'zip_url'}}{{tag '/zip_url'}}{{tag '^zip_url'}}{{tag 'repository'}}{{tag '/zip_url'}}"
-    repo_name: "{{tag 'toolchain.name'}}"
-    type: {{repoType}}
-    has_issues: true
-    enable_traceability: true
+services:
+  # Github repos
+  repo:
+    service_id: hostedgit
+    parameters:
+      repo_url: "{{tag '#zip_url'}}{{tag 'zip_url'}}{{tag '/zip_url'}}{{tag '^zip_url'}}{{tag 'repository'}}{{tag '/zip_url'}}"
+      repo_name: "{{tag 'toolchain.name'}}"
+      type: {{repoType}}
+      has_issues: true
+      enable_traceability: true
 
-# Pipelines
-build:
-  service_id: pipeline
-  parameters:
-    name: "{{tag 'name'}}"
-    ui-pipeline: true
-    configuration:
-     content: $file(pipeline.yml)
-     env:
-      REPO: "repo"
-      CF_APP: "{{tag 'deploy.parameters.app-name'}}"
-      CF_SPACE: "{{tag 'deploy.parameters.dev-space'}}"
-      CF_ORGANIZATION: "{{tag 'deploy.parameters.dev-organization'}}"
-      REGION_ID: "{{tag 'deploy.parameters.dev-region'}}"
-      {{#has deployment.type 'Kube'}}
-      CHART_NAME: "{{tag 'deploy.parameters.chart-name'}}"
-      KUBE_CLUSTER_NAME: "{{tag 'deploy.parameters.kube-cluster-name'}}"
-      CLUSTER_NAMESPACE: "{{tag 'deploy.parameters.cluster-namespace'}}"
-      API_KEY: "{{tag 'deploy.parameters.api-key'}}"
-      IMAGE_REGISTRY_TOKEN: "{{tag 'deploy.parameters.image-registry-token'}}"
-      REGISTRY_NAMESPACE: "{{tag 'deploy.parameters.registry-namespace'}}"
-      {{/has}}
-     execute: true
-    services: ["repo"]
-  hidden: ["form"]
+  # Pipelines
+  build:
+    service_id: pipeline
+    parameters:
+      services: 
+        - repo
+      name: "{{tag 'name'}}"
+      ui-pipeline: true
+      configuration:
+        content: 
+          $text: pipeline.yml
+        env:
+          REPO: repo
+          CF_APP: "{{tag 'form.pipeline.parameters.app-name'}}"
+          {{#has deployment.type 'Kube'}}
+          CHART_NAME: "{{tag 'form.pipeline.parameters.chart-name'}}"
+          KUBE_CLUSTER_NAME: "{{tag 'form.pipeline.parameters.kube-cluster-name'}}"
+          CLUSTER_NAMESPACE: "{{tag 'form.pipeline.parameters.cluster-namespace'}}"
+          API_KEY: "{{tag 'form.pipeline.parameters.api-key'}}"
+          IMAGE_REGISTRY_TOKEN: "{{tag 'form.pipeline.parameters.image-registry-token'}}"
+          REGISTRY_NAMESPACE: "{{tag 'form.pipeline.parameters.registry-namespace'}}"
+          {{/has}}
+          {{#has deployment.type 'CF'}}
+          CF_SPACE: "{{tag 'form.pipeline.parameters.dev-space'}}"
+          CF_ORGANIZATION: "{{tag 'form.pipeline.parameters.dev-organization'}}"
+          {{/has}}
+          REGION_ID: "{{tag 'form.pipeline.parameters.dev-region'}}"
+        execute: true
 
-#Web IDE
-webide:
-  service_id: orion
+  #Web IDE
+  webide:
+    service_id: orion
 
 #Deployment
-deploy:
-  schema:
-    $ref: deploy.json
-  service-category: pipeline
-  parameters:
-    app-name: {{name}}
-    dev-space: "{{tag 'space'}}"
-    dev-organization: "{{tag 'organization'}}"
-    dev-region: "{{tag 'region'}}"
-    {{#has deployment.type 'Kube'}}
-    chart-name: {{deployment.chartName}}
-    kube-cluster-name: {{deployment.kubeClusterName}}
-    cluster-namespace: {{deployment.kubeClusterNamespace}}
-    api-key: "{{tag 'api-key'}}"
-    image-pull-secret-name: "{{tag 'image-pull-secret-name'}}"
-    image-registry-token: "{{tag 'image-registry-token'}}"
-    registry-namespace: {{deployment.imageRegistryNamespace}}
-    {{/has}}
+form:
+  pipeline:
+    schema: 
+      $ref: deploy.json
+    parameters:
+      app-name: {{name}}
+      dev-region: "{{tag 'region'}}"
+      {{#has deployment.type 'Kube'}}
+      chart-name: {{deployment.chartName}}
+      kube-cluster-name: {{deployment.kubeClusterName}}
+      cluster-namespace: {{deployment.kubeClusterNamespace}}
+      api-key: "{{tag 'api-key'}}"
+      image-pull-secret-name: "{{tag 'image-pull-secret-name'}}"
+      image-registry-token: "{{tag 'image-registry-token'}}"
+      registry-namespace: {{deployment.imageRegistryNamespace}}
+      {{/has}}
+      {{#has deployment.type 'CF'}}
+      dev-space: "{{tag 'space'}}"
+      dev-organization: "{{tag 'organization'}}"
+      {{/has}}

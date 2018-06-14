@@ -179,11 +179,11 @@ describe('cloud-enablement:cloudfoundry', function () {
 					it('toolchain.yml file is generated with correct repo.parameters.type', function () {
 						assert.file('.bluemix/toolchain.yml');
 						let toolchainyml = yml.safeLoad(fs.readFileSync('.bluemix/toolchain.yml', 'utf8'));
-						let repoType = toolchainyml.repo.parameters.type;
+						let repoType = toolchainyml.services.repo.parameters.type;
 						if (createType === 'enable/') {
-							assertYmlContent(repoType, 'link', 'toolchainyml.repo.type');
+							assertYmlContent(repoType, 'link', 'toolchainyml.services.repo.parameters.type');
 						} else {
-							assertYmlContent(repoType, 'clone', 'toolchainyml.repo.type');
+							assertYmlContent(repoType, 'clone', 'toolchainyml.services.repo.parameters.type');
 						}
 					});
 
