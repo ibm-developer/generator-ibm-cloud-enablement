@@ -59,7 +59,6 @@ stages:
     type: deployer
     target:
       region_id: ${REGION_ID}
-      space: ${CF_SPACE}
       application: ${CF_APP}
       api_key: ${API_KEY}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
