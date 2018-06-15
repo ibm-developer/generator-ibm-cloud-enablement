@@ -22,6 +22,7 @@
       "description": "The IBM Cloud region",
       "type": "string"
     },
+    {{#has deployment.type 'CF'}}
     "dev-organization": {
       "description": "The IBM Cloud org",
       "type": "string"
@@ -30,12 +31,13 @@
       "description": "The IBM Cloud space",
       "type": "string"
     },
+    {{/has}}
     "app-name": {
       "description": "app name",
       "type": "string"
     }
   },
-  "required": ["dev-region", "dev-organization", "dev-space", "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],
+  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],
   "form": [{
     "type": "validator",
     "url": "/devops/setup/bm-helper/helper.html"
@@ -65,6 +67,7 @@
     "key": "app-name"
   }, {
     "type": "table",
+    {{#has deployment.type 'CF'}}
     "columnCount": 3,
     "widths": ["28%", "28%", "28%"],
     "items": [{
@@ -87,5 +90,17 @@
       "key": "dev-space",
       "readonly": false
     }]
+    {{/has}}
+    {{#has deployment.type 'Kube'}}
+    "columnCount": 1,
+    "widths": ["28%"],
+    "items": [{
+      "type": "label",
+      "title": "Region"
+    }, {
+      "type": "select",
+      "key": "dev-region"
+    }]
+    {{/has}}
   }]
 }
