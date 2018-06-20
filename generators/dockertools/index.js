@@ -206,7 +206,7 @@ module.exports = class extends Generator {
 		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
 		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '3000';
-		const debugPort = '5858';
+		const debugPort = '9229';
 
 		// Define metadata for all services that
 		// require custom logic in Dockerfiles
@@ -265,6 +265,7 @@ module.exports = class extends Generator {
 			testCmd: 'npm run test',
 			buildCmdDebug: 'npm install',
 			runCmd: '',
+			debugCmd: 'npm run debug',
 			stopCmd: "npm stop",
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
@@ -273,7 +274,7 @@ module.exports = class extends Generator {
 		
 		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE , 'node/Dockerfile', { port, servicesPackages });
 		
-		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'node/Dockerfile-tools', { port });
+		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'node/Dockerfile-tools', { port, debugPort });
 		
 		this._copyTemplateIfNotExists(FILENAME_DOCKER_IGNORE, 'node/dockerignore', {});
 		
