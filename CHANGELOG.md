@@ -8,7 +8,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* org and space no longer required in kube devops form payload ([#300](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/300)) ([147a9dc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/147a9dc))
 * **node-deployment:** readded debug cmd and expose correct debug port ([9ec8303](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9ec8303))
 
 
