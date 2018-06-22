@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.0.11"></a>
+## [1.0.11](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.0.9...v1.0.11) (2018-06-20)
+
+
+### Bug Fixes
+
+* **node-deployment:** readded debug cmd and expose correct debug port ([9ec8303](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9ec8303))
+
+
+
 <a name="1.0.10"></a>
 ## [1.0.10](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.0.9...v1.0.10) (2018-06-15)
 
