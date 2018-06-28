@@ -1,0 +1,2 @@
+pkill node
+npm start

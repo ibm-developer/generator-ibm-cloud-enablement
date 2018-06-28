@@ -46,7 +46,8 @@ module.exports = class extends Generator {
 		};
 		this.deployment = {
 			type: 'CF',
-			name: this.bluemix.name
+			name: this.bluemix.name,
+			language: this.bluemix.backendPlatform
 		};
 
 		this.name = undefined;
@@ -114,8 +115,8 @@ module.exports = class extends Generator {
 	}
 
 	/***
-	 * Get the highest memory size available 
-	 * 
+	 * Get the highest memory size available
+	 *
 	 * @params manifestMemoryConfig {string} the memory allocaated h
 	 */
 	_getHighestMemorySize(manifestMemoryConfig, userDefinedMinMemory){
@@ -124,7 +125,7 @@ module.exports = class extends Generator {
 		} else if (!manifestMemoryConfig && userDefinedMinMemory) {
 			return userDefinedMinMemory;
 		}
-			
+
 		const memMap = {
 			k: 1,
 			m: 2,
@@ -133,7 +134,7 @@ module.exports = class extends Generator {
 		const manifestSize = manifestMemoryConfig.replace(/[^MmGgKk]/g, '');
 		const userDefinedMinSize = userDefinedMinMemory.replace(/[^MmGgKk]/g, '');
 		let highestAvailableSize;
- 
+
 		if(memMap[manifestSize.toLowerCase()] > memMap[userDefinedMinSize.toLowerCase()]){
 			highestAvailableSize = manifestMemoryConfig;
 		} else if (memMap[manifestSize.toLowerCase()] < memMap[userDefinedMinSize.toLowerCase()]){
@@ -288,10 +289,21 @@ module.exports = class extends Generator {
 			deployment: this.deployment
 		});
 
-		this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml', {
-			config: this.pipelineConfig,
-			deployment: this.deployment
-		});
+		if (Utils.sanitizeAlphaNumLowerCase(this.opts.bluemix.cloudDeploymentType) === "vsi") {
+			this._writeHandlebarsFile('vsi_pipeline_master.yml', '.bluemix/pipeline.yml', {
+				config: this.pipelineConfig,
+				name: this.name,
+				lowercaseName: Utils.sanitizeAlphaNumLowerCase(this.name),
+				deployment: this.deployment
+			});
+		}
+		else {
+			this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml', {
+				config: this.pipelineConfig,
+				deployment: this.deployment
+			});
+		}
+
 	}
 
 	_writeHandlebarsFile(templateFile, destinationFile, data) {
