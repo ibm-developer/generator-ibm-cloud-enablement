@@ -1,0 +1,175 @@
+---
+stages:
+- name: Build Stage
+  inputs:
+  - type: git
+    branch: master
+    service: ${REPO}
+  properties:
+  - name: VI_INSTANCE_NAME
+    value: {{name}}
+    type: text
+  - name: PUBLIC_KEY
+    type: text
+  - name: PRIVATE_KEY
+    type: secure
+  - name: TF_VAR_ibm_sl_username
+    type: text
+  - name: TF_VAR_ibm_sl_api_key
+    type: secure
+  - name: TF_VAR_ibm_cloud_api_key
+    type: secure
+  - name: GIT_USER
+    type: text
+  - name: GIT_PASSWORD
+    type: secure
+  jobs:
+  - name: Validate
+    type: builder
+    artifact_dir: ''
+    build_type: shell
+    script: |
+      #!/bin/bash
+      bash terraform/scripts/validate.sh
+  - name: Build
+    type: builder
+    artifact_dir: ''
+    build_type: customimage
+    script: |
+      apt-get update && apt-get install -y build-essential debhelper fakeroot
+      bash terraform/scripts/build.sh
+      dpkg-buildpackage -rfakeroot -us -uc -b && mv ../{{lowercaseName}}-0.0_1-1_all.deb terraform/{{name}}-0.0_1-1_all.deb
+      if [ ! -f terraform/{{name}}-0.0_1-1_all.deb ]; then echo "Debian package was not successfully created."; exit 1; fi
+      echo $PUBLIC_KEY > terraform/publickey.txt
+      echo $TF_VAR_ibm_sl_api_key > terraform/slkey.txt
+      echo $TF_VAR_ibm_sl_username > terraform/slusername.txt
+      echo $TF_VAR_ibm_cloud_api_key > terraform/cloudkey.txt
+      echo $VI_INSTANCE_NAME > terraform/instancename.txt
+      echo $PRIVATE_KEY > terraform/ssh_private_key && chmod 400 terraform/ssh_private_key
+      echo $GIT_URL > terraform/giturl.txt
+      if [ ! -z $GIT_USER ]; then echo $GIT_USER > terraform/gituser.txt; fi
+      if [ ! -z $GIT_PASSWORD ]; then echo $GIT_PASSWORD > terraform/gitpassword.txt; fi
+    {{#has deployment.language 'NODE'}}
+    docker_image: node:8
+    {{/has}}
+    {{#has deployment.language 'PYTHON'}}
+    docker_image: python:3
+    {{/has}}
+    {{#has deployment.language 'DJANGO'}}
+    docker_image: python:3
+    {{/has}}
+    {{#has deployment.language 'SWIFT'}}
+    docker_image: ibmcom/swift-ubuntu:4.1.2
+    {{/has}}
+    {{#has deployment.language 'SPRING'}}
+    docker_image: maven:3-jdk-8
+    {{/has}}
+    {{#has deployment.language 'JAVA'}}
+    docker_image: maven:3-jdk-8
+    {{/has}}
+- name: Terraform Plan Stage
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  triggers:
+  - type: stage
+  jobs:
+  - name: Plan
+    type: builder
+    working_dir: terraform
+    artifact_dir: ''
+    build_type: customimage
+    script: |-
+      export PUBLIC_KEY=$(cat publickey.txt)
+      export TF_VAR_ibm_sl_api_key=$(cat slkey.txt)
+      export TF_VAR_ibm_sl_username=$(cat slusername.txt)
+      export TF_VAR_ibm_cloud_api_key=$(cat cloudkey.txt)
+      export VI_INSTANCE_NAME=$(cat instancename.txt)
+      if [ -f gituser.txt ]; then export GIT_USER=$(cat gituser.txt); fi
+      if [ -f gitpassword.txt ]; then export GIT_PASSWORD=$(cat gitpassword.txt); fi
+      export GIT_URL=$(cat giturl.txt)
+      bash scripts/fetch-state.sh
+      terraform init -input=false
+      terraform validate
+      terraform plan -var "ssh_public_key=$PUBLIC_KEY" -input=false -out tfplan
+    docker_image: ibmterraform/terraform-provider-ibm-docker
+- name: Terraform Apply Stage
+  inputs:
+  - type: job
+    stage: Terraform Plan Stage
+    job: Plan
+  triggers:
+  - type: stage
+  jobs:
+  - name: Apply
+    type: builder
+    artifact_dir: ''
+    build_type: customimage
+    script: |-
+      terraform apply -auto-approve -input=false tfplan
+      terraform output "host ip" > hostip.txt
+      bash scripts/publish-state.sh
+    docker_image: ibmterraform/terraform-provider-ibm-docker
+- name: Deploy / Install / Start Stage
+  inputs:
+  - type: job
+    stage: Terraform Apply Stage
+    job: Apply
+  triggers:
+  - type: stage
+  jobs:
+  - name: Deploy
+    type: builder
+    artifact_dir: ''
+    build_type: customimage
+    script: |-
+      apk add --no-cache openssh rsync
+      VSI_HOST=$(cat hostip.txt)
+      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "apt-get update; apt-get install rsync; mkdir -p app"
+      rsync -arv -e "ssh -i ssh_private_key" {{name}}-0.0_1-1_all.deb root@$VSI_HOST:app
+    docker_image: alpine
+  - name: Install
+    type: builder
+    artifact_dir: ''
+    build_type: shell
+    script: |-
+      #!/bin/bash
+      VSI_HOST=$(cat hostip.txt)
+      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
+  - name: Start
+    type: builder
+    artifact_dir: ''
+    build_type: shell
+    script: |-
+      #!/bin/bash
+      VSI_HOST=$(cat hostip.txt)
+      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; nohup bash start.sh &> output.log &"
+- name: Health Check Stage
+  inputs:
+  - type: job
+    stage: Deploy / Install / Start Stage
+    job: Start
+  triggers:
+  - type: stage
+  jobs:
+  - name: Test
+    type: tester
+    script: |
+      apk add --no-cache curl openssh
+      VSI_HOST=$(cat hostip.txt)
+      if [ $(curl -sL -w "%{http_code}\\n" "http://${VSI_HOST}:3000/health/" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
+        echo "Successfully reached health endpoint: http://${VSI_HOST}:3000/health/"
+        echo "====================================================================="
+        ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; sed -i 's/localhost/${VSI_HOST}/g' output.log; sed -i 's/0.0.0.0/${VSI_HOST}/g' output.log; sed -i 's/127.0.0.1/${VSI_HOST}/g' output.log; cat output.log"
+      else
+        echo "Could not reach health endpoint: http://${VSI_HOST}:3000/health/"
+        exit 1;
+      fi;
+    test_type: customimage
+    docker_image: alpine
+hooks:
+- enabled: true
+  label: null
+  ssl_enabled: false
+  url: http://lms-api/v1/messaging/webhook/publish
