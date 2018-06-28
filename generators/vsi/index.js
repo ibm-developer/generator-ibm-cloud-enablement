@@ -70,8 +70,8 @@ module.exports = class extends Generator {
 	}
 
 	writing() {
-		//skip writing files if platforms is specified via options and it doesn't include kube
-		if(this.opts.platforms && !this.opts.platforms.includes('kube')) {
+		//skip writing files if platforms is specified via options and it doesn't include VSI
+		if(this.opts.platforms && !this.opts.platforms.includes('VSI')) {
 			return;
 		}
 
