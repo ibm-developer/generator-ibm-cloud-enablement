@@ -1,3 +1,5 @@
+#! /usr/bin/env bash
+
 {{#has deployment.language 'NODE'}}
 npm install
 {{/has}}
