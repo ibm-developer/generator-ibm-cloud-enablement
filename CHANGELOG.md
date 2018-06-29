@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.1"></a>
+## [1.1.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.1.0...v1.1.1) (2018-06-29)
+
+
+### Bug Fixes
+
+* change kube_deploy to grab first port ([7cb8a9a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7cb8a9a))
+* dynamic service name fix in values.yaml ([4a89f98](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4a89f98))
+* **vsi:** validate json options for bluemix server options ([fe8aa5e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/fe8aa5e))
+
+
+
 <a name="1.1.0"></a>
 # [1.1.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.0.11...v1.1.0) (2018-06-28)
 
