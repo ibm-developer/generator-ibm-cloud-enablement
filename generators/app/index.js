@@ -37,7 +37,7 @@ module.exports = class extends Generator {
 		this.shouldPrompt = this.opts.bluemix ? false : true;
 
 		/*
-		Yeoman copies the opts when doing compose with so create own object reference 
+		Yeoman copies the opts when doing compose with so create own object reference
 		that can be updated in prompting
 		*/
 		if (this.opts.bluemix) {
@@ -48,10 +48,20 @@ module.exports = class extends Generator {
 		}
 	}
 
+
+	default(){
+		if (_.toLower(this.opts.bluemix.cloudDeploymentType) === "vsi") {
+			this.composeWith(require.resolve('../vsi'), this.opts);
+		}
+	}
 	initializing() {
 		this.composeWith(require.resolve('../dockertools'), this.opts);
 		this.composeWith(require.resolve('../kubernetes'), this.opts);
 		this.composeWith(require.resolve('../deployment'), this.opts);
+
+		if (_.toLower(this.opts.bluemix.cloudDeploymentType) === "vsi") {
+			this.composeWith(require.resolve('../vsi'), this.opts);
+		}
 	}
 
 	prompting() {
@@ -74,7 +84,8 @@ module.exports = class extends Generator {
 				'SPRING',
 				'NODE',
 				'PYTHON',
-				'SWIFT'
+				'SWIFT',
+				'DJANGO'
 			]
 		});
 		prompts.push({
@@ -82,6 +93,20 @@ module.exports = class extends Generator {
 			name: 'dockerRegistry',
 			message: 'Docker Registry (space for none)',
 			default: 'registry.ng.bluemix.net/' + os.userInfo().username
+		});
+
+		prompts.push({
+			type: 'input',
+			name: 'deploymentType',
+			message: 'Deployment Type (Kube, CF, or VSI)',
+			default: path.basename(process.cwd())
+		});
+
+		prompts.push({
+			type: 'input',
+			name: 'createType',
+			message: 'ie basic, blank, ect.',
+			default: path.basename(process.cwd())
 		});
 
 		return this.prompt(prompts).then(this._processAnswers.bind(this));
@@ -94,6 +119,8 @@ module.exports = class extends Generator {
 		this.bluemix.name = answers.name;
 		answers.dockerRegistry = answers.dockerRegistry.trim();
 		this.bluemix.dockerRegistry = answers.dockerRegistry.length > 0 ? answers.dockerRegistry : '';
+		this.bluemix.cloudDeploymentType = answers.deploymentType;
+		this.opts.createType = answers.createType;
 	}
 
 	_sanitizeOption(options, name) {

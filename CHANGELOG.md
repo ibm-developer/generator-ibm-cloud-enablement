@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.0"></a>
+# [1.1.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.0.11...v1.1.0) (2018-06-28)
+
+
+### Features
+
+* **vsi:** added support for deployment to vsi ([#306](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/306)) ([0374f9c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/0374f9c))
+
+
+
 <a name="1.0.11"></a>
 ## [1.0.11](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.0.9...v1.0.11) (2018-06-20)
 
