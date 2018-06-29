@@ -49,7 +49,7 @@ function get(language, bluemix) {
 	if(language === 'SPRING') {
 		bluemix.server.memory = "256M";
 	}
-	return JSON.stringify(bluemix);
+	return bluemix;
 }
 
 module.exports = {

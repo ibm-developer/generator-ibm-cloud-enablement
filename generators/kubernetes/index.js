@@ -1,5 +1,5 @@
 /*
- Copyright 2017 IBM Corp.
+ Copyright 2018 IBM Corp.
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -107,12 +107,12 @@ module.exports = class extends Generator {
 
 		this.opts.repositoryURL='';
 		if (this.bluemix.server) {
-			const registryNamespace = this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace ?
+			const registryNamespace = this.bluemix.server && this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace ?
 				this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace : 'replace-me-namespace';
-			const domain = this.bluemix.server.domain ? this.bluemix.server.domain : 'ng.bluemix.net';
+			const domain = this.bluemix.server && this.bluemix.server.domain ? this.bluemix.server.domain : 'ng.bluemix.net';
 			this.opts.repositoryURL= `registry.${domain}/${registryNamespace}/`;
 			this.opts.kubeClusterNamespace =
-				this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
+				this.bluemix.server && this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
 					this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace : 'default';
 		} else {
 			// TODO(gib): we seem to be hitting this, not sure how.
