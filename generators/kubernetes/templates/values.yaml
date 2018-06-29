@@ -14,7 +14,7 @@ livenessProbe:
   initialDelaySeconds: 3000
   periodSeconds: 1000
 service:
-  name: Node
+  name: {{language}}
   type: NodePort
   servicePort: {{servicePorts.http}}
 hpa:
