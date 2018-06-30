@@ -50,20 +50,11 @@ module.exports = class extends Generator {
 		this.cloudDeploymentType = this.bluemix.server && this.bluemix.server.cloudDeploymentType;
 	}
 
-
-	default(){
-		if (_.toLower(this.cloudDeploymentType) === "vsi") {
-			this.composeWith(require.resolve('../vsi'), this.opts);
-		}
-	}
 	initializing() {
 		this.composeWith(require.resolve('../dockertools'), this.opts);
 		this.composeWith(require.resolve('../kubernetes'), this.opts);
 		this.composeWith(require.resolve('../deployment'), this.opts);
-
-		if (_.toLower(this.cloudDeploymentType) === "vsi") {
-			this.composeWith(require.resolve('../vsi'), this.opts);
-		}
+		this.composeWith(require.resolve('../vsi'), this.opts);
 	}
 
 	prompting() {

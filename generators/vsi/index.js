@@ -70,11 +70,6 @@ module.exports = class extends Generator {
 	}
 
 	writing() {
-		//skip writing files if platforms is specified via options and it doesn't include VSI
-		if(this.opts.platforms && !this.opts.platforms.includes('VSI')) {
-			return;
-		}
-
 		this._writeHandlebarsFile('debian/control_master', 'debian/control', {
 			deployment: this.deployment
 		});
@@ -92,7 +87,6 @@ module.exports = class extends Generator {
 		});
 
 		this._writeHandlebarsFile('terraform/variables_master.tf', 'terraform/variables.tf', {
-
 			deployment: this.deployment
 		});
 
