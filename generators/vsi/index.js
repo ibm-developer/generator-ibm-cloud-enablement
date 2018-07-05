@@ -55,8 +55,6 @@ module.exports = class extends Generator {
 
 		this.opts.language = _.toLower(this.bluemix.backendPlatform);
 
-		this.opts.chartName = this.opts.applicationName;
-
 		this.deployment = {
 			type: 'VSI',
 			name: this.bluemix.name,
