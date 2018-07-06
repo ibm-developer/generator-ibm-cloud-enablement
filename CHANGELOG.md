@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.5"></a>
+## [1.1.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.1.0...v1.1.5) (2018-07-06)
+
+
+### Bug Fixes
+
+* change kube_deploy to grab first port ([7cb8a9a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7cb8a9a))
+* dynamic service name fix in values.yaml ([4a89f98](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4a89f98))
+* **vsi:** fixed kube chart name rename ([#317](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/317)) ([413e532](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/413e532))
+* **vsi:** fixed swift support for vsi and added dynamic port numbers for health check ([#319](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/319)) ([c0f8ee9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/c0f8ee9))
+* **vsi:** only include public folder for non-binary langs ([#315](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/315)) ([231efab](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/231efab))
+* **vsi:** removed branching logic to always generate vsi files ([#313](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/313)) ([9b9c04f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9b9c04f))
+* **vsi:** validate json options for bluemix server options ([fe8aa5e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/fe8aa5e))
+
+
+
 <a name="1.1.4"></a>
 ## [1.1.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.1.0...v1.1.4) (2018-07-05)
 
