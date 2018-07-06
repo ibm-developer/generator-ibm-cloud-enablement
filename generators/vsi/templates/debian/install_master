@@ -26,7 +26,7 @@ public							usr/src/{{deployment.name}}
 {{/unless}}
 {{/has}}
 {{#has deployment.language 'SWIFT'}}
-.build/debug/{{deployment.name}}		usr/src/{{deployment.name}}
+.build/							usr/src/{{deployment.name}}
 {{/has}}
 {{#has deployment.language 'SPRING'}}
 target/{{deployment.name}}-1.0-SNAPSHOT.jar	usr/src/{{deployment.name}}
