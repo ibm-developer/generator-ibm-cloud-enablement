@@ -145,6 +145,7 @@ stages:
       #!/bin/bash
       VSI_HOST=$(cat hostip.txt)
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; nohup bash start.sh &> output.log &"
+      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; cat output.log"
 - name: Health Check Stage
   inputs:
   - type: job
@@ -158,12 +159,30 @@ stages:
     script: |
       apk add --no-cache curl openssh
       VSI_HOST=$(cat hostip.txt)
-      if [ $(curl -sL -w "%{http_code}\\n" "http://${VSI_HOST}:3000/health/" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
-        echo "Successfully reached health endpoint: http://${VSI_HOST}:3000/health/"
+      {{#has deployment.language 'NODE'}}
+      PORT='3000'
+      {{/has}}
+      {{#has deployment.language 'PYTHON'}}
+      PORT='3000'
+      {{/has}}
+      {{#has deployment.language 'DJANGO'}}
+      PORT='3000'
+      {{/has}}
+      {{#has deployment.language 'SWIFT'}}
+      PORT='8080'
+      {{/has}}
+      {{#has deployment.language 'SPRING'}}
+      PORT='3000'
+      {{/has}}
+      {{#has deployment.language 'JAVA'}}
+      PORT='9080'
+      {{/has}}
+      if [ $(curl -sL -w "%{http_code}\\n" "http://${VSI_HOST}:${PORT}/health/" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
+        echo "Successfully reached health endpoint: http://${VSI_HOST}:${PORT}/health/"
         echo "====================================================================="
         ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; sed -i 's/localhost/${VSI_HOST}/g' output.log; sed -i 's/0.0.0.0/${VSI_HOST}/g' output.log; sed -i 's/127.0.0.1/${VSI_HOST}/g' output.log; cat output.log"
       else
-        echo "Could not reach health endpoint: http://${VSI_HOST}:3000/health/"
+        echo "Could not reach health endpoint: http://${VSI_HOST}:${PORT}/health/"
         exit 1;
       fi;
     test_type: customimage

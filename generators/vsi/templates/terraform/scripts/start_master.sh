@@ -16,7 +16,9 @@ gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE=PythonDjangoBasicFSWSH.set
 {{/has}}
 {{#has deployment.language 'SWIFT'}}
 pkill swift
+cd .build/release
 ./{{deployment.name}}
+cd -
 {{/has}}
 {{#has deployment.language 'SPRING'}}
 pkill java
