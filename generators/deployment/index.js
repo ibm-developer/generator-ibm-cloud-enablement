@@ -91,13 +91,15 @@ module.exports = class extends Generator {
 			case 'DJANGO':
 				this._configureDjango();
 				break;
+			case 'GO':
+				this._configureGo();
+				break;
 			default:
-				throw new Error(`Language ${this.bluemix.backendPlatform} was not one of the valid languages: NODE, SWIFT, JAVA, SPRING, DJANGO or PYTHON`);
+				throw new Error(`Language ${this.bluemix.backendPlatform} was not one of the valid languages: NODE, SWIFT, JAVA, SPRING, DJANGO, PYTHON, or GO`);
 		}
 		if (this.manifestConfig && this.manifestConfig.ignorePaths) {
 			this.cfIgnoreContent = this.cfIgnoreContent.concat(this.manifestConfig.ignorePaths);
 		}
-
 
 		this.pipelineConfig.postBuildScript = this.fs.read(this.templatePath('post_build.txt'));
 
@@ -111,7 +113,6 @@ module.exports = class extends Generator {
 					this.pipelineConfig.postBuildScript
 			});
 		}
-
 	}
 
 	/***
@@ -154,6 +155,16 @@ module.exports = class extends Generator {
 		this.manifestConfig.command = 'npm start';
 		this.manifestConfig.memory = this._getHighestMemorySize(this.manifestConfig.memory, this.opts.nodeCFMinMemory);
 		this.cfIgnoreContent = ['.git/', 'node_modules/', 'test/', 'vcap-local.js'];
+	}
+
+	_configureGo() {
+		// TODO: add version for the Go buildpack
+		// Need a direct github link becasue go_buildpack doesn't have dep support
+		this.manifestConfig.buildpack = 'https://github.com/cloudfoundry/go-buildpack.git';
+		this.manifestConfig.command = undefined;
+		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
+		this.manifestConfig.env.GOPACKAGENAME = this.bluemix.name;
+		this.cfIgnoreContent = ['.git/', 'test/', 'vendor/'];
 	}
 
 	_configureSwift() {
