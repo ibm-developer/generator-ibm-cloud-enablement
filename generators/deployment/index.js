@@ -67,6 +67,7 @@ module.exports = class extends Generator {
 		} else {
 			this.name = this.bluemix.name;
 			this.manifestConfig.name = this.bluemix.name;
+			this.deployment.type = this.bluemix.cloudDeploymentType || 'CF';
 		}
 
 		this.toolchainConfig.repoType = this.opts.repoType || "clone";

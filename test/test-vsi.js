@@ -428,4 +428,29 @@ describe('cloud-enablement:vsi', function () {
 		});
 	});
 
+	describe('healthEndpoint parameter passed in correctly', function () {
+
+		beforeEach(function () {
+			let bluemix= {};
+			bluemix.name = "appname";
+			bluemix.cloudDeploymentType = "VSI";
+			bluemix.backendPlatform = 'NODE';
+			bluemix.createType = 'webbasic';
+
+			return helpers.run(path.join(__dirname, '../generators/vsi/index.js'))
+				.inDir(path.join(__dirname, './vsi-tmp'))
+				.withOptions({bluemix: JSON.stringify(bluemix), healthEndpoint: 'customHealth'})
+
+		});
+
+		it('should have correct file content', function () {
+			it('has customHealth endpoint for pipeline.yml', function () {
+				let pipelineFile = '.bluemix/pipeline.yml';
+				assert.file(pipelineFile);
+
+				assert.fileContent(pipelineFile, 'http://${VSI_HOST}:${PORT}/customHealth')
+			});
+		});
+	});
+
 });
