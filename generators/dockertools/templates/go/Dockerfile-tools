@@ -10,7 +10,7 @@ EXPOSE <%= debugPort %>
 ENV CGO_ENABLED=0
 
 # Change working directory
-WORKDIR $GOPATH/src/<%= applicationName %>/
+WORKDIR $GOPATH/src/<%= applicationName.toLowerCase() %>/
 COPY . ./
 
 # Install dependencies
@@ -20,7 +20,7 @@ RUN dep ensure
 
 COPY run-dev $GOPATH/bin
 RUN chmod 777 $GOPATH/bin/run-dev
-RUN chmod 777 $GOPATH/src/<%= applicationName %>/
+RUN chmod 777 $GOPATH/src/<%= applicationName.toLowerCase() %>/
 
 CMD ["/bin/bash"]
 

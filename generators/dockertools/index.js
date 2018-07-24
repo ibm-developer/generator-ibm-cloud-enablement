@@ -44,7 +44,7 @@ module.exports = class extends Generator {
 
 		if (typeof(this.opts.services) === 'string') {
 			this.opts.services  = JSON.parse(opts.services || '[]');
-		} else {
+		} else { 
 			this.opts.services = opts.services || [];
 		}
 	}
@@ -246,7 +246,7 @@ module.exports = class extends Generator {
 			if(services[servKey].hasOwnProperty('port')){
 				servicePorts.push(services[servKey].port);
 			}
-		}
+		} 
 
 
 		const cliConfig = {
@@ -287,7 +287,7 @@ module.exports = class extends Generator {
 			const dockerComposeConfig =  {
 				containerName: `${applicationName.toLowerCase()}-express-run`,
 				image: `${applicationName.toLowerCase()}-express-run`,
-				ports: [port, debugPort].concat(servicePorts),
+				ports: [port, debugPort].concat(servicePorts), 
 				appPort: port,
 				envs: serviceEnvs,
 				images: serviceImageNames
@@ -436,12 +436,12 @@ module.exports = class extends Generator {
 				: 'python manage.py debug',
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
-
+		
 		if(this.opts.services.length > 0){
 			const dockerComposeConfig =  {
 				containerName: `${applicationName.toLowerCase()}-flask-run`,
 				image: `${applicationName.toLowerCase()}-flask-run`,
-				ports: [port, debugPort].concat(servicePorts),
+				ports: [port, debugPort].concat(servicePorts), 
 				appPort: port,
 				envs: serviceEnvs,
 				images: serviceImageNames
@@ -630,7 +630,7 @@ module.exports = class extends Generator {
 			const dockerComposeConfig =  {
 				containerName: `${applicationName.toLowerCase()}-django-run`,
 				image: `${applicationName.toLowerCase()}-django-run`,
-				ports: [port, debugPort].concat(servicePorts),
+				ports: [port, debugPort].concat(servicePorts), 
 				envs: serviceEnvs,
 				appPort: port,
 				images: serviceImageNames
@@ -666,7 +666,6 @@ module.exports = class extends Generator {
 		const serviceImageNames = [];
 		const servicePorts = [];
 
-		// TODO: Figure out what this does
 		// Iterate over service keys to search for provisioned services and their environments
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
@@ -698,6 +697,7 @@ module.exports = class extends Generator {
 			containerNameTools: `${applicationName.toLowerCase()}-go-tools`,
 			hostPathRun: '.',
 			hostPathTools: '.',
+			// Comment that explains the colon
 			containerPathRun: `/go/src/${applicationName.toLowerCase()}; :`,
 			containerPathTools: `/go/src/${applicationName.toLowerCase()}; :`,
 			containerPortMap: `${port}:${port}`,

@@ -101,6 +101,7 @@ module.exports = class extends Generator {
 			this.cfIgnoreContent = this.cfIgnoreContent.concat(this.manifestConfig.ignorePaths);
 		}
 
+
 		this.pipelineConfig.postBuildScript = this.fs.read(this.templatePath('post_build.txt'));
 
 		if (this.pipelineConfig.buildJobProps && this.pipelineConfig.buildJobProps.script) {
@@ -113,6 +114,7 @@ module.exports = class extends Generator {
 					this.pipelineConfig.postBuildScript
 			});
 		}
+
 	}
 
 	/***
@@ -158,13 +160,13 @@ module.exports = class extends Generator {
 	}
 
 	_configureGo() {
-		// TODO: add version for the Go buildpack
-		// Need a direct github link becasue go_buildpack doesn't have dep support
-		this.manifestConfig.buildpack = 'https://github.com/cloudfoundry/go-buildpack.git';
+		// Need a direct github link becasue 'go_buildpack' doesn't have dep support
+		this.manifestConfig.buildpack = 'https://github.com/cloudfoundry/go-buildpack.git#v1.8.25';
 		this.manifestConfig.command = undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
+		// This needs to be the name of the created folder??
 		this.manifestConfig.env.GOPACKAGENAME = this.bluemix.name;
-		this.cfIgnoreContent = ['.git/', 'test/', 'vendor/'];
+		this.cfIgnoreContent = ['.git/', 'vendor/'];
 	}
 
 	_configureSwift() {

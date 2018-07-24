@@ -4,7 +4,7 @@ FROM golang:1.10.3-alpine
 RUN apk update && apk add --no-cache bash git
 
 # Change working directory
-WORKDIR $GOPATH/src/<%= applicationName %>/
+WORKDIR $GOPATH/src/<%= applicationName.toLowerCase() %>/
 COPY . ./
 
 # Install dependencies
