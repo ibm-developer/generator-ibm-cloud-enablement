@@ -425,7 +425,7 @@ describe('cloud-enablement:vsi', function () {
 				assert.file(variablesTerraformFile);
 			});
 
-			it('has customHealth endpoint for pipeline.yml', function () {
+			it('has health endpoint for pipeline.yml', function () {
 				let pipelineFile = '.bluemix/pipeline.yml';
 				assert.file(pipelineFile);
 
