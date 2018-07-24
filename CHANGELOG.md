@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.1.7"></a>
+## [1.1.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.1.6...v1.1.7) (2018-07-24)
+
+
+### Bug Fixes
+
+* **vsi:** added template variable for health endpoint ([#324](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/324)) ([59c8434](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/59c8434))
+
+
+
 <a name="1.1.6"></a>
 ## [1.1.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.1.0...v1.1.6) (2018-07-09)
 
