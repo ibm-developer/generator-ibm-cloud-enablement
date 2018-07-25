@@ -650,7 +650,8 @@ module.exports = class extends Generator {
 
 	_generateGo() {
 
-		const applicationName = Utils.sanitizeAlphaNumUnderscore(this.bluemix.name);
+		const applicationName = Utils.sanitizeAlphaNumDash(this.bluemix.name);
+		const chartName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
 		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '8080';
@@ -713,7 +714,7 @@ module.exports = class extends Generator {
 			runCmd: '',
 			stopCmd: '',
 			debugCmd: 'dlv debug --headless --listen=0.0.0.0:8181',
-			chartPath: `chart/${applicationName.toLowerCase()}`
+			chartPath: `chart/${chartName.toLowerCase()}`
 		};
 
 		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {cliConfig});
