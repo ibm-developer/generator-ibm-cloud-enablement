@@ -667,7 +667,6 @@ module.exports = class extends Generator {
 		const serviceImageNames = [];
 		const servicePorts = [];
 
-		// TODO: Figure out what this does
 		// Iterate over service keys to search for provisioned services and their environments
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
@@ -699,6 +698,7 @@ module.exports = class extends Generator {
 			containerNameTools: `${applicationName.toLowerCase()}-go-tools`,
 			hostPathRun: '.',
 			hostPathTools: '.',
+			// Comment that explains the colon
 			containerPathRun: `/go/src/${applicationName.toLowerCase()}; :`,
 			containerPathTools: `/go/src/${applicationName.toLowerCase()}; :`,
 			containerPortMap: `${port}:${port}`,

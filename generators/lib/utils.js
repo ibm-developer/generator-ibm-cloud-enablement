@@ -42,8 +42,8 @@ const createUniqueName = (name) => {
 }
 
 const sanitizeAlphaNumUnderscore = (name) => {
-  name = name || 'appname';
-  return name
+	name = name || 'appname';
+	return name
     .toLowerCase()
     .replace(REGEX_LEADING_ALPHA, '')
     .replace('-', '_')

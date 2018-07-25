@@ -158,13 +158,12 @@ module.exports = class extends Generator {
 	}
 
 	_configureGo() {
-		// TODO: add version for the Go buildpack
-		// Need a direct github link becasue go_buildpack doesn't have dep support
-		this.manifestConfig.buildpack = 'https://github.com/cloudfoundry/go-buildpack.git';
+		// Need a direct github link becasue 'go_buildpack' doesn't have dep support
+		this.manifestConfig.buildpack = 'https://github.com/cloudfoundry/go-buildpack.git#v1.8.25';
 		this.manifestConfig.command = undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
-		this.manifestConfig.env.GOPACKAGENAME = this.bluemix.name;
-		this.cfIgnoreContent = ['.git/', 'test/', 'vendor/'];
+		this.manifestConfig.env.GOPACKAGENAME = Utils.sanitizeAlphaNumLowerCase(this.bluemix.name);
+		this.cfIgnoreContent = ['.git/', 'vendor/'];
 	}
 
 	_configureSwift() {
