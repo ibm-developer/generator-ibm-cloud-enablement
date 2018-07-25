@@ -649,7 +649,8 @@ module.exports = class extends Generator {
 	}
 
 	_generateGo() {
-		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
+
+		const applicationName = Utils.sanitizeAlphaNumUnderscore(this.bluemix.name);
 		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
 		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '8080';
