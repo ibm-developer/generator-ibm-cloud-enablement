@@ -5,12 +5,12 @@ RUN apk update && apk add --no-cache bash git
 
 # Change working directory
 WORKDIR $GOPATH/src/<%= applicationName %>/
-COPY . ./
 
 # Install dependencies
 RUN go get -u github.com/golang/dep/...
 RUN go get -u github.com/derekparker/delve/cmd/dlv/...
-RUN dep ensure
+COPY . ./
+RUN dep ensure -v
 
 ENV PORT <%= port %>
 EXPOSE <%= port %>

@@ -11,12 +11,12 @@ ENV CGO_ENABLED=0
 
 # Change working directory
 WORKDIR $GOPATH/src/<%= applicationName %>/
-COPY . ./
 
 # Install dependencies
 RUN go get -u github.com/golang/dep/...
 RUN go get -u github.com/derekparker/delve/cmd/dlv/...
-RUN dep ensure
+COPY . ./
+RUN dep ensure -v
 
 COPY run-dev $GOPATH/bin
 RUN chmod 777 $GOPATH/bin/run-dev
