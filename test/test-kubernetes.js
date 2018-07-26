@@ -29,6 +29,7 @@ const scaffolderSampleSwift = scaffolderSample.getJson('SWIFT');
 const scaffolderSampleJava = scaffolderSample.getJson('JAVA');
 const scaffolderSampleSpring = scaffolderSample.getJson('SPRING');
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
+const scaffolderSampleGo = scaffolderSample.getJson('GO');
 
 const applicationName = 'AcmeProject'; // from sample json files
 const chartLocation = 'chart/' + applicationName.toLowerCase();
@@ -572,6 +573,17 @@ describe('cloud-enablement:kubernetes', function () {
 
 		testOutput();
 	});
+
+	describe('kubernetes:app with Go project', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleGo)});
+		});
+
+		testOutput();
+	});
+
 	describe('cloud-enablement:kubernetes with empty bluemix object', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/kubernetes'))

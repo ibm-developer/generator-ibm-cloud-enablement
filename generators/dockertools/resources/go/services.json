@@ -1,0 +1,10 @@
+{
+  "postgresql": {
+    "package": "postgresql-dev"
+  },
+  "mongodb": {
+    "envs": {"MONGO_URL": "mongo", "MONGO_DB_NAME": "comments"},
+    "port": 27017,
+    "imageName": "mongo"
+  }
+}
