@@ -23,6 +23,8 @@ ENV PORT <%= port %>
 
 EXPOSE <%= port %>
 
+USER node
+
 CMD ["npm", "start"]
 
 
