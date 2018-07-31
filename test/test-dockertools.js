@@ -28,6 +28,8 @@ const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
 const scaffolderSamplePythonNoServices = scaffolderSample.getJsonNoServices('PYTHON');
 const scaffolderSampleDjango = scaffolderSample.getJson('DJANGO');
 const scaffolderSampleDjangoNoServices = scaffolderSample.getJsonNoServices('DJANGO');
+const scaffolderSampleGo = scaffolderSample.getJson('GO');
+const scaffolderSampleGoNoServices = scaffolderSample.getJsonNoServices('GO');
 
 const applicationName = "AcmeProject"; // From all scaffolder samples
 
@@ -766,6 +768,83 @@ describe('cloud-enablement:dockertools', function () {
 			]);
 		});
 	});
+
+	describe('cloud-enablement:dockertools with Go project', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleGo)})
+		});
+
+		it('create Dockerfile for running', function () {
+			assert.file(['Dockerfile', 'cli-config.yml', 'Dockerfile-tools']);
+		});
+
+		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
+		});
+
+		it('should have the correct EXPOSE instruction for Dockerfile and Dockerfile-tools', function() {
+			assert.fileContent('Dockerfile' , 'EXPOSE 8080');
+			assert.fileContent('Dockerfile-tools', 'EXPOSE 8181');
+		});
+
+		it('should have the correct build, test and debug cmds for containers', function() {
+			assert.fileContent('cli-config.yml', 'build-cmd-run : "go build"');
+			assert.fileContent('cli-config.yml', 'debug-cmd : "dlv debug --headless --listen=0.0.0.0:8181"');
+			assert.fileContent('cli-config.yml', 'test-cmd : "go test ./..."');
+		});
+			
+		it('has correct default port', function () {
+			assert.fileContent('cli-config.yml', '8080:8080');
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+
+		it('should have the chart-path property set in cli-config.yml', function () {
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+		});
+	});
+
+	describe('cloud-enablement:dockertools with Go project with no services', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleGoNoServices)})
+		});
+
+		it('create Dockerfile with dep ensure and no service package', function () {
+			assert.file(['Dockerfile']);
+			assert.fileContent('Dockerfile', 'dep ensure');
+			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create Dockerfile-tools with go and no service package', function () {
+			assert.file(['Dockerfile-tools']);
+			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
+		});
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', 'go build');
+			assert.fileContent('cli-config.yml', 'acmeproject-go-run');
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
 
 	describe('cloud-enablement:dockertools with empty bluemix object', function () {
 		beforeEach(function () {

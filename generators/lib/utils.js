@@ -18,6 +18,7 @@
 
 const REGEX_LEADING_ALPHA = /^[^a-zA-Z]*/;
 const REGEX_ALPHA_NUM = /[^a-zA-Z0-9]/g;
+const REGEX_ALPHA_NUM_DASH = /[^a-zA-Z0-9\-]/g;
 
 const sanitizeAlphaNumLowerCase = (name) => {
 	return sanitizeAlphaNum(name).toLowerCase();
@@ -40,8 +41,19 @@ const createUniqueName = (name) => {
 
 }
 
+const sanitizeAlphaNumDash = (name) => {
+	name = name || 'appname';
+	return name
+    .toLowerCase()
+    .replace(REGEX_LEADING_ALPHA, '')
+    .replace('_', '-')
+    .replace(' ', '-')
+    .replace(REGEX_ALPHA_NUM_DASH, '');
+};
+
 module.exports = {
 	sanitizeAlphaNum,
 	sanitizeAlphaNumLowerCase,
-	createUniqueName
+	createUniqueName,
+	sanitizeAlphaNumDash
 };

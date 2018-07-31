@@ -46,6 +46,9 @@ const portDefault = {
 	},
 	django: {
 		http: '3000'
+	},
+	go: {
+		http: '8080'
 	}
 }
 
@@ -146,7 +149,15 @@ module.exports = class extends Generator {
 				process : true
 			}
 		}
-		
+
+		if (this.opts.language === 'go') {
+			this.fileLocations.jenkinsfile = {
+				source : 'go/Jenkinsfile',
+				target : 'Jenkinsfile',
+				process : true
+			}
+		}
+
 		// Tested this works OK with Microservice Builder/Microclimate as well
 		if (this.opts.language === 'swift') {
 			this.fileLocations.jenkinsfile = {

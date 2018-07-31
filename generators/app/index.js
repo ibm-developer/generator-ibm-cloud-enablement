@@ -86,7 +86,8 @@ module.exports = class extends Generator {
 				'NODE',
 				'PYTHON',
 				'SWIFT',
-				'DJANGO'
+				'DJANGO',
+				'GO'
 			]
 		});
 		prompts.push({

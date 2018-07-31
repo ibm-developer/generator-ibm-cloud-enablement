@@ -39,7 +39,7 @@ const chartLocation = 'chart/' + applicationName.toLowerCase();
 describe('cloud-enablement:deployment', function () {
 	this.timeout(5000);
 
-	let languages = ['NODE', 'JAVA', 'SPRING', 'SWIFT'];
+	let languages = ['NODE', 'JAVA', 'SPRING', 'SWIFT', 'GO'];
 
 	languages.forEach(lang => {
 		let cfOptions = {
