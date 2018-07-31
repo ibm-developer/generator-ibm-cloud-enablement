@@ -699,7 +699,7 @@ module.exports = class extends Generator {
 			containerNameTools: `${applicationName.toLowerCase()}-go-tools`,
 			hostPathRun: '.',
 			hostPathTools: '.',
-			// Comment that explains the colon
+			// The colon adds a buffer command
 			containerPathRun: `/go/src/${applicationName.toLowerCase()}; :`,
 			containerPathTools: `/go/src/${applicationName.toLowerCase()}; :`,
 			containerPortMap: `${port}:${port}`,

@@ -13,6 +13,7 @@ COPY . ./
 RUN dep ensure -v
 
 ENV PORT <%= port %>
+ENV GIN_MODE = release
 EXPOSE <%= port %>
 
 CMD ["go", "run", "server.go"]
