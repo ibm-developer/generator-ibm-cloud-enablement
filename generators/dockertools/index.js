@@ -649,50 +649,12 @@ module.exports = class extends Generator {
 	}
 
 	_generateGo() {
-
 		const applicationName = Utils.sanitizeAlphaNumDash(this.bluemix.name);
 		const chartName = Utils.sanitizeAlphaNum(this.bluemix.name);
-		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
-		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
+		const dockerFileRun = 'Dockerfile';
+		const dockerFileTools = 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '8080';
 		const debugPort = '8181';
-
-		// Define metadata for all services that
-		// require custom logic in Dockerfiles
-		const services = require('./resources/go/services.json');
-
-		// Get array with all the keys for the services objects
-		const servKeys = Object.keys(services);
-		const servicesPackages = [];
-		const serviceEnvs = [];
-		const serviceImageNames = [];
-		const servicePorts = [];
-
-		// Iterate over service keys to search for provisioned services and their environments
-		for (let index in servKeys) {
-			const servKey = servKeys[index];
-			if (this.bluemix.hasOwnProperty(servKey)) {
-				if (services[servKey].package) {
-					servicesPackages.push(services[servKey].package);
-				}
-			}
-		}
-
-        // Iterate over services key deployed under docker images
-        // Retrieve envs, port and images names if availables for each services
-		for (let index = 0; index < this.opts.services.length; index++){
-			const servKey = this.opts.services[index];
-			if(services[servKey].hasOwnProperty('envs')){
-				serviceEnvs.push(services[servKey].envs);
-			}
-
-			if(services[servKey].hasOwnProperty('imageName')){
-				serviceImageNames.push(services[servKey].imageName);
-			}
-			if(services[servKey].hasOwnProperty('port')){
-				servicePorts.push(services[servKey].port);
-			}
-		}
 
 		const cliConfig = {
 			containerNameRun: `${applicationName.toLowerCase()}-go-run`,
@@ -719,29 +681,11 @@ module.exports = class extends Generator {
 
 		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {cliConfig});
 
-		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE , 'go/Dockerfile', { port, servicesPackages, applicationName });
+		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE , 'go/Dockerfile', { port, applicationName });
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'go/Dockerfile-tools', { port, debugPort, applicationName });
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKER_IGNORE, 'go/dockerignore', {});
-
-
-		if(this.opts.services.length > 0){
-
-			const dockerComposeConfig =  {
-				containerName: `${applicationName.toLowerCase()}-go-run`,
-				image: `${applicationName.toLowerCase()}-go-run`,
-				ports: [port, debugPort].concat(servicePorts),
-				appPort: port,
-				envs: serviceEnvs,
-				images: serviceImageNames
-			};
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'go/docker-compose.yml', dockerComposeConfig);
-			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-go-tools`;
-			dockerComposeConfig.image = `${applicationName.toLowerCase()}-go-tools`,
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'go/docker-compose-tools.yml', dockerComposeConfig);
-		}
-
 
 		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))){
 			this.log(FILENAME_DOCKER_IGNORE, "already exists, skipping.");
@@ -751,7 +695,6 @@ module.exports = class extends Generator {
 				this.destinationPath('.dockerignore')
 			);
 		}
-
 	}
 
 	_copyTemplateIfNotExists(targetFileName, sourceTemplatePath, ctx) {
