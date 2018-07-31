@@ -62,9 +62,6 @@ module.exports = class extends Generator {
 			language: this.bluemix.backendPlatform || this.opts.bluemix.backendPlatform,
 			createType: this.opts.createType || this.bluemix.createType
 		};
-
-		//use port if passed in
-
 	}
 
 	writing() {
