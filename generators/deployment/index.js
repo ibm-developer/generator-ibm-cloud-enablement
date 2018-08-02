@@ -163,7 +163,7 @@ module.exports = class extends Generator {
 		this.manifestConfig.buildpack = 'https://github.com/cloudfoundry/go-buildpack.git#v1.8.25';
 		this.manifestConfig.command = undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
-		this.manifestConfig.env.GOPACKAGENAME = Utils.sanitizeAlphaNumDash(this.bluemix.name);
+		this.manifestConfig.env.GOPACKAGENAME = this.bluemix.sanitizedName;
 		this.cfIgnoreContent = ['.git/', 'vendor/'];
 	}
 

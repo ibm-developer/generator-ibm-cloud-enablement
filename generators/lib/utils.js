@@ -18,7 +18,7 @@
 
 const REGEX_LEADING_ALPHA = /^[^a-zA-Z]*/;
 const REGEX_ALPHA_NUM = /[^a-zA-Z0-9]/g;
-const REGEX_ALPHA_NUM_DASH = /[^a-zA-Z0-9\-]/g;
+const REGEX_ALPHA_NUM_DASH = /[^a-zA-Z0-9-]/g;
 
 const sanitizeAlphaNumLowerCase = (name) => {
 	return sanitizeAlphaNum(name).toLowerCase();
@@ -46,8 +46,7 @@ const sanitizeAlphaNumDash = (name) => {
 	return name
     .toLowerCase()
     .replace(REGEX_LEADING_ALPHA, '')
-    .replace('_', '-')
-    .replace(' ', '-')
+    .replace(/ /g, '-')
     .replace(REGEX_ALPHA_NUM_DASH, '');
 };
 

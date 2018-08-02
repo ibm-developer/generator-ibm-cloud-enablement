@@ -649,8 +649,8 @@ module.exports = class extends Generator {
 	}
 
 	_generateGo() {
-		const applicationName = Utils.sanitizeAlphaNumDash(this.bluemix.name);
-		const chartName = Utils.sanitizeAlphaNum(this.bluemix.name);
+		const applicationName = this.bluemix.sanitizedName;
+		const chartName = Utils.sanitizeAlphaNumLowerCase(this.bluemix.name);
 		const dockerFileRun = 'Dockerfile';
 		const dockerFileTools = 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '8080';
@@ -662,8 +662,8 @@ module.exports = class extends Generator {
 			hostPathRun: '.',
 			hostPathTools: '.',
 			// The colon adds a buffer command
-			containerPathRun: `/go/src/${applicationName.toLowerCase()}; :`,
-			containerPathTools: `/go/src/${applicationName.toLowerCase()}; :`,
+			containerPathRun: `/go/src/${applicationName}; :`,
+			containerPathTools: `/go/src/${applicationName}; :`,
 			containerPortMap: `${port}:${port}`,
 			containerPortMapDebug: `${debugPort}:${debugPort}`,
 			dockerFileRun,
@@ -676,7 +676,7 @@ module.exports = class extends Generator {
 			runCmd: '',
 			stopCmd: '',
 			debugCmd: 'dlv debug --headless --listen=0.0.0.0:8181',
-			chartPath: `chart/${chartName.toLowerCase()}`
+			chartPath: `chart/${chartName}`
 		};
 
 		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {cliConfig});
