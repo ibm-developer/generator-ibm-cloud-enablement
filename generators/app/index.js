@@ -17,6 +17,7 @@ const Generator = require('yeoman-generator');
 const _ = require('lodash');
 const path = require('path');
 const os = require('os');
+const Utils = require('../lib/utils');
 
 const OPTION_BLUEMIX = 'bluemix';
 const OPTION_STARTER = 'starter';
@@ -45,6 +46,10 @@ module.exports = class extends Generator {
 		} else {
 			this.bluemix = {};
 			this.opts.bluemix = this.bluemix;
+		}
+
+		if (this.opts.bluemix.name && !this.opts.bluemix.sanitizedName) {
+			this.opts.bluemix.sanitizedName = Utils.sanitizeAlphaNumDash(this.opts.bluemix.name);
 		}
 
 		// Find cloud deployment type to composeWith correct generators
@@ -119,6 +124,7 @@ module.exports = class extends Generator {
 	_processAnswers(answers) {
 		this.bluemix.backendPlatform = answers.language;
 		this.bluemix.name = answers.name;
+		this.bluemix.sanitizedName = Utils.sanitizeAlphaNumDash(answers.name);
 		answers.dockerRegistry = answers.dockerRegistry.trim();
 		this.bluemix.dockerRegistry = answers.dockerRegistry.length > 0 ? answers.dockerRegistry : '';
 		this.bluemix.cloudDeploymentType = answers.deploymentType;
