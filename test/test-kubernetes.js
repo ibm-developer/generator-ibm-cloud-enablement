@@ -29,6 +29,8 @@ const scaffolderSampleSwift = scaffolderSample.getJson('SWIFT');
 const scaffolderSampleJava = scaffolderSample.getJson('JAVA');
 const scaffolderSampleSpring = scaffolderSample.getJson('SPRING');
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
+const scaffolderSampleGo = scaffolderSample.getJson('GO');
+const scaffolderSampleGoNoServer = scaffolderSample.getJsonNoServer('GO');
 
 const applicationName = 'AcmeProject'; // from sample json files
 const chartLocation = 'chart/' + applicationName.toLowerCase();
@@ -147,10 +149,10 @@ function assertHpaYmlContent() {
 describe('cloud-enablement:kubernetes', function () {
 	this.timeout(5000);
 
-	let languages = ['JAVA', 'SPRING', 'NODE'];
+	let languages = ['JAVA', 'SPRING', 'NODE', 'GO'];
 	languages.forEach(language => {
-		describe('kubernetes:app with Java-' + language + ' project', function () {
-			let bluemix = language === 'SPRING' ? JSON.stringify(scaffolderSampleSpring) : language === 'JAVA' ? JSON.stringify(scaffolderSampleJava) : JSON.stringify(scaffolderSampleNode);
+		describe('kubernetes:app with ' + language + ' project', function () {
+			let bluemix = language === 'SPRING' ? JSON.stringify(scaffolderSampleSpring) : language === 'JAVA' ? JSON.stringify(scaffolderSampleJava) : language === 'NODE' ? JSON.stringify(scaffolderSampleNode) : JSON.stringify(scaffolderSampleGo);
 			beforeEach(function () {
 				return helpers.run(path.join(__dirname, '../generators/app'))
 					.inDir(path.join(__dirname, './tmp'))
@@ -201,7 +203,7 @@ describe('cloud-enablement:kubernetes', function () {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 					assertYmlContent(serviceyml.spec.ports[1], undefined, 'serviceyml.spec.ports[1]');
 				}
-				if (language === 'NODE') {
+				if (language === 'NODE' || language === 'GO') {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 				}
 			});
@@ -266,8 +268,8 @@ describe('cloud-enablement:kubernetes', function () {
 					assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
 				}
 			});
-			if (language === 'JAVA' || language === 'NODE' || language == 'SPRING') {
-				it('Java, Node and Spring have Jenkinsfile with correct content', function () {
+			if (language === 'JAVA' || language === 'NODE' || language == 'SPRING' || language == 'GO') {
+				it('Java, Node, Spring and Go have Jenkinsfile with correct content', function () {
 					assert.fileContent('Jenkinsfile', 'image = \'' + applicationName.toLowerCase() + '\'');
 				});
 			}
@@ -572,6 +574,17 @@ describe('cloud-enablement:kubernetes', function () {
 
 		testOutput();
 	});
+
+	describe('kubernetes:app with Go project with NO server', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleGoNoServer)});
+		});
+
+		testOutput();
+	});
+
 	describe('cloud-enablement:kubernetes with empty bluemix object', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/kubernetes'))

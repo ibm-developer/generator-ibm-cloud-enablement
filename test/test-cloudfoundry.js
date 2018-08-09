@@ -23,12 +23,14 @@ const fs = require('fs');
 const scaffolderSample = require('./samples/scaffolder-sample');
 const scaffolderSampleNode = scaffolderSample.getJson('NODE');
 const scaffolderSampleNodeNoServer = scaffolderSample.getJsonNoServer('NODE');
+const scaffolderSampleGoNoServer = scaffolderSample.getJsonNoServer('GO');
 const scaffolderSampleSwift = scaffolderSample.getJson('SWIFT')
 const scaffolderSampleJava = scaffolderSample.getJson('JAVA');
 const scaffolderSampleSpring = scaffolderSample.getJson('SPRING');
 const scaffolderSampleJavaNoServices = scaffolderSample.getJsonNoServices('JAVA');
 const scaffolderSamplePython = scaffolderSample.getJson('PYTHON');
 const scaffolderSampleDjango = scaffolderSample.getJson('DJANGO');
+const scaffolderSampleGo = scaffolderSample.getJson('GO');
 
 describe('cloud-enablement:cloudfoundry', function () {
 	this.timeout(5000);
@@ -92,6 +94,25 @@ describe('cloud-enablement:cloudfoundry', function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode)});
+		});
+
+		it('manifest.yml has memory', function () {
+			assert.file('manifest.yml');
+			assert.fileContent('manifest.yml', 'memory: 1024M');
+		});
+
+		it('toolchain.yml repo type is clone', function () {
+			assert.file('.bluemix/toolchain.yml');
+			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
+		});
+
+	});
+
+	describe('cloud-enablement:cloudfoundry with Go', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleGo)});
 		});
 
 		it('manifest.yml has memory', function () {
@@ -333,6 +354,31 @@ describe('cloud-enablement:cloudfoundry', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.fileContent('.bluemix/toolchain.yml', 'type: link');
 		});
+	});
+	describe('cloud-enablement:cloudfoundry with Go with NO server', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleGoNoServer), repoType: "link"});
+		});
+
+		it('manifest has no server details', function () {
+			assert.file('manifest.yml');
+			assert.fileContent('manifest.yml', 'name: AcmeProject');
+			assert.fileContent('manifest.yml', 'random-route: true');
+			assert.noFileContent('manifest.yml', 'services:');
+			assert.fileContent('manifest.yml', 'memory: 128M');
+		});
+
+		it('toolchain.yml repo type is link', function () {
+			assert.file('.bluemix/toolchain.yml');
+			assert.fileContent('.bluemix/toolchain.yml', 'type: link');
+		});
+
+		it('cfignore contains vendor folder', function () {
+			assert.file('.cfignore');
+			assert.fileContent('.cfignore', 'vendor/');
+		})
 	});
 });
 

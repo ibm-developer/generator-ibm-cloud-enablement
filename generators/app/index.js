@@ -17,6 +17,7 @@ const Generator = require('yeoman-generator');
 const _ = require('lodash');
 const path = require('path');
 const os = require('os');
+const Utils = require('../lib/utils');
 
 const OPTION_BLUEMIX = 'bluemix';
 const OPTION_STARTER = 'starter';
@@ -47,14 +48,26 @@ module.exports = class extends Generator {
 			this.opts.bluemix = this.bluemix;
 		}
 
-		this.cloudDeploymentType = this.bluemix.server && this.bluemix.server.cloudDeploymentType;
+		if (this.opts.bluemix.name && !this.opts.bluemix.sanitizedName) {
+			this.opts.bluemix.sanitizedName = Utils.sanitizeAlphaNumDash(this.opts.bluemix.name);
+		}
+
+		// Find cloud deployment type to composeWith correct generators
+		if (this.bluemix.server) {
+			this.cloudDeploymentType = this.bluemix.server.cloudDeploymentType;
+		} else {
+			this.cloudDeploymentType = this.bluemix.cloudDeploymentType;
+		}
 	}
 
 	initializing() {
 		this.composeWith(require.resolve('../dockertools'), this.opts);
 		this.composeWith(require.resolve('../kubernetes'), this.opts);
 		this.composeWith(require.resolve('../deployment'), this.opts);
-		this.composeWith(require.resolve('../vsi'), this.opts);
+
+		if (_.toLower(this.cloudDeploymentType) === 'vsi') {
+			this.composeWith(require.resolve('../vsi'), this.opts);
+		}
 	}
 
 	prompting() {
@@ -78,7 +91,8 @@ module.exports = class extends Generator {
 				'NODE',
 				'PYTHON',
 				'SWIFT',
-				'DJANGO'
+				'DJANGO',
+				'GO'
 			]
 		});
 		prompts.push({
@@ -110,6 +124,7 @@ module.exports = class extends Generator {
 	_processAnswers(answers) {
 		this.bluemix.backendPlatform = answers.language;
 		this.bluemix.name = answers.name;
+		this.bluemix.sanitizedName = Utils.sanitizeAlphaNumDash(answers.name);
 		answers.dockerRegistry = answers.dockerRegistry.trim();
 		this.bluemix.dockerRegistry = answers.dockerRegistry.length > 0 ? answers.dockerRegistry : '';
 		this.bluemix.cloudDeploymentType = answers.deploymentType;
