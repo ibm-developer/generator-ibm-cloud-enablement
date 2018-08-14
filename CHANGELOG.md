@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.0"></a>
+# [1.2.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.1.6...v1.2.0) (2018-08-09)
+
+
+### Bug Fixes
+
+* **vsi:** added template variable for health endpoint ([#324](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/324)) ([59c8434](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/59c8434))
+* add gin mode release to dockerfile ([21cfad0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/21cfad0))
+* add more Go tests to test-kube ([9bb9ec2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9bb9ec2))
+* change sanitize function ([a64ca82](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/a64ca82))
+* changed dep ensure to show logs ([577bdfd](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/577bdfd))
+* **vsi:** only run vsi generator when cloudDeploymentType is VSI ([#326](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/326)) ([b05601c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b05601c))
+* handle sanitizedName passed from bluemix payload ([#329](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/329)) ([ae32589](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ae32589))
+* refactored whitespace ([8990a12](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/8990a12))
+* sanitize app name for go apps correctly ([bf9cef2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/bf9cef2))
+* sanitize golang app name correctly in deployment ([184cf9b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/184cf9b))
+
+
+### Features
+
+* add golang functionality ([8d4ad34](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/8d4ad34))
+
+
+
 <a name="1.1.7"></a>
 ## [1.1.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.1.6...v1.1.7) (2018-07-24)
 
