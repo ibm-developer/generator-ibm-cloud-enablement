@@ -106,6 +106,10 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file(['Dockerfile', 'cli-config.yml', 'Dockerfile-tools']);
 		});
 
+		it('create run-debug and run-dev if not present', function () {
+			assert.file(['run-dev', 'run-debug']);
+		});
+
 		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
 			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
 			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
@@ -120,7 +124,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'debug-cmd : "npm run debug"');
 			assert.fileContent('cli-config.yml', 'stop-cmd : "npm stop"');
 		});
-			
+
 		it('has correct default port', function () {
 			assert.fileContent('cli-config.yml', '3000:3000');
 		});
@@ -162,7 +166,7 @@ describe('cloud-enablement:dockertools', function () {
 				'.dockerignore'
 			]);
 		});
-		
+
 		it('should have the dockerfile-run property set as compose files cli-config.yml', function () {
 			assert.fileContent('cli-config.yml', `dockerfile-run : "docker-compose.yml"`);
 			assert.fileContent('cli-config.yml', `dockerfile-tools : "docker-compose-tools.yml"`);
@@ -172,7 +176,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('docker-compose-tools.yml', `image: "${applicationName.toLowerCase()}-express-tools"`);
 
 		});
-		
+
 		it('create docker-compose.yml and docker-compose-tools.yml for running', function () {
 			assert.file(['docker-compose.yml', 'docker-compose-tools.yml']);
 		});
@@ -232,7 +236,7 @@ describe('cloud-enablement:dockertools', function () {
 					it('cli-config file does not have a run-cmd', function () {
 						assert.noFileContent('cli-config.yml', 'run-cmd');
 					});
-				} 
+				}
 				if (language === 'JAVA' || language === 'libertyBeta') {
 					it('.dockerignore ignores workarea and logs', function () {
 						assert.fileContent('.dockerignore', 'workarea');
@@ -544,7 +548,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file(['Dockerfile']);
 			assert.fileContent('Dockerfile', '"python", "manage.py", "start"');
 		});
-		
+
 		it('should have the dockerfile-run property set as compose files cli-config.yml', function () {
 			assert.fileContent('cli-config.yml', `dockerfile-run : "docker-compose.yml"`);
 			assert.fileContent('cli-config.yml', `dockerfile-tools : "docker-compose-tools.yml"`);
@@ -564,7 +568,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('docker-compose-tools.yml', `image: "${applicationName.toLowerCase()}-flask-tools"`);
 		});
 
-		
+
 		it('docker-compose-tools.yml with flask', function () {
 			assert.file(['docker-compose-tools.yml']);
 		})
@@ -795,7 +799,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'debug-cmd : "dlv debug --headless --listen=0.0.0.0:8181"');
 			assert.fileContent('cli-config.yml', 'test-cmd : "go test ./..."');
 		});
-			
+
 		it('has correct default port', function () {
 			assert.fileContent('cli-config.yml', '8080:8080');
 		});
