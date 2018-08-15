@@ -99,8 +99,8 @@ stages:
       space: ${CF_SPACE}
       {{/has}}
       application: ${CF_APP}
-    {{#has deployment.type 'Kube'}}
       api_key: ${API_KEY}
+    {{#has deployment.type 'Kube'}}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash

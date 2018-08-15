@@ -25,21 +25,21 @@ services:
   build:
     service_id: pipeline
     parameters:
-      services: 
+      services:
         - repo
       name: "{{tag 'name'}}"
       ui-pipeline: true
       configuration:
-        content: 
+        content:
           $text: pipeline.yml
         env:
           REPO: repo
           CF_APP: "{{tag 'form.pipeline.parameters.app-name'}}"
+          API_KEY: "{{tag 'form.pipeline.parameters.api-key'}}"
           {{#has deployment.type 'Kube'}}
           CHART_NAME: "{{tag 'form.pipeline.parameters.chart-name'}}"
           KUBE_CLUSTER_NAME: "{{tag 'form.pipeline.parameters.kube-cluster-name'}}"
           CLUSTER_NAMESPACE: "{{tag 'form.pipeline.parameters.cluster-namespace'}}"
-          API_KEY: "{{tag 'form.pipeline.parameters.api-key'}}"
           IMAGE_REGISTRY_TOKEN: "{{tag 'form.pipeline.parameters.image-registry-token'}}"
           REGISTRY_NAMESPACE: "{{tag 'form.pipeline.parameters.registry-namespace'}}"
           {{/has}}
@@ -57,16 +57,16 @@ services:
 #Deployment
 form:
   pipeline:
-    schema: 
+    schema:
       $ref: deploy.json
     parameters:
       app-name: {{name}}
       dev-region: "{{tag 'region'}}"
+      api-key: "{{tag 'api-key'}}"
       {{#has deployment.type 'Kube'}}
       chart-name: {{deployment.chartName}}
       kube-cluster-name: {{deployment.kubeClusterName}}
       cluster-namespace: {{deployment.kubeClusterNamespace}}
-      api-key: "{{tag 'api-key'}}"
       image-pull-secret-name: "{{tag 'image-pull-secret-name'}}"
       image-registry-token: "{{tag 'image-registry-token'}}"
       registry-namespace: {{deployment.imageRegistryNamespace}}
