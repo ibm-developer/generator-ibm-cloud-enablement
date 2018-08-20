@@ -8,7 +8,7 @@
       "description": "IBM Cloud API keys contain permissions that grant access to organizations, spaces, and Kubernetes clusters. You can obtain your API key with 'bx iam api-key-create' or via the console at https://console.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once).",
       "type": "string"
     },
-    {{#has deployment.type "Kube"}}
+    {{#has deployment.type 'Kube'}}
     "image-registry-token": {
       "description": "Container Registry access token. Retrievable via [bx cr tokens]",
       "type": "string"
@@ -22,7 +22,7 @@
       "description": "The IBM Cloud region",
       "type": "string"
     },
-    {{#has deployment.type "CF"}}
+    {{#has deployment.type 'CF'}}
     "dev-organization": {
       "description": "The IBM Cloud org",
       "type": "string"
@@ -37,7 +37,7 @@
       "type": "string"
     }
   },
-  "required": ["dev-region", {{#has deployment.type "CF"}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type "Kube"}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],
+  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],
   "form": [{
     "type": "validator",
     "url": "/devops/setup/bm-helper/helper.html"
@@ -48,7 +48,7 @@
     "title": "IBM Cloud API Key",
     "key": "api-key"
   },
-{{#has deployment.type "Kube"}}
+  {{#has deployment.type 'Kube'}}
   {
     "type": "password",
     "readonly": false,
@@ -68,7 +68,7 @@
     "key": "app-name"
   }, {
     "type": "table",
-    {{#has deployment.type "CF"}}
+    {{#has deployment.type 'CF'}}
     "columnCount": 3,
     "widths": ["28%", "28%", "28%"],
     "items": [{
@@ -92,7 +92,7 @@
       "readonly": false
     }]
     {{/has}}
-    {{#has deployment.type "Kube"}}
+    {{#has deployment.type 'Kube'}}
     "columnCount": 1,
     "widths": ["28%"],
     "items": [{
