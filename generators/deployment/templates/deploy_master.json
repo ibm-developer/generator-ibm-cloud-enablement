@@ -8,16 +8,6 @@
       "description": "IBM Cloud API keys contain permissions that grant access to organizations, spaces, and Kubernetes clusters. You can obtain your API key with 'bx iam api-key-create' or via the console at https://console.bluemix.net/iam/#/apikeys by clicking **Create API key** (Each API key only can be viewed once).",
       "type": "string"
     },
-    {{#has deployment.type 'Kube'}}
-    "image-registry-token": {
-      "description": "Container Registry access token. Retrievable via [bx cr tokens]",
-      "type": "string"
-    },
-    "kube-cluster-name": {
-      "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.bluemix.net/containers-kubernetes/home/clusters.",
-      "type": "string"
-    },
-    {{/has}}
     "dev-region": {
       "description": "The IBM Cloud region",
       "type": "string"
@@ -29,6 +19,16 @@
     },
     "dev-space": {
       "description": "The IBM Cloud space",
+      "type": "string"
+    },
+    {{/has}}
+    {{#has deployment.type 'Kube'}}
+      "image-registry-token": {
+      "description": "Container Registry access token. Retrievable via [bx cr tokens]",
+      "type": "string"
+    },
+      "kube-cluster-name": {
+      "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.bluemix.net/containers-kubernetes/home/clusters.",
       "type": "string"
     },
     {{/has}}
