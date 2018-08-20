@@ -48,7 +48,7 @@
     "title": "IBM Cloud API Key",
     "key": "api-key"
   },
-{{#has deployment.type 'Kube'}}
+  {{#has deployment.type 'Kube'}}
   {
     "type": "password",
     "readonly": false,
