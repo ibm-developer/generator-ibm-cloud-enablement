@@ -23,6 +23,8 @@ const FILENAME_DOCKERCOMPOSE = "docker-compose.yml";
 const FILENAME_DOCKERCOMPOSE_TOOLS = "docker-compose-tools.yml";
 const FILENAME_DOCKERFILE_TOOLS = "Dockerfile-tools";
 const FILENAME_DOCKER_IGNORE = ".dockerignore";
+const FILENAME_DEBUG = "run-debug";
+const FILENAME_DEV = "run-dev";
 
 module.exports = class extends Generator {
 	constructor(args, opts) {
@@ -280,6 +282,10 @@ module.exports = class extends Generator {
 		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'node/Dockerfile-tools', { port, debugPort });
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKER_IGNORE, 'node/dockerignore', {});
+
+		this._copyTemplateIfNotExists(FILENAME_DEBUG , 'node/run-debug', {});
+
+		this._copyTemplateIfNotExists(FILENAME_DEV , 'node/run-dev', {});
 
 
 		if(this.opts.services.length > 0){
