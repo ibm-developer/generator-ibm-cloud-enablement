@@ -1,0 +1,8 @@
+#!/bin/bash
+# Simple shell script to run application in dev mode
+<% if (language === "PYTHON") { %>
+python manage.py livereload
+<% } %>
+<% if (language === "DJANGO") { %>
+python manage.py runserver --settings=<%= name %>.settings.development
+<% } %>
