@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.3"></a>
+## [1.2.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.2.2...v1.2.3) (2018-08-21)
+
+
+### Bug Fixes
+
+* Django and Python were failing with bx dev enable too, adding run-dev script ([7e86947](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7e86947))
+
+
+
 <a name="1.2.2"></a>
 ## [1.2.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.2.0...v1.2.2) (2018-08-21)
 
