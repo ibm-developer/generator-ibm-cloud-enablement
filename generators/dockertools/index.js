@@ -497,6 +497,21 @@ module.exports = class extends Generator {
 			);
 		}
 
+		if (this.fs.exists(this.destinationPath(FILENAME_DEV))){
+			this.log(FILENAME_DEV, "already exists, skipping.");
+		} else {
+			this.fs.copyTpl(
+				this.templatePath('python/run-dev'),
+				this.destinationPath(FILENAME_DEV), {
+					port: port,
+					enable: this.opts.enable,
+					servicesPackages: servicesPackages,
+					language: this.bluemix.backendPlatform,
+					name: this.bluemix.name
+				}
+			);
+		}
+
 		const FILENAME_MANAGEMENT = "manage.py";
 		if (!this.opts.enable) {
 			if (this.fs.exists(this.destinationPath(FILENAME_MANAGEMENT))){
@@ -628,6 +643,21 @@ module.exports = class extends Generator {
 					servicesPackages: servicesPackages,
 					language: this.bluemix.backendPlatform,
 					name: this.bluemix.name
+				}
+			);
+		}
+
+		if (this.fs.exists(this.destinationPath(FILENAME_DEV))){
+			this.log(FILENAME_DEV, "already exists, skipping.");
+		} else {
+			this.fs.copyTpl(
+				this.templatePath('python/run-dev'),
+				this.destinationPath(FILENAME_DEV), {
+					port: port,
+					enable: this.opts.enable,
+					servicesPackages: servicesPackages,
+					language: this.bluemix.backendPlatform,
+					name: this.bluemix.name.toLowerCase()
 				}
 			);
 		}
