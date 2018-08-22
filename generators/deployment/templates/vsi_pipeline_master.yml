@@ -30,6 +30,7 @@ stages:
     build_type: shell
     script: |
       #!/bin/bash
+      set -eo pipefail
       bash terraform/scripts/validate.sh
   - name: Build
     type: builder
@@ -81,6 +82,8 @@ stages:
     artifact_dir: ''
     build_type: customimage
     script: |-
+      #!/bin/bash
+      set -eo pipefail
       export PUBLIC_KEY=$(cat publickey.txt)
       export TF_VAR_ibm_sl_api_key=$(cat slkey.txt)
       export TF_VAR_ibm_sl_username=$(cat slusername.txt)
@@ -107,6 +110,8 @@ stages:
     artifact_dir: ''
     build_type: customimage
     script: |-
+      #!/bin/bash
+      set -eo pipefail
       terraform apply -auto-approve -input=false tfplan
       terraform output "host ip" > hostip.txt
       bash scripts/publish-state.sh
@@ -124,6 +129,8 @@ stages:
     artifact_dir: ''
     build_type: customimage
     script: |-
+      #!/bin/sh
+      set -eo pipefail
       apk add --no-cache openssh rsync
       VSI_HOST=$(cat hostip.txt)
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "apt-get update; apt-get install rsync; mkdir -p app"
@@ -135,6 +142,7 @@ stages:
     build_type: shell
     script: |-
       #!/bin/bash
+      set -eo pipefail
       VSI_HOST=$(cat hostip.txt)
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
   - name: Start
@@ -143,6 +151,7 @@ stages:
     build_type: shell
     script: |-
       #!/bin/bash
+      set -eo pipefail
       VSI_HOST=$(cat hostip.txt)
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; nohup bash start.sh &> output.log &"
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; cat output.log"
@@ -157,6 +166,8 @@ stages:
   - name: Test
     type: tester
     script: |
+      #!/bin/sh
+      set -eo pipefail
       apk add --no-cache curl openssh
       VSI_HOST=$(cat hostip.txt)
       {{#has deployment.language 'NODE'}}
