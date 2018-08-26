@@ -61,7 +61,7 @@ form:
       $ref: deploy.json
     parameters:
       app-name: {{name}}
-      dev-region: "{{tag 'region'}}"
+      dev-region: "{{region}}"
       api-key: "{{tag 'api-key'}}"
       {{#has deployment.type 'Kube'}}
       chart-name: {{deployment.chartName}}
@@ -72,6 +72,7 @@ form:
       registry-namespace: {{deployment.imageRegistryNamespace}}
       {{/has}}
       {{#has deployment.type 'CF'}}
-      dev-space: "{{tag 'space'}}"
-      dev-organization: "{{tag 'organization'}}"
+      dev-space: "{{space}}"
+      dev-organization: "{{org}}"
       {{/has}}
+
