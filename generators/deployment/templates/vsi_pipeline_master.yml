@@ -68,6 +68,9 @@ stages:
     {{#has deployment.language 'JAVA'}}
     docker_image: maven:3-jdk-8
     {{/has}}
+    {{#has deployment.language 'GO'}}
+    docker_image: golang:1.10
+    {{/has}}
 - name: Terraform Plan Stage
   inputs:
   - type: job
@@ -187,6 +190,9 @@ stages:
       {{/has}}
       {{#has deployment.language 'JAVA'}}
       PORT='9080'
+      {{/has}}
+      {{#has deployment.language 'G0'}}
+      PORT='8080'
       {{/has}}
       if [ $(curl -sL -w "%{http_code}\\n" "http://${VSI_HOST}:${PORT}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
         echo "Successfully reached health endpoint: http://${VSI_HOST}:${PORT}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}"
