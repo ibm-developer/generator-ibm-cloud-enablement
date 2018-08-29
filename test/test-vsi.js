@@ -339,7 +339,7 @@ describe('cloud-enablement:vsi', function () {
 		});
 	});
 
-	describe('Go project with correct file content for GOLANG', function () {
+	/*describe('Go project with correct file content for GOLANG', function () {
 
 		beforeEach(function () {
 			let bluemix= {};
@@ -364,7 +364,7 @@ describe('cloud-enablement:vsi', function () {
 			assert.fileContent('terraform/scripts/install.sh', 'apt-get update');
 			assert.fileContent('debian/control', 'appname');
 		});
-	});
+	});*/
 
 	describe('VSI parameter passed in correctly', function () {
 
