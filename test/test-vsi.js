@@ -339,6 +339,33 @@ describe('cloud-enablement:vsi', function () {
 		});
 	});
 
+	describe('Go project with correct file content for GOLANG', function () {
+
+		beforeEach(function () {
+			let bluemix= {};
+			bluemix.name = "appname";
+			bluemix.cloudDeploymentType = "VSI";
+			bluemix.backendPlatform = 'GO';
+			bluemix.createType = 'webbasic';
+
+			return helpers.run(path.join(__dirname, '../generators/vsi/index.js'))
+				.inDir(path.join(__dirname, './vsi-tmp'))
+				.withOptions({bluemix: JSON.stringify(bluemix)})
+
+		});
+
+		it('should have correct file content', function () {
+			assert.fileContent('debian/install', 'go_executable');
+			assert.fileContent('terraform/scripts/start.sh', 'PORT_NUMBER=8080');
+			assert.fileContent('terraform/scripts/start.sh', 'lsof -i tcp:${PORT_NUMBER} | awk \'NR!=1 {print $2}\' | xargs kill');
+			assert.fileContent('terraform/scripts/start.sh', './go_executable');
+			assert.fileContent('terraform/scripts/build.sh', 'export project_name="$(cat manifest.yml | grep -w "GOPACKAGENAME :" | sed \'s/    GOPACKAGENAME : //\')"');
+			assert.fileContent('terraform/scripts/build.sh', 'dep init');
+			assert.fileContent('terraform/scripts/install.sh', 'apt-get update');
+			assert.fileContent('debian/control', 'appname');
+		});
+	});
+
 	describe('VSI parameter passed in correctly', function () {
 
 		beforeEach(function () {
