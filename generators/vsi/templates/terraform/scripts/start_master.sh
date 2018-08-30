@@ -31,6 +31,8 @@ wlp/bin/server start
 {{/has}}
 {{#has deployment.language 'GO'}}
 cd /usr/src/{{deployment.name}}
-pkill go
+cd /usr/src/{{deployment.name}}
+go get github.com/rimiti/kill-port
+kill-port 8080
 ./go_executable
 {{/has}}
