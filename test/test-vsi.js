@@ -357,6 +357,7 @@ describe('cloud-enablement:vsi', function () {
 		it('should have correct file content', function () {
 			assert.fileContent('debian/install', 'go_executable');
 			assert.fileContent('terraform/scripts/start.sh', 'PORT_NUMBER=8080');
+			assert.fileContent('terraform/scripts/start.sh', 'lsof -i tcp:${PORT_NUMBER} | awk \'NR!=1 {print $2}\' | xargs kill');
 			assert.fileContent('terraform/scripts/start.sh', './go_executable');
 			assert.fileContent('terraform/scripts/build.sh', 'export project_name="$(cat manifest.yml | grep -w "GOPACKAGENAME :" | sed \'s/    GOPACKAGENAME : //\')"');
 			assert.fileContent('terraform/scripts/build.sh', 'dep init');

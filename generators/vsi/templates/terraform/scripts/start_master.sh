@@ -31,8 +31,7 @@ wlp/bin/server start
 {{/has}}
 {{#has deployment.language 'GO'}}
 cd /usr/src/{{deployment.name}}
-cd /usr/src/{{deployment.name}}
-go get github.com/rimiti/kill-port
-kill-port 8080
+PORT_NUMBER=8080
+lsof -i tcp:${PORT_NUMBER} | awk 'NR!=1 {print $2}' | xargs kill
 ./go_executable
 {{/has}}
