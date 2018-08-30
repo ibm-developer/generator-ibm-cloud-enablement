@@ -191,7 +191,7 @@ stages:
       {{#has deployment.language 'JAVA'}}
       PORT='9080'
       {{/has}}
-      {{#has deployment.language 'G0'}}
+      {{#has deployment.language 'GO'}}
       PORT='8080'
       {{/has}}
       if [ $(curl -sL -w "%{http_code}\\n" "http://${VSI_HOST}:${PORT}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
