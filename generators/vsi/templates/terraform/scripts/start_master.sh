@@ -31,7 +31,6 @@ wlp/bin/server start
 {{/has}}
 {{#has deployment.language 'GO'}}
 cd /usr/src/{{deployment.name}}
-PORT_NUMBER=8080
-lsof -i tcp:${PORT_NUMBER} | awk 'NR!=1 {print $2}' | xargs kill
+pkill go
 ./go_executable
 {{/has}}
