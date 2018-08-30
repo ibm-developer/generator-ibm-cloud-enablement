@@ -37,5 +37,3 @@ echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sourc
 apt-get update
 apt-get install -y -t jessie-backports openjdk-8-jre unzip
 {{/has}}
-{{#has deployment.language 'GO'}}
-{{/has}}
