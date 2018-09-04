@@ -95,6 +95,60 @@ describe('cloud-enablement:dockertools', function () {
 		});
 	});
 
+	describe('cloud-enablement:dockertools with Swift project with mongo', function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift), services: JSON.stringify(['mongodb'])})
+		});
+
+		it('create Dockerfile for running', function () {
+			assert.file([
+				'Dockerfile'
+			]);
+			assert.fileContent('Dockerfile', 'RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y \\');
+			assert.fileContent('Dockerfile', '  libpq-dev \\');
+		});
+
+		it('should have the executableName property set in Dockerfile', function () {
+			assert.fileContent('Dockerfile', `CMD [ "sh", "-c", "cd /swift-project && .build-ubuntu/release/${applicationName}" ]`);
+		});
+
+		it('create Dockerfile-tools for compilation', function () {
+			assert.file([
+				'Dockerfile-tools'
+			]);
+			assert.fileContent('Dockerfile-tools', 'RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y \\');
+			assert.fileContent('Dockerfile', '  libpq-dev \\');
+		});
+
+		it('create docker-compose and docker-compose-tools django', function () {
+			assert.file(['docker-compose.yml', 'docker-compose-tools.yml']);
+			assert.fileContent('docker-compose.yml', `container_name: "${applicationName.toLowerCase()}-swift-run"`);
+			assert.fileContent('docker-compose.yml', 'MONGO_URL');
+			assert.fileContent('docker-compose.yml', '2048:1024');
+			assert.fileContent('docker-compose-tools.yml', 'MONGO_URL');
+			assert.fileContent('docker-compose.yml', `image: "${applicationName.toLowerCase()}-swift-run"`);
+			assert.fileContent('docker-compose-tools.yml', `container_name: "${applicationName.toLowerCase()}-swift-tools"`);
+			assert.fileContent('docker-compose-tools.yml', `image: "${applicationName.toLowerCase()}-swift-tools"`);
+		})
+
+		it('create CLI-config file', function () {
+			assert.file(['cli-config.yml']);
+			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.fileContent('cli-config.yml', 'run-cmd : ""');
+			assert.fileContent('cli-config.yml', 'container-port-map-debug : "2048:1024,2049:1025"');
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "docker-compose.yml"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "docker-compose-tools.yml"');
+		});
+
+		it('create dockerignore file', function () {
+			assert.file([
+				'.dockerignore'
+			]);
+		});
+	});
+
 	describe('cloud-enablement:dockertools with NodeJS project', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))

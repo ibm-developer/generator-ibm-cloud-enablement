@@ -166,35 +166,33 @@ module.exports = class extends Generator {
 
 		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
 
-		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE, 'swift/' + FILENAME_DOCKERFILE, {
-			dockerConfig
-		});
+		this._writeHandlebarsFile('swift/Dockerfile', FILENAME_DOCKERFILE, dockerConfig);
 
-		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'swift/' + FILENAME_DOCKERFILE_TOOLS, {
-			dockerConfig
-		});
+		this._writeHandlebarsFile('swift/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, dockerConfig);
+
 
 		if (compilationOptions.length > 0) {
-			this._copyTemplateIfNotExists(FILENAME_SWIFT_BUILD, 'swift/' + FILENAME_SWIFT_BUILD, {
+			this._writeHandlebarsFile('swift/swift-build-linux', FILENAME_SWIFT_BUILD, {
 				compilationOptions: compilationOptions
 			});
 
-			this._copyTemplateIfNotExists(FILENAME_SWIFT_TEST, 'swift/' + FILENAME_SWIFT_TEST, {
+			this._writeHandlebarsFile('swift/swift-test-linux', FILENAME_SWIFT_TEST, {
 				compilationOptions: compilationOptions
 			});
 		}
 
+		const derrayify = serviceEnvs[0];
 		if(this.opts.services.length > 0){
 			const dockerComposeConfig =  {
 				containerName: `${applicationName.toLowerCase()}-swift-run`,
 				image: `${applicationName.toLowerCase()}-swift-run`,
-				envs: serviceEnvs,
+				envs: derrayify,
 				images: serviceImageNames
 			};
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'swift/docker-compose.yml', dockerComposeConfig);
+			this._writeHandlebarsFile('swift/docker-compose.yml', FILENAME_DOCKERCOMPOSE, dockerComposeConfig);
 			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-swift-tools`;
 			dockerComposeConfig.image = `${applicationName.toLowerCase()}-swift-tools`;
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'swift/docker-compose-tools.yml', dockerComposeConfig);
+			this._writeHandlebarsFile('swift/docker-compose-tools.yml', FILENAME_DOCKERCOMPOSE_TOOLS, dockerComposeConfig);
 		}
 
 
