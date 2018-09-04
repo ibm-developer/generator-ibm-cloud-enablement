@@ -383,6 +383,7 @@ describe('cloud-enablement:dockertools', function () {
 		it('create Dockerfile with start command', function () {
 			assert.file(['Dockerfile']);
 			assert.fileContent('Dockerfile', '"python", "manage.py", "start"');
+			assert.fileContent('Dockerfile', 'ENV FLASK_APP=server/__init__.py');
 		});
 
 		it('create Dockerfile-tools with flask', function () {
@@ -559,6 +560,7 @@ describe('cloud-enablement:dockertools', function () {
 		})
 		it('create docker-compose.yml with flask', function () {
 			assert.file(['docker-compose.yml']);
+			assert.fileContent('docker-compose.yml', `MONGO_URL`);
 		});
 
 		it('should have the correct image name and container name for docker-compose and docker-compose-tools', function() {
@@ -566,6 +568,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('docker-compose.yml', `image: "${applicationName.toLowerCase()}-flask-run"`);
 			assert.fileContent('docker-compose-tools.yml', `container_name: "${applicationName.toLowerCase()}-flask-tools"`);
 			assert.fileContent('docker-compose-tools.yml', `image: "${applicationName.toLowerCase()}-flask-tools"`);
+			assert.fileContent('docker-compose-tools.yml', `MONGO_URL`);
 		});
 
 

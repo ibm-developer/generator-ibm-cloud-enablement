@@ -164,9 +164,7 @@ module.exports = class extends Generator {
 			serviceItems: serviceItems
 		}
 
-		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {
-			cliConfig
-		});
+		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE, 'swift/' + FILENAME_DOCKERFILE, {
 			dockerConfig
@@ -275,7 +273,7 @@ module.exports = class extends Generator {
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
 
-		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {cliConfig});
+		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE , 'node/Dockerfile', { port, servicesPackages });
 
@@ -366,10 +364,16 @@ module.exports = class extends Generator {
 	}
 
 	_writeHandlebarsFile(templateFile, destinationFile, data) {
-		let template = this.fs.read(this.templatePath(templateFile));
-		let compiledTemplate = Handlebars.compile(template);
-		let output = compiledTemplate(data);
-		this.fs.write(this.destinationPath(destinationFile), output);
+
+		if (this.fs.exists(this.destinationPath(destinationFile))) {
+			this.log(destinationFile, "already exists, skipping.");
+		}
+		else {
+			let template = this.fs.read(this.templatePath(templateFile));
+			let compiledTemplate = Handlebars.compile(template);
+			let output = compiledTemplate(data);
+			this.fs.write(this.destinationPath(destinationFile), output);
+		}
 	}
 
 	_generatePython() {
@@ -442,6 +446,7 @@ module.exports = class extends Generator {
 				: 'python manage.py debug',
 			chartPath: `chart/${applicationName.toLowerCase()}`
 		};
+		const derrayify = serviceEnvs[0];
 
 		if(this.opts.services.length > 0){
 			const dockerComposeConfig =  {
@@ -449,67 +454,53 @@ module.exports = class extends Generator {
 				image: `${applicationName.toLowerCase()}-flask-run`,
 				ports: [port, debugPort].concat(servicePorts),
 				appPort: port,
-				envs: serviceEnvs,
+				envs: derrayify,
 				images: serviceImageNames
 			};
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', dockerComposeConfig);
+			this._writeHandlebarsFile('python/docker-compose.yml', FILENAME_DOCKERCOMPOSE, dockerComposeConfig);
 			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-flask-tools`;
 			dockerComposeConfig.image = `${applicationName.toLowerCase()}-flask-tools`;
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', dockerComposeConfig);
+			this._writeHandlebarsFile('python/docker-compose-tools.yml', FILENAME_DOCKERCOMPOSE_TOOLS, dockerComposeConfig);
 		}
 
 		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
 			this.log(FILENAME_CLI_CONFIG, "already exists, skipping.");
 		} else {
-			this.fs.copyTpl(
-				this.templatePath('cli-config-common.yml'),
-				this.destinationPath(FILENAME_CLI_CONFIG), {
-					cliConfig
-				}
-			);
+			this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
 		}
 
 		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
 			this.log(FILENAME_DOCKERFILE, "already exists, skipping.");
 		} else {
-			this.fs.copyTpl(
-				this.templatePath('python/Dockerfile'),
-				this.destinationPath(FILENAME_DOCKERFILE), {
-					port: port,
-					enable: this.opts.enable,
-					language: this.bluemix.backendPlatform,
-					name: this.bluemix.name,
-					servicesPackages: servicesPackages
-				}
-			);
+			this._writeHandlebarsFile('python/Dockerfile', FILENAME_DOCKERFILE, {
+				port: port,
+				enable: this.opts.enable,
+				language: this.bluemix.backendPlatform,
+				name: this.bluemix.name,
+				servicesPackages: servicesPackages
+			});
 		}
 
 		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))){
 			this.log(FILENAME_DOCKERFILE_TOOLS, "already exists, skipping.");
 		} else {
-			this.fs.copyTpl(
-				this.templatePath('python/Dockerfile-tools'),
-				this.destinationPath(FILENAME_DOCKERFILE_TOOLS), {
-					servicesPackages: servicesPackages,
-					language: this.bluemix.backendPlatform,
-					name: this.bluemix.name
-				}
-			);
+			this._writeHandlebarsFile('python/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, {
+				servicesPackages: servicesPackages,
+				language: this.bluemix.backendPlatform,
+				name: this.bluemix.name
+			});
 		}
 
 		if (this.fs.exists(this.destinationPath(FILENAME_DEV))){
 			this.log(FILENAME_DEV, "already exists, skipping.");
 		} else {
-			this.fs.copyTpl(
-				this.templatePath('python/run-dev'),
-				this.destinationPath(FILENAME_DEV), {
-					port: port,
-					enable: this.opts.enable,
-					servicesPackages: servicesPackages,
-					language: this.bluemix.backendPlatform,
-					name: this.bluemix.name
-				}
-			);
+			this._writeHandlebarsFile('python/run-dev', FILENAME_DEV, {
+				port: port,
+				enable: this.opts.enable,
+				servicesPackages: servicesPackages,
+				language: this.bluemix.backendPlatform,
+				name: this.bluemix.name
+			});
 		}
 
 		const FILENAME_MANAGEMENT = "manage.py";
@@ -611,55 +602,44 @@ module.exports = class extends Generator {
 		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
 			this.log(FILENAME_CLI_CONFIG, "already exists, skipping.");
 		} else {
-			this.fs.copyTpl(
-				this.templatePath('cli-config-common.yml'),
-				this.destinationPath(FILENAME_CLI_CONFIG), {
-					cliConfig
-				}
+			this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {
+				cliConfig
+			}
 			);
 		}
 
 		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
 			this.log(FILENAME_DOCKERFILE, "already exists, skipping.");
 		} else {
-			this.fs.copyTpl(
-				this.templatePath('python/Dockerfile'),
-				this.destinationPath(FILENAME_DOCKERFILE), {
-					port: port,
-					enable: this.opts.enable,
-					servicesPackages: servicesPackages,
-					language: this.bluemix.backendPlatform,
-					name: this.bluemix.name
-				}
-			);
+			this._writeHandlebarsFile('python/Dockerfile', FILENAME_DOCKERFILE, {
+				port: port,
+				enable: this.opts.enable,
+				servicesPackages: servicesPackages,
+				language: this.bluemix.backendPlatform,
+				name: this.bluemix.name
+			});
 		}
 
 		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))){
 			this.log(FILENAME_DOCKERFILE_TOOLS, "already exists, skipping.");
 		} else {
-			this.fs.copyTpl(
-				this.templatePath('python/Dockerfile-tools'),
-				this.destinationPath(FILENAME_DOCKERFILE_TOOLS), {
-					servicesPackages: servicesPackages,
-					language: this.bluemix.backendPlatform,
-					name: this.bluemix.name
-				}
-			);
+			this._writeHandlebarsFile('python/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, {
+				servicesPackages: servicesPackages,
+				language: this.bluemix.backendPlatform,
+				name: this.bluemix.name
+			});
 		}
 
 		if (this.fs.exists(this.destinationPath(FILENAME_DEV))){
 			this.log(FILENAME_DEV, "already exists, skipping.");
 		} else {
-			this.fs.copyTpl(
-				this.templatePath('python/run-dev'),
-				this.destinationPath(FILENAME_DEV), {
-					port: port,
-					enable: this.opts.enable,
-					servicesPackages: servicesPackages,
-					language: this.bluemix.backendPlatform,
-					name: this.bluemix.name.toLowerCase()
-				}
-			);
+			this._writeHandlebarsFile('python/run-dev', FILENAME_DEV, {
+				port: port,
+				enable: this.opts.enable,
+				servicesPackages: servicesPackages,
+				language: this.bluemix.backendPlatform,
+				name: this.bluemix.name.toLowerCase()
+			});
 		}
 
 		if(this.opts.services.length > 0){
@@ -671,10 +651,10 @@ module.exports = class extends Generator {
 				appPort: port,
 				images: serviceImageNames
 			};
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'python/docker-compose.yml', dockerComposeConfig);
+			this._writeHandlebarsFile('python/docker-compose.yml', FILENAME_DOCKERCOMPOSE, dockerComposeConfig);
 			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-django-tools`;
 			dockerComposeConfig.image = `${applicationName.toLowerCase()}-django-tools`;
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'python/docker-compose-tools.yml', dockerComposeConfig);
+			this._writeHandlebarsFile('python/docker-compose-tools.yml', FILENAME_DOCKERCOMPOSE_TOOLS, dockerComposeConfig);
 		}
 
 
@@ -715,7 +695,7 @@ module.exports = class extends Generator {
 			chartPath: `chart/${chartName}`
 		};
 
-		this._copyTemplateIfNotExists(FILENAME_CLI_CONFIG, 'cli-config-common.yml', {cliConfig});
+		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE , 'go/Dockerfile', { port, applicationName });
 
@@ -745,4 +725,6 @@ module.exports = class extends Generator {
 		}
 
 	}
+
+
 };
