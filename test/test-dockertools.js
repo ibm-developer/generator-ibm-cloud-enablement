@@ -829,6 +829,8 @@ describe('cloud-enablement:dockertools', function () {
 		it('create Dockerfile with dep ensure and no service package', function () {
 			assert.file(['Dockerfile']);
 			assert.fileContent('Dockerfile', 'dep ensure');
+			assert.fileContent('Dockerfile', '8080');
+			assert.fileContent('Dockerfile-tools', '8181');
 			assert.noFileContent('Dockerfile', 'postgresql-dev \\');
 		});
 

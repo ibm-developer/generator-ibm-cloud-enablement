@@ -698,9 +698,9 @@ module.exports = class extends Generator {
 
 		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
 
-		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE , 'go/Dockerfile', { port, applicationName });
+		this._writeHandlebarsFile('go/Dockerfile', FILENAME_DOCKERFILE, { port, applicationName });
 
-		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'go/Dockerfile-tools', { port, debugPort, applicationName });
+		this._writeHandlebarsFile('go/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, { port, debugPort, applicationName });
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKER_IGNORE, 'go/dockerignore', {});
 
