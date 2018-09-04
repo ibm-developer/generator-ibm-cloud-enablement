@@ -174,6 +174,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('docker-compose.yml', `image: "${applicationName.toLowerCase()}-express-run"`);
 			assert.fileContent('docker-compose-tools.yml', `container_name: "${applicationName.toLowerCase()}-express-tools"`);
 			assert.fileContent('docker-compose-tools.yml', `image: "${applicationName.toLowerCase()}-express-tools"`);
+			assert.fileContent('docker-compose-tools.yml', `MONGO_URL`);
 
 		});
 

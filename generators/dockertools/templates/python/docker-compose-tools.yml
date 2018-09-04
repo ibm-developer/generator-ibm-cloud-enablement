@@ -14,7 +14,7 @@ services:
     links: {{#each images}}
       -  {{this}}{{/each}}{{/ifCond}}
     environment: {{#each envs as |value key|}}
-      {{key}}: {{value}}{{/each}}; {{#each images}}
+      {{key}}: {{value}}{{/each}} {{#each images}}
   {{this}}:
     image: {{this}}
 {{/each}}

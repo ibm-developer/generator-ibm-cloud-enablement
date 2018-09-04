@@ -10,7 +10,7 @@ services:
       - "{{this}}:{{this}}"{{/each}} {{#ifCond images.length '>' 0}}
     links: {{#each images}}
       - {{this}}{{/each}}{{/ifCond}}
-    environment: {{log envs}}{{#each envs as |value key|}}
+    environment: {{#each envs as |value key|}}
       {{key}}: {{value}}{{/each}} {{#each images}}
   {{this}}:
     image: {{this}}

@@ -5,18 +5,18 @@ services:
       context: .
       dockerfile: Dockerfile-tools
     tty: true
-    image: "<%= image %>"
-    container_name: "<%= containerName %>"
-    ports: <% ports.forEach(port => { %>
-      - "<%= port %>:<%= port %>"<%}) %>
+    image: "{{image}}"
+    container_name: "{{containerName}}"
+    ports: {{#each ports}}
+      - "{{this}}:{{this}}"{{/each}}
     volumes:
-      - .:/app
-      <%if(images.length > 0){ %>
-    links: <% images.forEach(image => { %>
-      -  <%= image %><%})} %>
+      - .:/app {{#ifCond images.length '>' 0}}
+    links: {{#each images}}
+      -  {{this}}{{/each}}{{/ifCond}}
     environment:
-      NODE_ENV: "development"<% envs.forEach(env => { for(key in env){ %>
-      <%= key %>: <%= env[key] %><%}});%> <% images.forEach(image => {%>
-  <%=image%>:
-    image: <%=image%>
-  <%});%>
+      NODE_ENV: "development"{{#each envs as |value key|}}
+      {{key}}: {{value}}{{/each}} {{#each images}}
+  {{this}}:
+    image: {{this}}
+{{/each}}
+

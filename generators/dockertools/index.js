@@ -275,9 +275,9 @@ module.exports = class extends Generator {
 
 		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
 
-		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE , 'node/Dockerfile', { port, servicesPackages });
+		this._writeHandlebarsFile('node/Dockerfile', FILENAME_DOCKERFILE, {port, servicesPackages});
 
-		this._copyTemplateIfNotExists(FILENAME_DOCKERFILE_TOOLS, 'node/Dockerfile-tools', { port, debugPort });
+		this._writeHandlebarsFile('node/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, {port, servicesPackages, debugPort});
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKER_IGNORE, 'node/dockerignore', {});
 
@@ -288,18 +288,19 @@ module.exports = class extends Generator {
 
 		if(this.opts.services.length > 0){
 
+			const derrayify = serviceEnvs[0];
 			const dockerComposeConfig =  {
 				containerName: `${applicationName.toLowerCase()}-express-run`,
 				image: `${applicationName.toLowerCase()}-express-run`,
 				ports: [port, debugPort].concat(servicePorts),
 				appPort: port,
-				envs: serviceEnvs,
-				images: serviceImageNames
+				envs: derrayify,
+				images: serviceImageNames,
 			};
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE, 'node/docker-compose.yml', dockerComposeConfig);
+			this._writeHandlebarsFile('node/docker-compose.yml', FILENAME_DOCKERCOMPOSE, dockerComposeConfig);
 			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-express-tools`;
 			dockerComposeConfig.image = `${applicationName.toLowerCase()}-express-tools`,
-			this._copyTemplateIfNotExists(FILENAME_DOCKERCOMPOSE_TOOLS, 'node/docker-compose-tools.yml', dockerComposeConfig);
+			this._writeHandlebarsFile('node/docker-compose-tools.yml', FILENAME_DOCKERCOMPOSE_TOOLS, dockerComposeConfig);
 		}
 
 
