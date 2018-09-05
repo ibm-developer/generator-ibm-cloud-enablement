@@ -1,11 +1,11 @@
 FROM node:8
 
 
-ENV PORT <%= port %>
+ENV PORT {{port}}
 ENV NODE_HEAPDUMP_OPTIONS nosignal
 
-EXPOSE <%= port %>
-EXPOSE <%= debugPort %>
+EXPOSE {{port}}
+EXPOSE {{debugPort}}
 
 WORKDIR "/app"
 

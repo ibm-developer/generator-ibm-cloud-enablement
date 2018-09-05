@@ -10,15 +10,14 @@ ARG bx_dev_user=root
 ARG bx_dev_userid=1000
 
 # Install system level packages
-<% if (dockerConfig.serviceItems.length > 0) { -%>
+{{#ifCond serviceItems.length '>' 0}}
 RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y \
-<% for (var index = 0; index < dockerConfig.serviceItems.length; index++) { -%>
-  <%- dockerConfig.serviceItems[index].package %> \
-<% } -%>
+{{#each serviceItems}}
+  {{this.package}} \ {{/each}}
   && apt-get clean
-<% } else { -%>
+{{else}}
 # RUN apt-get update && apt-get dist-upgrade -y
-<% } -%>
+{{/ifCond}}
 
 # Add utils files
 ADD https://raw.githubusercontent.com/IBM-Swift/swift-ubuntu-docker/master/utils/tools-utils.sh /swift-utils/tools-utils.sh
@@ -32,7 +31,7 @@ RUN if [ "$bx_dev_user" != root ]; then useradd -ms /bin/bash -u $bx_dev_userid 
 # This is necessary to run 'tools-utils.sh debug' script when executed from an interactive shell.
 # This will not affect the deploy container.
 RUN echo "$bx_dev_user ALL=NOPASSWD: ALL" > /etc/sudoers.d/user && \
-    chmod 0440 /etc/sudoers.d/user 
+    chmod 0440 /etc/sudoers.d/user
 
 # Bundle application source & binaries
 COPY . /swift-project

@@ -3,14 +3,14 @@ FROM golang:1.10.3-alpine
 # Update packages and install dependency packages for services
 RUN apk update && apk add --no-cache bash git
 
-EXPOSE <%= port %>
-EXPOSE <%= debugPort %>
+EXPOSE {{port}}
+EXPOSE {{debugPort}}
 
 # Disables C compilation
 ENV CGO_ENABLED=0
 
 # Change working directory
-WORKDIR $GOPATH/src/<%= applicationName %>/
+WORKDIR $GOPATH/src/{{applicationName}}/
 
 # Install dependencies
 RUN go get -u github.com/golang/dep/...
@@ -20,7 +20,7 @@ RUN dep ensure -v
 
 COPY run-dev $GOPATH/bin
 RUN chmod 777 $GOPATH/bin/run-dev
-RUN chmod 777 $GOPATH/src/<%= applicationName %>/
+RUN chmod 777 $GOPATH/src/{{applicationName}}/
 
 CMD ["/bin/bash"]
 

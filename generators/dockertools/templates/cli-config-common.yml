@@ -1,57 +1,57 @@
 # The container name used for the run container
-container-name-run : "<%= cliConfig.containerNameRun %>"
+container-name-run : "{{cliConfig.containerNameRun}}"
 # The container name used for the tools container
-container-name-tools : "<%= cliConfig.containerNameTools %>"
+container-name-tools : "{{cliConfig.containerNameTools}}"
 
 # The project root on the host for the run container to mount to container-path-run
-host-path-run : "<%= cliConfig.hostPathRun %>"
+host-path-run : "{{cliConfig.hostPathRun}}"
 # The project root on the host for the tools container to mount to container-path-tools
-host-path-tools : "<%= cliConfig.hostPathTools %>"
+host-path-tools : "{{cliConfig.hostPathTools}}"
 
 # The project root in the run container to mount to host-path-run
-container-path-run : "<%= cliConfig.containerPathRun %>"
+container-path-run : "{{cliConfig.containerPathRun}}"
 # The project root in the tools container that will be mounted to host-path-tools
-container-path-tools : "<%= cliConfig.containerPathTools %>"
+container-path-tools : "{{cliConfig.containerPathTools}}"
 
 # The port mappings between the host and the container in the form [host:container]
-container-port-map : "<%= cliConfig.containerPortMap %>"
+container-port-map : "{{cliConfig.containerPortMap}}"
 # The port mappings between the host and the container for the debug port in the form [host:container]
-container-port-map-debug : "<%= cliConfig.containerPortMapDebug %>"
+container-port-map-debug : "{{cliConfig.containerPortMapDebug}}"
 
-<% if(cliConfig.containerMountsRun && cliConfig.containerMountsTools){ %>
+{{#ifCond cliConfig.containerMountsRun '&&' cliConfig.containerMountsTools}}
 # The list of additional mounts between the host and the run container in the form [host_path:container_path]
 container-mounts-run:
-   - <%- cliConfig.containerMountsRun %>
+   - {{cliConfig.containerMountsRun}}
 # The list of additional mounts between the host and the tools container in the form [host_path:container_path]
 container-mounts-tools:
-   - <%- cliConfig.containerMountsTools %>
-<%}%>
+   - {{cliConfig.containerMountsTools}}
+{{/ifCond}}
 # The name for the dockerfile for the run container
-dockerfile-run : "<%= cliConfig.dockerFileRun %>"
+dockerfile-run : "{{cliConfig.dockerFileRun}}"
 # The name for the dockerfile for the tools container
-dockerfile-tools : "<%= cliConfig.dockerFileTools %>"
+dockerfile-tools : "{{cliConfig.dockerFileTools}}"
 
 # The name of image to create from dockerfile-run
-image-name-run : "<%= cliConfig.imageNameRun %>"
+image-name-run : "{{cliConfig.imageNameRun}}"
 # The name of image to create from dockerfile-tools
-image-name-tools : "<%= cliConfig.imageNameTools %>"
+image-name-tools : "{{cliConfig.imageNameTools}}"
 
 # The command to build the code and docker image for RUN
-build-cmd-run : "<%= cliConfig.buildCmdRun %>"
+build-cmd-run : "{{cliConfig.buildCmdRun}}"
 # The command to execute tests for the code in the tools container
-test-cmd : "<%= cliConfig.testCmd %>"
+test-cmd : "{{cliConfig.testCmd}}"
 # The command to build the code and docker image for DEBUG
-build-cmd-debug : "<%= cliConfig.buildCmdDebug %>"
+build-cmd-debug : "{{cliConfig.buildCmdDebug}}"
 
 # The command to run the code in the run container
-run-cmd : "<%= cliConfig.runCmd %>"
+run-cmd : "{{cliConfig.runCmd}}"
 # The command to execute debug of the code in the tools container
-debug-cmd : "<%= cliConfig.debugCmd %>"
+debug-cmd : "{{{cliConfig.debugCmd}}}"
 # The command to stop the code
-stop-cmd : "<%= cliConfig.stopCmd %>"
+stop-cmd : "{{cliConfig.stopCmd}}"
 
 # The relative path to the helm chart used for Kubernetes deployment
-chart-path : "<%= cliConfig.chartPath %>"
+chart-path : "{{cliConfig.chartPath}}"
 
 # The IBM version of this configuration
 version : "0.0.3"
