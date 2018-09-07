@@ -204,9 +204,8 @@ module.exports = class extends Generator {
 
 		if(this.opts.services){
 			this.opts.services.forEach(service => {
-				const uniqueServiceSuffix = `${service}-${Utils.createUniqueName(this.bluemix.name)}`;
 				if(_.includes(supportingServicesTypes, service)){
-					this._writeHandlebarsFile(SERVICE_DIR + service + DEPLOYMENT_SUFFIX, chartDir + '/templates/' + service + DEPLOYMENT_SUFFIX, {uniqueServiceSuffix});
+					this._writeHandlebarsFile(SERVICE_DIR + service + DEPLOYMENT_SUFFIX, chartDir + '/templates/' + service + DEPLOYMENT_SUFFIX, {});
 				} else {
 					console.error(service + ' is not supported');
 				}
