@@ -9,7 +9,7 @@ spec:
   type: NodePort
   ports:
   # the port that this service should serve on
-  - name: httpmongo
+  - name: http
     port: 27017
   selector:
     app: "mongo-selector"
