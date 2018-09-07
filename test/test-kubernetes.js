@@ -356,7 +356,8 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have mongodb.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
-			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongodb");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "{{  .Chart.Name }}-mongo-service");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongo-service");
 		});
 
 		it('should have deployment.yaml', function () {
@@ -390,7 +391,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have mongodb.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
-			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongodb");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "{{  .Chart.Name }}-mongo-service");
 
 		});
 
@@ -418,7 +419,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have mongodb.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
-			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongodb");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "{{  .Chart.Name }}-mongo-service");
 		});
 
 		it('should have deployment.yaml', function () {
@@ -453,7 +454,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have mongodb.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
-			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongodb");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "{{  .Chart.Name }}-mongo-service");
 		});
 
 		assertYmlMongoContent();
@@ -479,7 +480,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have mongodb.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
-			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongodb");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "{{  .Chart.Name }}-mongo-service");
 		});
 
 		it('should have deployment.yaml', function () {
@@ -514,7 +515,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have mongodb.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
-			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongodb");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "{{  .Chart.Name }}-mongo-service");
 		});
 
 		assertYmlMongoContent();
@@ -531,7 +532,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have mongodb.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
-			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongodb");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "{{  .Chart.Name }}-mongo-service");
 		});
 
 		it('should have deployment.yaml', function () {
@@ -566,7 +567,7 @@ describe('cloud-enablement:kubernetes', function () {
 
 		it('should have mongodb.deploy.yaml', function () {
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
-			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "mongodb");
+			assert.fileContent(chartLocation + '/templates/mongodb.deploy.yaml', "{{  .Chart.Name }}-mongo-service");
 		});
 
 		assertYmlMongoContent();
