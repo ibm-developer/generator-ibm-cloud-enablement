@@ -39,7 +39,7 @@
     },
     "private-key": {
       "description": "SSH Private Key",
-      "type": "string"
+      "type": "password"
     },
     "softlayer-username": {
       "description": "SoftLayer Username",
@@ -47,7 +47,7 @@
     },
     "softlayer-api-key": {
       "description": "SoftLayer API Key",
-      "type": "string"
+      "type": "password"
     },
     "gitlab-username": {
       "description": "GitLab Username",
@@ -55,7 +55,7 @@
     },
     "gitlab-access-token": {
       "description": "GitLab Access Token",
-      "type": "string"
+      "type": "password"
     },
     {{/has}}
     "app-name": {
@@ -151,7 +151,7 @@
       "type": "text",
       "key": "softlayer-username"
     },{
-      "type": "text",
+      "type": "password",
       "key": "softlayer-api-key"
     },{
       "type": "label",
@@ -163,7 +163,7 @@
       "type": "text",
       "key": "gitlab-username"
     },{
-      "type": "text",
+      "type": "password",
       "key": "gitlab-access-token"
     },{
       "type": "label",
