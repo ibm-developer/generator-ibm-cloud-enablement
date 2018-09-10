@@ -10,18 +10,25 @@ stages:
     value: {{name}}
     type: text
   - name: PUBLIC_KEY
+    value: "${PUBLIC_KEY}"
     type: text
   - name: PRIVATE_KEY
+    value: "${PRIVATE_KEY}"
     type: secure
   - name: TF_VAR_ibm_sl_username
+    value: "${TF_VAR_ibm_sl_username}"
     type: text
   - name: TF_VAR_ibm_sl_api_key
+    value: "${TF_VAR_ibm_sl_api_key}"
     type: secure
   - name: TF_VAR_ibm_cloud_api_key
+    value: "${API_KEY}"
     type: secure
   - name: GIT_USER
+    value: "${GITLAB_USER}"
     type: text
   - name: GIT_PASSWORD
+    value: "${GITLAB_ACCESS_TOKEN}"
     type: secure
   jobs:
   - name: Validate
@@ -30,6 +37,7 @@ stages:
     build_type: shell
     script: |
       #!/bin/bash
+      set -eo pipefail
       bash terraform/scripts/validate.sh
   - name: Build
     type: builder
@@ -67,6 +75,9 @@ stages:
     {{#has deployment.language 'JAVA'}}
     docker_image: maven:3-jdk-8
     {{/has}}
+    {{#has deployment.language 'GO'}}
+    docker_image: golang:1.10
+    {{/has}}
 - name: Terraform Plan Stage
   inputs:
   - type: job
@@ -81,6 +92,8 @@ stages:
     artifact_dir: ''
     build_type: customimage
     script: |-
+      #!/bin/bash
+      set -eo pipefail
       export PUBLIC_KEY=$(cat publickey.txt)
       export TF_VAR_ibm_sl_api_key=$(cat slkey.txt)
       export TF_VAR_ibm_sl_username=$(cat slusername.txt)
@@ -107,6 +120,8 @@ stages:
     artifact_dir: ''
     build_type: customimage
     script: |-
+      #!/bin/bash
+      set -eo pipefail
       terraform apply -auto-approve -input=false tfplan
       terraform output "host ip" > hostip.txt
       bash scripts/publish-state.sh
@@ -124,6 +139,8 @@ stages:
     artifact_dir: ''
     build_type: customimage
     script: |-
+      #!/bin/sh
+      set -eo pipefail
       apk add --no-cache openssh rsync
       VSI_HOST=$(cat hostip.txt)
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "apt-get update; apt-get install rsync; mkdir -p app"
@@ -135,6 +152,7 @@ stages:
     build_type: shell
     script: |-
       #!/bin/bash
+      set -eo pipefail
       VSI_HOST=$(cat hostip.txt)
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
   - name: Start
@@ -143,6 +161,7 @@ stages:
     build_type: shell
     script: |-
       #!/bin/bash
+      set -eo pipefail
       VSI_HOST=$(cat hostip.txt)
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; nohup bash start.sh &> output.log &"
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; cat output.log"
@@ -157,6 +176,8 @@ stages:
   - name: Test
     type: tester
     script: |
+      #!/bin/sh
+      set -eo pipefail
       apk add --no-cache curl openssh
       VSI_HOST=$(cat hostip.txt)
       {{#has deployment.language 'NODE'}}
@@ -176,6 +197,9 @@ stages:
       {{/has}}
       {{#has deployment.language 'JAVA'}}
       PORT='9080'
+      {{/has}}
+      {{#has deployment.language 'GO'}}
+      PORT='8080'
       {{/has}}
       if [ $(curl -sL -w "%{http_code}\\n" "http://${VSI_HOST}:${PORT}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
         echo "Successfully reached health endpoint: http://${VSI_HOST}:${PORT}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}"

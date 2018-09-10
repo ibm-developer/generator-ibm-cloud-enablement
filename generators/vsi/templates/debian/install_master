@@ -5,9 +5,9 @@ package-lock.json				usr/src/{{deployment.name}}
 run-debug                       usr/src/{{deployment.name}}
 run-dev                         usr/src/{{deployment.name}}
 server							usr/src/{{deployment.name}}
-{{#unless deployment.createType 'blank'}}
+{{#checkProperty deployment.createType 'blank'}}
 public							usr/src/{{deployment.name}}
-{{/unless}}
+{{/checkProperty}}
 {{/has}}
 {{#has deployment.language 'PYTHON'}}
 {{deployment.name}}.tgz			usr/src/{{deployment.name}}
@@ -21,9 +21,9 @@ manage.py                       usr/src/{{deployment.name}}
 app                             usr/src/{{deployment.name}}
 run-dev                        usr/src/{{deployment.name}}
 server							usr/src/{{deployment.name}}
-{{#unless deployment.createType 'blank'}}
+{{#checkProperty deployment.createType 'blank'}}
 public							usr/src/{{deployment.name}}
-{{/unless}}
+{{/checkProperty}}
 {{/has}}
 {{#has deployment.language 'SWIFT'}}
 .build/							usr/src/{{deployment.name}}
@@ -57,6 +57,9 @@ webpack.prod.js                 usr/src/{{deployment.name}}
 client                          usr/src/{{deployment.name}}
 Procfile-dev                    usr/src/{{deployment.name}}
 Procfile-debug                    usr/src/{{deployment.name}}
+{{/has}}
+{{#has deployment.language 'GO'}}
+go_executable					usr/src/{{deployment.name}}
 {{/has}}
 terraform/scripts/install.sh	usr/src/{{deployment.name}}
 terraform/scripts/start.sh		usr/src/{{deployment.name}}

@@ -110,8 +110,8 @@ module.exports = class extends Generator {
 			Object.assign(this.pipelineConfig.buildJobProps, {
 				build_type: 'shell',
 				script: '|-\n' +
-					'      #!/bin/bash\n' +
-					this.pipelineConfig.postBuildScript
+				'      #!/bin/bash\n' +
+				this.pipelineConfig.postBuildScript
 			});
 		}
 	}
@@ -195,8 +195,8 @@ module.exports = class extends Generator {
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',
 			script: '|\n' +
-				'      #!/bin/bash\n' +
-				'      ' + this.pipelineConfig.javaBuildScriptContent
+			'      #!/bin/bash\n' +
+			'      ' + this.pipelineConfig.javaBuildScriptContent
 		};
 	}
 
@@ -283,7 +283,10 @@ module.exports = class extends Generator {
 
 		// create .bluemix directory for toolchain/devops related files
 		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml', {
-			name: this.name,
+			name: this.opts.toolchainName || this.name,
+			org: this.opts.deploymentOrg || "{{organization}}",
+			space: this.opts.deploymentSpace || "{{space}}",
+			region: this.opts.deploymentRegion || "{{region}}",
 			repoType: this.toolchainConfig.repoType,
 			deployment: this.deployment
 		});
@@ -324,3 +327,4 @@ module.exports = class extends Generator {
 		this.fs.write(this.destinationPath(destinationFile), output);
 	}
 };
+
