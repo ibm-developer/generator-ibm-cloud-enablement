@@ -10,18 +10,25 @@ stages:
     value: {{name}}
     type: text
   - name: PUBLIC_KEY
+    value: "${PUBLIC_KEY}"
     type: text
   - name: PRIVATE_KEY
+    value: "${PRIVATE_KEY}"
     type: secure
   - name: TF_VAR_ibm_sl_username
+    value: "${TF_VAR_ibm_sl_username}"
     type: text
   - name: TF_VAR_ibm_sl_api_key
+    value: "${TF_VAR_ibm_sl_api_key}"
     type: secure
   - name: TF_VAR_ibm_cloud_api_key
+    value: "${API_KEY}"
     type: secure
   - name: GIT_USER
+    value: "${GITLAB_USER}"
     type: text
   - name: GIT_PASSWORD
+    value: "${GITLAB_ACCESS_TOKEN}"
     type: secure
   jobs:
   - name: Validate
