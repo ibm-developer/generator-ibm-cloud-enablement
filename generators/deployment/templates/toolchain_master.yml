@@ -47,6 +47,14 @@ services:
           CF_SPACE: "{{tag 'form.pipeline.parameters.dev-space'}}"
           CF_ORGANIZATION: "{{tag 'form.pipeline.parameters.dev-organization'}}"
           {{/has}}
+          {{#has deployment.type 'VSI'}}
+          PUBLIC_KEY: "{{tag 'form.pipeline.parameters.public-key'}}"
+          PRIVATE_KEY: "{{tag 'form.pipeline.parameters.private-key'}}"
+          TF_VAR_ibm_sl_username: "{{tag 'form.pipeline.parameters.softlayer-username'}}"
+          TF_VAR_ibm_sl_api_key: "{{tag 'form.pipeline.parameters.softlayer-api-key'}}"
+          GITLAB_USER: "{{tag 'form.pipeline.parameters.gitlab-user'}}"
+          GITLAB_ACCESS_TOKEN: "{{tag 'form.pipeline.parameters.gitlab-access-token'}}"
+          {{/has}}
           REGION_ID: "{{tag 'form.pipeline.parameters.dev-region'}}"
         execute: true
 
@@ -74,4 +82,12 @@ form:
       {{#has deployment.type 'CF'}}
       dev-space: "{{tag 'space'}}"
       dev-organization: "{{tag 'organization'}}"
+      {{/has}}
+      {{#has deployment.type 'VSI'}}
+      public-key: "{{tag 'public-key'}}"
+      private-key: "{{tag 'private-key'}}"
+      softlayer-username: "{{tag 'softlayer-username'}}"
+      softlayer-api-key: "{{tag 'softlayer-api-key'}}"
+      gitlab-user: "{{tag 'gitlab-user'}}"
+      gitlab-access-token: "{{tag 'gitlab-access-token'}}"
       {{/has}}
