@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.2.3"></a>
+## [1.2.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.2.2...v1.2.3) (2018-08-21)
+
+
+### Bug Fixes
+
+* Django and Python were failing with bx dev enable too, adding run-dev script ([7e86947](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7e86947))
+
+
+
+<a name="1.2.2"></a>
+## [1.2.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.2.0...v1.2.2) (2018-08-21)
+
+
+### Bug Fixes
+
+* added unit test ([389584d](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/389584d))
+* bx dev enable wasn't generating the files, run-dev or run-debug, for Node ([2c74566](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2c74566))
+* changed the description of the api-key usage ([da4d8e7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/da4d8e7))
+* codacy prevented version update, trying to make it happy ([71299ea](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/71299ea))
+* don't want these in master yet ([4d62253](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4d62253))
+* let's see if the version will bump after this ([dea33ca](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/dea33ca))
+* package version ([2931052](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2931052))
+* trying to make Codacy happy ([c42152e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/c42152e))
+* unvert change with package-lock.json ([c70f228](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/c70f228))
+* Using CF without specifying API Key is being deprecated, adding API Key to Pipeline similar to what we do with Kube ([b307ec6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b307ec6))
+* **vsi:** fixed healthcheck endpoint for python ([#334](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/334)) ([86f2360](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/86f2360))
+
+
+
 <a name="1.1.7"></a>
 ## [1.1.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.1.6...v1.1.7) (2018-07-24)
 
