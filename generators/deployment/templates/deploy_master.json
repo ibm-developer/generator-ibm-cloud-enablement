@@ -23,13 +23,39 @@
     },
     {{/has}}
     {{#has deployment.type 'Kube'}}
-      "image-registry-token": {
+    "image-registry-token": {
       "description": "Container Registry access token. Retrievable via [bx cr tokens]",
       "type": "string"
     },
-      "kube-cluster-name": {
+    "kube-cluster-name": {
       "description": "Your cluster name. Retrieve it with [bx cs clusters] or via the console at https://console.bluemix.net/containers-kubernetes/home/clusters.",
       "type": "string"
+    },
+    {{/has}}
+    {{#has deployment.type 'VSI'}}
+    "public-key": {
+      "description": "SSH Public Key",
+      "type": "string"
+    },
+    "private-key": {
+      "description": "SSH Private Key",
+      "type": "password"
+    },
+    "softlayer-username": {
+      "description": "SoftLayer Username",
+      "type": "string"
+    },
+    "softlayer-api-key": {
+      "description": "SoftLayer API Key",
+      "type": "password"
+    },
+    "gitlab-username": {
+      "description": "GitLab Username",
+      "type": "string"
+    },
+    "gitlab-access-token": {
+      "description": "GitLab Access Token",
+      "type": "password"
     },
     {{/has}}
     "app-name": {
@@ -37,7 +63,7 @@
       "type": "string"
     }
   },
-  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],
+  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}{{#has deployment.type 'VSI'}}, "api-key", "public-key", "private-key", "softlayer-username", "softlayer-api-key"{{/has}}],
   "form": [{
     "type": "validator",
     "url": "/devops/setup/bm-helper/helper.html"
@@ -59,6 +85,20 @@
     "readonly": false,
     "title": "Kubernetes Cluster Name",
     "key": "kube-cluster-name"
+  },
+  {{/has}}
+  {{#has deployment.type 'VSI'}}
+  {
+    "type": "text",
+    "readonly": false,
+    "title": "SSH Public Key",
+    "key": "public-key"   
+  },
+  {
+    "type": "password",
+    "readonly": false,
+    "title": "SSH Private Key",
+    "key": "private-key"   
   },
   {{/has}}
   {
@@ -101,6 +141,36 @@
     }, {
       "type": "select",
       "key": "dev-region"
+    }]
+    {{/has}}
+    {{#has deployment.type 'VSI'}}
+    "type": "table",
+    "columnCount": 2,
+    "widths": ["28%", "28%"],
+    "items": [{
+      "type": "text",
+      "key": "softlayer-username"
+    },{
+      "type": "password",
+      "key": "softlayer-api-key"
+    },{
+      "type": "label",
+      "title": "SoftLayer Username"
+    },{
+      "type": "label",
+      "key": "SoftLayer API Key"
+    },{
+      "type": "text",
+      "key": "gitlab-username"
+    },{
+      "type": "password",
+      "key": "gitlab-access-token"
+    },{
+      "type": "label",
+      "title": "GitLab Username"
+    },{
+      "type": "label",
+      "key": "GitLab Access Token"
     }]
     {{/has}}
   }]
