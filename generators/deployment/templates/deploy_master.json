@@ -63,7 +63,7 @@
       "type": "string"
     }
   },
-  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}{{#has deployment.type 'VSI'}}, "api-key", "public-key", "private-key", "softlayer-username", "softlayer-api-key"{{/has}}],
+  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],
   "form": [{
     "type": "validator",
     "url": "/devops/setup/bm-helper/helper.html"
