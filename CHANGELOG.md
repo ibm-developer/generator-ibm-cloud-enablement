@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.0"></a>
+# [1.3.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.2.3...v1.3.0) (2018-09-11)
+
+
+### Bug Fixes
+
+* **vsi:** added flags for scripts to fail pipeline when any command fails ([35ae40a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/35ae40a))
+* **vsi:** added support to set toolchain vars via form ([#357](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/357)) ([5dbf63e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5dbf63e))
+
+
+### Features
+
+* **DevopsToolchain:** add support for devops v2 ([250f620](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/250f620))
+* add VSI Deployment for Go Blank  ([b842292](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b842292))
+
+
+
 <a name="1.2.3"></a>
 ## [1.2.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.2.2...v1.2.3) (2018-08-21)
 
