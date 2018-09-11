@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.1"></a>
+## [1.3.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.0...v1.3.1) (2018-09-11)
+
+
+### Bug Fixes
+
+* **vsi:** removed vsi fields from required list ([689aa45](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/689aa45))
+
+
+
 <a name="1.3.0"></a>
 # [1.3.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.2.3...v1.3.0) (2018-09-11)
 
