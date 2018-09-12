@@ -63,8 +63,7 @@
       "type": "string"
     }
   },
-  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}{{#has deployment.type 'VSI'}}, "api-key", "public-key", "private-key", "softlayer-username", "softlayer-api-key"{{/has}}],
-  "form": [{
+  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],  "form": [{
     "type": "validator",
     "url": "/devops/setup/bm-helper/helper.html"
   },
@@ -92,13 +91,13 @@
     "type": "text",
     "readonly": false,
     "title": "SSH Public Key",
-    "key": "public-key"   
+    "key": "public-key"
   },
   {
     "type": "password",
     "readonly": false,
     "title": "SSH Private Key",
-    "key": "private-key"   
+    "key": "private-key"
   },
   {{/has}}
   {
