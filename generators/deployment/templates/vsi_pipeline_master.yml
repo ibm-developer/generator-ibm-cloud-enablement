@@ -25,7 +25,7 @@ stages:
     value: "${API_KEY}"
     type: secure
   - name: GIT_USER
-    value: "${GITLAB_USER}"
+    value: "${GITLAB_USERNAME}"
     type: text
   - name: GIT_PASSWORD
     value: "${GITLAB_ACCESS_TOKEN}"
