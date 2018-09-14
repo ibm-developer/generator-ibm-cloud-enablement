@@ -1,20 +1,20 @@
 version: '2'
 services:
   web:
-    build: 
+    build:
       context: .
       dockerfile: Dockerfile
-    image: "<%= image %>"
-    container_name: "<%= containerName %>"
+    image: "{{image}}"
+    container_name: "{{containerName}}"
     command: npm run start
-    ports: <% ports.forEach(port => { %>
-        - "<%= port %>:<%= port %>"<% }); if(images.length > 0){ %>
-    links: <% images.forEach(image => { %>
-      - <%= image %><% });} %>
+    ports: {{#each ports}}
+        - "{{this}}:{{this}}"{{/each}}
+    links: {{#ifCond images.length '>' 0}}{{#each images}}
+      - {{this}}{{/each}}{{/ifCond}}
     environment:
       NODE_ENV: "development"
-      PORT: <%= appPort %><% envs.forEach(env => { for(key in env){ %>
-      <%= key %>: <%= env[key] %><%}});%> <% images.forEach(image => {%>
-  <%=image%>:
-    image: <%=image%>
-  <%});%>
+      PORT: {{appPort}}{{#each envs as |value key|}}
+      {{key}}: {{value}}{{/each}}{{#each images}}
+  {{this}}:
+    image: {{this}}
+  {{/each}}

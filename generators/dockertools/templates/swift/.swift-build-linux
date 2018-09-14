@@ -1,1 +1,1 @@
-swift build <%- compilationOptions %>
+swift build {{compilationOptions}}

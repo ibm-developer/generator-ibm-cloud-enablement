@@ -110,8 +110,8 @@ module.exports = class extends Generator {
 			Object.assign(this.pipelineConfig.buildJobProps, {
 				build_type: 'shell',
 				script: '|-\n' +
-					'      #!/bin/bash\n' +
-					this.pipelineConfig.postBuildScript
+				'      #!/bin/bash\n' +
+				this.pipelineConfig.postBuildScript
 			});
 		}
 	}
@@ -195,8 +195,8 @@ module.exports = class extends Generator {
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',
 			script: '|\n' +
-				'      #!/bin/bash\n' +
-				'      ' + this.pipelineConfig.javaBuildScriptContent
+			'      #!/bin/bash\n' +
+			'      ' + this.pipelineConfig.javaBuildScriptContent
 		};
 	}
 

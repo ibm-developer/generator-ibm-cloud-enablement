@@ -1,1 +1,1 @@
-swift test <%- compilationOptions %>
+swift test {{compilationOptions}}

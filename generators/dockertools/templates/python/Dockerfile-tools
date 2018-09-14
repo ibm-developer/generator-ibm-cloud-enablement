@@ -5,18 +5,17 @@ WORKDIR /app
 COPY requirements.txt /tmp/requirements.txt
 RUN apk --update add python py-pip openssl ca-certificates py-openssl wget bash linux-headers
 RUN apk --update add --virtual build-dependencies libffi-dev openssl-dev python-dev py-pip build-base \
-<% for (var index = 0; index < servicesPackages.length; index++) { -%>
-  <%- servicesPackages[index] %> \
-<% } -%>
+{{#each servicesPackages}}
+  {{this}} \
+{{/each}}
   && pip install --upgrade pip \
   && pip install --upgrade -r /tmp/requirements.txt \
   && apk del build-dependencies
-<% if (language === "PYTHON") { %>
+{{#ifCond language "===" "PYTHON"}}
 ENV FLASK_APP=server/__init__.py
 ENV FLASK_DEBUG=true
+{{/ifCond}}
 
-
-<% } %>
 COPY . /app
 COPY run-dev /bin
 RUN chmod 777 /bin/run-dev
