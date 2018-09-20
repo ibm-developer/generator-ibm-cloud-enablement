@@ -84,8 +84,8 @@ form:
       dev-organization: "{{org}}"
       {{/has}}
       {{#has deployment.type 'VSI'}}
-      public-key: "{{tag 'public-key'}}"
-      private-key: "{{tag 'private-key'}}"
+      public-key: "{{tag 'ssh-public-key'}}"
+      private-key: "{{tag 'ssh-private-key'}}"
       softlayer-username: "{{tag 'softlayer-username'}}"
       softlayer-api-key: "{{tag 'softlayer-api-key'}}"
       gitlab-username: "{{tag 'gitlab-username'}}"
