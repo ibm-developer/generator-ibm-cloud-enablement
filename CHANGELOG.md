@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.2"></a>
+## [1.3.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.1...v1.3.2) (2018-09-14)
+
+
+### Bug Fixes
+
+* change mongohttp back to http ([7d6bf1a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7d6bf1a))
+* getting rid of some comments ([61d500a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/61d500a))
+* got rid of ejs tags in dockertools/templates/go ([07c78cb](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/07c78cb))
+* got rid of ejs tags in dockertools/templates/node ([5a79089](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5a79089))
+* got rid of ejs tags in dockertools/templates/swift and kubernetes/templates/services/mongodb.deploy.yaml ([e7d622f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e7d622f))
+* mongo service and deployment now have unique names ([68df661](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/68df661))
+* removed ejs tags from dockertools/templates/python ([407b43f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/407b43f))
+* should fix &quot in cli-config ([7542a68](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7542a68))
+* should fix &quot in cli-config ([#350](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/350)) ([d7a2c5f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/d7a2c5f))
+* **vsi:** added support to set toolchain vars via form ([#354](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/354)) ([e528a8f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e528a8f))
+* **vsi:** modified gitlab username var to match scaffolder value ([#363](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/363)) ([e57c036](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e57c036))
+
+
+
 <a name="1.3.1"></a>
 ## [1.3.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.0...v1.3.1) (2018-09-11)
 
