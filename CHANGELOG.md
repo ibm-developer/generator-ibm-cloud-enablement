@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.3"></a>
+## [1.3.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.2...v1.3.3) (2018-09-23)
+
+
+### Bug Fixes
+
+* Change ssh key parameter names ([ca4af2f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ca4af2f))
+* Change vsi pipeline order to accomadate multi-line env ([580d8df](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/580d8df))
+
+
+
 <a name="1.3.2"></a>
 ## [1.3.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.1...v1.3.2) (2018-09-14)
 
