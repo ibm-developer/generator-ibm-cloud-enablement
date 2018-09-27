@@ -70,7 +70,7 @@ module.exports = class extends Generator {
 			this.deployment.type = this.bluemix.cloudDeploymentType || 'CF';
 		}
 		if (this.manifestConfig.domain && this.manifestConfig.host) {
-			this.manifestConfig.route = `${this.bluemix.server.domain}/${this.bluemix.server.host}`
+			this.manifestConfig.route = `${this.bluemix.server.host}.${this.bluemix.server.domain}`
 		}
 
 		this.toolchainConfig.repoType = this.opts.repoType || "clone";
