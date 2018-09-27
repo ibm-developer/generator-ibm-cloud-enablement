@@ -1,6 +1,6 @@
 ---
 stages:
-- name: Build Stage
+- name: Build Preparation Stage
   inputs:
   - type: git
     branch: master
@@ -10,18 +10,25 @@ stages:
     value: {{name}}
     type: text
   - name: PUBLIC_KEY
-    type: text
+    value: "${PUBLIC_KEY}"
+    type: secure
   - name: PRIVATE_KEY
+    value: "${PRIVATE_KEY}"
     type: secure
   - name: TF_VAR_ibm_sl_username
+    value: "${TF_VAR_ibm_sl_username}"
     type: text
   - name: TF_VAR_ibm_sl_api_key
+    value: "${TF_VAR_ibm_sl_api_key}"
     type: secure
   - name: TF_VAR_ibm_cloud_api_key
+    value: "${API_KEY}"
     type: secure
   - name: GIT_USER
+    value: "${GITLAB_USERNAME}"
     type: text
   - name: GIT_PASSWORD
+    value: "${GITLAB_ACCESS_TOKEN}"
     type: secure
   jobs:
   - name: Validate
@@ -32,6 +39,30 @@ stages:
       #!/bin/bash
       set -eo pipefail
       bash terraform/scripts/validate.sh
+  - name: Set Keys
+    type: builder
+    artifact_dir: ''
+    build_type: shell
+    script: |
+      #!/bin/bash
+      set -eo pipefail
+      echo "${PUBLIC_KEY}" > terraform/publickey.txt
+      echo "${TF_VAR_ibm_sl_api_key}" > terraform/slkey.txt
+      echo "${TF_VAR_ibm_sl_username}" > terraform/slusername.txt
+      echo "${TF_VAR_ibm_cloud_api_key}" > terraform/cloudkey.txt
+      echo "${VI_INSTANCE_NAME}" > terraform/instancename.txt
+      echo "${PRIVATE_KEY}" > terraform/ssh_private_key && chmod 400 terraform/ssh_private_key
+      echo "${GIT_URL}" > terraform/giturl.txt
+      if [ ! -z "${GIT_USER}" ]; then echo $GIT_USER > terraform/gituser.txt; fi
+      if [ ! -z "${GIT_PASSWORD}" ]; then echo $GIT_PASSWORD > terraform/gitpassword.txt; fi
+- name: Build Stage
+  inputs:
+  - type: job
+    stage: Build Preparation Stage
+    job: Set Keys
+  triggers:
+  - type: stage
+  jobs:
   - name: Build
     type: builder
     artifact_dir: ''
@@ -41,15 +72,6 @@ stages:
       bash terraform/scripts/build.sh
       dpkg-buildpackage -rfakeroot -us -uc -b && mv ../{{lowercaseName}}-0.0_1-1_all.deb terraform/{{name}}-0.0_1-1_all.deb
       if [ ! -f terraform/{{name}}-0.0_1-1_all.deb ]; then echo "Debian package was not successfully created."; exit 1; fi
-      echo $PUBLIC_KEY > terraform/publickey.txt
-      echo $TF_VAR_ibm_sl_api_key > terraform/slkey.txt
-      echo $TF_VAR_ibm_sl_username > terraform/slusername.txt
-      echo $TF_VAR_ibm_cloud_api_key > terraform/cloudkey.txt
-      echo $VI_INSTANCE_NAME > terraform/instancename.txt
-      echo $PRIVATE_KEY > terraform/ssh_private_key && chmod 400 terraform/ssh_private_key
-      echo $GIT_URL > terraform/giturl.txt
-      if [ ! -z $GIT_USER ]; then echo $GIT_USER > terraform/gituser.txt; fi
-      if [ ! -z $GIT_PASSWORD ]; then echo $GIT_PASSWORD > terraform/gitpassword.txt; fi
     {{#has deployment.language 'NODE'}}
     docker_image: node:8
     {{/has}}
