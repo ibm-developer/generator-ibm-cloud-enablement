@@ -20,9 +20,11 @@ applications:
   {{#if this.memory }}
   memory: {{{this.memory}}}
   {{/if ~}}
-  {{#if this.route }}
-  routes:
-    - route: {{{this.route}}}
+  {{#if this.domain }}
+  domain: {{{this.domain}}}
+  {{/if ~}}
+  {{#if this.host }}
+  host: {{{this.host}}}
   {{else}}
   random-route: true
   {{/if ~}}
