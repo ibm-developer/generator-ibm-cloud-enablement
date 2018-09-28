@@ -344,11 +344,11 @@ describe('cloud-enablement:cloudfoundry', function () {
 			assert.file('manifest.yml');
 			assert.fileContent('manifest.yml', 'name: AcmeProject');
 			assert.fileContent('manifest.yml', 'random-route: true');
-			assert.fileContent('manifest.yml', `memory: ${minMem}`); 
+			assert.fileContent('manifest.yml', `memory: ${minMem}`);
 			assert.noFileContent('manifest.yml', 'env:');
 		});
 
-		
+
 
 		it('toolchain.yml repo type is link', function () {
 			assert.file('.bluemix/toolchain.yml');

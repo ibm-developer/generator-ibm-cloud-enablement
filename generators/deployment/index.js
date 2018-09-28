@@ -327,4 +327,3 @@ module.exports = class extends Generator {
 		this.fs.write(this.destinationPath(destinationFile), output);
 	}
 };
-
