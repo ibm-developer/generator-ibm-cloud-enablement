@@ -69,9 +69,6 @@ module.exports = class extends Generator {
 			this.manifestConfig.name = this.bluemix.name;
 			this.deployment.type = this.bluemix.cloudDeploymentType || 'CF';
 		}
-		if (this.manifestConfig.domain && this.manifestConfig.host) {
-			this.manifestConfig.route = `${this.bluemix.server.host}.${this.bluemix.server.domain}`
-		}
 
 		this.toolchainConfig.repoType = this.opts.repoType || "clone";
 		switch (this.bluemix.backendPlatform) {
@@ -330,4 +327,3 @@ module.exports = class extends Generator {
 		this.fs.write(this.destinationPath(destinationFile), output);
 	}
 };
-
