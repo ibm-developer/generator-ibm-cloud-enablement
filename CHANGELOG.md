@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.4"></a>
+## [1.3.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.3...v1.3.4) (2018-09-28)
+
+
+### Bug Fixes
+
+* changing domain/host to using routes in manifest.yml ([7af184f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7af184f))
+* fixed host/domain format ([707313e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/707313e))
+* polling helm version to wait for Tiller pod to become active on new Kube cluster ([638d73f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/638d73f))
+
+
+
 <a name="1.3.3"></a>
 ## [1.3.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.2...v1.3.3) (2018-09-23)
 
