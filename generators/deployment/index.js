@@ -230,7 +230,7 @@ module.exports = class extends Generator {
 	_configureSpring() {
 		this.cfIgnoreContent = ['/.classpath', '/.project', '/.settings', '/src/main/resources/application-local.properties', 'target/', 'build/'];
 		this.manifestConfig.buildpack = 'java_buildpack';
-		this.manifestConfig.memory = this._getHighestMemorySize(this.manifestConfig.memory, '1023M');
+		this.manifestConfig.memory = this._getHighestMemorySize(this.manifestConfig.memory, '1024M');
 		let buildDir = (this.opts.buildType && this.opts.buildType === 'gradle') ? 'build/libs' : 'target';
 		let jarPath = `${buildDir}/${this.opts.artifactId}-${this.opts.version}.jar`;
 		this.manifestConfig.path = `./${jarPath}`;
