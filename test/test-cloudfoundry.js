@@ -179,7 +179,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 						if ( language === 'SPRING' ) {
 							let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
 							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/' + artifactId + '-'+javaVersion+'.jar', 'manifestyml.applications[0].path');
-							assertYmlContent(manifestyml.applications[0].memory, '256M', 'manifestyml.applications[0].memory')
+							assertYmlContent(manifestyml.applications[0].memory, '1024M', 'manifestyml.applications[0].memory')
 							assertYmlContent(manifestyml.applications[0].buildpack, 'java_buildpack', 'manifestyml.applications[0].buildpack')
 						}
 					});
