@@ -2,24 +2,20 @@ language: node_js
 node_js:
 - '8'
 before_install:
-- wget https://github.com/github/hub/releases/download/v2.2.9/hub-linux-386-2.2.9.tgz
-- wget https://kubernetes-helm.storage.googleapis.com/helm-v2.7.2-linux-amd64.tar.gz
-- shasum -a 256 -c ./sha256.txt
-- tar -xvzf hub-linux-386-2.2.9.tgz
-- tar -xvf helm-v2.7.2-linux-amd64.tar.gz
-- export PATH=${PATH}:$PWD/hub-linux-386-2.2.9/bin/:$PWD/linux-amd64
 - npm i -g makeshift && makeshift -r https://registry.npmjs.org
-- npm i -g markdown-to-html
+- npm i -g standard-version
 before_script:
 - cd /tmp
-- git clone -b master https://github.com/ibm-developer/changelog-generator-slack-notification.git
-- npm install changelog-generator-slack-notification
+- wget https://github.com/github/hub/releases/download/v2.5.1/hub-linux-386-2.5.1.tgz
+- tar -xvzf hub-linux-386-2.5.1.tgz
+- mv hub-linux-386-2.5.1 hub
+- export PATH=${PATH}:/tmp/hub/bin
+- git clone -b master https://github.com/ibm-developer/standard-npm-devops.git
 - cd -
-script: npm test && npm run coveralls && ./npm_version_upgrade.sh
+script: npm test && npm run coveralls && /tmp/standard-npm-devops/do_devops.sh
 branches:
   only:
-  - develop
   - master
-notifications:
-  slack:
-    secure: YsSIB1nMQvcgqDsjMcgIkRAPh3LB9xqxW8+237kPVIW2itSUvLr4VQqTcHOOKmG7U2vySQoC7Kcb+lm+8w98xv8OGOe2ikCDaB05ExyONivL0D0gbVEwbdIMuWg72SanIuSXcbDtaFnbn6sCPqHVZpXB3jSd9wKN8YOb0MWz3s1TG0AR0L9DRMrj0K9kGDpIkAqsKO5Tbm4AyXIafzih1gRXldLBvBCR+/W0tvhaPVIhuvNjXGRVs+1kp7daJKtdXDpUWjTx4w64nbr8ljmh50J3rLCdbh4TTlO/TVT3k3RD9IsfwaEeWS6j7/SMXdpT35DFxK1GetCHzJxQcKbMDR9O+6VgQRm24z1456mw4ayf860GtC8oU0+x7b9ndY3KQd6/qoXwFx0ngJN479KVpo5T96zEKkQ1XVCh2Jlx0Zw2iThzH/Ks9G+q7zNIYP3+9US6ogzszZPCHbJzCkllrL4C9FP3LBqSlnS7uon8D9/8RSd0MEA1fTWsF5LBKZdntIo2Ma6QlEB5yelbeP/XUE+AHKveDUCd1b7mq7u6Cnx9z8rS4O++Y3Otd2idITDArfvkncnWiOYTWUlYA/UNeBznZ7u2B7yCzKymp4t1u6Es/Kdh8xhzTVRDSQTKcUinyOitaRLb0vHtivJM2MjaLPeYqL5TudQPHKPuvaAMHjU=
+  - develop
+env:
+  - DEV_BRANCH=develop PROD_BRANCH=master DEVOPS_SCRIPT_DIR="/tmp/standard-npm-devops"
