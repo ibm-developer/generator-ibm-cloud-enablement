@@ -7,9 +7,11 @@ before_install:
 before_script:
 - cd /tmp
 - wget https://github.com/github/hub/releases/download/v2.5.1/hub-linux-386-2.5.1.tgz
+- wget https://kubernetes-helm.storage.googleapis.com/helm-v2.7.2-linux-amd64.tar.gz
 - tar -xvzf hub-linux-386-2.5.1.tgz
+- tar -xvf helm-v2.7.2-linux-amd64.tar.gz
 - mv hub-linux-386-2.5.1 hub
-- export PATH=${PATH}:/tmp/hub/bin
+- export PATH=${PATH}:/tmp/hub/bin:$PWD/linux-amd64
 - git clone -b master https://github.com/ibm-developer/standard-npm-devops.git
 - cd -
 script: npm test && npm run coveralls && /tmp/standard-npm-devops/do_devops.sh
