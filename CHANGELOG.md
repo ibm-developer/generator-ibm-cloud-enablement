@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.6"></a>
+## [1.3.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.5...v1.3.6) (2018-10-15)
+
+
+### Bug Fixes
+
+* More memory for CF Spring ([559a8ee](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/559a8ee))
+* More memory for CF Spring ([417c10a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/417c10a))
+* More memory for CF Spring ([c4153d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/c4153d5))
+
+
+
 <a name="1.3.5"></a>
 ## [1.3.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.4...v1.3.5) (2018-09-28)
 
