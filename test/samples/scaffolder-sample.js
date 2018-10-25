@@ -47,7 +47,7 @@ function get(language, bluemix) {
 		bluemix.server.memory = "512M";
 	}
 	if(language === 'SPRING') {
-		bluemix.server.memory = "256M";
+		bluemix.server.memory = "1024M";
 	}
 	return bluemix;
 }
