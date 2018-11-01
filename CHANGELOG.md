@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.8"></a>
+## [1.3.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.7...v1.3.8) (2018-11-01)
+
+
+### Bug Fixes
+
+* make link more likely to hit a working endpoint in running kube app ([9c205c5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9c205c5))
+* move bindings to deployment.yaml ([e36207a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e36207a))
+* move node base image up to 8-stretch ([93fc788](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/93fc788))
+* remove mongo update ([7719dec](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7719dec))
+* update mongo helm chart ([7adce91](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7adce91))
+* Update the dockerfile apm config so it works correctly ([3e16fda](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3e16fda))
+
+
+
 <a name="1.3.7"></a>
 ## [1.3.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.6...v1.3.7) (2018-10-17)
 
