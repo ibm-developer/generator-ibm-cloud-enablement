@@ -10,13 +10,16 @@ services:
     ports: {{#each ports}}
       - "{{this}}:{{this}}"{{/each}}
     volumes:
-      - .:/app {{#ifCond images.length '>' 0}}
+      - .:/app
+      - node_modules:/app/node_modules {{#ifCond images.length '>' 0}}
     links: {{#each images}}
       -  {{this}}{{/each}}{{/ifCond}}
     environment:
       NODE_ENV: "development"{{#each envs as |value key|}}
-      {{key}}: {{value}}{{/each}} {{#each images}}
+      {{key}}: {{value}}{{/each}}{{#each images}}
   {{this}}:
     image: {{this}}
 {{/each}}
 
+volumes:
+  node_modules:

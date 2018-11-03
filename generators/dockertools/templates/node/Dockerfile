@@ -14,7 +14,7 @@ RUN apt-get update \
 
 # Install npm production packages
 COPY package.json /app/
-RUN cd /app; npm install --production
+RUN cd /app && npm install --production
 
 COPY . /app
 
@@ -24,6 +24,3 @@ ENV PORT {{port}}
 EXPOSE {{port}}
 
 CMD ["npm", "start"]
-
-
-
