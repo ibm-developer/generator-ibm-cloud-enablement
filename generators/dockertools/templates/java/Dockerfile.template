@@ -15,6 +15,7 @@ COPY /src/main/liberty/config/jvmbx.options /config/jvm.options
 COPY /build/wlp/usr/servers/defaultServer /config/
 {{/has}}
 # Grant write access to apps folder, this is to support old and new docker versions.
+# Liberty document reference : https://hub.docker.com/_/websphere-liberty/
 USER root
 RUN chmod g+w /config/apps
 USER 1001
