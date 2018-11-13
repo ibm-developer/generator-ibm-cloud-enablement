@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.9"></a>
+## [1.3.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.8...v1.3.9) (2018-11-13)
+
+
+### Bug Fixes
+
+* Add reference to Liberty doc ([5357856](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5357856))
+* Change README to test PR build ([3c632d2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3c632d2))
+* Liberty container run non-root ([dd32b7b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/dd32b7b))
+
+
+
 <a name="1.3.8"></a>
 ## [1.3.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.7...v1.3.8) (2018-11-01)
 
