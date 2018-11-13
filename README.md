@@ -29,7 +29,7 @@
 
 Creates the files required to deploy projects to Kubernetes (using Helm Charts) and/or Cloud Foundry (using a generated manifest). Also, provides scripts to initiate IBM Cloud’s DevOps Toolchain.
 
-## Pre-requisites
+## Pre-requisites 
 
 Install [Yeoman](http://yeoman.io)
 Install [Helm](https://github.com/kubernetes/helm#install) 
