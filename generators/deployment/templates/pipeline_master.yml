@@ -129,23 +129,7 @@ stages:
   - type: stage
   permission:
     execute: TOOLCHAIN_ADMINS
-  jobs:
-  - name: Test
-    type: tester
-    script: |-
-      #!/bin/sh
-      apk add --no-cache curl
-      if [ "$(curl -Is http://{{manifest.host}}.{{manifest.domain}}/health | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint"
-        echo "====================================================================="
-      else
-        echo "Could not reach health endpoint: http://{{manifest.host}}.{{manifest.domain}}/health"
-        exit 1;
-      fi;
-    test_type: customimage
-    docker_image: alpine
 {{/has}}
-{{#has deployment.type 'Kube'}}
 - name: Health
   inputs:
   - type: job
@@ -155,6 +139,7 @@ stages:
   - type: stage
   permission:
     execute: TOOLCHAIN_ADMINS
+  {{#has deployment.type 'Kube'}}
   properties:
   - name: CLUSTER_NAMESPACE
     value: ${CLUSTER_NAMESPACE}
@@ -191,4 +176,21 @@ stages:
         exit 1;
       fi;
 
-    {{/has}}
+  {{/has}}
+  {{#has deployment.type 'CF'}}
+  jobs:
+  - name: Test
+    type: tester
+    script: |-
+      #!/bin/sh
+      apk add --no-cache curl
+      if [ "$(curl -Is http://{{manifest.host}}.{{manifest.domain}}/health | head -n 1 | grep 200)" != "" ]; then
+        echo "Successfully reached health endpoint"
+        echo "====================================================================="
+      else
+        echo "Could not reach health endpoint: http://{{manifest.host}}.{{manifest.domain}}/health"
+        exit 1;
+      fi;
+    test_type: customimage
+    docker_image: alpine
+  {{/has}}
