@@ -119,17 +119,6 @@ stages:
       {{/if}}
       # cf logs "${CF_APP}" --recent
     {{/has}}
-{{#has deployment.type 'CF'}}
-- name: Health
-  inputs:
-  - type: job
-    stage: Build Stage
-    job: Build
-  triggers:
-  - type: stage
-  permission:
-    execute: TOOLCHAIN_ADMINS
-{{/has}}
 - name: Health
   inputs:
   - type: job
