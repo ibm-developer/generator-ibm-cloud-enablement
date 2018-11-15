@@ -119,7 +119,7 @@ stages:
       {{/if}}
       # cf logs "${CF_APP}" --recent
     {{/has}}
-- name: Health
+- name: Health Stage
   inputs:
   - type: job
     stage: Build Stage
