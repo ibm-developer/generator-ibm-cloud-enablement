@@ -106,6 +106,8 @@ stages:
       #!/bin/bash
       echo "source the kube_deploy script to run in current shell"
       source {{{deployment.scriptsDir}}}/kube_deploy.sh
+      echo "export IP_ADDR=${IP_ADDR}" >> kube_vars.sh
+      echo "export PORT=${PORT}" >> kube_vars.sh
     {{/has}}
     {{#has deployment.type 'CF'}}
     script: |-
@@ -116,4 +118,79 @@ stages:
       cf push "${CF_APP}"
       {{/if}}
       # cf logs "${CF_APP}" --recent
+    {{/has}}
+{{#has deployment.type 'CF'}}
+- name: Health
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  triggers:
+  - type: stage
+  permission:
+    execute: TOOLCHAIN_ADMINS
+  jobs:
+  - name: Test
+    type: tester
+    script: |-
+      #!/bin/sh
+      apk add --no-cache curl
+      if [ "$(curl -Is http://{{manifest.host}}.{{manifest.domain}}/health | head -n 1 | grep 200)" != "" ]; then
+        echo "Successfully reached health endpoint"
+        echo "====================================================================="
+      else
+        echo "Could not reach health endpoint: http://{{manifest.host}}.{{manifest.domain}}/health"
+        exit 1;
+      fi;
+    test_type: customimage
+    docker_image: alpine
+{{/has}}
+{{#has deployment.type 'Kube'}}
+- name: Health
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  triggers:
+  - type: stage
+  permission:
+    execute: TOOLCHAIN_ADMINS
+  properties:
+  - name: CLUSTER_NAMESPACE
+    value: ${CLUSTER_NAMESPACE}
+    type: text
+  - name: IMAGE_REGISTRY_TOKEN
+    value: ${IMAGE_REGISTRY_TOKEN}
+    type: text
+  - name: buildProperties
+    value: build.properties
+    type: file
+  jobs:
+  - name: Deploy
+    type: deployer
+    deploy_type: kubernetes
+    target:
+      region_id: ibm:yp:us-south
+      api_key: +l0/Y7wYjwFj1sd/RbMGBxTgHFbwliMljv03t53iVSWeluhBNCmXl/dujEsdfBI+QivgI3QCx+70jKTkn0K4zQ==
+      account_guid: efd7ba0fed9b607323a6a27a2cee04b3
+      resource_group: default
+      kubernetes_cluster: mycluster
+    script: |-
+      IP_ADDR=$(bx cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
+      if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
+        RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"
+      else
+        RELEASE_NAME=${IMAGE_NAME}
+      fi
+      echo "RELEASE_NAME: $RELEASE_NAME"
+
+      PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
+      if [ "$(curl -Is http://$IP_ADDR:$PORT/health | head -n 1 | grep 200)" != "" ]; then
+        echo "Successfully reached health endpoint"
+        echo "====================================================================="
+      else
+        echo "Could not reach health endpoint: http://$IP_ADDR:$PORT/health"
+        exit 1;
+      fi;
+
     {{/has}}
