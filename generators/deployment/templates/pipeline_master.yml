@@ -170,11 +170,9 @@ stages:
     type: deployer
     deploy_type: kubernetes
     target:
-      region_id: ibm:yp:us-south
-      api_key: +l0/Y7wYjwFj1sd/RbMGBxTgHFbwliMljv03t53iVSWeluhBNCmXl/dujEsdfBI+QivgI3QCx+70jKTkn0K4zQ==
-      account_guid: efd7ba0fed9b607323a6a27a2cee04b3
-      resource_group: default
-      kubernetes_cluster: mycluster
+      region_id: ${REGION_ID}
+      api_key: ${API_KEY}
+      kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       IP_ADDR=$(bx cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
       if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
