@@ -2,6 +2,65 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.3.9"></a>
+## [1.3.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.8...v1.3.9) (2018-11-13)
+
+
+### Bug Fixes
+
+* Add reference to Liberty doc ([5357856](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5357856))
+* Change README to test PR build ([3c632d2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3c632d2))
+* Liberty container run non-root ([dd32b7b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/dd32b7b))
+
+
+
+<a name="1.3.8"></a>
+## [1.3.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.7...v1.3.8) (2018-11-01)
+
+
+### Bug Fixes
+
+* make link more likely to hit a working endpoint in running kube app ([9c205c5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9c205c5))
+* move bindings to deployment.yaml ([e36207a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e36207a))
+* move node base image up to 8-stretch ([93fc788](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/93fc788))
+* remove mongo update ([7719dec](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7719dec))
+* update mongo helm chart ([7adce91](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/7adce91))
+* Update the dockerfile apm config so it works correctly ([3e16fda](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3e16fda))
+
+
+
+<a name="1.3.7"></a>
+## [1.3.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.6...v1.3.7) (2018-10-17)
+
+
+### Bug Fixes
+
+* typo wrong kind of quotes ([c021fbb](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/c021fbb))
+
+
+
+<a name="1.3.6"></a>
+## [1.3.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.5...v1.3.6) (2018-10-15)
+
+
+### Bug Fixes
+
+* More memory for CF Spring ([559a8ee](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/559a8ee))
+* More memory for CF Spring ([417c10a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/417c10a))
+* More memory for CF Spring ([c4153d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/c4153d5))
+
+
+
+<a name="1.3.5"></a>
+## [1.3.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.4...v1.3.5) (2018-09-28)
+
+
+### Bug Fixes
+
+* reverting back to before routes in manifest was added ([bba01da](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/bba01da))
+
+
+
 <a name="1.3.4"></a>
 ## [1.3.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.3...v1.3.4) (2018-09-28)
 

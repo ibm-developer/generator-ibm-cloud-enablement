@@ -44,6 +44,12 @@ spec:
             value: {{tag ' .Values.services.mongo.url '}}
           - name: MONGO_DB_NAME
             value: {{tag ' .Values.services.mongo.name '}}
+          - name: MONGO_USER
+            value: {{tag ' .Values.services.mongo.username '}}
+          - name: MONGO_PASS
+            value: {{tag ' .Values.services.mongo.password '}}
+          - name: MONGO_CA
+            value: {{tag ' .Values.services.mongo.ca '}}
           {{/has}}
 {{tag '- if .Values.generatedBindings.enabled '}}
 {{tag '.Files.Get "bindings.yaml" | indent 10 '}}
