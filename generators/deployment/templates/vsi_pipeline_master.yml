@@ -68,6 +68,27 @@ stages:
     artifact_dir: ''
     build_type: customimage
     script: |
+      # download `ibmcloud` cli and `dev` plugin
+      curl -fsSL https://clis.ng.bluemix.net/install/linux | sh
+      ibmcloud plugin install dev
+      
+      # log in and set ibmcloud cli target
+      ibmcloud api https://api.ng.bluemix.net
+      export TF_VAR_ibm_cloud_api_key=$(cat terraform/cloudkey.txt)
+      bx login --apikey $TF_VAR_ibm_cloud_api_key
+      ibmcloud target --cf-api https://api.ng.bluemix.net 
+      
+      # Fetch CF org and space for the current account 
+      # These are not used during deployment, but must be set to use the `dev` cli.  
+      # Any value will work, so this fetches the first ones encountered
+      export ORG=$(ibmcloud account orgs | awk 'NR==6' | awk '{split($0,a," "); print a[1]}')
+      export SPACE=$(ibmcloud account spaces -o $ORG | awk 'NR==5')
+      ibmcloud target --cf-api https://api.ng.bluemix.net -o $ORG -s $SPACE
+      
+      # fetch credentials for the app instance
+      ibmcloud dev get-credentials
+      
+      # package app for VSI deployment
       apt-get update && apt-get install -y build-essential debhelper fakeroot
       bash terraform/scripts/build.sh
       dpkg-buildpackage -rfakeroot -us -uc -b && mv ../{{lowercaseName}}-0.0_1-1_all.deb terraform/{{name}}-0.0_1-1_all.deb
