@@ -282,7 +282,6 @@ describe('cloud-enablement:cloudfoundry', function () {
 
 		it('no cloud foundry files should be created', function () {
 			assert.file('manifest.yml');
-			assert.file('.bluemix/pipeline.yml');
 			assert.file('.bluemix/toolchain.yml');
 			assert.file('.bluemix/deploy.json');
 			assert.file('.cfignore');
