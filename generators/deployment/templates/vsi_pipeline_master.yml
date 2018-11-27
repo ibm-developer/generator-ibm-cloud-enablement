@@ -237,7 +237,7 @@ stages:
       {{#has deployment.language 'GO'}}
       PORT='8080'
       {{/has}}
-      if [ $(curl -sL -w "%{http_code}\\n" "http://${VSI_HOST}:${PORT}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}" -o /dev/null --connect-timeout 3 --max-time 5) == "200" ]; then
+      if [ $(curl -sL -w "%{http_code}\\n" "http://${VSI_HOST}:${PORT}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}" -o /dev/null --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30) == "200" ]; then
         echo "Successfully reached health endpoint: http://${VSI_HOST}:${PORT}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}"
         echo "====================================================================="
         ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "cd /usr/src/{{name}}; sed -i 's/localhost/${VSI_HOST}/g' output.log; sed -i 's/0.0.0.0/${VSI_HOST}/g' output.log; sed -i 's/127.0.0.1/${VSI_HOST}/g' output.log; cat output.log"
