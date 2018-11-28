@@ -160,10 +160,6 @@ describe('cloud-enablement:dockertools', function () {
 			assert.file(['Dockerfile', 'cli-config.yml', 'Dockerfile-tools']);
 		});
 
-		it('create run-debug and run-dev if not present', function () {
-			assert.file(['run-dev', 'run-debug']);
-		});
-
 		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
 			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
 			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
