@@ -18,6 +18,8 @@ RUN go get -u github.com/derekparker/delve/cmd/dlv/...
 COPY . ./
 RUN dep ensure -v
 
+COPY run-dev $GOPATH/bin
+RUN chmod 777 $GOPATH/bin/run-dev
 RUN chmod 777 $GOPATH/src/{{applicationName}}/
 
 CMD ["/bin/bash"]

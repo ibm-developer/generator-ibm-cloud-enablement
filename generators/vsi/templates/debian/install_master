@@ -17,6 +17,7 @@ staticfiles				        usr/src/{{deployment.name}}
 {{deployment.name}}    			usr/src/{{deployment.name}}
 manage.py                       usr/src/{{deployment.name}}
 app                             usr/src/{{deployment.name}}
+run-dev                        usr/src/{{deployment.name}}
 server							usr/src/{{deployment.name}}
 {{#checkProperty deployment.createType 'blank'}}
 public							usr/src/{{deployment.name}}
