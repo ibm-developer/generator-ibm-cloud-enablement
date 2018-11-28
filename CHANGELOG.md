@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.9...v1.4.0) (2018-11-20)
+
+
+### Features
+
+* added logic to fetch service credentials for VSI deployments ([af3fdb8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/af3fdb8))
+
+
+
 <a name="1.3.9"></a>
 ## [1.3.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.8...v1.3.9) (2018-11-13)
 
