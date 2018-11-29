@@ -212,7 +212,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 						assert.file('.bluemix/pipeline.yml');
 						let pipelineyml = yml.safeLoad(fs.readFileSync('.bluemix/pipeline.yml', 'utf8'));
 						let stages = pipelineyml.stages;
-						assert(stages.length === 2, 'Expected piplelineyml to have 2 stages, found ' + stages.length);
+						assert(stages.length === 3, 'Expected piplelineyml to have 3 stages, found ' + stages.length);
 						stages.forEach(stage => {
 							if(stage.name === 'Build Stage') {
 								assertYmlContent(stage.triggers[0].type, 'commit', 'pipelineyml.stages[0].triggers[0].type');
@@ -282,7 +282,6 @@ describe('cloud-enablement:cloudfoundry', function () {
 
 		it('no cloud foundry files should be created', function () {
 			assert.file('manifest.yml');
-			assert.file('.bluemix/pipeline.yml');
 			assert.file('.bluemix/toolchain.yml');
 			assert.file('.bluemix/deploy.json');
 			assert.file('.cfignore');
