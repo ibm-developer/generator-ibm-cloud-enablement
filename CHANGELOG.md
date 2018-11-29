@@ -2,6 +2,38 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.4.0...v1.5.0) (2018-11-28)
+
+
+### Bug Fixes
+
+* 3 stages not 4 ([ae32d4c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ae32d4c))
+* add polling parameters for vsi health stage ([609c690](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/609c690))
+* added polling ([e61557b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e61557b))
+* change test desciption ([251ecfc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/251ecfc))
+* fixed properties in pipeline for kube health stage ([f370acd](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f370acd))
+* forgot to add handlebars variables to pipeline ([0c785d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/0c785d5))
+* refactored pipeline.yml ([f5df48e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f5df48e))
+
+
+### Features
+
+* added health stage to deployments in pipeline ([53b2856](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/53b2856))
+* added logic to fetch service credentials for VSI deployments ([90b5264](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/90b5264))
+
+
+
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.9...v1.4.0) (2018-11-20)
+
+
+### Features
+
+* added logic to fetch service credentials for VSI deployments ([af3fdb8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/af3fdb8))
+
+
+
 <a name="1.3.9"></a>
 ## [1.3.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.8...v1.3.9) (2018-11-13)
 
