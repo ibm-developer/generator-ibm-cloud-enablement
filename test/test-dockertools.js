@@ -297,20 +297,8 @@ describe('cloud-enablement:dockertools', function () {
 						assert.fileContent('.dockerignore', 'workarea');
 						assert.fileContent('.dockerignore', 'logs');
 					});
-					it('Dockerfile contains installUtility', function () {
-						assert.fileContent('Dockerfile', 'installUtility');
-					});
 					it('Dockerfile contains LICENSE_JAR_URL', function () {
 						assert.fileContent('Dockerfile', 'LICENSE_JAR_URL');
-					});
-					it('Dockerfile contains apmDataCollector-7.4', function () {
-						assert.fileContent('Dockerfile', 'apmDataCollector-7.4');
-					});
-					it('Dockerfile contains LD_LIBRARY_PATH', function () {
-						assert.fileContent('Dockerfile', 'LD_LIBRARY_PATH');
-					});
-					it('Dockerfile contains JVM_ARGS', function () {
-						assert.fileContent('Dockerfile', 'JVM_ARGS');
 					});
 					it('Dockerfile-tools contains wlp path', function () {
 						assert.fileContent('Dockerfile-tools', 'wlp/bin');
