@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.0...v1.5.1) (2018-11-30)
+
+
+### Bug Fixes
+
+* domain properties not passed through ([6ce9cf9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/6ce9cf9))
+* Remove apm tools from Liberty docker image ([8a75588](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/8a75588))
+
+
+
 <a name="1.5.0"></a>
 # [1.5.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.4.0...v1.5.0) (2018-11-28)
 

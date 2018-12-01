@@ -269,8 +269,6 @@ module.exports = class extends Generator {
 	}
 
 	writing() {
-		this.manifestConfig.host = this.manifestConfig.host;
-		this.manifestConfig.domain = this.manifestConfig.domain || 'mybluemix.net';
 		//skip writing files if platforms is specified via options and it doesn't include bluemix
 		if (this.opts.platforms && !this.opts.platforms.includes('bluemix')) {
 			return;
