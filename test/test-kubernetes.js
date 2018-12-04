@@ -163,7 +163,7 @@ describe('cloud-enablement:kubernetes', function () {
 				let deploymentyml = getSafeYaml(chartLocation + '/templates/deployment.yaml');
 				let readinessProbe = deploymentyml.spec.template.spec.containers[0].readinessProbe;
 				if (language === 'JAVA') {
-					assertYmlContent(readinessProbe.httpGet.path, '/AcmeProject/health', 'readinessProbe.httpGet.path');
+					assertYmlContent(readinessProbe.httpGet.path, '/health', 'readinessProbe.httpGet.path');
 					assertYmlContent(readinessProbe.httpGet.port, 9080, 'readinessProbe.httpGet.port');
 				}
 				if (language === 'SPRING') {
