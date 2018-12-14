@@ -305,7 +305,7 @@ describe('cloud-enablement:dockertools', function () {
 				if (language === 'JAVA') {
 					it('Dockerfile contains correct Liberty image', function() {
 						assert.fileContent('Dockerfile', 'FROM websphere-liberty:webProfile7')
-					})
+					});
                     it('Dockerfile contains ibmAppMetricsForJava-1.2.1', function() {
                         assert.fileContent('Dockerfile', 'ibmAppMetricsForJava-1.2.1');
                     });
