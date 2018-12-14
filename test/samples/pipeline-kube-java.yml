@@ -147,6 +147,7 @@ stages:
       api_key: ${API_KEY}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
+      export PATH="downloads:$PATH"
       IP_ADDR=$(bx cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
       if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
         RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"
