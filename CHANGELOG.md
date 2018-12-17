@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.5"></a>
+## [1.5.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.4...v1.5.5) (2018-12-17)
+
+
+### Bug Fixes
+
+* added helm and kubectl version updates when necessary ([9ca9cce](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9ca9cce))
+* always download current version of helm and kubectl ([2217f59](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2217f59))
+* fixed unit tests ([686eeae](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/686eeae))
+* have to add PATH to health stage ([a7e6a25](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/a7e6a25))
+
+
+
 <a name="1.5.4"></a>
 ## [1.5.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.3...v1.5.4) (2018-12-12)
 
