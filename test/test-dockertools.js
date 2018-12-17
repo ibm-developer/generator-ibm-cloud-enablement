@@ -306,12 +306,12 @@ describe('cloud-enablement:dockertools', function () {
 					it('Dockerfile contains correct Liberty image', function() {
 						assert.fileContent('Dockerfile', 'FROM websphere-liberty:webProfile7')
 					});
-                    it('Dockerfile contains ibmAppMetricsForJava-1.2.1', function() {
-                        assert.fileContent('Dockerfile', 'ibmAppMetricsForJava-1.2.1');
-                    });
-                    it('Dockerfile contains config_unified_dc.sh', function() {
-                        assert.fileContent('Dockerfile', 'config_unified_dc.sh');
-                    });
+					it('Dockerfile contains ibmAppMetricsForJava-1.2.1', function() {
+						assert.fileContent('Dockerfile', 'ibmAppMetricsForJava-1.2.1');
+					});
+					it('Dockerfile contains config_unified_dc.sh', function() {
+						assert.fileContent('Dockerfile', 'config_unified_dc.sh');
+					});
 				}
 				if (language === 'libertyBeta') {
 					it('Dockerfile contains correct Liberty beta image', function() {
