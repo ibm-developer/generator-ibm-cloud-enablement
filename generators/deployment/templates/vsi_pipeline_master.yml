@@ -75,7 +75,7 @@ stages:
       # log in and set ibmcloud cli target
       ibmcloud api https://api.ng.bluemix.net
       export TF_VAR_ibm_cloud_api_key=$(cat terraform/cloudkey.txt)
-      bx login --apikey $TF_VAR_ibm_cloud_api_key
+      ibmcloud login --apikey $TF_VAR_ibm_cloud_api_key
       ibmcloud target --cf-api https://api.ng.bluemix.net 
       
       # Fetch CF org and space for the current account 
