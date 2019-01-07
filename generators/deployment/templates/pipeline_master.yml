@@ -188,9 +188,17 @@ stages:
       export PATH="downloads:$PATH"
       IP_ADDR=$(ibmcloud cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
       if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
+        {{#if deployment.hasMongo}}
+        RELEASE_NAME=${IMAGE_NAME}-application-service
+        {{else}}
         RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"
+        {{/if}}
       else
+        {{#if deployment.hasMongo}}
+        RELEASE_NAME=${IMAGE_NAME}-application-service
+        {{else}}
         RELEASE_NAME=${IMAGE_NAME}
+        {{/if}}
       fi
       echo "RELEASE_NAME: $RELEASE_NAME"
 
