@@ -1,6 +1,8 @@
 ---
 applications:
-- instances: 1
+{{#if this.instances}}
+- instances: {{{this.instances}}}
+{{/if}}
   timeout: 180
   {{#if this.name }}
   name: {{{this.name}}}
