@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.7"></a>
+## [1.5.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.6...v1.5.7) (2019-01-09)
+
+
+### Bug Fixes
+
+* added default to 1 for instances variable in manifest ([5febd57](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5febd57))
+* fixing helm linting problem with new kubectl and helm version updates ([25964d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/25964d5))
+
+
+
 <a name="1.5.6"></a>
 ## [1.5.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.5...v1.5.6) (2019-01-09)
 
