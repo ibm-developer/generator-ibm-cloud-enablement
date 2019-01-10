@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.6"></a>
+## [1.5.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.5...v1.5.6) (2019-01-09)
+
+
+### Bug Fixes
+
+* instances variable no longer static in manifest.yml ([bd08e85](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/bd08e85))
+* mean and mern health endpoint ([4636e24](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4636e24))
+
+
+
 <a name="1.5.5"></a>
 ## [1.5.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.4...v1.5.5) (2018-12-17)
 
