@@ -295,6 +295,9 @@ describe('cloud-enablement:dockertools', function () {
 						assert.fileContent('.dockerignore', 'workarea');
 						assert.fileContent('.dockerignore', 'logs');
 					});
+					it('Dockerfile contains installUtility', function () {
+						assert.fileContent('Dockerfile', 'installUtility');
+					});
 					it('Dockerfile contains LICENSE_JAR_URL', function () {
 						assert.fileContent('Dockerfile', 'LICENSE_JAR_URL');
 					});
