@@ -14,6 +14,18 @@ stages:
   - name: CHART_NAME
     value: ${CHART_NAME}
     type: text
+  - name: KUBECTL_VERSION
+    value: $(wget -qO- https://github.com/kubernetes/kubernetes/releases | sed -n '/Latest release<\/a>/,$p' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' |head -1)
+    type: text
+  - name: HELM_VERSION
+    value: $(wget -qO- https://github.com/kubernetes/helm/releases | sed -n '/Latest release<\/a>/,$p' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' |head -1)
+    type: text
+  - name: KUBECTL_DOWNLOAD_URL
+    value: https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+    type: text
+  - name: HELM_DOWNLOAD_URL
+    value: https://kubernetes-helm.storage.googleapis.com/helm-${HELM_VERSION}-linux-amd64.tar.gz
+    type: text
   {{/has}}
   jobs:
   - name: Build
@@ -54,6 +66,30 @@ stages:
       cat Dockerfile >> Dockerfile-tools
       mv Dockerfile-tools Dockerfile
       {{/if}}
+
+      mkdir downloads
+      PATH="downloads:$PATH"
+
+      if [ "$(echo "$(helm version -c)" | grep $HELM_VERSION)" == "" ]; then
+        echo "Downloading helm v$HELM_VERSION"
+        curl -SsL "$HELM_DOWNLOAD_URL" -o "helm-${HELM_VERSION}-linux-amd64.tar.gz"
+        tar -zxvf helm-${HELM_VERSION}-linux-amd64.tar.gz
+        chmod 700 linux-amd64/helm
+        mv linux-amd64/helm downloads/helm
+        chmod +x downloads/helm
+      fi
+
+      if [ "$(echo "$(kubectl version --client)" | grep $KUBECTL_VERSION)" == "" ]; then
+        echo "Downloading kubectl v$KUBECTL_VERSION"
+        curl -LO "$KUBECTL_DOWNLOAD_URL"
+        chmod +x kubectl
+        mv kubectl downloads/kubectl
+      fi
+
+      echo "helm version"
+      helm version -c
+      echo "kubectl version"
+      kubectl version --client
 
       echo "source the container_build script to run in current shell"
       SCRIPTS_DIR={{{deployment.scriptsDir}}} # SCRIPTS_DIR is used in container_build.sh
@@ -104,6 +140,7 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
+      export PATH="downloads:$PATH"
       echo "source the kube_deploy script to run in current shell"
       source {{{deployment.scriptsDir}}}/kube_deploy.sh
       echo "export IP_ADDR=${IP_ADDR}" >> kube_vars.sh
@@ -148,11 +185,20 @@ stages:
       api_key: ${API_KEY}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
-      IP_ADDR=$(bx cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
+      export PATH="downloads:$PATH"
+      IP_ADDR=$(ibmcloud cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
       if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
+        {{#if deployment.hasMongo}}
+        RELEASE_NAME=${IMAGE_NAME}-application-service
+        {{else}}
         RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"
+        {{/if}}
       else
+        {{#if deployment.hasMongo}}
+        RELEASE_NAME=${IMAGE_NAME}-application-service
+        {{else}}
         RELEASE_NAME=${IMAGE_NAME}
+        {{/if}}
       fi
       echo "RELEASE_NAME: $RELEASE_NAME"
 
