@@ -55,9 +55,11 @@ module.exports = class extends Generator {
 			this.name = this.bluemix.server.name;
 			this.manifestConfig = Object.assign(this.manifestConfig, this.bluemix.server);
 			this.deployment = Object.assign(this.deployment, this.bluemix.server.cloudDeploymentOptions);
+			this.manifestConfig.instances = this.manifestConfig.instances || '1';
 			this.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
 			this.deployment.chartName = Utils.sanitizeAlphaNumLowerCase(this.name || this.bluemix.name);
 			this.deployment.scriptsDir = '.bluemix/scripts';
+			this.deployment.hasMongo = this.opts.createType === 'mern' || this.opts.createType === 'mean';
 			if (!this.deployment.kubeClusterNamespace) {
 				this.deployment.kubeClusterNamespace = 'default';
 			}
@@ -314,7 +316,8 @@ module.exports = class extends Generator {
 		else {
 			this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml', {
 				config: this.pipelineConfig,
-				deployment: this.deployment
+				deployment: this.deployment,
+				manifest: this.manifestConfig
 			});
 		}
 

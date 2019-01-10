@@ -2,6 +2,115 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.5.7"></a>
+## [1.5.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.6...v1.5.7) (2019-01-09)
+
+
+### Bug Fixes
+
+* added default to 1 for instances variable in manifest ([5febd57](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5febd57))
+* fixing helm linting problem with new kubectl and helm version updates ([25964d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/25964d5))
+
+
+
+<a name="1.5.6"></a>
+## [1.5.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.5...v1.5.6) (2019-01-09)
+
+
+### Bug Fixes
+
+* instances variable no longer static in manifest.yml ([bd08e85](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/bd08e85))
+* mean and mern health endpoint ([4636e24](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4636e24))
+
+
+
+<a name="1.5.5"></a>
+## [1.5.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.4...v1.5.5) (2018-12-17)
+
+
+### Bug Fixes
+
+* added helm and kubectl version updates when necessary ([9ca9cce](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9ca9cce))
+* always download current version of helm and kubectl ([2217f59](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2217f59))
+* fixed unit tests ([686eeae](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/686eeae))
+* have to add PATH to health stage ([a7e6a25](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/a7e6a25))
+
+
+
+<a name="1.5.4"></a>
+## [1.5.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.3...v1.5.4) (2018-12-12)
+
+
+### Bug Fixes
+
+* Restore step to install missing features for server. ([4823346](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4823346))
+* volume mount problems in node ([37d4f8e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/37d4f8e))
+
+
+
+<a name="1.5.3"></a>
+## [1.5.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.2...v1.5.3) (2018-12-12)
+
+
+### Bug Fixes
+
+* Use context root / in Liberty basedeployment and kube.deploy yamls ([cb0f02f](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/cb0f02f))
+
+
+
+<a name="1.5.2"></a>
+## [1.5.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.1...v1.5.2) (2018-12-03)
+
+
+### Bug Fixes
+
+* remove Liberty context root from kube readinessProbe ([b323cd6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b323cd6))
+
+
+
+<a name="1.5.1"></a>
+## [1.5.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.0...v1.5.1) (2018-11-30)
+
+
+### Bug Fixes
+
+* domain properties not passed through ([6ce9cf9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/6ce9cf9))
+* Remove apm tools from Liberty docker image ([8a75588](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/8a75588))
+
+
+
+<a name="1.5.0"></a>
+# [1.5.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.4.0...v1.5.0) (2018-11-28)
+
+
+### Bug Fixes
+
+* 3 stages not 4 ([ae32d4c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ae32d4c))
+* add polling parameters for vsi health stage ([609c690](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/609c690))
+* added polling ([e61557b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e61557b))
+* change test desciption ([251ecfc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/251ecfc))
+* fixed properties in pipeline for kube health stage ([f370acd](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f370acd))
+* forgot to add handlebars variables to pipeline ([0c785d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/0c785d5))
+* refactored pipeline.yml ([f5df48e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f5df48e))
+
+
+### Features
+
+* added health stage to deployments in pipeline ([53b2856](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/53b2856))
+* added logic to fetch service credentials for VSI deployments ([90b5264](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/90b5264))
+
+
+
+<a name="1.4.0"></a>
+# [1.4.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.9...v1.4.0) (2018-11-20)
+
+
+### Features
+
+* added logic to fetch service credentials for VSI deployments ([af3fdb8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/af3fdb8))
+
+
+
 <a name="1.3.9"></a>
 ## [1.3.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.3.8...v1.3.9) (2018-11-13)
 

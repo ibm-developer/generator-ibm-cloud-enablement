@@ -23,7 +23,7 @@ spec:
           httpGet:
           {{! healthEndpoint is configured in the index.js and is different for basicweb}}
           {{#has language 'java'}}
-            path: /{{applicationName}}/{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}
+            path: /{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}
             port: 9080
           {{/has}}
           {{#has language 'spring'}}
