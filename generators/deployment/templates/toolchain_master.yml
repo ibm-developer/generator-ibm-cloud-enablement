@@ -92,8 +92,8 @@ form:
       {{#has deployment.type 'CFEE'}}
       dev-space: "{{space}}"
       dev-organization: "{{org}}"
-      cfee-env: "{{cfee-env}}"
-      cfee-host: "{{cfee-host}}"
+      cfee-env: "{{tag 'cfee-env'}}"
+      cfee-host: "{{tag 'cfee-host'}}"
       {{/has}}
       {{#has deployment.type 'VSI'}}
       public-key: "{{tag 'ssh-public-key'}}"
