@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.6.0"></a>
+# [1.6.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.7...v1.6.0) (2019-01-11)
+
+
+### Bug Fixes
+
+* **templates:** reduce initial delay and period ([32bdf55](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/32bdf55))
+* accounted for random route/standalone in the pipeline ([cdda9fc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/cdda9fc))
+* cfee tags to handlebars preserves the actual mustache tag ([84406df](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/84406df))
+* Restore test to validate installUtility present ([9dfe49a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9dfe49a))
+
+
+### Features
+
+* support cfee ([f217b85](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f217b85))
+
+
+
 <a name="1.5.7"></a>
 ## [1.5.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.6...v1.5.7) (2019-01-09)
 
