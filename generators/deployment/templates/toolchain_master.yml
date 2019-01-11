@@ -47,6 +47,12 @@ services:
           CF_SPACE: "{{tag 'form.pipeline.parameters.dev-space'}}"
           CF_ORGANIZATION: "{{tag 'form.pipeline.parameters.dev-organization'}}"
           {{/has}}
+          {{#has deployment.type 'CFEE'}}
+          CF_SPACE: "{{tag 'form.pipeline.parameters.dev-space'}}"
+          CF_ORGANIZATION: "{{tag 'form.pipeline.parameters.dev-organization'}}"
+          CFEE_ENV: "{{tag 'form.pipeline.parameters.cfee-env'}}"
+          CFEE_HOST: "{{tag 'form.pipeline.parameters.cfee-host'}}"
+          {{/has}}
           {{#has deployment.type 'VSI'}}
           PUBLIC_KEY: "{{tag 'form.pipeline.parameters.public-key'}}"
           PRIVATE_KEY: "{{tag 'form.pipeline.parameters.private-key'}}"
@@ -82,6 +88,12 @@ form:
       {{#has deployment.type 'CF'}}
       dev-space: "{{space}}"
       dev-organization: "{{org}}"
+      {{/has}}
+      {{#has deployment.type 'CFEE'}}
+      dev-space: "{{space}}"
+      dev-organization: "{{org}}"
+      cfee-env: "{{tag 'cfee-env'}}"
+      cfee-host: "{{tag 'cfee-host'}}"
       {{/has}}
       {{#has deployment.type 'VSI'}}
       public-key: "{{tag 'ssh-public-key'}}"
