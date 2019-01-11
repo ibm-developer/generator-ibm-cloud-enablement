@@ -17,11 +17,10 @@ COPY /build/wlp/usr/servers/defaultServer /config/
 # Grant write access to apps folder, this is to support old and new docker versions.
 # Liberty document reference : https://hub.docker.com/_/websphere-liberty/
 USER root
-RUN chmod g+w /config/apps
+RUN chmod g+w /config/apps && chmod g+w /config/jvm.options
 USER 1001
 # install any missing features required by server config and install the ibmAppMetricsForJava.
-RUN installUtility install --acceptLicense defaultServer && installUtility install --acceptLicense ibmAppMetricsForJava-1.2.1
-RUN /opt/ibm/wlp/usr/extension/liberty_dc/bin/config_unified_dc.sh -silent
+RUN installUtility install --acceptLicense defaultServer && installUtility install --acceptLicense ibmAppMetricsForJava-1.2.1 && /opt/ibm/wlp/usr/extension/liberty_dc/bin/config_unified_dc.sh -silent
 # Upgrade to production license if URL to JAR provided
 ARG LICENSE_JAR_URL
 RUN \ 
