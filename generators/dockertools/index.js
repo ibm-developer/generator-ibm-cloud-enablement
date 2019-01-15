@@ -204,8 +204,8 @@ module.exports = class extends Generator {
 
 	_generateNodeJS() {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
-		const dockerFileRun = 'docker-compose.yml';
-		const dockerFileTools = 'docker-compose-tools.yml';
+		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
+		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '3000';
 		const debugPort = '9229';
 
