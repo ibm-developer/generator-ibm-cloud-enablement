@@ -165,8 +165,8 @@ describe('cloud-enablement:dockertools', function () {
 		});
 
 		it('should have Dockerfile and Dockerfile-tools as the docker run commands', function() {
-			assert.fileContent('cli-config.yml', 'dockerfile-run : "docker-compose.yml"');
-			assert.fileContent('cli-config.yml', 'dockerfile-tools : "docker-compose-tools.yml"');
+			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
+			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
 		});
 
 		it('should have the correct EXPOSE instruction for Dockerfile and Dockerfile-tools', function() {
