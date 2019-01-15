@@ -171,6 +171,7 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('should have the correct EXPOSE instruction for Dockerfile and Dockerfile-tools', function() {
 			assert.fileContent('Dockerfile' , 'EXPOSE 3000');
+			assert.fileContent('Dockerfile-tools', 'EXPOSE 9229');
 		});
 
 		it('should have the correct run, stop and debug cmds for containers', function() {
@@ -178,8 +179,8 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'stop-cmd : "npm stop"');
 		});
 
-		it('should use root in cli-config.yml', function () {
-			assert.fileContent('cli-config.yml', 'use-root-user-tools: true');
+		it('has correct default port', function () {
+			assert.fileContent('cli-config.yml', '3000:3000');
 		});
 
 		it('create dockerignore file', function () {
@@ -207,10 +208,11 @@ describe('cloud-enablement:dockertools', function () {
 
 		it('should have the correct EXPOSE instruction for Dockerfile and Dockerfile-tools', function() {
 			assert.fileContent('Dockerfile' , 'EXPOSE 3000');
+			assert.fileContent('Dockerfile-tools', 'EXPOSE 9229');
 		});
 
-		it('should use root in cli-config.yml', function () {
-			assert.fileContent('cli-config.yml', 'use-root-user-tools: true');
+		it('has correct port', function () {
+			assert.fileContent('cli-config.yml', '3000:3000');
 		});
 
 		it('create dockerignore file', function () {
