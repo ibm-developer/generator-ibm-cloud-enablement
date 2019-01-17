@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.6.1"></a>
+## [1.6.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.6.0...v1.6.1) (2019-01-17)
+
+
+### Bug Fixes
+
+* Fix ic dev build ([b6d7198](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b6d7198))
+* Fix ic dev build for node - Revert all of pr 426 ([f9095d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f9095d5))
+
+
+
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.7...v1.6.0) (2019-01-11)
 
