@@ -130,6 +130,10 @@ stages:
     type: deployer
     target:
       region_id: ${REGION_ID}
+      {{#has deployment.type 'CFEE'}}
+      cfee_env: ${CFEE_ENV}
+      cfee_host: ${CFEE_HOST}
+      {{/has}}
       {{#has deployment.type 'CF'}}
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
