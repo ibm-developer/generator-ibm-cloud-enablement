@@ -133,6 +133,8 @@ stages:
       {{#has deployment.type 'CFEE'}}
       cfee_env: ${CFEE_ENV}
       cfee_host: ${CFEE_HOST}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
       {{/has}}
       {{#has deployment.type 'CF'}}
       organization: ${CF_ORGANIZATION}
