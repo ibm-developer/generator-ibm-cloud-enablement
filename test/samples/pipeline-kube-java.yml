@@ -108,9 +108,9 @@ stages:
   - name: Deploy
     type: deployer
     target:
-      region_id: ${REGION_ID}
       application: ${CF_APP}
       api_key: ${API_KEY}
+      region_id: ${REGION_ID}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
