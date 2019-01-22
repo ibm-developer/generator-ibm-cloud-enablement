@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.1"></a>
+## [1.7.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.0...v1.7.1) (2019-01-22)
+
+
+### Bug Fixes
+
+* CFEE requires organization and space ([91086cf](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/91086cf))
+* CFEE requires organization and space - tests care about yml content order due to string compare instead of parsing.  hmph. ([6890c09](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/6890c09))
+
+
+
 <a name="1.7.0"></a>
 # [1.7.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.6.1...v1.7.0) (2019-01-18)
 
