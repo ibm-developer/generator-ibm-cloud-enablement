@@ -74,7 +74,7 @@ form:
     schema:
       $ref: deploy.json
     parameters:
-      app-name: "{{tag 'name'}}"
+      app-name: "{{tag 'app-name'}}"
       toolchain-name: "{{tag 'toolchain-name'}}"
       dev-region: "{{region}}"
       api-key: "{{tag 'api-key'}}"
