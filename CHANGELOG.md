@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.2"></a>
+## [1.7.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.1...v1.7.2) (2019-01-22)
+
+
+### Bug Fixes
+
+* omit region_id for CFEE ([3c221fc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3c221fc))
+
+
+
+<a name="1.7.1"></a>
+## [1.7.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.0...v1.7.1) (2019-01-22)
+
+
+### Bug Fixes
+
+* CFEE requires organization and space ([91086cf](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/91086cf))
+* CFEE requires organization and space - tests care about yml content order due to string compare instead of parsing.  hmph. ([6890c09](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/6890c09))
+
+
+
+<a name="1.7.0"></a>
+# [1.7.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.6.1...v1.7.0) (2019-01-18)
+
+
+### Features
+
+* support CFEE ([0848ce2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/0848ce2))
+
+
+
+<a name="1.6.1"></a>
+## [1.6.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.6.0...v1.6.1) (2019-01-17)
+
+
+### Bug Fixes
+
+* Fix ic dev build ([b6d7198](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b6d7198))
+* Fix ic dev build for node - Revert all of pr 426 ([f9095d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f9095d5))
+
+
+
 <a name="1.6.0"></a>
 # [1.6.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.7...v1.6.0) (2019-01-11)
 

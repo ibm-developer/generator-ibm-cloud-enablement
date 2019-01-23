@@ -129,14 +129,21 @@ stages:
   - name: Deploy
     type: deployer
     target:
-      region_id: ${REGION_ID}
+      {{#has deployment.type 'CFEE'}}
+      cfee_env: ${CFEE_ENV}
+      cfee_host: ${CFEE_HOST}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      {{/has}}
       {{#has deployment.type 'CF'}}
+      region_id: ${REGION_ID}
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
       {{/has}}
       application: ${CF_APP}
       api_key: ${API_KEY}
     {{#has deployment.type 'Kube'}}
+      region_id: ${REGION_ID}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
