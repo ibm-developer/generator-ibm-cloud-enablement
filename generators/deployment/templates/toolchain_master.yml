@@ -46,12 +46,16 @@ services:
           {{#has deployment.type 'CF'}}
           CF_SPACE: "{{tag 'form.pipeline.parameters.dev-space'}}"
           CF_ORGANIZATION: "{{tag 'form.pipeline.parameters.dev-organization'}}"
+          CF_HOSTNAME: "{{tag 'form.pipeline.parameters.cf-host'}}"
+          CF_DOMAIN: "{{tag 'form.pipeline.parameters.cf-domain'}}"
           {{/has}}
           {{#has deployment.type 'CFEE'}}
           CF_SPACE: "{{tag 'form.pipeline.parameters.dev-space'}}"
           CF_ORGANIZATION: "{{tag 'form.pipeline.parameters.dev-organization'}}"
           CFEE_ENV: "{{tag 'form.pipeline.parameters.cfee-env'}}"
           CFEE_HOST: "{{tag 'form.pipeline.parameters.cfee-host'}}"
+          CF_HOSTNAME: "{{tag 'form.pipeline.parameters.cfee-hostname'}}"
+          CF_DOMAIN: "{{tag 'form.pipeline.parameters.cfee-domain'}}"
           {{/has}}
           {{#has deployment.type 'VSI'}}
           PUBLIC_KEY: "{{tag 'form.pipeline.parameters.public-key'}}"
@@ -89,12 +93,16 @@ form:
       {{#has deployment.type 'CF'}}
       dev-space: "{{space}}"
       dev-organization: "{{org}}"
+      cf-host: "{{tag 'cf-host'}}"
+      cf-domain: "{{tag 'cf-domain'}}"
       {{/has}}
       {{#has deployment.type 'CFEE'}}
       dev-space: "{{space}}"
       dev-organization: "{{org}}"
       cfee-env: "{{tag 'cfee-env'}}"
       cfee-host: "{{tag 'cfee-host'}}"
+      cfee-hostname: "{{tag 'cfee-hostname'}}"
+      cfee-domain: "{{tag 'cfee-domain'}}"
       {{/has}}
       {{#has deployment.type 'VSI'}}
       public-key: "{{tag 'ssh-public-key'}}"

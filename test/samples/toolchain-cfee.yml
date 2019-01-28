@@ -35,11 +35,12 @@ services:
           REPO: repo
           CF_APP: "{{form.pipeline.parameters.app-name}}"
           API_KEY: "{{form.pipeline.parameters.api-key}}"
-          CHART_NAME: "{{form.pipeline.parameters.chart-name}}"
-          KUBE_CLUSTER_NAME: "{{form.pipeline.parameters.kube-cluster-name}}"
-          CLUSTER_NAMESPACE: "{{form.pipeline.parameters.cluster-namespace}}"
-          IMAGE_REGISTRY_TOKEN: "{{form.pipeline.parameters.image-registry-token}}"
-          REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
+          CF_SPACE: "{{form.pipeline.parameters.dev-space}}"
+          CF_ORGANIZATION: "{{form.pipeline.parameters.dev-organization}}"
+          CFEE_ENV: "{{form.pipeline.parameters.cfee-env}}"
+          CFEE_HOST: "{{form.pipeline.parameters.cfee-host}}"
+          CF_HOSTNAME: "{{form.pipeline.parameters.cfee-hostname}}"
+          CF_DOMAIN: "{{form.pipeline.parameters.cfee-domain}}"
           REGION_ID: "{{form.pipeline.parameters.dev-region}}"
         execute: true
 
@@ -57,9 +58,9 @@ form:
       toolchain-name: "{{toolchain-name}}"
       dev-region: "{{region}}"
       api-key: "{{api-key}}"
-      chart-name: myapplication
-      kube-cluster-name: my_kube_cluster
-      cluster-namespace: my_kube_namespace
-      image-pull-secret-name: "{{image-pull-secret-name}}"
-      image-registry-token: "{{image-registry-token}}"
-      registry-namespace: my_registry_ns
+      dev-space: "{{space}}"
+      dev-organization: "{{organization}}"
+      cfee-env: "{{cfee-env}}"
+      cfee-host: "{{cfee-host}}"
+      cfee-hostname: "{{cfee-hostname}}"
+      cfee-domain: "{{cfee-domain}}"
