@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.5"></a>
+## [1.7.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.4...v1.7.5) (2019-02-05)
+
+
+### Bug Fixes
+
+* swift 4.2.2 docker image support ([5138e20](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5138e20))
+
+
+
 <a name="1.7.4"></a>
 ## [1.7.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.3...v1.7.4) (2019-01-28)
 
