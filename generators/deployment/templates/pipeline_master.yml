@@ -220,7 +220,7 @@ stages:
       echo "RELEASE_NAME: $RELEASE_NAME"
 
       PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
-      if [ "$(curl -sL http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+      if [ "$(curl -s http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
         echo "Successfully reached health endpoint"
         echo "====================================================================="
       else
@@ -257,7 +257,7 @@ stages:
     script: |-
       #!/bin/sh
       apk add --no-cache curl
-      if [ "$(curl -sL http://{{manifest.host}}.{{manifest.domain}}/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+      if [ "$(curl -s http://{{manifest.host}}.{{manifest.domain}}/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
         echo "Successfully reached health endpoint"
         echo "====================================================================="
       else
@@ -296,7 +296,7 @@ stages:
     script: |-
       #!/bin/sh
       apk add --no-cache curl
-      if [ "$(curl -sL http://{{manifest.host}}.{{manifest.domain}}/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+      if [ "$(curl -s http://{{manifest.host}}.{{manifest.domain}}/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
         echo "Successfully reached health endpoint"
         echo "====================================================================="
       else
