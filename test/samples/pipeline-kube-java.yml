@@ -12,16 +12,16 @@ stages:
     value: ${CHART_NAME}
     type: text
   - name: KUBECTL_VERSION
-    value: $(wget -qO- https://github.com/kubernetes/kubernetes/releases | sed -n '/Latest release<\/a>/,$p' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' |head -1)
+    value: v1.13.3
     type: text
   - name: HELM_VERSION
-    value: $(wget -qO- https://github.com/kubernetes/helm/releases | sed -n '/Latest release<\/a>/,$p' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' |head -1)
+    value: v2.12.3
     type: text
   - name: KUBECTL_DOWNLOAD_URL
-    value: https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+    value: https://storage.googleapis.com/kubernetes-release/release/v1.13.3/bin/linux/amd64/kubectl
     type: text
   - name: HELM_DOWNLOAD_URL
-    value: https://kubernetes-helm.storage.googleapis.com/helm-${HELM_VERSION}-linux-amd64.tar.gz
+    value: https://kubernetes-helm.storage.googleapis.com/helm-v2.12.3-linux-amd64.tar.gz
     type: text
   jobs:
   - name: Build
