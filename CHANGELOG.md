@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.6"></a>
+## [1.7.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.5...v1.7.6) (2019-02-07)
+
+
+### Bug Fixes
+
+* change flags in curl health stages ([d7af404](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/d7af404))
+* revert change in curl flags ([8695c48](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/8695c48))
+* update tests ([6aeef3b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/6aeef3b))
+
+
+
 <a name="1.7.5"></a>
 ## [1.7.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.4...v1.7.5) (2019-02-05)
 

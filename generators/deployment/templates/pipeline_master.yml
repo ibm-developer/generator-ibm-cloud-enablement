@@ -173,6 +173,7 @@ stages:
       {{/if}}
       # cf logs "${CF_APP}" --recent
     {{/has}}
+{{#missing deployment.type 'CFEE'}}
 - name: Health Stage
   inputs:
   - type: job
@@ -268,42 +269,4 @@ stages:
     docker_image: alpine
   {{/unless}}
   {{/has}}
-  {{#has deployment.type 'CFEE'}}
-  {{#unless manifest.host}}
-  jobs:
-  - name: Deploy
-    type: deployer
-    deploy_type: cf
-    target:
-      region_id: ${REGION_ID}
-      organization: ${CF_ORGANIZATION}
-      space: ${CF_SPACE}
-      application: ${CF_APP}
-      api_key: ${API_KEY}
-    script: |-
-      export CF_ENDPOINT=$(cf app $CF_APP | grep running)
-      if [[ "$CF_ENDPOINT" != "" ]]; then
-        echo "Your application is up anding running"
-        echo "====================================================================="
-      else
-        echo "There was a problem with starting your application"
-        exit 1;
-      fi
-  {{else}}
-  jobs:
-  - name: Test
-    type: tester
-    script: |-
-      #!/bin/sh
-      apk add --no-cache curl
-      if [ "$(curl -Is http://{{manifest.host}}.{{manifest.domain}}/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint"
-        echo "====================================================================="
-      else
-        echo "Could not reach health endpoint: http://{{manifest.host}}.{{manifest.domain}}/health"
-        exit 1;
-      fi;
-    test_type: customimage
-    docker_image: alpine
-  {{/unless}}
-  {{/has}}
+{{/missing}}
