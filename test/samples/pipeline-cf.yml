@@ -56,7 +56,7 @@ stages:
     script: |-
       #!/bin/sh
       apk add --no-cache curl
-      if [ "$(curl -s http://myapp.ng.bluemix.net/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+      if [ "$(curl -Is http://myapp.ng.bluemix.net/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
         echo "Successfully reached health endpoint"
         echo "====================================================================="
       else
