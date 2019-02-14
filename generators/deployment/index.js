@@ -192,7 +192,7 @@ module.exports = class extends Generator {
 		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {
 			this.toolchainConfig.repoType = 'link';
 		}
-		let buildCommand = this.opts.buildType === 'maven' ? '      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0\n      ./mvnw install -DskipTests' : '      gradle build';
+		let buildCommand = this.opts.buildType === 'gradle' ? '      gradle build' : '      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0\n      ./mvnw install -DskipTests' ;
 		this.pipelineConfig.javaBuildScriptContent = 'export JAVA_HOME=$JAVA8_HOME\n' + buildCommand;
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',

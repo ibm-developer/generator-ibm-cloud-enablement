@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.8"></a>
+## [1.7.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.7...v1.7.8) (2019-02-21)
+
+
+### Bug Fixes
+
+* add cluster role binding [#468](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/468) ([dfe3f52](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/dfe3f52))
+* add env vars to pipeline ([21abd3b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/21abd3b))
+* adding 3.6 to docker compose ([2ba4c06](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2ba4c06))
+* change default build to maven ([04fa5bf](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/04fa5bf))
+* getting rid of python 2.7 references in favor of python 3 ([afe0c88](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/afe0c88))
+
+
+
 <a name="1.7.7"></a>
 ## [1.7.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.6...v1.7.7) (2019-02-07)
 
