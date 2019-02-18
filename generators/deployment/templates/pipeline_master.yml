@@ -201,6 +201,15 @@ stages:
   - type: stage
   permission:
     execute: TOOLCHAIN_ADMINS
+  {{#has deployment.type 'CF'}}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  {{/has}}
   {{#has deployment.type 'Kube'}}
   properties:
   - name: CLUSTER_NAMESPACE
