@@ -43,7 +43,8 @@ stages:
       echo "LOG_DIR has been unset: ${LOG_DIR}"
 
       export JAVA_HOME=$JAVA8_HOME
-      gradle build
+      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+      ./mvnw install -DskipTests
 
       echo "Java build finished, setting LOG_DIR back to original"
       LOG_DIR=$LOG_DIR_TEMP
@@ -157,7 +158,7 @@ stages:
       echo "RELEASE_NAME: $RELEASE_NAME"
 
       PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
-      if [ "$(curl -Is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+      if [ "$(curl -is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
         echo "Successfully reached health endpoint"
         echo "====================================================================="
       else
