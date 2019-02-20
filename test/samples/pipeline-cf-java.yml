@@ -20,7 +20,8 @@ stages:
     script: |
       #!/bin/bash
       export JAVA_HOME=$JAVA8_HOME
-      gradle build
+      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+      ./mvnw install -DskipTests
 
       if  [[ -f post_build.sh ]]; then
         chmod +x post_build.sh;
