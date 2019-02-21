@@ -5,6 +5,15 @@ stages:
   - type: git
     branch: master
     service: ${REPO}
+  {{#has deployment.type 'CF'}}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  {{/has}}
   {{#if config.triggersType}}
   triggers:
   - type: {{config.triggersType}}
@@ -108,6 +117,15 @@ stages:
   - type: job
     stage: Build Stage
     job: Build
+  {{#has deployment.type 'CF'}}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  {{/has}}
   {{#has deployment.type 'Kube'}}
   properties:
   - name: buildProperties
@@ -183,6 +201,15 @@ stages:
   - type: stage
   permission:
     execute: TOOLCHAIN_ADMINS
+  {{#has deployment.type 'CF'}}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  {{/has}}
   {{#has deployment.type 'Kube'}}
   properties:
   - name: CLUSTER_NAMESPACE

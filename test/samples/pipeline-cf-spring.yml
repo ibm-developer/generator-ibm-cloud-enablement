@@ -4,6 +4,13 @@ stages:
   - type: git
     branch: master
     service: ${REPO}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
   triggers:
   - type: commit
   jobs:
@@ -13,7 +20,8 @@ stages:
     script: |
       #!/bin/bash
       export JAVA_HOME=$JAVA8_HOME
-      gradle build
+      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+      ./mvnw install -DskipTests
 
       if  [[ -f post_build.sh ]]; then
         chmod +x post_build.sh;
@@ -27,6 +35,13 @@ stages:
   - type: job
     stage: Build Stage
     job: Build
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
   triggers:
   - type: stage
   jobs:
@@ -51,6 +66,13 @@ stages:
   - type: stage
   permission:
     execute: TOOLCHAIN_ADMINS
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
   jobs:
   - name: Test
     type: tester
