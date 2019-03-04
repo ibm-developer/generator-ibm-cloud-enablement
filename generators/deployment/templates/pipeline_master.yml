@@ -5,6 +5,15 @@ stages:
   - type: git
     branch: master
     service: ${REPO}
+  {{#has deployment.type 'CF'}}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  {{/has}}
   {{#if config.triggersType}}
   triggers:
   - type: {{config.triggersType}}
@@ -15,16 +24,16 @@ stages:
     value: ${CHART_NAME}
     type: text
   - name: KUBECTL_VERSION
-    value: $(wget -qO- https://github.com/kubernetes/kubernetes/releases | sed -n '/Latest release<\/a>/,$p' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' |head -1)
+    value: v1.13.3
     type: text
   - name: HELM_VERSION
-    value: $(wget -qO- https://github.com/kubernetes/helm/releases | sed -n '/Latest release<\/a>/,$p' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' |head -1)
+    value: v2.12.3
     type: text
   - name: KUBECTL_DOWNLOAD_URL
-    value: https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+    value: https://storage.googleapis.com/kubernetes-release/release/v1.13.3/bin/linux/amd64/kubectl
     type: text
   - name: HELM_DOWNLOAD_URL
-    value: https://kubernetes-helm.storage.googleapis.com/helm-${HELM_VERSION}-linux-amd64.tar.gz
+    value: https://kubernetes-helm.storage.googleapis.com/helm-v2.12.3-linux-amd64.tar.gz
     type: text
   {{/has}}
   jobs:
@@ -108,6 +117,15 @@ stages:
   - type: job
     stage: Build Stage
     job: Build
+  {{#has deployment.type 'CF'}}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  {{/has}}
   {{#has deployment.type 'Kube'}}
   properties:
   - name: buildProperties
@@ -129,14 +147,21 @@ stages:
   - name: Deploy
     type: deployer
     target:
-      region_id: ${REGION_ID}
+      {{#has deployment.type 'CFEE'}}
+      cfee_env: ${CFEE_ENV}
+      cfee_host: ${CFEE_HOST}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      {{/has}}
       {{#has deployment.type 'CF'}}
+      region_id: ${REGION_ID}
       organization: ${CF_ORGANIZATION}
       space: ${CF_SPACE}
       {{/has}}
       application: ${CF_APP}
       api_key: ${API_KEY}
     {{#has deployment.type 'Kube'}}
+      region_id: ${REGION_ID}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
@@ -152,10 +177,21 @@ stages:
       {{#if config.pushCommand}}
       {{{config.pushCommand}}}
       {{else}}
-      cf push "${CF_APP}"
+      cf push "${CF_APP}" --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"
       {{/if}}
       # cf logs "${CF_APP}" --recent
     {{/has}}
+    {{#has deployment.type 'CFEE'}}
+    script: |-
+      #!/bin/bash
+      {{#if config.pushCommand}}
+      {{{config.pushCommand}}}
+      {{else}}
+      cf push "${CF_APP}" --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"
+      {{/if}}
+      # cf logs "${CF_APP}" --recent
+    {{/has}}
+{{#missing deployment.type 'CFEE'}}
 - name: Health Stage
   inputs:
   - type: job
@@ -165,6 +201,15 @@ stages:
   - type: stage
   permission:
     execute: TOOLCHAIN_ADMINS
+  {{#has deployment.type 'CF'}}
+  properties:
+  - name: CF_HOSTNAME
+    value: "${CF_HOSTNAME}"
+    type: text
+  - name: CF_DOMAIN
+    value: "${CF_DOMAIN}"
+    type: text
+  {{/has}}
   {{#has deployment.type 'Kube'}}
   properties:
   - name: CLUSTER_NAMESPACE
@@ -203,7 +248,7 @@ stages:
       echo "RELEASE_NAME: $RELEASE_NAME"
 
       PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
-      if [ "$(curl -Is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+      if [ "$(curl -is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
         echo "Successfully reached health endpoint"
         echo "====================================================================="
       else
@@ -240,7 +285,7 @@ stages:
     script: |-
       #!/bin/sh
       apk add --no-cache curl
-      if [ "$(curl -Is http://{{manifest.host}}.{{manifest.domain}}/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+      if [ "$(curl -is http://{{manifest.host}}.{{manifest.domain}}/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
         echo "Successfully reached health endpoint"
         echo "====================================================================="
       else
@@ -251,3 +296,4 @@ stages:
     docker_image: alpine
   {{/unless}}
   {{/has}}
+{{/missing}}

@@ -30,9 +30,6 @@ container-mounts-tools:
 dockerfile-run : "{{{cliConfig.dockerFileRun}}}"
 # The name for the dockerfile for the tools container
 dockerfile-tools : "{{{cliConfig.dockerFileTools}}}"
-{{#if cliConfig.useRoot}}
-use-root-user-tools: true
-{{/if}}
 
 # The name of image to create from dockerfile-run
 image-name-run : "{{{cliConfig.imageNameRun}}}"

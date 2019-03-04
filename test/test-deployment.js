@@ -27,10 +27,12 @@ const pipelineKubeSampleJava = fs.readFileSync(path.join(__dirname, 'samples/pip
 const toolchainKubeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube.yml'), 'utf-8');
 
 const pipelineCFSample = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf.yml'), 'utf-8');
+const pipelineCFEESample = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cfee.yml'), 'utf-8');
 const pipelineCFSampleJava = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf-java.yml'), 'utf-8');
 const pipelineCFSampleSpring = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf-spring.yml'), 'utf-8');
 const pipelineCFSampleSwift = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf-swift.yml'), 'utf-8');
 const toolchainCFSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-cf.yml'), 'utf-8');
+const toolchainCFEESample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-cfee.yml'), 'utf-8');
 const deployCFSample = fs.readFileSync(path.join(__dirname, 'samples/deploy-cf.json'), 'utf-8');
 
 const applicationName = 'AcmeProject'; // from sample json files
@@ -45,7 +47,7 @@ describe('cloud-enablement:deployment', function () {
 		let cfOptions = {
 			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'CF'))
 		};
-		if(lang === 'JAVA' || lang === 'SPRING') {
+		if (lang === 'JAVA' || lang === 'SPRING') {
 			cfOptions.artifactId = 'testArtifact-id';
 			cfOptions.version = '0.0.1-SNAPSHOT';
 		}
@@ -88,6 +90,35 @@ describe('cloud-enablement:deployment', function () {
 		});
 	});
 
+	let cfeeOptions = {
+		bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment('NODE', 'CFEE'))
+	};
+	
+	describe(`cloud-enablement:deployment CFEE for language Node`, function () {
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions(cfeeOptions);
+		});
+
+		it('has all files', function () {
+			assert.file('.bluemix/toolchain.yml');
+			assert.file('.bluemix/pipeline.yml');
+			assert.file('.bluemix/deploy.json');
+			assert.file('.bluemix/scripts/container_build.sh');
+			assert.file('.bluemix/scripts/kube_deploy.sh');
+		});
+
+		it('has toolchain.yml with correct content', function () {
+			assert.fileContent('.bluemix/toolchain.yml', toolchainCFEESample);
+		});
+
+		it('has pipeline.yml with correct content', function () {
+			assert.fileContent('.bluemix/pipeline.yml', pipelineCFEESample);
+		});
+
+	});
+	
 	languages.forEach(lang => {
 		let kubeOptions = {
 			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube'))

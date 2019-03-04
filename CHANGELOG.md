@@ -2,6 +2,128 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.8"></a>
+## [1.7.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.7...v1.7.8) (2019-02-21)
+
+
+### Bug Fixes
+
+* add cluster role binding [#468](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/468) ([dfe3f52](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/dfe3f52))
+* add env vars to pipeline ([21abd3b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/21abd3b))
+* adding 3.6 to docker compose ([2ba4c06](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2ba4c06))
+* change default build to maven ([04fa5bf](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/04fa5bf))
+* getting rid of python 2.7 references in favor of python 3 ([afe0c88](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/afe0c88))
+
+
+
+<a name="1.7.7"></a>
+## [1.7.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.6...v1.7.7) (2019-02-07)
+
+
+### Bug Fixes
+
+* update unit tests ([76e5e18](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/76e5e18))
+
+
+
+<a name="1.7.6"></a>
+## [1.7.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.5...v1.7.6) (2019-02-07)
+
+
+### Bug Fixes
+
+* change flags in curl health stages ([d7af404](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/d7af404))
+* revert change in curl flags ([8695c48](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/8695c48))
+* update tests ([6aeef3b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/6aeef3b))
+
+
+
+<a name="1.7.5"></a>
+## [1.7.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.4...v1.7.5) (2019-02-05)
+
+
+### Bug Fixes
+
+* swift 4.2.2 docker image support ([5138e20](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5138e20))
+
+
+
+<a name="1.7.4"></a>
+## [1.7.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.3...v1.7.4) (2019-01-28)
+
+
+
+<a name="1.7.3"></a>
+## [1.7.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.2...v1.7.3) (2019-01-24)
+
+
+### Bug Fixes
+
+* replace hardcoded name with mustache tag ([e1767a5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e1767a5))
+* test mustachioed name ([52107eb](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/52107eb))
+
+
+
+<a name="1.7.2"></a>
+## [1.7.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.1...v1.7.2) (2019-01-22)
+
+
+### Bug Fixes
+
+* omit region_id for CFEE ([3c221fc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3c221fc))
+
+
+
+<a name="1.7.1"></a>
+## [1.7.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.0...v1.7.1) (2019-01-22)
+
+
+### Bug Fixes
+
+* CFEE requires organization and space ([91086cf](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/91086cf))
+* CFEE requires organization and space - tests care about yml content order due to string compare instead of parsing.  hmph. ([6890c09](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/6890c09))
+
+
+
+<a name="1.7.0"></a>
+# [1.7.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.6.1...v1.7.0) (2019-01-18)
+
+
+### Features
+
+* support CFEE ([0848ce2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/0848ce2))
+
+
+
+<a name="1.6.1"></a>
+## [1.6.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.6.0...v1.6.1) (2019-01-17)
+
+
+### Bug Fixes
+
+* Fix ic dev build ([b6d7198](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b6d7198))
+* Fix ic dev build for node - Revert all of pr 426 ([f9095d5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f9095d5))
+
+
+
+<a name="1.6.0"></a>
+# [1.6.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.7...v1.6.0) (2019-01-11)
+
+
+### Bug Fixes
+
+* **templates:** reduce initial delay and period ([32bdf55](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/32bdf55))
+* accounted for random route/standalone in the pipeline ([cdda9fc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/cdda9fc))
+* cfee tags to handlebars preserves the actual mustache tag ([84406df](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/84406df))
+* Restore test to validate installUtility present ([9dfe49a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/9dfe49a))
+
+
+### Features
+
+* support cfee ([f217b85](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f217b85))
+
+
+
 <a name="1.5.7"></a>
 ## [1.5.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.5.6...v1.5.7) (2019-01-09)
 

@@ -6,12 +6,10 @@ services:
       dockerfile: Dockerfile
     image: "{{image}}"
     container_name: "{{containerName}}"
+    command: npm run start
     ports: {{#each ports}}
         - "{{this}}:{{this}}"{{/each}}
-    volumes:
-      - .:/app
-      - node_modules:/app/node_modules {{#ifCond images.length '>' 0}}
-    links: {{#each images}}
+    links: {{#ifCond images.length '>' 0}}{{#each images}}
       - {{this}}{{/each}}{{/ifCond}}
     environment:
       NODE_ENV: "development"
@@ -19,7 +17,4 @@ services:
       {{key}}: {{value}}{{/each}}{{#each images}}
   {{this}}:
     image: {{this}}
-  {{/each}}
-
-volumes:
-  node_modules:
+{{/each}}

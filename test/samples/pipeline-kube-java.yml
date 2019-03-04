@@ -12,16 +12,16 @@ stages:
     value: ${CHART_NAME}
     type: text
   - name: KUBECTL_VERSION
-    value: $(wget -qO- https://github.com/kubernetes/kubernetes/releases | sed -n '/Latest release<\/a>/,$p' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' |head -1)
+    value: v1.13.3
     type: text
   - name: HELM_VERSION
-    value: $(wget -qO- https://github.com/kubernetes/helm/releases | sed -n '/Latest release<\/a>/,$p' | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+' |head -1)
+    value: v2.12.3
     type: text
   - name: KUBECTL_DOWNLOAD_URL
-    value: https://storage.googleapis.com/kubernetes-release/release/${KUBECTL_VERSION}/bin/linux/amd64/kubectl
+    value: https://storage.googleapis.com/kubernetes-release/release/v1.13.3/bin/linux/amd64/kubectl
     type: text
   - name: HELM_DOWNLOAD_URL
-    value: https://kubernetes-helm.storage.googleapis.com/helm-${HELM_VERSION}-linux-amd64.tar.gz
+    value: https://kubernetes-helm.storage.googleapis.com/helm-v2.12.3-linux-amd64.tar.gz
     type: text
   jobs:
   - name: Build
@@ -43,7 +43,8 @@ stages:
       echo "LOG_DIR has been unset: ${LOG_DIR}"
 
       export JAVA_HOME=$JAVA8_HOME
-      gradle build
+      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+      ./mvnw install -DskipTests
 
       echo "Java build finished, setting LOG_DIR back to original"
       LOG_DIR=$LOG_DIR_TEMP
@@ -108,9 +109,9 @@ stages:
   - name: Deploy
     type: deployer
     target:
-      region_id: ${REGION_ID}
       application: ${CF_APP}
       api_key: ${API_KEY}
+      region_id: ${REGION_ID}
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
@@ -157,7 +158,7 @@ stages:
       echo "RELEASE_NAME: $RELEASE_NAME"
 
       PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
-      if [ "$(curl -Is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+      if [ "$(curl -is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
         echo "Successfully reached health endpoint"
         echo "====================================================================="
       else

@@ -192,7 +192,7 @@ module.exports = class extends Generator {
 		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {
 			this.toolchainConfig.repoType = 'link';
 		}
-		let buildCommand = this.opts.buildType === 'maven' ? '      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0\n      ./mvnw install -DskipTests' : '      gradle build';
+		let buildCommand = this.opts.buildType === 'gradle' ? '      gradle build' : '      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0\n      ./mvnw install -DskipTests' ;
 		this.pipelineConfig.javaBuildScriptContent = 'export JAVA_HOME=$JAVA8_HOME\n' + buildCommand;
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',
@@ -226,7 +226,7 @@ module.exports = class extends Generator {
 		if (excludes.length === 2) {
 			this.manifestConfig.env.services_autoconfig_excludes = excludes[0] + ' ' + excludes[1];
 		}
-		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + zipPath;
+		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + zipPath + ' --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"';
 	}
 
 	_configureSpring() {
@@ -236,7 +236,7 @@ module.exports = class extends Generator {
 		let buildDir = (this.opts.buildType && this.opts.buildType === 'gradle') ? 'build/libs' : 'target';
 		let jarPath = `${buildDir}/${this.opts.artifactId}-${this.opts.version}.jar`;
 		this.manifestConfig.path = `./${jarPath}`;
-		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + jarPath;
+		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + jarPath + ' --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"';
 	}
 
 	_configurePython() {

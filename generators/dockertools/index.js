@@ -204,8 +204,8 @@ module.exports = class extends Generator {
 
 	_generateNodeJS() {
 		const applicationName = Utils.sanitizeAlphaNum(this.bluemix.name);
-		const dockerFileRun = 'docker-compose.yml';
-		const dockerFileTools = 'docker-compose-tools.yml';
+		const dockerFileRun = this.opts.services.length > 0 ? 'docker-compose.yml' : 'Dockerfile';
+		const dockerFileTools = this.opts.services.length > 0 ? 'docker-compose-tools.yml' : 'Dockerfile-tools';
 		const port = this.opts.port ? this.opts.port : '3000';
 		const debugPort = '9229';
 
@@ -254,13 +254,16 @@ module.exports = class extends Generator {
 			hostPathTools: '.',
 			containerPathRun: '/app',
 			containerPathTools: '/app',
+			containerPortMap: `${port}:${port}`,
+			containerPortMapDebug: `${debugPort}:${debugPort}`,
+			containerMountsRun: '"./node_modules_linux": "/app/node_modules"',
+			containerMountsTools: '"./node_modules_linux": "/app/node_modules"',
 			dockerFileRun,
 			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-express-run`,
 			imageNameTools: `${applicationName.toLowerCase()}-express-tools`,
-			useRoot: true,
 			buildCmdRun: 'npm install' ,
-			testCmd: 'npm test',
+			testCmd: 'npm run test',
 			buildCmdDebug: 'npm install',
 			runCmd: '',
 			debugCmd: 'npm run debug',
@@ -280,24 +283,33 @@ module.exports = class extends Generator {
 
 		this._copyTemplateIfNotExists(FILENAME_DEV , 'node/run-dev', {});
 
-		const dockerComposeConfig =  {
-			containerName: `${applicationName.toLowerCase()}-express-run`,
-			image: `${applicationName.toLowerCase()}-express-run`,
-			ports: [port, debugPort],
-			appPort: port
-		};
 
-		if(this.opts.services.length > 0) {
+		if(this.opts.services.length > 0){
+
 			const derrayify = serviceEnvs[0];
-			dockerComposeConfig.ports = dockerComposeConfig.ports.concat(servicePorts);
-			dockerComposeConfig.envs = derrayify;
-			dockerComposeConfig.images = serviceImageNames;
+			const dockerComposeConfig =  {
+				containerName: `${applicationName.toLowerCase()}-express-run`,
+				image: `${applicationName.toLowerCase()}-express-run`,
+				ports: [port, debugPort].concat(servicePorts),
+				appPort: port,
+				envs: derrayify,
+				images: serviceImageNames,
+			};
+			this._writeHandlebarsFile('node/docker-compose.yml', FILENAME_DOCKERCOMPOSE, dockerComposeConfig);
+			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-express-tools`;
+			dockerComposeConfig.image = `${applicationName.toLowerCase()}-express-tools`,
+			this._writeHandlebarsFile('node/docker-compose-tools.yml', FILENAME_DOCKERCOMPOSE_TOOLS, dockerComposeConfig);
 		}
 
-		this._writeHandlebarsFile('node/docker-compose.yml', FILENAME_DOCKERCOMPOSE, dockerComposeConfig);
-		dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-express-tools`;
-		dockerComposeConfig.image = `${applicationName.toLowerCase()}-express-tools`;
-		this._writeHandlebarsFile('node/docker-compose-tools.yml', FILENAME_DOCKERCOMPOSE_TOOLS, dockerComposeConfig);
+
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))){
+			this.log(FILENAME_DOCKER_IGNORE, "already exists, skipping.");
+		} else {
+			this.fs.copyTpl(
+				this.templatePath('node/dockerignore'),
+				this.destinationPath('.dockerignore')
+			);
+		}
 	}
 
 	_generateJava() {
