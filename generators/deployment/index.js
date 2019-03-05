@@ -203,11 +203,15 @@ module.exports = class extends Generator {
 	}
 
 	_configureLiberty() {
+		let artifactId = this.opts.artifactId ? this.opts.artifactId : "java-liberty";
+		let version = this.opts.version ? this.opts.version : "1.0-SNAPSHOT";
+		
 		this.cfIgnoreContent = ['/.classpath', '/.project', '/.settings', '/src/main/liberty/config/server.env', 'target/', 'build/'];
 		this.manifestConfig.buildpack = 'liberty-for-java';
 		this.manifestConfig.memory = this.manifestConfig.memory || '512M';
 		let buildDir = (this.opts.buildType && this.opts.buildType === 'gradle') ? 'build' : 'target';
-		let zipPath = `${buildDir}/${this.opts.artifactId}-${this.opts.version}.zip`
+		let zipPath = `${buildDir}/` + artifactId + `-` + version + `.zip`;
+		console.log ("**** zippath " + zipPath)
 		this.manifestConfig.path = `./${zipPath}`;
 		let excludes = [];
 		if (this.opts.libertyVersion === 'beta') {
@@ -230,11 +234,15 @@ module.exports = class extends Generator {
 	}
 
 	_configureSpring() {
+		let artifactId = this.opts.artifactId ? this.opts.artifactId : "java-spring";
+		let version = this.opts.version ? this.opts.version : "1.0-SNAPSHOT";
+		
 		this.cfIgnoreContent = ['/.classpath', '/.project', '/.settings', '/src/main/resources/application-local.properties', 'target/', 'build/'];
 		this.manifestConfig.buildpack = 'java_buildpack';
 		this.manifestConfig.memory = this._getHighestMemorySize(this.manifestConfig.memory, '1024M');
 		let buildDir = (this.opts.buildType && this.opts.buildType === 'gradle') ? 'build/libs' : 'target';
-		let jarPath = `${buildDir}/${this.opts.artifactId}-${this.opts.version}.jar`;
+		let jarPath = `${buildDir}/` + artifactId + `-` + version + `.jar`;
+		console.log ("**** jarPath " + jarPath)
 		this.manifestConfig.path = `./${jarPath}`;
 		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + jarPath + ' --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"';
 	}
