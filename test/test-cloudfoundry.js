@@ -140,7 +140,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 
 				describe('cloud-enablement:cloudfoundry with ' + language + ' with buildType ' + buildType + ' and createType ' + createType, function () {
 					let bluemixJson = language === 'SPRING' ? scaffolderSampleSpring : scaffolderSampleJava;
-					let artifactId = 'testArtifact-id';
+					let artifactId = '${CF_APP}';
 					let javaVersion = '1.0-SNAPSHOT';
 
 					let options = {bluemix: JSON.stringify(bluemixJson), buildType : buildType, createType: createType, artifactId: artifactId, version: javaVersion};
