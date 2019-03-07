@@ -47,6 +47,3 @@ spec:
           - name: MONGO_DB_NAME
             value: {{tag ' .Values.services.mongo.name '}}
           {{/has}}
-{{tag '- if .Values.generatedBindings.enabled '}}
-{{tag '.Files.Get "bindings.yaml" | indent 10 '}}
-{{tag '- end '}}

@@ -49,11 +49,6 @@ function testOutput() {
 		assert.file(valuesFile);
 	});
 
-	it('has kubernetes config for bindings.yaml', function () {
-		let valuesFile = chartLocation + '/bindings.yaml';
-		assert.file(valuesFile);
-	});
-
 	it('has kubernetes config for deployment', function () {
 		assert.file(chartLocation + '/templates/deployment.yaml');
 	});
@@ -87,9 +82,6 @@ function testOutput() {
 				// template command will render two charts: service and Deployment
 				let charts = yml.safeLoadAll(stdout);
 				assertYmlContent(charts[1].kind, 'Deployment', 'charts[1].kind');
-				// bindings (including APM attributes) should have been rendered in-line in deployment.yaml
-				assertYmlContent(charts[1].spec.template.spec.containers[0].env[2].name, 'IBM_APM_SERVER_URL',
-												'charts[1].spec.template.spec.containers[0].env[2].name');
 				done();
 			}
 		})
@@ -183,13 +175,6 @@ describe('cloud-enablement:kubernetes', function () {
 				let deploymentyml = getSafeYaml(chartLocation + '/templates/deployment.yaml');
 				let spec = deploymentyml.spec.template.spec;
 				assertYmlContent(spec.containers[0].env[1].name, 'APPLICATION_NAME', 'spec.containers[0].env[1].name');
-
-				let bindingsyml = getSafeYaml(chartLocation + '/bindings.yaml');
-				assertYmlContent(bindingsyml[0].name, 'IBM_APM_SERVER_URL', 'bindingsyml[0].name');
-				assertYmlContent(bindingsyml[1].name, 'IBM_APM_KEYFILE', 'bindingsyml[1].name');
-				assertYmlContent(bindingsyml[2].name, 'IBM_APM_KEYFILE_PASSWORD', 'bindingsyml[2].name');
-				assertYmlContent(bindingsyml[3].name, 'IBM_APM_INGRESS_URL', 'bindingsyml[3].name');
-				assertYmlContent(bindingsyml[4].name, 'IBM_APM_ACCESS_TOKEN', 'bindingsyml[4].name');
 			});
 
 			it('has service.yaml with correct content', function () {
@@ -337,7 +322,6 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/hpa.yaml');
 			assert.file(chartLocation + '/templates/mongodb.deploy.yaml');
 			assert.file(chartLocation + '/templates/istio.yaml');
-			assert.file(chartLocation + '/bindings.yaml');
 			assert.file(chartLocation + '/values.yaml');
 			assert.file(chartLocation + '/Chart.yaml');
 			assert.file('Jenkinsfile');
