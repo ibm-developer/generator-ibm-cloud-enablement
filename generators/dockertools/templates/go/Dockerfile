@@ -1,4 +1,4 @@
-FROM golang:1.10.3-alpine
+FROM golang:1.10.3-alpine as builder
 
 # Update packages and install dependency packages for services
 RUN apk update && apk add --no-cache bash git
@@ -16,4 +16,16 @@ ENV PORT {{port}}
 ENV GIN_MODE release
 EXPOSE {{port}}
 
-CMD ["go", "run", "server.go"]
+# build binary
+RUN go build -o main .
+
+FROM alpine
+WORKDIR /go/src/{{applicationName}}
+COPY --from=builder /go/src/{{applicationName}}/main ./
+COPY --from=builder /go/src/{{applicationName}}/public ./public
+
+ENV PORT {{port}}
+ENV GIN_MODE release
+EXPOSE {{port}}
+
+CMD ["./main"]
