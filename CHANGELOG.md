@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.11"></a>
+## [1.7.11](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.10...v1.7.11) (2019-03-08)
+
+
+### Bug Fixes
+
+* revert to artifactID for java deployment ([2d4dfca](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2d4dfca))
+
+
+
 <a name="1.7.10"></a>
 ## [1.7.10](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.9...v1.7.10) (2019-03-07)
 
