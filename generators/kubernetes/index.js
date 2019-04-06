@@ -72,16 +72,24 @@ module.exports = class extends Generator {
 
 
 	initializing() {
-		this.fileLocations = {
-			chart: {source : 'Chart.yaml', target : 'chartDir/Chart.yaml', process: true},
-			deployment: {source : 'deployment.yaml', target : 'chartDir/templates/deployment.yaml', process: true},
-			service: {source : 'service.yaml', target : 'chartDir/templates/service.yaml', process: false},
-			hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
-			istio: {source : 'istio.yaml', target : 'chartDir/templates/istio.yaml', process: true},
-			basedeployment: {source : 'basedeployment.yaml', target : 'chartDir/templates/basedeployment.yaml', process: true},
-			values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true},
-			bindings: {source : 'bindings.yaml', target : 'chartDir/bindings.yaml', process: true}
-		};
+		if (this.opts.language == 'java') {
+			this.fileLocations = {
+				chart: {source : 'Chart.yaml', target : 'chartDir/Chart.yaml', process: true},
+				values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true},
+			};
+		}
+		else {
+			this.fileLocations = {
+				chart: {source : 'Chart.yaml', target : 'chartDir/Chart.yaml', process: true},
+				deployment: {source : 'deployment.yaml', target : 'chartDir/templates/deployment.yaml', process: true},
+				service: {source : 'service.yaml', target : 'chartDir/templates/service.yaml', process: false},
+				hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
+				istio: {source : 'istio.yaml', target : 'chartDir/templates/istio.yaml', process: true},
+				basedeployment: {source : 'basedeployment.yaml', target : 'chartDir/templates/basedeployment.yaml', process: true},
+				values: {source : 'values.yaml', target : 'chartDir/values.yaml', process: true},
+				bindings: {source : 'bindings.yaml', target : 'chartDir/bindings.yaml', process: true}
+			};
+		}
 	}
 
 	configuring() {
@@ -165,19 +173,24 @@ module.exports = class extends Generator {
 				process : true
 			}
 		}
-		else if (this.opts.language === 'java' || this.opts.language === 'spring') {
-			this.fileLocations.deployment.source = 'java/deployment.yaml';
-			this.fileLocations.basedeployment.source = 'java/basedeployment.yaml';
-			this.fileLocations.service.source = 'java/service.yaml';
+
+		if (this.opts.language == 'java'){
+			this.fileLocations.values.source = 'java-microprofile/values.yaml';
+		}
+
+		else if (this.opts.language === 'spring') {
+			this.fileLocations.deployment.source = 'java-spring/deployment.yaml';
+			this.fileLocations.basedeployment.source = 'java-spring/basedeployment.yaml';
+			this.fileLocations.service.source = 'java-spring/service.yaml';
 			this.fileLocations.service.process = true;
-			this.fileLocations.values.source = 'java/values.yaml';
+			this.fileLocations.values.source = 'java-spring/values.yaml';
 			this.fileLocations.kubedeploy = {
-				source : 'java/manifests/kube.deploy.yml',
+				source : 'java-spring/manifests/kube.deploy.yml',
 				target : 'manifests/kube.deploy.yml',
 				process : true
 			};
 			this.fileLocations.jenkinsfile = {
-				source : 'java/Jenkinsfile',
+				source : 'java-spring/Jenkinsfile',
 				target : 'Jenkinsfile',
 				process : true
 			};

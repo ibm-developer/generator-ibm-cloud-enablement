@@ -1,0 +1,41 @@
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+replicaCount: 1
+revisionHistoryLimit: 1
+image:
+  repository: {{#toLowerCase applicationName}}{{/toLowerCase}}
+  tag: v1.0.0
+  pullPolicy: IfNotPresent
+  readinessProbe:
+    httpGet:
+      path: /{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}
+      port: 9080
+    initialDelaySeconds: 20
+resources:
+  requests:
+    cpu: 200m
+    memory: 300Mi
+service:
+  enabled: true
+  name: "{{chartName}}-service"
+  port: {{servicePorts.http}}
+  targetPort: {{servicePorts.http}}
+  type: NodePort
+  labels:
+    char: "{{chartName}}-1.0.0"
+  extraSelectors:
+    app: "{{charName}}-selector"
+ssl:
+  enabled: true
+extraEnvs:
+- name: PORT
+  value: {{servicePorts.http}}
+- name: APPLICATION_NAME
+  value: "{{#toLowerCase applicationName}}{{/toLowerCase}}"
+  # or value: $(RELEASE_NAME)
+{{#has services 'mongodb'}}
+- name: MONGO_URL
+  value: mongo
+- name: MONGO_DB_NAME
+  value: comments
+{{/has}}

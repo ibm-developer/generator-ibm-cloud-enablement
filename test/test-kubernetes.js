@@ -148,10 +148,10 @@ function assertHpaYmlContent() {
 describe('cloud-enablement:kubernetes', function () {
 	this.timeout(5000);
 
-	let languages = ['JAVA', 'SPRING', 'NODE', 'GO'];
+	let languages = ['SPRING', 'NODE', 'GO'];
 	languages.forEach(language => {
 		describe('kubernetes:app with ' + language + ' project', function () {
-			let bluemix = language === 'SPRING' ? JSON.stringify(scaffolderSampleSpring) : language === 'JAVA' ? JSON.stringify(scaffolderSampleJava) : language === 'NODE' ? JSON.stringify(scaffolderSampleNode) : JSON.stringify(scaffolderSampleGo);
+			let bluemix = language === 'SPRING' ? JSON.stringify(scaffolderSampleSpring) : language === 'NODE' ? JSON.stringify(scaffolderSampleNode) : JSON.stringify(scaffolderSampleGo);
 			beforeEach(function () {
 				return helpers.run(path.join(__dirname, '../generators/app'))
 					.inDir(path.join(__dirname, './tmp'))
@@ -162,10 +162,6 @@ describe('cloud-enablement:kubernetes', function () {
 			it('has deployment.yaml with correct readinessProbe', function () {
 				let deploymentyml = getSafeYaml(chartLocation + '/templates/deployment.yaml');
 				let readinessProbe = deploymentyml.spec.template.spec.containers[0].readinessProbe;
-				if (language === 'JAVA') {
-					assertYmlContent(readinessProbe.httpGet.path, '/health', 'readinessProbe.httpGet.path');
-					assertYmlContent(readinessProbe.httpGet.port, 9080, 'readinessProbe.httpGet.port');
-				}
 				if (language === 'SPRING') {
 					assertYmlContent(readinessProbe.httpGet.path, '/health', 'readinessProbe.httpGet.path');
 					assertYmlContent(readinessProbe.httpGet.port, 8080, 'readinessProbe.httpGet.port');
@@ -194,10 +190,6 @@ describe('cloud-enablement:kubernetes', function () {
 
 			it('has service.yaml with correct content', function () {
 				let serviceyml = getSafeYaml(chartLocation + '/templates/service.yaml');
-				if (language === 'JAVA') {
-					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
-					assertYmlContent(serviceyml.spec.ports[1].name, 'https', 'serviceyml.spec.ports[1].name');
-				}
 				if (language === 'SPRING') {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
 					assertYmlContent(serviceyml.spec.ports[1], undefined, 'serviceyml.spec.ports[1]');
@@ -209,10 +201,6 @@ describe('cloud-enablement:kubernetes', function () {
 
 			it('has values.yaml with correct content', function () {
 				let valuesyml = getSafeYaml(chartLocation + '/values.yaml');
-				if (language === 'JAVA') {
-					assertYmlContent(valuesyml.service.servicePort, 9080, 'valuesyml.service.servicePort');
-					assertYmlContent(valuesyml.service.servicePortHttps, 9443, 'valuesyml.service.servicePortHttps');
-				}
 				if (language === 'SPRING') {
 					assertYmlContent(valuesyml.service.servicePort, 8080, 'valuesyml.service.servicePort');
 					assertYmlContent(valuesyml.service.servicePortHttps, undefined, 'valuesyml.service.servicePortHttps');
@@ -234,17 +222,13 @@ describe('cloud-enablement:kubernetes', function () {
 			});
 
 			it('has manifests/kube.deploy.yml with correct content', function () {
-				if (language === 'JAVA' || language === 'SPRING') {
+				if (language === 'SPRING') {
 					assert.file('manifests/kube.deploy.yml');
 					let i = 0;
 					yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
 						switch (i) {
 							case 0:
 								assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-service', 'doc0.data.metadata.name');
-								if (language === 'JAVA') {
-									assertYmlContent(data.spec.ports[0].port, 9080, 'doc0.spec.ports[0].port');
-									assertYmlContent(data.spec.ports[1].port, 9443, 'doc0.spec.ports[1].port');
-								}
 								if (language === 'SPRING') {
 									assertYmlContent(data.spec.ports[0].port, 8080, 'doc0.spec.ports[0].port');
 								}
@@ -252,9 +236,6 @@ describe('cloud-enablement:kubernetes', function () {
 								break;
 							case 1:
 								assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-deployment', 'doc1.metadata.name');
-								if (language === 'JAVA') {
-									assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/health', 'doc1.spec.template.spec.containers[0].readinessProbe.httpGet.path');
-								}
 								if (language === 'SPRING') {
 									assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/health', 'doc1.data.spec.template.spec.containers[0].readinessProbe.httpGet.path');
 								}
@@ -267,14 +248,70 @@ describe('cloud-enablement:kubernetes', function () {
 					assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
 				}
 			});
-			if (language === 'JAVA' || language === 'NODE' || language == 'SPRING' || language == 'GO') {
-				it('Java, Node, Spring and Go have Jenkinsfile with correct content', function () {
+			if (language === 'NODE' || language == 'SPRING' || language == 'GO') {
+				it('Node, Spring and Go have Jenkinsfile with correct content', function () {
 					assert.fileContent('Jenkinsfile', 'image = \'' + applicationName.toLowerCase() + '\'');
 				});
 			}
 		});
 	});
 
+	describe('kubernetes:app with java-liberty project', function () {
+		let bluemix = JSON.stringify(scaffolderSampleJava);
+		beforeEach(function () {
+			return helpers.run(path.join(__dirname, '../generators/app'))
+				.inDir(path.join(__dirname, './tmp'))
+				.withOptions({bluemix: bluemix});
+		});
+		it('has kubernetes config for Chart.yaml', function () {
+			let chartFile = chartLocation + '/Chart.yaml';
+			assert.file(chartFile);
+			let chartyml = yml.safeLoad(fs.readFileSync(chartFile, 'utf8'));
+			assertYmlContent(chartyml.name, applicationName.toLowerCase(), 'chartyml.name');
+		});
+
+		it('has kubernetes config for deployment', function () {
+			assert.file(chartLocation + '/templates/deployment.yaml');
+		}); 
+
+		
+		it('has valid helm chart when running helm lint', function (done) {
+			exec('helm lint ' + chartLocation + '/', {maxBuffer: 20 * 1024 * 1024}, (error, stdout) => {
+				error ? done(new Error(stdout)) : done();
+			})
+		}); 
+		let valuesFile = chartLocation + '/values.yaml';
+		it('has kubernetes config for values.yaml', function () {
+			
+			assert.file(valuesFile);
+		});
+		
+		let valuesyml = valuesFile;
+		it('has correct readinessProbe', () => {
+			let readinessProbe = valuesyml.image.readinessProbe;
+			assertYmlContent(readinessProbe.httpGet.path, '/health', 'readinessProbe.httpGet.path');
+			assertYmlContent(readinessProbe.httpGet.port, 9080, 'readinessProbe.httpGet.port');
+		});
+		it('has correct hpa settings', () => {
+			let resources = valuesyml.resources;
+			assertYmlContentExists(resources.requests.cpu, 'resources.requests.cpu');
+			assertYmlContentExists(resources.requests.memory, 'resources.requests.memory');
+		});
+		it('has correct env settings for for APM', () => {
+			let env = valuesyml.extraEnvs;
+			assertYmlContent(env[1].name, 'APPLICATION_NAME', 'env[1].name');
+		});
+		it('service section has correct content', () => {
+			assertYmlContent(valuesyml.service.port, 9080, 'valuesFile.service.port');
+			assertYmlContent(valuesyml.service.extraPorts[0].port, 9443, 'valuesFile.service.extraPorts[0].port');
+			assertYmlContent(valuesyml.image.resources.requests.cpu, '200m', 'valuesyml.image.resources.requests.cpu');
+		});
+
+		it('has helm install file', function(){
+			assert.file(chartLocation + '/templates/helmInstall.sh')
+		});
+	});
+ 
 	describe('kubernetes:app with Java project and custom health endpoint', function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
