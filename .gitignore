@@ -18,6 +18,9 @@ coverage
 # nyc test coverage
 .nyc_output
 
+# unit test result
+xunit.xml
+
 # Grunt intermediate storage (http://gruntjs.com/creating-plugins#storing-task-files)
 .grunt
 
@@ -49,3 +52,4 @@ test/tmp
 # .cfignore
 # .bluemix
 helm
+
