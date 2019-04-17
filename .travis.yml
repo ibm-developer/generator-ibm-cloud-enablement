@@ -15,8 +15,8 @@ before_script:
 - git clone -b master https://github.com/ibm-developer/standard-npm-devops.git
 - cd -
 script: 
-  - npm test && npm run coveralls && /tmp/standard-npm-devops/do_devops.sh
-  - if [ -z $TRAVIS_PULL_REQUEST_BRANCH ]; then $DEVOPS_SCRIPT_DIR/do_devops_insights_reporting.sh; fi
+- npm test && npm run coveralls && /tmp/standard-npm-devops/do_devops.sh
+- $DEVOPS_SCRIPT_DIR/do_devops_insights_reporting.sh
 branches:
   only:
   - master
@@ -32,3 +32,4 @@ env:
     - LOGICAL_APP_NAME=generator-ibm-cloud-enablement
     - GIT_URL=https://github.com/ibm-developer/generator-ibm-cloud-enablement
     - DEVOPS_REPORT_DIR=/tmp/devops_insights/
+
