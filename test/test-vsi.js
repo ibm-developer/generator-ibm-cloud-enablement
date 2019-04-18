@@ -143,7 +143,7 @@ describe('cloud-enablement:vsi', function () {
 			assert.fileContent('debian/install', 'node_modules');
 			assert.fileContent('terraform/scripts/start.sh', 'npm start');
 			assert.fileContent('terraform/scripts/build.sh', 'npm install');
-			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y nodejs');
+			assert.fileContent('terraform/scripts/install.sh', 'nvm install 8.16.0');
 			assert.fileContent('debian/control', 'appname');
 		});
 	});
@@ -167,7 +167,7 @@ describe('cloud-enablement:vsi', function () {
 			assert.fileContent('debian/install', 'node_modules');
 			assert.fileContent('terraform/scripts/start.sh', 'npm start');
 			assert.fileContent('terraform/scripts/build.sh', 'npm install');
-			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y nodejs');
+			assert.fileContent('terraform/scripts/install.sh', 'nvm install 8.16.0');
 			assert.fileContent('debian/control', 'appname');
 
 			assert.fileContent('debian/install', 'Procfile-dev');
@@ -198,7 +198,7 @@ describe('cloud-enablement:vsi', function () {
 			assert.fileContent('debian/install', 'node_modules');
 			assert.fileContent('terraform/scripts/start.sh', 'npm start');
 			assert.fileContent('terraform/scripts/build.sh', 'npm install');
-			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y nodejs');
+			assert.fileContent('terraform/scripts/install.sh', 'nvm install 8.16.0');
 			assert.fileContent('debian/control', 'appname');
 
 			assert.fileContent('debian/install', 'webpack.common.js');

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.14"></a>
+## [1.7.14](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.13...v1.7.14) (2019-04-18)
+
+
+### Bug Fixes
+
+* java and node vsi installations were broken ([850fe47](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/850fe47))
+
+
+
 <a name="1.7.13"></a>
 ## [1.7.13](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.11...v1.7.13) (2019-04-01)
 
