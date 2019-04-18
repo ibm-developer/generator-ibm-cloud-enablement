@@ -180,9 +180,9 @@ stages:
       apk add --no-cache openssh rsync
       VSI_HOST=$(cat hostip.txt)
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "apt-get update; apt-get install rsync; mkdir -p app"
+      rsync -arv -e "ssh -i ssh_private_key" {{name}}-0.0_1-1_all.deb root@$VSI_HOST:app
 
     {{#has deployment.language 'JAVA'}}
-      rsync -arv -e "ssh -i ssh_private_key" {{name}}-0.0_1-1_all.deb root@$VSI_HOST:app
       echo "scripts/install.sh initial"
       cat scripts/install.sh
       # https://unix.stackexchange.com/questions/508724/failed-to-fetch-jessie-backports-repository
@@ -196,9 +196,7 @@ stages:
       cat scripts/install.sh
       rsync -arv -e "ssh -i ssh_private_key" scripts/install.sh root@$VSI_HOST:app
     {{/has}}
-
     {{#has deployment.language 'SPRING'}}
-      rsync -arv -e "ssh -i ssh_private_key" {{name}}-0.0_1-1_all.deb root@$VSI_HOST:app
       echo "scripts/install.sh initial"
       cat scripts/install.sh
       # https://unix.stackexchange.com/questions/508724/failed-to-fetch-jessie-backports-repository
@@ -212,6 +210,7 @@ stages:
       cat scripts/install.sh
       rsync -arv -e "ssh -i ssh_private_key" scripts/install.sh root@$VSI_HOST:app
     {{/has}}
+    
     docker_image: alpine
   - name: Install
     type: builder
