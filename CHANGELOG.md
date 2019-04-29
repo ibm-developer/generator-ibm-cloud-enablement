@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.16"></a>
+## [1.7.16](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.15...v1.7.16) (2019-04-19)
+
+
+### Bug Fixes
+
+* dependencies upgrade from npm audit ([02eeb76](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/02eeb76))
+
+
+
+<a name="1.7.15"></a>
+## [1.7.15](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.14...v1.7.15) (2019-04-18)
+
+
+### Bug Fixes
+
+* missing rsync for non-java vsi templates ([53a23fa](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/53a23fa))
+
+
+
+<a name="1.7.14"></a>
+## [1.7.14](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.13...v1.7.14) (2019-04-18)
+
+
+### Bug Fixes
+
+* java and node vsi installations were broken ([850fe47](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/850fe47))
+
+
+
+<a name="1.7.13"></a>
+## [1.7.13](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.11...v1.7.13) (2019-04-01)
+
+
+### Bug Fixes
+
+* update default appname for java deployment ([a7efb2a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/a7efb2a))
+
+
+
+<a name="1.7.11"></a>
+## [1.7.11](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.10...v1.7.11) (2019-03-08)
+
+
+### Bug Fixes
+
+* revert to artifactID for java deployment ([2d4dfca](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2d4dfca))
+
+
+
 <a name="1.7.10"></a>
 ## [1.7.10](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.9...v1.7.10) (2019-03-07)
 

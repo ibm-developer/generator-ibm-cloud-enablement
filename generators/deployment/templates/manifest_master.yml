@@ -36,7 +36,7 @@ applications:
   {{#if this.health-check-http-endpoint}}
   health-check-http-endpoint: {{{this.health-check-http-endpoint}}}
   {{/if ~}}
-  {{#if this.services }}
+  {{#if this.services}}
   services:
   {{#each this.services}}
     - {{{this}}}
