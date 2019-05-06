@@ -161,8 +161,7 @@ module.exports = class extends Generator {
 	}
 
 	_configureGo() {
-		// Need a direct github link becasue 'go_buildpack' doesn't have dep support
-		this.manifestConfig.buildpack = 'https://github.com/cloudfoundry/go-buildpack.git#v1.8.25';
+		this.manifestConfig.buildpack = 'go_buildpack';
 		this.manifestConfig.command = undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.manifestConfig.env.GOPACKAGENAME = this.bluemix.sanitizedName;
