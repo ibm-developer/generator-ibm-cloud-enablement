@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.18"></a>
+## [1.7.18](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.17...v1.7.18) (2019-05-06)
+
+
+### Bug Fixes
+
+* update buildpack for go ([f86e6fe](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f86e6fe))
+
+
+
+<a name="1.7.17"></a>
+## [1.7.17](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.16...v1.7.17) (2019-05-01)
+
+
+
 <a name="1.7.16"></a>
 ## [1.7.16](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.15...v1.7.16) (2019-04-19)
 
