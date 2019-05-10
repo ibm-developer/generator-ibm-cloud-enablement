@@ -16,10 +16,9 @@ WORKDIR $GOPATH/src/{{applicationName}}/
 RUN go get -u github.com/golang/dep/...
 RUN go get -u github.com/derekparker/delve/cmd/dlv/...
 COPY . ./
-RUN dep ensure -v
+RUN if test -e "Gopkg.toml"; then dep ensure -v; fi
 
-COPY run-dev $GOPATH/bin
-RUN chmod 777 $GOPATH/bin/run-dev
+RUN if test -e "run-dev"; then cp run-dev $GOPATH/bin; chmod 777 $GOPATH/bin/run-dev; fi
 RUN chmod 777 $GOPATH/src/{{applicationName}}/
 
 CMD ["/bin/bash"]
