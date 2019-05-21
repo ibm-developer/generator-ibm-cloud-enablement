@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.19"></a>
+## [1.7.19](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.18...v1.7.19) (2019-05-21)
+
+
+### Bug Fixes
+
+* add app-id attribute for patterns flow ([34255b3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/34255b3))
+
+
+
 <a name="1.7.18"></a>
 ## [1.7.18](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.17...v1.7.18) (2019-05-06)
 
