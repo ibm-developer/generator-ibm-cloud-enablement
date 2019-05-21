@@ -255,6 +255,7 @@ class scaffolderSample {
 	noServices() {
 		return {
 			"name": "AcmeProject",
+			"applicationId": "c48blpm2-8ae9-4e43-a55f-7406b0346ef3",
 			"server": {
 				"diskQuota": "512M",
 				"domain": "ng.bluemix.net",

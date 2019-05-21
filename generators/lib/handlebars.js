@@ -93,5 +93,14 @@ Handlebars.registerHelper('checkProperty', function(context, options, handler) {
 	return undefined;
 });
 
+//only process the section if the paramter is not undefined
+Handlebars.registerHelper('exists', function(context, handler) {
+	if (context !== 'undefined') {
+		let data = Handlebars.createFrame(handler.data);
+		return handler.fn(handler.data.root, {data : data, blockParams : [handler.data.root]})
+	} else {
+		return undefined
+	}
+});
 
 module.exports = Handlebars;
