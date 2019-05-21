@@ -22,7 +22,7 @@ const REGEX_ALPHA_NUM_DASH = /[^a-zA-Z0-9-]/g;
 
 const sanitizeAlphaNumLowerCase = (name) => {
 	return sanitizeAlphaNum(name).toLowerCase();
-}
+};
 
 const sanitizeAlphaNum = (name) => {
 	let cleanName = '';
@@ -30,7 +30,7 @@ const sanitizeAlphaNum = (name) => {
 		cleanName = name.replace(REGEX_LEADING_ALPHA, '').replace(REGEX_ALPHA_NUM, '');
 	}
 	return (cleanName || 'APP');
-}
+};
 
 const createUniqueName = (name) => {
 	const hexString = new Buffer(name, 'base64').toString('hex');
@@ -39,7 +39,7 @@ const createUniqueName = (name) => {
 
 	return new Buffer(name, 'base64').toString('hex').substring(0,chars);
 
-}
+};
 
 const sanitizeAlphaNumDash = (name) => {
 	name = name || 'appname';
