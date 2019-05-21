@@ -155,7 +155,8 @@ module.exports = class extends Generator {
 			runCmd: '',
 			stopCmd: '',
 			debugCmd: `/swift-utils/tools-utils.sh debug ${executableName} 1024`,
-			chartPath: `chart/${applicationName.toLowerCase()}`
+			chartPath: `chart/${applicationName.toLowerCase()}`,
+			applicationId: `${this.bluemix.applicationId}`
 		};
 
 		// Create Docker config object for Swift
@@ -268,7 +269,8 @@ module.exports = class extends Generator {
 			runCmd: '',
 			debugCmd: 'npm run debug',
 			stopCmd: "npm stop",
-			chartPath: `chart/${applicationName.toLowerCase()}`
+			chartPath: `chart/${applicationName.toLowerCase()}`,
+			applicationId: `${this.bluemix.applicationId}`
 		};
 
 		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
@@ -320,6 +322,7 @@ module.exports = class extends Generator {
 
 		if(!this.opts.platforms || this.opts.platforms.includes('cli')) {
 			/* Common cli-config template */
+			this.opts.applicationId = `${this.bluemix.applicationId}`;
 			if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
 				this.log(FILENAME_CLI_CONFIG, "already exists, skipping.");
 			} else {
@@ -443,7 +446,8 @@ module.exports = class extends Generator {
 			debugCmd: this.opts.enable
 				? 'echo No debug command specified in cli-config'
 				: 'python manage.py debug',
-			chartPath: `chart/${applicationName.toLowerCase()}`
+			chartPath: `chart/${applicationName.toLowerCase()}`,
+			applicationId: `${this.bluemix.applicationId}`
 		};
 		const derrayify = serviceEnvs[0];
 
@@ -595,7 +599,8 @@ module.exports = class extends Generator {
 			debugCmd: this.opts.enable
 				? 'echo No debug command specified in cli-config'
 				: `python manage.py runserver --noreload`,
-			chartPath: `chart/${applicationName.toLowerCase()}`
+			chartPath: `chart/${applicationName.toLowerCase()}`,
+			applicationId: `${this.bluemix.applicationId}`
 		};
 
 		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
@@ -691,7 +696,8 @@ module.exports = class extends Generator {
 			runCmd: '',
 			stopCmd: '',
 			debugCmd: 'dlv debug --headless --listen=0.0.0.0:8181',
-			chartPath: `chart/${chartName}`
+			chartPath: `chart/${chartName}`,
+			applicationId: `${this.bluemix.applicationId}`
 		};
 
 		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
