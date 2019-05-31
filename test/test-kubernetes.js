@@ -217,46 +217,6 @@ describe('cloud-enablement:kubernetes', function () {
 					'basedeploymentyml.spec.template.spec.containers.image');
 				assertYmlContent(basedeploymentyml.spec.template.metadata.labels.version, 'base', 'basedeploymentyml.spec.template.metadata.labels.version');
 			});
-
-			it('has manifests/kube.deploy.yml with correct content', function () {
-				if (language === 'JAVA' || language === 'SPRING') {
-					assert.file('manifests/kube.deploy.yml');
-					let i = 0;
-					yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
-						switch (i) {
-							case 0:
-								assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-service', 'doc0.data.metadata.name');
-								if (language === 'JAVA') {
-									assertYmlContent(data.spec.ports[0].port, 9080, 'doc0.spec.ports[0].port');
-									assertYmlContent(data.spec.ports[1].port, 9443, 'doc0.spec.ports[1].port');
-								}
-								if (language === 'SPRING') {
-									assertYmlContent(data.spec.ports[0].port, 8080, 'doc0.spec.ports[0].port');
-								}
-								i++;
-								break;
-							case 1:
-								assertYmlContent(data.metadata.name, applicationName.toLowerCase() + '-deployment', 'doc1.metadata.name');
-								if (language === 'JAVA') {
-									assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/health', 'doc1.spec.template.spec.containers[0].readinessProbe.httpGet.path');
-								}
-								if (language === 'SPRING') {
-									assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/health', 'doc1.data.spec.template.spec.containers[0].readinessProbe.httpGet.path');
-								}
-								i++;
-								break;
-							default:
-								assert.fail(i, 'i < 2', 'Yaml file contains more documents than expected');
-						}
-					});
-					assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
-				}
-			});
-			if (language === 'JAVA' || language === 'NODE' || language == 'SPRING' || language == 'GO') {
-				it('Java, Node, Spring and Go have Jenkinsfile with correct content', function () {
-					assert.fileContent('Jenkinsfile', 'image = \'' + applicationName.toLowerCase() + '\'');
-				});
-			}
 		});
 	});
 
@@ -265,24 +225,6 @@ describe('cloud-enablement:kubernetes', function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSpring), healthEndpoint: 'customHealth'})
-		});
-		it('has manifests/kube.deploy.yml with correct content', function () {
-			assert.file('manifests/kube.deploy.yml');
-			let i = 0;
-			yml.safeLoadAll(fs.readFileSync('manifests/kube.deploy.yml', 'utf8'), data => {
-				switch (i) {
-					case 0:
-						i++;
-						break;
-					case 1:
-						assertYmlContent(data.spec.template.spec.containers[0].readinessProbe.httpGet.path, '/customHealth', 'doc1.data.spec.template.spec.containers[0].readinessProbe.httpGet.path');
-						i++;
-						break;
-					default:
-						assert.fail(i, 'i < 2', 'Yaml file contains more documents than expected');
-				}
-			});
-			assert.strictEqual(i, 2, 'Expected to find exactly 2 documents, instead found ' + i);
 		});
 	});
 
@@ -302,9 +244,6 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.noFile(chartLocation + '/templates/istio.yaml');
 			assert.noFile(chartLocation + '/values.yaml');
 			assert.noFile(chartLocation + '/Chart.yaml');
-			assert.noFile('Jenkinsfile');
-			assert.noFile('manifests/kube.deploy.yml');
-
 		});
 	});
 
@@ -324,9 +263,6 @@ describe('cloud-enablement:kubernetes', function () {
 			assert.file(chartLocation + '/templates/istio.yaml');
 			assert.file(chartLocation + '/values.yaml');
 			assert.file(chartLocation + '/Chart.yaml');
-			assert.file('Jenkinsfile');
-			assert.file('manifests/kube.deploy.yml');
-
 		});
 	});
 
