@@ -16,6 +16,7 @@
 const Handlebars = require('../lib/handlebars.js');
 const Generator = require('yeoman-generator');
 const Utils = require('../lib/utils');
+const xmljs = require('xml-js');
 
 module.exports = class extends Generator {
 	constructor(args, opts) {
@@ -180,6 +181,17 @@ module.exports = class extends Generator {
 		if (this.opts.appName) {
 			this.manifestConfig.name = this.opts.appName;
 			this.name = this.opts.appName;
+		}
+		if (!this.opts.artifactId) {
+			try {
+				const data = this.fs.read(this.templatePath("pom.xml"));
+				const pomJson = xmljs.xml2json(data, { compact: true, spaces: 4 })
+				const pom = JSON.parse(pomJson);
+				this.opts.artifactId = pom.project.artifactId._text;
+			} catch (err) {
+				// file not found
+				this.opts.artifactId = "<replace-me-with-artifactId-from-pom.xml>";
+			}
 		}
 		if (this.opts.createType === 'bff/liberty') {
 			this.manifestConfig.env.OPENAPI_SPEC = `/${this.name}/swagger/api`;

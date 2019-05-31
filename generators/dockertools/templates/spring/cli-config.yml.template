@@ -5,13 +5,13 @@ ibm-cloud-app-id : "{{applicationId}}"
 {{/exists}}
 
 # The container name used for the run container
-container-name-run : "{{#toLowerCase appName}}{{/toLowerCase}}"
+container-name-run : "{{appNameRefreshed}}"
 
 # The container name used for the tools container
-container-name-tools : "bx-dev-{{#toLowerCase appName}}{{/toLowerCase}}-tools"
+container-name-tools : "bx-dev-{{appNameRefreshed}}-tools"
 
 # The name of image to create from dockerfile-run
-image-name-run : "{{#toLowerCase appName}}{{/toLowerCase}}"
+image-name-run : "{{appNameRefreshed}}"
 {{#has buildType 'maven'}}
 # The name of image to create from dockerfile-tools
 image-name-tools : "bx-dev-java-maven-tools"
@@ -56,7 +56,7 @@ container-port-map : "8080:8080,8443:8443"
 container-port-map-debug : "8000:8000"
 
 # The command to execute debug of the code in the tools container
-debug-cmd : "java -Dspring.profiles.active=local -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=y -jar {{#has buildType 'maven'}}./target/{{/has}}{{#has buildType 'gradle'}}./build/libs/{{/has}}{{#firstAvailable artifactId appName}}{{/firstAvailable}}-{{version}}.jar"
+debug-cmd : "java -Dspring.profiles.active=local -Xdebug -Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=y -jar {{#has buildType 'maven'}}./target/{{/has}}{{#has buildType 'gradle'}}./build/libs/{{/has}}{{#firstAvailable artifactId appNameRefreshed}}{{/firstAvailable}}-{{version}}.jar"
 
 # The name for the dockerfile for the run container
 dockerfile-run : "Dockerfile"
@@ -65,4 +65,4 @@ dockerfile-run : "Dockerfile"
 dockerfile-tools : "Dockerfile-tools"
 
 # The relative path to the helm chart used for Kubernetes deployment
-chart-path : "chart/{{#toLowerCase appName}}{{/toLowerCase}}"
+chart-path : "chart/{{appNameRefreshed}}"

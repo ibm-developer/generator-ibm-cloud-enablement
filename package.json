@@ -1,6 +1,6 @@
 {
   "name": "generator-ibm-cloud-enablement",
-  "version": "1.7.19",
+  "version": "1.7.20",
   "description": "This generator adds IBM Cloud enablement to applications",
   "main": "generators/app/index.js",
   "license": "Apache-2.0",
@@ -33,7 +33,8 @@
     "handlebars": "^4.1.0",
     "js-yaml": "^3.13.0",
     "lodash": "^4.17.11",
-    "yeoman-generator": "^3.2.0"
+    "yeoman-generator": "^3.2.0",
+    "xml-js": "^1.6.11"
   },
   "devDependencies": {
     "coveralls": "^3.0.2",

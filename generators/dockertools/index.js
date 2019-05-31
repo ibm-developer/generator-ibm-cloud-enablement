@@ -16,6 +16,7 @@
 const Generator = require('yeoman-generator');
 const Handlebars = require('../lib/handlebars.js');
 const Utils = require('../lib/utils');
+const xmljs = require('xml-js');
 
 const FILENAME_CLI_CONFIG = "cli-config.yml";
 const FILENAME_DOCKERFILE = "Dockerfile";
@@ -36,7 +37,7 @@ module.exports = class extends Generator {
 			this.bluemix = opts.bluemix;
 		}
 
-		if(typeof (opts) === 'string'){
+		if (typeof (opts) === 'string') {
 			this.opts = JSON.parse(opts || '{}');
 		} else {
 			this.opts = opts.cloudContext || opts;
@@ -44,8 +45,8 @@ module.exports = class extends Generator {
 
 		this.opts.libertyBeta = opts.libertyBeta;
 
-		if (typeof(this.opts.services) === 'string') {
-			this.opts.services  = JSON.parse(opts.services || '[]');
+		if (typeof (this.opts.services) === 'string') {
+			this.opts.services = JSON.parse(opts.services || '[]');
 		} else {
 			this.opts.services = opts.services || [];
 		}
@@ -105,7 +106,7 @@ module.exports = class extends Generator {
 		let compilationOptions = "";
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
-			if(this.bluemix.hasOwnProperty(servKey)) {
+			if (this.bluemix.hasOwnProperty(servKey)) {
 				serviceItems.push(services[servKey]);
 				if (services[servKey].hasOwnProperty("compilationOptions")) {
 					compilationOptions = compilationOptions + " " + services[servKey].compilationOptions;
@@ -113,23 +114,22 @@ module.exports = class extends Generator {
 			}
 		}
 
-        // Iterate over services key deployed under docker images
+		// Iterate over services key deployed under docker images
 		// Retrieve envs, port and images names if availables for each services
-		for (let index = 0; index < this.opts.services.length; index++){
+		for (let index = 0; index < this.opts.services.length; index++) {
 			const servKey = this.opts.services[index];
-			if(services[servKey].hasOwnProperty('envs')){
+			if (services[servKey].hasOwnProperty('envs')) {
 				serviceEnvs.push(services[servKey].envs);
 			}
 
-			if(services[servKey].hasOwnProperty('imageName')){
+			if (services[servKey].hasOwnProperty('imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
 
-			if(services[servKey].hasOwnProperty('port')){
+			if (services[servKey].hasOwnProperty('port')) {
 				servicePorts.push(services[servKey].port);
 			}
 		}
-
 
 		compilationOptions = compilationOptions.trim();
 
@@ -165,7 +165,7 @@ module.exports = class extends Generator {
 			serviceItems: serviceItems
 		}
 
-		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
+		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, { cliConfig });
 
 		this._writeHandlebarsFile('swift/Dockerfile', FILENAME_DOCKERFILE, dockerConfig);
 
@@ -183,8 +183,8 @@ module.exports = class extends Generator {
 		}
 
 		const derrayify = serviceEnvs[0];
-		if(this.opts.services.length > 0){
-			const dockerComposeConfig =  {
+		if (this.opts.services.length > 0) {
+			const dockerComposeConfig = {
 				containerName: `${applicationName.toLowerCase()}-swift-run`,
 				image: `${applicationName.toLowerCase()}-swift-run`,
 				envs: derrayify,
@@ -231,18 +231,18 @@ module.exports = class extends Generator {
 			}
 		}
 
-          // Iterate over services key deployed under docker images
-          // Retrieve envs, port and images names if availables for each services
-		for (let index = 0; index < this.opts.services.length; index++){
+		// Iterate over services key deployed under docker images
+		// Retrieve envs, port and images names if availables for each services
+		for (let index = 0; index < this.opts.services.length; index++) {
 			const servKey = this.opts.services[index];
-			if(services[servKey].hasOwnProperty('envs')){
+			if (services[servKey].hasOwnProperty('envs')) {
 				serviceEnvs.push(services[servKey].envs);
 			}
 
-			if(services[servKey].hasOwnProperty('imageName')){
+			if (services[servKey].hasOwnProperty('imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
-			if(services[servKey].hasOwnProperty('port')){
+			if (services[servKey].hasOwnProperty('port')) {
 				servicePorts.push(services[servKey].port);
 			}
 		}
@@ -263,7 +263,7 @@ module.exports = class extends Generator {
 			dockerFileTools,
 			imageNameRun: `${applicationName.toLowerCase()}-express-run`,
 			imageNameTools: `${applicationName.toLowerCase()}-express-tools`,
-			buildCmdRun: 'npm install' ,
+			buildCmdRun: 'npm install',
 			testCmd: 'npm run test',
 			buildCmdDebug: 'npm install',
 			runCmd: '',
@@ -273,23 +273,23 @@ module.exports = class extends Generator {
 			applicationId: `${this.bluemix.applicationId}`
 		};
 
-		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
+		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, { cliConfig });
 
-		this._writeHandlebarsFile('node/Dockerfile', FILENAME_DOCKERFILE, {port, servicesPackages});
+		this._writeHandlebarsFile('node/Dockerfile', FILENAME_DOCKERFILE, { port, servicesPackages });
 
-		this._writeHandlebarsFile('node/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, {port, servicesPackages, debugPort});
+		this._writeHandlebarsFile('node/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, { port, servicesPackages, debugPort });
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKER_IGNORE, 'node/dockerignore', {});
 
-		this._copyTemplateIfNotExists(FILENAME_DEBUG , 'node/run-debug', {});
+		this._copyTemplateIfNotExists(FILENAME_DEBUG, 'node/run-debug', {});
 
-		this._copyTemplateIfNotExists(FILENAME_DEV , 'node/run-dev', {});
+		this._copyTemplateIfNotExists(FILENAME_DEV, 'node/run-dev', {});
 
 
-		if(this.opts.services.length > 0){
+		if (this.opts.services.length > 0) {
 
 			const derrayify = serviceEnvs[0];
-			const dockerComposeConfig =  {
+			const dockerComposeConfig = {
 				containerName: `${applicationName.toLowerCase()}-express-run`,
 				image: `${applicationName.toLowerCase()}-express-run`,
 				ports: [port, debugPort].concat(servicePorts),
@@ -299,12 +299,12 @@ module.exports = class extends Generator {
 			};
 			this._writeHandlebarsFile('node/docker-compose.yml', FILENAME_DOCKERCOMPOSE, dockerComposeConfig);
 			dockerComposeConfig.containerName = `${applicationName.toLowerCase()}-express-tools`;
-			dockerComposeConfig.image = `${applicationName.toLowerCase()}-express-tools`,
+			dockerComposeConfig.image = `${applicationName.toLowerCase()}-express-tools`;
 			this._writeHandlebarsFile('node/docker-compose-tools.yml', FILENAME_DOCKERCOMPOSE_TOOLS, dockerComposeConfig);
 		}
 
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))) {
 			this.log(FILENAME_DOCKER_IGNORE, "already exists, skipping.");
 		} else {
 			this.fs.copyTpl(
@@ -315,15 +315,33 @@ module.exports = class extends Generator {
 	}
 
 	_generateJava() {
-		if(!this.opts.appName) {
+
+		if (!this.opts.artifactId) {
+			try {
+				const data = this.fs.read(this.templatePath("pom.xml"));
+				const pomJson = xmljs.xml2json(data, { compact: true, spaces: 4 })
+				const pom = JSON.parse(pomJson);
+				this.opts.artifactId = pom.project.artifactId._text;
+			} catch (err) {
+				// file not found
+				this.opts.artifactId = "<replace-me-with-artifactId-from-pom.xml>";
+			}
+		} 
+
+		if (!this.opts.appName) {
 			this.opts.appName = Utils.sanitizeAlphaNum(this.bluemix.name);
 		}
 		let dir = this.bluemix.backendPlatform.toLowerCase();
 
-		if(!this.opts.platforms || this.opts.platforms.includes('cli')) {
+		this.opts.appNameRefreshed = this.bluemix.name.toLowerCase();
+		this.opts.buildType = this.opts.buildType ? this.opts.buildType : 'maven';
+		this.opts.version = this.opts.version ? this.opts.version : "1.0-SNAPSHOT";
+
+		if (!this.opts.platforms || this.opts.platforms.includes('cli')) {
 			/* Common cli-config template */
 			this.opts.applicationId = `${this.bluemix.applicationId}`;
-			if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
+
+			if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))) {
 				this.log(FILENAME_CLI_CONFIG, "already exists, skipping.");
 			} else {
 				this._writeHandlebarsFile(
@@ -333,7 +351,7 @@ module.exports = class extends Generator {
 				);
 			}
 
-			if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))){
+			if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))) {
 				this.log(FILENAME_DOCKERFILE_TOOLS, "already exists, skipping.");
 			} else {
 				this._writeHandlebarsFile(
@@ -344,7 +362,7 @@ module.exports = class extends Generator {
 			}
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))) {
 			this.log(FILENAME_DOCKERFILE, "already exists, skipping.");
 		} else {
 			this._writeHandlebarsFile(
@@ -354,7 +372,7 @@ module.exports = class extends Generator {
 			);
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))) {
 			this.log(FILENAME_DOCKER_IGNORE, "already exists, skipping.")
 		} else {
 			this._writeHandlebarsFile(
@@ -407,17 +425,17 @@ module.exports = class extends Generator {
 			}
 		}
 
-        // Iterate over services key deployed under docker images
+		// Iterate over services key deployed under docker images
 		// Retrieve envs, port and images names if availables for each services
-		for (let index = 0; index < this.opts.services.length; index++){
+		for (let index = 0; index < this.opts.services.length; index++) {
 			const servKey = this.opts.services[index];
-			if(services[servKey].hasOwnProperty('envs')){
+			if (services[servKey].hasOwnProperty('envs')) {
 				serviceEnvs.push(services[servKey].envs);
 			}
-			if(services[servKey].hasOwnProperty('imageName')){
+			if (services[servKey].hasOwnProperty('imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
-			if(services[servKey].hasOwnProperty('port')){
+			if (services[servKey].hasOwnProperty('port')) {
 				servicePorts.push(services[servKey].port);
 			}
 
@@ -451,8 +469,8 @@ module.exports = class extends Generator {
 		};
 		const derrayify = serviceEnvs[0];
 
-		if(this.opts.services.length > 0){
-			const dockerComposeConfig =  {
+		if (this.opts.services.length > 0) {
+			const dockerComposeConfig = {
 				containerName: `${applicationName.toLowerCase()}-flask-run`,
 				image: `${applicationName.toLowerCase()}-flask-run`,
 				ports: [port, debugPort].concat(servicePorts),
@@ -466,13 +484,13 @@ module.exports = class extends Generator {
 			this._writeHandlebarsFile('python/docker-compose-tools.yml', FILENAME_DOCKERCOMPOSE_TOOLS, dockerComposeConfig);
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
+		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))) {
 			this.log(FILENAME_CLI_CONFIG, "already exists, skipping.");
 		} else {
-			this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
+			this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, { cliConfig });
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))) {
 			this.log(FILENAME_DOCKERFILE, "already exists, skipping.");
 		} else {
 			this._writeHandlebarsFile('python/Dockerfile', FILENAME_DOCKERFILE, {
@@ -484,7 +502,7 @@ module.exports = class extends Generator {
 			});
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))) {
 			this.log(FILENAME_DOCKERFILE_TOOLS, "already exists, skipping.");
 		} else {
 			this._writeHandlebarsFile('python/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, {
@@ -494,7 +512,7 @@ module.exports = class extends Generator {
 			});
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DEV))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DEV))) {
 			this.log(FILENAME_DEV, "already exists, skipping.");
 		} else {
 			this._writeHandlebarsFile('python/run-dev', FILENAME_DEV, {
@@ -508,7 +526,7 @@ module.exports = class extends Generator {
 
 		const FILENAME_MANAGEMENT = "manage.py";
 		if (!this.opts.enable) {
-			if (this.fs.exists(this.destinationPath(FILENAME_MANAGEMENT))){
+			if (this.fs.exists(this.destinationPath(FILENAME_MANAGEMENT))) {
 				this.log(FILENAME_MANAGEMENT, "already exists, skipping.");
 			} else {
 				this.fs.copy(
@@ -554,23 +572,23 @@ module.exports = class extends Generator {
 
 		}
 
-        // Iterate over services key deployed under docker images
+		// Iterate over services key deployed under docker images
 		// Retrieve envs, port and images names if availables for each services
-		for (let index = 0; index < this.opts.services.length; index++){
+		for (let index = 0; index < this.opts.services.length; index++) {
 			const servKey = this.opts.services[index];
 
-			if(services[servKey].hasOwnProperty('envs')){
+			if (services[servKey].hasOwnProperty('envs')) {
 				serviceEnvs.push(services[servKey].envs);
 			}
 
-			if(services[servKey].hasOwnProperty('imageName')){
+			if (services[servKey].hasOwnProperty('imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
 
-			if(services[servKey].hasOwnProperty('imageName')){
+			if (services[servKey].hasOwnProperty('imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
-			if(services[servKey].hasOwnProperty('port')){
+			if (services[servKey].hasOwnProperty('port')) {
 
 				servicePorts.push(services[servKey].port);
 			}
@@ -603,7 +621,7 @@ module.exports = class extends Generator {
 			applicationId: `${this.bluemix.applicationId}`
 		};
 
-		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))){
+		if (this.fs.exists(this.destinationPath(FILENAME_CLI_CONFIG))) {
 			this.log(FILENAME_CLI_CONFIG, "already exists, skipping.");
 		} else {
 			this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {
@@ -612,7 +630,7 @@ module.exports = class extends Generator {
 			);
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE))) {
 			this.log(FILENAME_DOCKERFILE, "already exists, skipping.");
 		} else {
 			this._writeHandlebarsFile('python/Dockerfile', FILENAME_DOCKERFILE, {
@@ -624,7 +642,7 @@ module.exports = class extends Generator {
 			});
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKERFILE_TOOLS))) {
 			this.log(FILENAME_DOCKERFILE_TOOLS, "already exists, skipping.");
 		} else {
 			this._writeHandlebarsFile('python/Dockerfile-tools', FILENAME_DOCKERFILE_TOOLS, {
@@ -634,7 +652,7 @@ module.exports = class extends Generator {
 			});
 		}
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DEV))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DEV))) {
 			this.log(FILENAME_DEV, "already exists, skipping.");
 		} else {
 			this._writeHandlebarsFile('python/run-dev', FILENAME_DEV, {
@@ -646,8 +664,8 @@ module.exports = class extends Generator {
 			});
 		}
 
-		if(this.opts.services.length > 0){
-			const dockerComposeConfig =  {
+		if (this.opts.services.length > 0) {
+			const dockerComposeConfig = {
 				containerName: `${applicationName.toLowerCase()}-django-run`,
 				image: `${applicationName.toLowerCase()}-django-run`,
 				ports: [port, debugPort].concat(servicePorts),
@@ -700,7 +718,7 @@ module.exports = class extends Generator {
 			applicationId: `${this.bluemix.applicationId}`
 		};
 
-		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, {cliConfig});
+		this._writeHandlebarsFile('cli-config-common.yml', FILENAME_CLI_CONFIG, { cliConfig });
 
 		this._writeHandlebarsFile('go/Dockerfile', FILENAME_DOCKERFILE, { port, applicationName });
 
@@ -708,7 +726,7 @@ module.exports = class extends Generator {
 
 		this._copyTemplateIfNotExists(FILENAME_DOCKER_IGNORE, 'go/dockerignore', {});
 
-		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))){
+		if (this.fs.exists(this.destinationPath(FILENAME_DOCKER_IGNORE))) {
 			this.log(FILENAME_DOCKER_IGNORE, "already exists, skipping.");
 		} else {
 			this.fs.copyTpl(
@@ -719,7 +737,7 @@ module.exports = class extends Generator {
 	}
 
 	_copyTemplateIfNotExists(targetFileName, sourceTemplatePath, ctx) {
-		if (this.fs.exists(this.destinationPath(targetFileName))){
+		if (this.fs.exists(this.destinationPath(targetFileName))) {
 			this.log(targetFileName, "already exists, skipping.");
 		} else {
 			this.fs.copyTpl(

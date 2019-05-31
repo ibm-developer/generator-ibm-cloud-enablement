@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.20"></a>
+## [1.7.20](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.19...v1.7.20) (2019-05-31)
+
+
+### Bug Fixes
+
+* add defaults for Java static starter kits ([fd64800](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/fd64800))
+
+
+
 <a name="1.7.19"></a>
 ## [1.7.19](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.18...v1.7.19) (2019-05-21)
 
