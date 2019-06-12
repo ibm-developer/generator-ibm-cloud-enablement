@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.21"></a>
+## [1.7.21](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.20...v1.7.21) (2019-06-12)
+
+
+### Bug Fixes
+
+* ibmcloud name change https://github.ibm.com/arf/planning-languages/issues/852 ([3dbedca](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3dbedca))
+* Remove MicroServicesBuilder artifacts ([517690e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/517690e))
+
+
+
 <a name="1.7.20"></a>
 ## [1.7.20](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.19...v1.7.20) (2019-05-31)
 
