@@ -1,3 +1,4 @@
+defaultBaseImageVersion: latest
 stages:
 - name: Build Stage
   inputs:
