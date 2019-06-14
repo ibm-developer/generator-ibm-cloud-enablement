@@ -2,6 +2,47 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.22"></a>
+## [1.7.22](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.21...v1.7.22) (2019-06-13)
+
+
+### Bug Fixes
+
+* use the latest pipeline images ([56a0849](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/56a0849))
+
+
+
+<a name="1.7.21"></a>
+## [1.7.21](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.20...v1.7.21) (2019-06-12)
+
+
+### Bug Fixes
+
+* ibmcloud name change https://github.ibm.com/arf/planning-languages/issues/852 ([3dbedca](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3dbedca))
+* Remove MicroServicesBuilder artifacts ([517690e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/517690e))
+
+
+
+<a name="1.7.20"></a>
+## [1.7.20](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.19...v1.7.20) (2019-05-31)
+
+
+### Bug Fixes
+
+* add defaults for Java static starter kits ([fd64800](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/fd64800))
+
+
+
+<a name="1.7.19"></a>
+## [1.7.19](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.18...v1.7.19) (2019-05-21)
+
+
+### Bug Fixes
+
+* add app-id attribute for patterns flow ([34255b3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/34255b3))
+
+
+
 <a name="1.7.18"></a>
 ## [1.7.18](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.17...v1.7.18) (2019-05-06)
 

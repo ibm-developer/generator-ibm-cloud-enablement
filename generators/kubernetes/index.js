@@ -139,49 +139,14 @@ module.exports = class extends Generator {
 		// chart/<applicationName>/...
 		let chartDir = 'chart/' + this.opts.chartName;
 
-		// Tested this works OK with Microservice Builder
-		if (this.opts.language === 'node') {
-			this.fileLocations.jenkinsfile = {
-				source : 'node/Jenkinsfile',
-				target : 'Jenkinsfile',
-				process : true
-			}
-		}
-
-		if (this.opts.language === 'go') {
-			this.fileLocations.jenkinsfile = {
-				source : 'go/Jenkinsfile',
-				target : 'Jenkinsfile',
-				process : true
-			}
-		}
-
-		// Tested this works OK with Microservice Builder/Microclimate as well
-		if (this.opts.language === 'swift') {
-			this.fileLocations.jenkinsfile = {
-				source : 'swift/Jenkinsfile',
-				target : 'Jenkinsfile',
-				process : true
-			}
-		}
-		else if (this.opts.language === 'java' || this.opts.language === 'spring') {
+		if (this.opts.language === 'java' || this.opts.language === 'spring') {
 			this.fileLocations.deployment.source = 'java/deployment.yaml';
 			this.fileLocations.basedeployment.source = 'java/basedeployment.yaml';
 			this.fileLocations.service.source = 'java/service.yaml';
 			this.fileLocations.service.process = true;
 			this.fileLocations.values.source = 'java/values.yaml';
-			this.fileLocations.kubedeploy = {
-				source : 'java/manifests/kube.deploy.yml',
-				target : 'manifests/kube.deploy.yml',
-				process : true
-			};
-			this.fileLocations.jenkinsfile = {
-				source : 'java/Jenkinsfile',
-				target : 'Jenkinsfile',
-				process : true
-			};
-		}
 
+		}
 		// iterate over file names
 		let files = Object.keys(this.fileLocations);
 		files.forEach(file => {
