@@ -10,10 +10,11 @@ WORKDIR $GOPATH/src/{{applicationName}}/
 RUN go get -u github.com/golang/dep/...
 RUN go get -u github.com/derekparker/delve/cmd/dlv/...
 COPY . ./
-RUN dep ensure -v
+RUN if test -e "Gopkg.toml"; then dep ensure -v; fi
 
 ENV PORT {{port}}
 ENV GIN_MODE release
 EXPOSE {{port}}
 
-CMD ["go", "run", "server.go"]
+RUN go build -o app
+CMD ["./app"]
