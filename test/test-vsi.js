@@ -286,7 +286,7 @@ describe('cloud-enablement:vsi', function () {
 			assert.fileContent('terraform/scripts/start.sh', './appname');
 			assert.fileContent('terraform/scripts/build.sh', 'swift build');
 			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y libatomic1 libpython2.7');
-			assert.fileContent('terraform/scripts/install.sh', 'tar -xzf swift-4.1.2-RELEASE-ubuntu14.04.tar.gz');
+			assert.fileContent('terraform/scripts/install.sh', 'tar -xzf swift-5.0.1-RELEASE-ubuntu14.04.tar.gz');
 			assert.fileContent('debian/control', 'appname');
 		});
 	});
