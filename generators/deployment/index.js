@@ -155,8 +155,15 @@ module.exports = class extends Generator {
 	}
 
 	_configureNode() {
+
+		if (this.fs.exists(this.destinationPath("webpack.js")) || this.fs.exists(this.destinationPath("webpack.prod.js"))) {
+			this.manifestConfig.command = 'npm prune --production && NODE_ENV=production npm start';
+			this.manifestConfig.env.NPM_CONFIG_PRODUCTION = false;
+		} else {
+			this.manifestConfig.command = 'npm start';
+		}
+
 		this.manifestConfig.buildpack = 'sdk-for-nodejs';
-		this.manifestConfig.command = 'npm start';
 		this.manifestConfig.memory = this._getHighestMemorySize(this.manifestConfig.memory, this.opts.nodeCFMinMemory);
 		this.cfIgnoreContent = ['.git/', 'node_modules/', 'test/', 'vcap-local.js'];
 	}
