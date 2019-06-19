@@ -318,7 +318,7 @@ module.exports = class extends Generator {
 
 		if (!this.opts.artifactId) {
 			try {
-				const data = this.fs.read(this.templatePath("pom.xml"));
+				const data = this.fs.read(this.destinationPath("pom.xml"));
 				const pomJson = xmljs.xml2json(data, { compact: true, spaces: 4 })
 				const pom = JSON.parse(pomJson);
 				this.opts.artifactId = pom.project.artifactId._text;
