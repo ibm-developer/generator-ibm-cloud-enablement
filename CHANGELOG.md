@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.23"></a>
+## [1.7.23](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.22...v1.7.23) (2019-06-19)
+
+
+### Bug Fixes
+
+* Go Dockerfiles so it can be enabled ([c01f284](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/c01f284))
+* update path to read pom.xml ([34846a7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/34846a7))
+
+
+
 <a name="1.7.22"></a>
 ## [1.7.22](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.21...v1.7.22) (2019-06-13)
 
