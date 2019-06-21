@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.26"></a>
+## [1.7.26](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.25...v1.7.26) (2019-06-21)
+
+
+### Bug Fixes
+
+* configure java common before framework ([d2285fe](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/d2285fe))
+
+
+
 <a name="1.7.25"></a>
 ## [1.7.25](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.24...v1.7.25) (2019-06-21)
 
