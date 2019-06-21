@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.24"></a>
+## [1.7.24](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.23...v1.7.24) (2019-06-21)
+
+
+### Bug Fixes
+
+* add env var and prune to manifest ([f08e11e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f08e11e))
+
+
+
 <a name="1.7.23"></a>
 ## [1.7.23](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.22...v1.7.23) (2019-06-19)
 
