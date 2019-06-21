@@ -61,9 +61,26 @@ module.exports = class extends Generator {
 	}
 
 	initializing() {
-		this.composeWith(require.resolve('../dockertools'), this.opts);
-		this.composeWith(require.resolve('../kubernetes'), this.opts);
-		this.composeWith(require.resolve('../deployment'), this.opts);
+		// Serverless Cloud Functions go through a different system of enablement than other patterns,
+		// see https://github.ibm.com/arf/generator-cloud-functions-usecase/
+		if (_.toLower(this.cloudDeploymentType) === 'functions') {
+
+			let context = this.parentContext || {};
+			//add bluemix options from this.options to existing bluemix options on parent context
+			context[OPTION_BLUEMIX] = Object.assign(context[OPTION_BLUEMIX] || {}, this.options[OPTION_BLUEMIX]);
+
+			// DevOps v2 Shim
+			context.deploymentOrg = this.options.deploymentOrg;
+			context.deploymentSpace = this.options.deploymentSpace;
+			context.deploymentRegion = this.options.deploymentRegion;
+			context.toolchainName = this.options.toolchainName;
+
+			this.composeWith(require.resolve('../functions'), context);		}
+		else {
+			this.composeWith(require.resolve('../dockertools'), this.opts);
+			this.composeWith(require.resolve('../kubernetes'), this.opts);
+			this.composeWith(require.resolve('../deployment'), this.opts);
+		}
 
 		if (_.toLower(this.cloudDeploymentType) === 'vsi') {
 			this.composeWith(require.resolve('../vsi'), this.opts);
