@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.25"></a>
+## [1.7.25](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.24...v1.7.25) (2019-06-21)
+
+
+### Bug Fixes
+
+* upgrade nyc per audit ([e6712e6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e6712e6))
+
+
+
 <a name="1.7.24"></a>
 ## [1.7.24](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.23...v1.7.24) (2019-06-21)
 

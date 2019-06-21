@@ -1,0 +1,87 @@
+stages:
+- name: Build Stage
+  inputs:
+  - type: git
+    branch: master
+    service: ${REPO}
+  {{#if config.triggersType}}
+  triggers:
+  - type: {{config.triggersType}}
+  {{/if}}
+  jobs:
+  - name: Build
+    type: builder
+- name: Deploy Stage
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  triggers:
+  - type: stage
+  properties:
+  - name: DATABASE
+    value: "products"
+    type: text
+  jobs:
+  - name: Deploy
+    type: deployer
+    artifact_dir: ''
+    build_type: shell
+    target:
+      region_id: ${REGION_ID}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
+      api_key: ${API_KEY}
+    script: |-
+      #!/bin/bash
+      {{#if deployment.my_service}}
+      ibmcloud login -a ${CF_TARGET_URL} --apikey ${PIPELINE_BLUEMIX_API_KEY}
+      ibmcloud target --cf -o ${CF_ORG} -s ${CF_SPACE}
+      export MY_SERVICE={{deployment.my_service}}
+      export SERVICE_KEYS=$(bx resource service-keys --instance-name $MY_SERVICE)
+      export SERVICE_GUID=$(echo $SERVICE_KEYS | awk 'BEGIN{FS="Created At "} {print $2}' | awk '{ print $1 }')
+      export CREDENTIALS=$(bx resource service-key $SERVICE_GUID)
+      echo $CREDENTIALS
+      export DATABASE_URL=$(echo $CREDENTIALS | awk 'BEGIN{FS="url: "} {print $2}' | awk '{ print $1 }' |  sed 's/\"//g')
+      curl -X PUT "$DATABASE_URL/$DATABASE"
+      {{/if}}
+      chmod +x .bluemix/pipeline-DEPLOY.sh
+      ./.bluemix/pipeline-DEPLOY.sh
+- name: Health Stage
+  inputs:
+  - type: job
+    stage: Build Stage
+    job: Build
+  triggers:
+  - type: stage
+  permission:
+    execute: TOOLCHAIN_ADMINS
+  jobs:
+  - name: Deploy
+    type: deployer
+    artifact_dir: ''
+    build_type: shell
+    target:
+      region_id: ${REGION_ID}
+      organization: ${CF_ORGANIZATION}
+      space: ${CF_SPACE}
+      application: ${CF_APP}
+      api_key: ${API_KEY}
+    script: |-
+      #!/bin/sh
+      ibmcloud login -a ${CF_TARGET_URL} --apikey ${PIPELINE_BLUEMIX_API_KEY}
+      ibmcloud target --cf -o ${CF_ORG} -s ${CF_SPACE}
+      if [ "$(bx wsk action invoke {{deployment.name}}/readAll | grep ok:)" != "" ]; then
+        echo "Successfully reached health endpoint."
+      else
+        echo "Could not reach the health endpoint."
+        exit 1
+      fi
+    test_type: customimage
+    docker_image: alpine
+hooks:
+- enabled: true
+  label: null
+  ssl_enabled: false
+  url: http://lms-api/v1/messaging/webhook/publish
