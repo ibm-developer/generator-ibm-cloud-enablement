@@ -102,5 +102,11 @@ Handlebars.registerHelper('exists', function(context, handler) {
 		return undefined
 	}
 });
+/*
+Handlebars.registerHelper('tag', function(context) {
+	return "{{" + context + "}}";
+});
+*/
+
 
 module.exports = Handlebars;
