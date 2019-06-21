@@ -82,8 +82,8 @@ module.exports = class extends Generator {
 				this._configureSwift();
 				break;
 			case 'JAVA':
-				this._configureLiberty();
 				this._configureJavaCommon();
+				this._configureLiberty();
 				break;
 			case 'SPRING':
 				this._configureJavaCommon();
