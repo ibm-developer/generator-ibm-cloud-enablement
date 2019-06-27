@@ -55,3 +55,6 @@ chart-path : "{{{cliConfig.chartPath}}}"
 
 # The IBM version of this configuration
 version : "0.0.3"
+{{#exists cliConfig.applicationId}}
+ibm-cloud-app-id : "{{{cliConfig.applicationId}}}"
+{{/exists}}

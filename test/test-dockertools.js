@@ -140,6 +140,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'container-port-map-debug : "2048:1024,2049:1025"');
 			assert.fileContent('cli-config.yml', 'dockerfile-run : "docker-compose.yml"');
 			assert.fileContent('cli-config.yml', 'dockerfile-tools : "docker-compose-tools.yml"');
+			assert.noFileContent('cli-config.yml', 'ibm-cloud-app-id :')
 		});
 
 		it('create dockerignore file', function () {
@@ -273,6 +274,7 @@ describe('cloud-enablement:dockertools', function () {
 				});
 				it('create cli-config for CLI tool', function () {
 					assert.file('cli-config.yml');
+					assert.noFileContent('cli-config.yml', 'ibm-cloud-app-id : ')
 				});
 				it('create cli-config chart path includes application name', function () {
 					assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
@@ -534,6 +536,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'python manage.py');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.fileContent('cli-config.yml', 'ibm-cloud-app-id : "c48blpm2-8ae9-4e43-a55f-7406b0346ef3"');
 		});
 
 		it('create manage.py file for flask', function () {
@@ -630,6 +633,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', 'python manage.py');
 			assert.fileContent('cli-config.yml', 'acmeproject-flask-run');
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.noFileContent('cli-config.yml', 'ibm-cloud-app-id : ');
 		});
 
 		it('create manage.py file for flask', function () {
@@ -776,6 +780,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 			assert.fileContent('cli-config.yml', 'dockerfile-run : "Dockerfile"');
 			assert.fileContent('cli-config.yml', 'dockerfile-tools : "Dockerfile-tools"');
+			assert.noFileContent('cli-config.yml', 'ibm-cloud-app-id : ');
 		});
 
 		it('create dockerignore file', function () {
@@ -816,6 +821,7 @@ describe('cloud-enablement:dockertools', function () {
 			assert.fileContent('cli-config.yml', `dockerfile-run : "docker-compose.yml"`);
 			assert.fileContent('cli-config.yml', `dockerfile-tools : "docker-compose-tools.yml"`);
 			assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
+			assert.noFileContent('cli-config.yml', 'ibm-cloud-app-id : ');
 		});
 
 		it('create dockerignore file', function () {

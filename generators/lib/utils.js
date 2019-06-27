@@ -16,13 +16,18 @@
 
 'use strict';
 
+const Handlebars = require('../lib/handlebars');
+const Glob = require('glob');
+const _ = require('lodash');
+const fs = require('fs');
+
 const REGEX_LEADING_ALPHA = /^[^a-zA-Z]*/;
 const REGEX_ALPHA_NUM = /[^a-zA-Z0-9]/g;
 const REGEX_ALPHA_NUM_DASH = /[^a-zA-Z0-9-]/g;
 
 const sanitizeAlphaNumLowerCase = (name) => {
 	return sanitizeAlphaNum(name).toLowerCase();
-}
+};
 
 const sanitizeAlphaNum = (name) => {
 	let cleanName = '';
@@ -30,7 +35,7 @@ const sanitizeAlphaNum = (name) => {
 		cleanName = name.replace(REGEX_LEADING_ALPHA, '').replace(REGEX_ALPHA_NUM, '');
 	}
 	return (cleanName || 'APP');
-}
+};
 
 const createUniqueName = (name) => {
 	const hexString = new Buffer(name, 'base64').toString('hex');
@@ -39,7 +44,38 @@ const createUniqueName = (name) => {
 
 	return new Buffer(name, 'base64').toString('hex').substring(0,chars);
 
+};
+
+function _writeHandlebarsFile(_this, templateFile, destinationFile, data) {
+	let template = _this.fs.read(_this.templatePath(templateFile));
+	let compiledTemplate = Handlebars.compile(template);
+	let output = compiledTemplate(data);
+	_this.fs.write(_this.destinationPath(destinationFile), output);
 }
+
+function _copyFiles(_this, srcPath, dstPath, templateContext) {
+
+	let files = Glob.sync(srcPath + "/**/*", {dot: true});
+
+	_.each(files, function (srcFilePath) {
+
+		// Do not process srcFilePath if it is pointing to a directory
+		if (fs.lstatSync(srcFilePath).isDirectory()) return;
+
+		// Do not process files that end in .partial, they're processed separately
+		if (srcFilePath.indexOf(".partial") > 0 || srcFilePath.indexOf(".replacement") > 0) return;
+
+		let functionName =srcFilePath.substring(srcFilePath.lastIndexOf("/")+1);
+		if( _.isUndefined(functionName) ) {
+			return;
+		}
+
+		// Lets write the Actions using HandleBars
+		_writeHandlebarsFile(_this,srcFilePath, dstPath+"/"+functionName,templateContext);
+
+	}.bind(this));
+}
+
 
 const sanitizeAlphaNumDash = (name) => {
 	name = name || 'appname';
@@ -51,8 +87,10 @@ const sanitizeAlphaNumDash = (name) => {
 };
 
 module.exports = {
-	sanitizeAlphaNum,
-	sanitizeAlphaNumLowerCase,
-	createUniqueName,
-	sanitizeAlphaNumDash
+	sanitizeAlphaNum: sanitizeAlphaNum,
+	sanitizeAlphaNumLowerCase: sanitizeAlphaNumLowerCase,
+	createUniqueName: createUniqueName,
+	sanitizeAlphaNumDash: sanitizeAlphaNumDash,
+	writeHandlebarsFile: _writeHandlebarsFile,
+	copyFiles: _copyFiles
 };

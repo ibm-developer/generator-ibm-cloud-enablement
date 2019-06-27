@@ -16,6 +16,7 @@
 const Handlebars = require('../lib/handlebars.js');
 const Generator = require('yeoman-generator');
 const Utils = require('../lib/utils');
+const xmljs = require('xml-js');
 
 module.exports = class extends Generator {
 	constructor(args, opts) {
@@ -81,8 +82,8 @@ module.exports = class extends Generator {
 				this._configureSwift();
 				break;
 			case 'JAVA':
-				this._configureLiberty();
 				this._configureJavaCommon();
+				this._configureLiberty();
 				break;
 			case 'SPRING':
 				this._configureJavaCommon();
@@ -154,8 +155,15 @@ module.exports = class extends Generator {
 	}
 
 	_configureNode() {
+
+		if (this.fs.exists(this.destinationPath("webpack.js")) || this.fs.exists(this.destinationPath("webpack.prod.js"))) {
+			this.manifestConfig.command = 'npm prune --production && NODE_ENV=production npm start';
+			this.manifestConfig.env.NPM_CONFIG_PRODUCTION = false;
+		} else {
+			this.manifestConfig.command = 'npm start';
+		}
+
 		this.manifestConfig.buildpack = 'sdk-for-nodejs';
-		this.manifestConfig.command = 'npm start';
 		this.manifestConfig.memory = this._getHighestMemorySize(this.manifestConfig.memory, this.opts.nodeCFMinMemory);
 		this.cfIgnoreContent = ['.git/', 'node_modules/', 'test/', 'vcap-local.js'];
 	}
@@ -180,6 +188,17 @@ module.exports = class extends Generator {
 		if (this.opts.appName) {
 			this.manifestConfig.name = this.opts.appName;
 			this.name = this.opts.appName;
+		}
+		if (!this.opts.artifactId) {
+			try {
+				const data = this.fs.read(this.destinationPath("pom.xml"));
+				const pomJson = xmljs.xml2json(data, { compact: true, spaces: 4 })
+				const pom = JSON.parse(pomJson);
+				this.opts.artifactId = pom.project.artifactId._text;
+			} catch (err) {
+				// file not found
+				this.opts.artifactId = "<replace-me-with-artifactId-from-pom.xml>";
+			}
 		}
 		if (this.opts.createType === 'bff/liberty') {
 			this.manifestConfig.env.OPENAPI_SPEC = `/${this.name}/swagger/api`;
