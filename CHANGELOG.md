@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.27"></a>
+## [1.7.27](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.26...v1.7.27) (2019-06-27)
+
+
+### Bug Fixes
+
+* Use routes instead of host and domain, use buildpacks instead of buildpack ([69df2c9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/69df2c9))
+
+
+
 <a name="1.7.26"></a>
 ## [1.7.26](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.25...v1.7.26) (2019-06-21)
 
