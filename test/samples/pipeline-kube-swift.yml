@@ -132,7 +132,7 @@ stages:
     value: build.properties
     type: file
   jobs:
-  - name: Deploy
+  - name: Test
     type: deployer
     deploy_type: kubernetes
     target:
