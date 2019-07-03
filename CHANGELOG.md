@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.30"></a>
+## [1.7.30](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.29...v1.7.30) (2019-07-03)
+
+
+### Bug Fixes
+
+* remove host and domain from CF toolchain ([b8aeda5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b8aeda5))
+
+
+
 <a name="1.7.29"></a>
 ## [1.7.29](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.28...v1.7.29) (2019-07-03)
 
