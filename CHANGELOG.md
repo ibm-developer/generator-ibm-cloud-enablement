@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.29"></a>
+## [1.7.29](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.28...v1.7.29) (2019-07-03)
+
+
+### Bug Fixes
+
+* set default command in manifest ([8674b64](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/8674b64))
+
+
+
 <a name="1.7.28"></a>
 ## [1.7.28](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.27...v1.7.28) (2019-06-29)
 
