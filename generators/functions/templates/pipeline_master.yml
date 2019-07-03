@@ -58,7 +58,7 @@ stages:
   permission:
     execute: TOOLCHAIN_ADMINS
   jobs:
-  - name: Deploy
+  - name: Test
     type: deployer
     artifact_dir: ''
     build_type: shell

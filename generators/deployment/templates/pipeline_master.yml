@@ -223,7 +223,7 @@ stages:
     value: build.properties
     type: file
   jobs:
-  - name: Deploy
+  - name: Test
     type: deployer
     deploy_type: kubernetes
     target:
@@ -261,7 +261,7 @@ stages:
   {{#has deployment.type 'CF'}}
   {{#unless manifest.host}}
   jobs:
-  - name: Deploy
+  - name: Test
     type: deployer
     deploy_type: cf
     target:
