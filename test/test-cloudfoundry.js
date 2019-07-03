@@ -225,12 +225,12 @@ describe('cloud-enablement:cloudfoundry', function () {
 							if(stage.name === 'Deploy Stage') {
 								if ( language === 'JAVA' ) {
 									let targetDir = buildType === 'maven' ? 'target' : 'build'
-									let deployCommand = 'cf push "${CF_APP}" -p ' + targetDir + '/' + artifactId + '-' + javaVersion + '.zip --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"';
+									let deployCommand = 'cf push "${CF_APP}" -p ' + targetDir + '/' + artifactId + '-' + javaVersion + '.zip';
 									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
 								}
 								if ( language === 'SPRING' ) {
 									let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
-									let deployCommand = 'cf push "${CF_APP}" -p ' + targetDir + '/' + artifactId + '-' + javaVersion + '.jar --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"'
+									let deployCommand = 'cf push "${CF_APP}" -p ' + targetDir + '/' + artifactId + '-' + javaVersion + '.jar'
 									assert(stage.jobs[0].script.includes(deployCommand), 'Expected deploy script to contain ' + deployCommand + ' found ' + stage.jobs[0].script);
 								}
 							}

@@ -178,7 +178,7 @@ stages:
       {{#if config.pushCommand}}
       {{{config.pushCommand}}}
       {{else}}
-      cf push "${CF_APP}" --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"
+      cf push "${CF_APP}"
       {{/if}}
       # cf logs "${CF_APP}" --recent
     {{/has}}
@@ -188,7 +188,7 @@ stages:
       {{#if config.pushCommand}}
       {{{config.pushCommand}}}
       {{else}}
-      cf push "${CF_APP}" --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"
+      cf push "${CF_APP}"
       {{/if}}
       # cf logs "${CF_APP}" --recent
     {{/has}}
