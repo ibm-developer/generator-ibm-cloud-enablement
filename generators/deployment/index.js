@@ -17,6 +17,8 @@ const Handlebars = require('../lib/handlebars.js');
 const Generator = require('yeoman-generator');
 const Utils = require('../lib/utils');
 const xmljs = require('xml-js');
+const jsyaml = require('js-yaml');
+const fs = require('fs');
 
 module.exports = class extends Generator {
 	constructor(args, opts) {
@@ -274,9 +276,17 @@ module.exports = class extends Generator {
 	_configureDjango() {
 		// buildpack is left blank; bluemix will auto detect
 		this.manifestConfig.buildpack = 'python_buildpack';
-		this.manifestConfig.command = this.opts.enable ?
-			'echo No run command specified in manifest.yml' :
-			`gunicorn --env DJANGO_SETTINGS_MODULE=${this.bluemix.name}.settings.production ${this.bluemix.name}.wsgi -b 0.0.0.0:$PORT`;
+
+		// if there is a `command` in manifest.yml already, keep it. Otherwise, this is the default command string:
+		let manifestCommand = `gunicorn --env DJANGO_SETTINGS_MODULE=${this.bluemix.name}.settings.production ${this.bluemix.name}.wsgi -b 0.0.0.0:$PORT`;
+		try {
+			let manifestyml = jsyaml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
+			manifestCommand = manifestyml.applications[0].command ? manifestyml.applications[0].command : manifestCommand;
+			
+		} catch (err) {
+			// cannot read file or find a command, return to default behavior
+		}
+		this.manifestConfig.command = this.opts.enable ? 'echo No run command specified in manifest.yml' : manifestCommand;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.cfIgnoreContent = ['.pyc', '.egg-info'];
 	}
