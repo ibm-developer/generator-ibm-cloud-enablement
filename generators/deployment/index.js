@@ -180,7 +180,16 @@ module.exports = class extends Generator {
 
 	_configureSwift() {
 		this.manifestConfig.buildpack = 'swift_buildpack';
-		this.manifestConfig.command = this.bluemix.name ? ("\"'" + `${this.bluemix.name}` + "'\"") : undefined;
+		
+		// if there is a `command` in manifest.yml already, keep it. Otherwise, this is the default command string:
+		let manifestCommand = this.bluemix.name ? ("\'" + `${this.bluemix.name}` + "\'") : undefined;
+		try {
+			let manifestyml = jsyaml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
+			manifestCommand = manifestyml.applications[0].command ? manifestyml.applications[0].command : manifestCommand;
+		} catch (err) {
+			// cannot read file or find a command, return to default behavior
+		}
+		this.manifestConfig.command = manifestCommand;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.pipelineConfig.swift = true;
 		this.cfIgnoreContent = ['.build/*', '.build-ubuntu/*', 'Packages/*'];
@@ -282,7 +291,6 @@ module.exports = class extends Generator {
 		try {
 			let manifestyml = jsyaml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
 			manifestCommand = manifestyml.applications[0].command ? manifestyml.applications[0].command : manifestCommand;
-			
 		} catch (err) {
 			// cannot read file or find a command, return to default behavior
 		}
