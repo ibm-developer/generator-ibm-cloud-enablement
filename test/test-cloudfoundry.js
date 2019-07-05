@@ -162,7 +162,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 							let targetDir = buildType === 'maven' ? 'target' : 'build'
 							assertYmlContent(manifestyml.applications[0].path, './' + targetDir + '/' + artifactId + '-' + javaVersion +'.zip', 'manifestyml.applications[0].path');
 							assertYmlContent(manifestyml.applications[0].memory, '512M', 'manifestyml.applications[0].memory')
-							assertYmlContent(manifestyml.applications[0].buildpacks[0], 'liberty-for-java', 'manifestyml.applications[0].buildpack')
+							assertYmlContent(manifestyml.applications[0].buildpack, 'liberty-for-java', 'manifestyml.applications[0].buildpack')
 							assertYmlContent(manifestyml.applications[0].env.services_autoconfig_excludes, 'cloudantNoSQLDB=config Object-Storage=config', 'manifestyml.applications[0].env.services_autoconfig_excludes');
 						}
 
@@ -180,7 +180,7 @@ describe('cloud-enablement:cloudfoundry', function () {
 							let targetDir = buildType === 'maven' ? 'target' : 'build/libs'
 							assertYmlContent(manifestyml.applications[0].path, './'+targetDir+'/' + artifactId + '-'+javaVersion+'.jar', 'manifestyml.applications[0].path');
 							assertYmlContent(manifestyml.applications[0].memory, '1024M', 'manifestyml.applications[0].memory')
-							assertYmlContent(manifestyml.applications[0].buildpacks[0], 'java_buildpack', 'manifestyml.applications[0].buildpack')
+							assertYmlContent(manifestyml.applications[0].buildpack, 'java_buildpack', 'manifestyml.applications[0].buildpack')
 						}
 					});
 

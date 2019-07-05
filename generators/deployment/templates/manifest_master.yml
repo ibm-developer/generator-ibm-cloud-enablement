@@ -8,8 +8,7 @@ applications:
   name: {{{this.name}}}
   {{/if ~}}
   {{#if this.buildpack }}
-  buildpacks:
-  - {{{this.buildpack}}}
+  buildpack: {{{this.buildpack}}}
   {{/if ~}}
   {{#if this.command }}
   command: {{{this.command}}}
