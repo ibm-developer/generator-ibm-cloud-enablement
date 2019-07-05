@@ -8,8 +8,7 @@ applications:
   name: {{{this.name}}}
   {{/if ~}}
   {{#if this.buildpack }}
-  buildpacks:
-    - {{{this.buildpack}}}
+  buildpack: {{{this.buildpack}}}
   {{/if ~}}
   {{#if this.command }}
   command: {{{this.command}}}
@@ -23,11 +22,11 @@ applications:
   {{#if this.memory }}
   memory: {{{this.memory}}}
   {{/if ~}}
-  {{#if this.host}}
-     {{#if this.domain}}
-  routes:
-    - route: {{{this.host}}}.{{{this.domain}}}
-     {{/if ~}}
+  {{#if this.domain }}
+  domain: {{{this.domain}}}
+  {{/if ~}}
+  {{#if this.host }}
+  host: {{{this.host}}}
   {{else}}
   random-route: true
   {{/if ~}}
