@@ -180,7 +180,16 @@ module.exports = class extends Generator {
 
 	_configureSwift() {
 		this.manifestConfig.buildpack = 'swift_buildpack';
-		this.manifestConfig.command = this.bluemix.name ? ("\"'" + `${this.bluemix.name}` + "'\"") : undefined;
+		
+		// if there is a `command` in manifest.yml already, keep it. Otherwise, this is the default command string:
+		let manifestCommand = this.bluemix.name ? ("\'" + `${this.bluemix.name}` + "\'") : undefined;
+		try {
+			let manifestyml = jsyaml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
+			manifestCommand = manifestyml.applications[0].command ? manifestyml.applications[0].command : manifestCommand;
+		} catch (err) {
+			// cannot read file or find a command, return to default behavior
+		}
+		this.manifestConfig.command = manifestCommand;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.pipelineConfig.swift = true;
 		this.cfIgnoreContent = ['.build/*', '.build-ubuntu/*', 'Packages/*'];
@@ -247,7 +256,7 @@ module.exports = class extends Generator {
 		if (excludes.length === 2) {
 			this.manifestConfig.env.services_autoconfig_excludes = excludes[0] + ' ' + excludes[1];
 		}
-		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + zipPath;
+		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + zipPath + ' --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"';
 	}
 
 	_configureSpring() {
@@ -258,7 +267,7 @@ module.exports = class extends Generator {
 		let buildDir = (this.opts.buildType && this.opts.buildType === 'gradle') ? 'build/libs' : 'target';
 		let jarPath = `${buildDir}/${this.opts.artifactId}` + `-` + version + `.jar`;
 		this.manifestConfig.path = `./${jarPath}`;
-		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + jarPath;
+		this.pipelineConfig.pushCommand = 'cf push "${CF_APP}" -p ' + jarPath + ' --hostname "${CF_HOSTNAME}" -d "${CF_DOMAIN}"';
 	}
 
 	_configurePython() {
@@ -282,7 +291,6 @@ module.exports = class extends Generator {
 		try {
 			let manifestyml = jsyaml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
 			manifestCommand = manifestyml.applications[0].command ? manifestyml.applications[0].command : manifestCommand;
-			
 		} catch (err) {
 			// cannot read file or find a command, return to default behavior
 		}
