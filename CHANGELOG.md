@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.32"></a>
+## [1.7.32](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.30...v1.7.32) (2019-07-05)
+
+
+### Bug Fixes
+
+* add buildpacks array ([baa7886](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/baa7886))
+* keep static manifest command- Swift ([93cf82c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/93cf82c))
+* revert buildpack array ([b017295](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b017295))
+* revert host and domain replacement ([1641328](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/1641328)), closes [#512](https://github.com/ibm-developer/generator-ibm-cloud-enablement/issues/512)
+
+
+
 <a name="1.7.29"></a>
 ## [1.7.29](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.28...v1.7.29) (2019-07-03)
 
