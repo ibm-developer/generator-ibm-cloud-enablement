@@ -175,6 +175,16 @@ module.exports = class extends Generator {
 		this.manifestConfig.command = undefined;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.manifestConfig.env.GOPACKAGENAME = this.bluemix.sanitizedName;
+		try {
+			// pattern type skits need a static GOPACKAGE name specified in static manifest for server.go imports
+			let manifestyml = jsyaml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
+			if ( manifestyml.applications[0].env.GOPACKAGENAME) {
+				this.manifestConfig.env.GOPACKAGENAME = manifestyml.applications[0].env.GOPACKAGENAME
+			}
+		} catch (err) {
+			// cannot read file or find a command, return to default behavior
+		}
+
 		this.cfIgnoreContent = ['.git/', 'vendor/'];
 	}
 
