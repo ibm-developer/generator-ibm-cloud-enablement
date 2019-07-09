@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.33"></a>
+## [1.7.33](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.32...v1.7.33) (2019-07-09)
+
+
+### Bug Fixes
+
+* convert gopackagename to static for patterns ([31bc205](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/31bc205))
+
+
+
 <a name="1.7.32"></a>
 ## [1.7.32](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.30...v1.7.32) (2019-07-05)
 
