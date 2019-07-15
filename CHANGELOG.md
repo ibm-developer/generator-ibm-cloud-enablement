@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.34"></a>
+## [1.7.34](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.33...v1.7.34) (2019-07-15)
+
+
+### Bug Fixes
+
+* removed deprecated -a parameter ([4df9d6b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4df9d6b))
+
+
+
 <a name="1.7.33"></a>
 ## [1.7.33](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.32...v1.7.33) (2019-07-09)
 
