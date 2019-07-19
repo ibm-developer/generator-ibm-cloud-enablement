@@ -22,6 +22,7 @@
     "testkube": "npm run mocha test/test-kubernetes.js",
     "testdeploy": "npm run mocha test/test-deployment.js",
     "testvsi": "npm run mocha test/test-vsi.js",
+    "testserverless": "npm run mocha test/test-serverless.js",
     "testinsights": "mocha --recursive --reporter mocha-multi-reporters --reporter-options configFile=config.json",
     "lint": "eslint .",
     "mocha": "nyc mocha --recursive",

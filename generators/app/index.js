@@ -63,7 +63,7 @@ module.exports = class extends Generator {
 	initializing() {
 		// Serverless Cloud Functions go through a different system of enablement than other patterns,
 		// see https://github.ibm.com/arf/generator-cloud-functions-usecase/
-		if (_.toLower(this.cloudDeploymentType) === 'functions') {
+		if (_.toLower(this.cloudDeploymentType) == 'functions') {
 
 			let context = this.parentContext || {};
 			//add bluemix options from this.options to existing bluemix options on parent context
