@@ -250,7 +250,7 @@ stages:
 
       PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
       if [ "$(curl -is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint"
+        echo "Successfully reached health endpoint at http://$IP_ADDR:$PORT/health"
         echo "====================================================================="
       else
         echo "Could not reach health endpoint: http://$IP_ADDR:$PORT/health"
@@ -273,7 +273,7 @@ stages:
     script: |-
       export CF_ENDPOINT=$(cf app $CF_APP | grep running)
       if [[ "$CF_ENDPOINT" != "" ]]; then
-        echo "Your application is up anding running"
+        echo "Your application is up anding running at http://{{manifest.host}}.{{manifest.domain}}"
         echo "====================================================================="
       else
         echo "There was a problem with starting your application"
@@ -287,7 +287,7 @@ stages:
       #!/bin/sh
       apk add --no-cache curl
       if [ "$(curl -is http://{{manifest.host}}.{{manifest.domain}}/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint"
+        echo "Successfully reached health endpoint at http://{{manifest.host}}.{{manifest.domain}}/health"
         echo "====================================================================="
       else
         echo "Could not reach health endpoint: http://{{manifest.host}}.{{manifest.domain}}/health"

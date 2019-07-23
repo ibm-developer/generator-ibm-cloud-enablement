@@ -78,7 +78,7 @@ stages:
       #!/bin/sh
       apk add --no-cache curl
       if [ "$(curl -is http://myapp.ng.bluemix.net/health  --connect-timeout 3 --max-time 5 --retry 3 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint"
+        echo "Successfully reached health endpoint at http://myapp.ng.bluemix.net/health"
         echo "====================================================================="
       else
         echo "Could not reach health endpoint: http://myapp.ng.bluemix.net/health"
