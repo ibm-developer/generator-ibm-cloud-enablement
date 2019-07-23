@@ -33,10 +33,6 @@
     },
     {{/has}}
     {{#has deployment.type 'Kube'}}
-    "image-registry-token": {
-      "description": "Container Registry access token. Retrievable via [ibmcloud cr tokens]",
-      "type": "string"
-    },
     "kube-cluster-name": {
       "description": "Your cluster name. Retrieve it with [ibmcloud cs clusters] or via the console at https://cloud.ibm.com/containers-kubernetes/home/clusters.",
       "type": "string"
@@ -73,7 +69,7 @@
       "type": "string"
     }
   },
-  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} {{#has deployment.type 'CFEE'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-registry-token", "image-pull-secret-name", "kube-cluster-name"{{/has}}],  "form": [{
+  "required": ["dev-region", {{#has deployment.type 'CF'}}"dev-organization", "dev-space",{{/has}} {{#has deployment.type 'CFEE'}}"dev-organization", "dev-space",{{/has}} "app-name"{{#has deployment.type 'Kube'}}, "api-key", "image-pull-secret-name", "kube-cluster-name"{{/has}}],  "form": [{
     "type": "validator",
     "url": "/devops/setup/bm-helper/helper.html"
   },
@@ -85,11 +81,6 @@
   },
   {{#has deployment.type 'Kube'}}
   {
-    "type": "password",
-    "readonly": false,
-    "title": "Container Registry access token",
-    "key": "image-registry-token"
-  }, {
     "type": "text",
     "readonly": false,
     "title": "Kubernetes Cluster Name",
