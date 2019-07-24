@@ -40,7 +40,6 @@ services:
           CHART_NAME: "{{tag 'form.pipeline.parameters.chart-name'}}"
           KUBE_CLUSTER_NAME: "{{tag 'form.pipeline.parameters.kube-cluster-name'}}"
           CLUSTER_NAMESPACE: "{{tag 'form.pipeline.parameters.cluster-namespace'}}"
-          IMAGE_REGISTRY_TOKEN: "{{tag 'form.pipeline.parameters.image-registry-token'}}"
           REGISTRY_NAMESPACE: "{{tag 'form.pipeline.parameters.registry-namespace'}}"
           {{/has}}
           {{#has deployment.type 'CF'}}
@@ -86,8 +85,6 @@ form:
       chart-name: {{deployment.chartName}}
       kube-cluster-name: {{deployment.kubeClusterName}}
       cluster-namespace: {{deployment.kubeClusterNamespace}}
-      image-pull-secret-name: "{{tag 'image-pull-secret-name'}}"
-      image-registry-token: "{{tag 'image-registry-token'}}"
       registry-namespace: {{deployment.imageRegistryNamespace}}
       {{/has}}
       {{#has deployment.type 'CF'}}

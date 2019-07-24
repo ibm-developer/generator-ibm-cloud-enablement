@@ -38,7 +38,6 @@ services:
           CHART_NAME: "{{form.pipeline.parameters.chart-name}}"
           KUBE_CLUSTER_NAME: "{{form.pipeline.parameters.kube-cluster-name}}"
           CLUSTER_NAMESPACE: "{{form.pipeline.parameters.cluster-namespace}}"
-          IMAGE_REGISTRY_TOKEN: "{{form.pipeline.parameters.image-registry-token}}"
           REGISTRY_NAMESPACE: "{{form.pipeline.parameters.registry-namespace}}"
           REGION_ID: "{{form.pipeline.parameters.dev-region}}"
         execute: true
@@ -60,6 +59,4 @@ form:
       chart-name: myapplication
       kube-cluster-name: my_kube_cluster
       cluster-namespace: my_kube_namespace
-      image-pull-secret-name: "{{image-pull-secret-name}}"
-      image-registry-token: "{{image-registry-token}}"
       registry-namespace: my_registry_ns

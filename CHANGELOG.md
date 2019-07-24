@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.36"></a>
+## [1.7.36](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.35...v1.7.36) (2019-07-24)
+
+
+### Bug Fixes
+
+* remove image registry token ([138a29a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/138a29a))
+
+
+
 <a name="1.7.35"></a>
 ## [1.7.35](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.34...v1.7.35) (2019-07-23)
 
