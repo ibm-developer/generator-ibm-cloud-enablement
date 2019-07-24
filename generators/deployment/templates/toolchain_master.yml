@@ -85,7 +85,6 @@ form:
       chart-name: {{deployment.chartName}}
       kube-cluster-name: {{deployment.kubeClusterName}}
       cluster-namespace: {{deployment.kubeClusterNamespace}}
-      image-pull-secret-name: "{{tag 'image-pull-secret-name'}}"
       registry-namespace: {{deployment.imageRegistryNamespace}}
       {{/has}}
       {{#has deployment.type 'CF'}}

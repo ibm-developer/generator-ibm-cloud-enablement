@@ -59,5 +59,4 @@ form:
       chart-name: myapplication
       kube-cluster-name: my_kube_cluster
       cluster-namespace: my_kube_namespace
-      image-pull-secret-name: "{{image-pull-secret-name}}"
       registry-namespace: my_registry_ns
