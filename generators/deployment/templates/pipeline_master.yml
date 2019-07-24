@@ -138,9 +138,6 @@ stages:
   - name: CLUSTER_NAMESPACE
     value: ${CLUSTER_NAMESPACE}
     type: text
-  - name: IMAGE_REGISTRY_TOKEN
-    value: ${IMAGE_REGISTRY_TOKEN}
-    type: text
   {{/has}}
   triggers:
   - type: stage
@@ -215,9 +212,6 @@ stages:
   properties:
   - name: CLUSTER_NAMESPACE
     value: ${CLUSTER_NAMESPACE}
-    type: text
-  - name: IMAGE_REGISTRY_TOKEN
-    value: ${IMAGE_REGISTRY_TOKEN}
     type: text
   - name: buildProperties
     value: build.properties

@@ -93,7 +93,7 @@ describe('cloud-enablement:deployment', function () {
 	let cfeeOptions = {
 		bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment('NODE', 'CFEE'))
 	};
-	
+
 	describe(`cloud-enablement:deployment CFEE for language Node`, function () {
 		beforeEach(function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
@@ -118,7 +118,7 @@ describe('cloud-enablement:deployment', function () {
 		});
 
 	});
-	
+
 	languages.forEach(lang => {
 		let kubeOptions = {
 			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube'))
@@ -158,12 +158,10 @@ describe('cloud-enablement:deployment', function () {
 
 				let properties = deployJson.properties;
 				assert(properties['api-key']);
-				assert(properties['image-registry-token']);
 				assert(properties['kube-cluster-name']);
 
 				assert(deployJson.required);
 				assert(deployJson.required.includes('api-key'));
-				assert(deployJson.required.includes('image-registry-token'));
 				assert(deployJson.required.includes('kube-cluster-name'));
 
 				let form = deployJson.form;
@@ -171,11 +169,6 @@ describe('cloud-enablement:deployment', function () {
 					return val.key === 'api-key';
 				});
 				assert(formApiKey);
-
-				let formRegistryToken = form.find(function (val) {
-					return val.key === 'image-registry-token';
-				});
-				assert(formRegistryToken);
 
 				let clusterName = form.find(function (val) {
 					return val.key === 'kube-cluster-name';
