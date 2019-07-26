@@ -12,7 +12,7 @@ export FLASK_APP=server/__init__.py
 python manage.py start 0.0.0.0:3000
 {{/has}}
 {{#has deployment.language 'DJANGO'}}
-gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE=PythonDjangoBasicFSWSH.settings.production {{deployment.name}}.wsgi --timeout 120
+gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE={{deployment.name}}.settings.production {{deployment.name}}.wsgi --timeout 120
 {{/has}}
 {{#has deployment.language 'SWIFT'}}
 pkill swift
