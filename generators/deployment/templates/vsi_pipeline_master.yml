@@ -191,7 +191,7 @@ stages:
       echo 'echo "deb http://archive.debian.org/debian jessie-backports main" >> /etc/apt/sources.list' >> scripts/install.sh
       echo 'echo "Acquire::Check-Valid-Until \"false\";" > /etc/apt/apt.conf.d/100disablechecks' >> scripts/install.sh
       echo 'apt-get -o Acquire::Check-Valid-Until=false update' >> scripts/install.sh
-      echo 'apt-get install -y -t jessie-backports openjdk-8-jre' >> scripts/install.sh
+      echo 'apt-get install -y -t jessie-backports openjdk-8-jre unzip' >> scripts/install.sh
       echo "install.sh updated"
       cat scripts/install.sh
       rsync -arv -e "ssh -i ssh_private_key" scripts/install.sh root@$VSI_HOST:app
@@ -205,7 +205,7 @@ stages:
       echo 'echo "deb http://archive.debian.org/debian jessie-backports main" >> /etc/apt/sources.list' >> scripts/install.sh
       echo 'echo "Acquire::Check-Valid-Until \"false\";" > /etc/apt/apt.conf.d/100disablechecks' >> scripts/install.sh
       echo 'apt-get -o Acquire::Check-Valid-Until=false update' >> scripts/install.sh
-      echo 'apt-get install -y -t jessie-backports openjdk-8-jre' >> scripts/install.sh
+      echo 'apt-get install -y -t jessie-backports openjdk-8-jre unzip' >> scripts/install.sh
       echo "install.sh updated"
       cat scripts/install.sh
       rsync -arv -e "ssh -i ssh_private_key" scripts/install.sh root@$VSI_HOST:app
