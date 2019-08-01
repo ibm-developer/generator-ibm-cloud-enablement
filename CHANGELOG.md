@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.38"></a>
+## [1.7.38](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.37...v1.7.38) (2019-08-01)
+
+
+### Bug Fixes
+
+* missing pip requirements ([2fd78ba](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2fd78ba))
+* missing unzip package ([a561301](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/a561301))
+
+
+
 <a name="1.7.37"></a>
 ## [1.7.37](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.36...v1.7.37) (2019-07-26)
 
