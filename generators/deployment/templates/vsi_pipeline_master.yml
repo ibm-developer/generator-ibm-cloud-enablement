@@ -192,10 +192,10 @@ stages:
       VSI_HOST=$(cat hostip.txt)
 
     {{#has deployment.language 'JAVA'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; source install.sh"
+      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
     {{/has}}
     {{#has deployment.language 'SPRING'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; source install.sh"
+      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
     {{/has}}
     {{#has deployment.language 'NODE'}}
       ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
