@@ -310,7 +310,7 @@ describe('cloud-enablement:vsi', function () {
 			assert.fileContent('debian/install', 'target/appname-1.0-SNAPSHOT.jar');
 			assert.fileContent('terraform/scripts/start.sh', 'java -Dserver.port=3000 -jar appname-1.0-SNAPSHOT.jar');
 			assert.fileContent('terraform/scripts/build.sh', 'mvn clean install');
-			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y -t jessie-backports openjdk-8-jre');
+			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y -t openjdk-8-jre');
 			assert.fileContent('debian/control', 'appname');
 		});
 	});
