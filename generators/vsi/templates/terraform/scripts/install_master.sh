@@ -29,7 +29,7 @@ cd -
 {{/has}}
 {{#has deployment.language 'SPRING'}}
 apt-get update
-apt-get install -y -t  openjdk-8-jre unzip
+apt-get install -y -t openjdk-8-jre unzip
 {{/has}}
 {{#has deployment.language 'JAVA'}}
 apt-get update
