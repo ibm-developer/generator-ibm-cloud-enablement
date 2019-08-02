@@ -26,7 +26,7 @@ resource "ibm_compute_ssh_key" "ssh_key_gip" {
 resource "ibm_compute_vm_instance" "vm1" {
     hostname = "${var.vi_instance_name}"
     domain = "example.com"
-    os_reference_code = "DEBIAN_10_64"
+    os_reference_code = "DEBIAN_9_64"
     datacenter = "${var.datacenter}"
     network_speed = 100
     hourly_billing = true
