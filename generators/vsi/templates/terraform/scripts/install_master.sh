@@ -11,8 +11,7 @@ nvm install 8.16.0
 apt-get install -y python3-pip
 {{/has}}
 {{#has deployment.language 'DJANGO'}}
-wget --no-check-certificate https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tgz
-tar -xzf Python-2.7.11.tgz
+apt-get install -y python3-pip
 {{/has}}
 {{#has deployment.language 'SWIFT'}}
 apt-get install -y libatomic1 libpython2.7 libcurl4-openssl-dev
