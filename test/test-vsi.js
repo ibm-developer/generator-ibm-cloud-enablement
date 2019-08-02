@@ -227,7 +227,7 @@ describe('cloud-enablement:vsi', function () {
 			assert.fileContent('debian/install', 'requirements.txt');
 			assert.fileContent('terraform/scripts/start.sh', 'gunicorn -b 0.0.0.0:3000 --env DJANGO_SETTINGS_MODULE');
 			assert.fileContent('terraform/scripts/build.sh', 'pip install -r requirements.txt');
-			assert.fileContent('terraform/scripts/install.sh', 'wget --no-check-certificate https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tgz');
+			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y python3-pip');
 			assert.fileContent('debian/control', 'appname');
 
 			assert.fileContent('debian/install', 'appname');
@@ -334,7 +334,7 @@ describe('cloud-enablement:vsi', function () {
 			assert.fileContent('debian/install', 'target/liberty/wlp/usr/servers/defaultServer/appname.zip');
 			assert.fileContent('terraform/scripts/start.sh', 'wlp/bin/server start');
 			assert.fileContent('terraform/scripts/build.sh', 'mvn clean install');
-			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y -t jessie-backports openjdk-8-jre');
+			assert.fileContent('terraform/scripts/install.sh', 'apt-get install -y -t openjdk-8-jre');
 			assert.fileContent('debian/control', 'appname');
 		});
 	});
