@@ -28,12 +28,10 @@ ldconfig
 cd -
 {{/has}}
 {{#has deployment.language 'SPRING'}}
-echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list
 apt-get update
-apt-get install -y -t jessie-backports openjdk-8-jre
+apt-get install -y -t  openjdk-8-jre unzip
 {{/has}}
 {{#has deployment.language 'JAVA'}}
-echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list
 apt-get update
-apt-get install -y -t jessie-backports openjdk-8-jre unzip
+apt-get install -y -t openjdk-8-jre unzip
 {{/has}}
