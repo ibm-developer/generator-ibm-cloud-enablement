@@ -103,7 +103,7 @@ stages:
     docker_image: python:3
     {{/has}}
     {{#has deployment.language 'SWIFT'}}
-    docker_image: ibmcom/swift-ubuntu:4.1.2
+    docker_image: ibmcom/swift-ubuntu:5.0.1
     {{/has}}
     {{#has deployment.language 'SPRING'}}
     docker_image: maven:3-jdk-8
@@ -179,38 +179,8 @@ stages:
       set -eo pipefail
       apk add --no-cache openssh rsync
       VSI_HOST=$(cat hostip.txt)
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "apt-get update; apt-get install rsync; mkdir -p app"
+      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "echo 'deb  http://deb.debian.org/debian  stretch main'>>/etc/apt/sources.list; echo 'deb-src  http://deb.debian.org/debian  stretch main'>>/etc/apt/sources.list; apt-get update; apt-get install rsync; mkdir -p app"
       rsync -arv -e "ssh -i ssh_private_key" {{name}}-0.0_1-1_all.deb root@$VSI_HOST:app
-
-    {{#has deployment.language 'JAVA'}}
-      echo "scripts/install.sh initial"
-      cat scripts/install.sh
-      # https://unix.stackexchange.com/questions/508724/failed-to-fetch-jessie-backports-repository
-      echo "apt-get update" > scripts/install.sh
-      echo "apt-get install -f" >> scripts/install.sh
-      echo 'echo "deb http://archive.debian.org/debian jessie-backports main" >> /etc/apt/sources.list' >> scripts/install.sh
-      echo 'echo "Acquire::Check-Valid-Until \"false\";" > /etc/apt/apt.conf.d/100disablechecks' >> scripts/install.sh
-      echo 'apt-get -o Acquire::Check-Valid-Until=false update' >> scripts/install.sh
-      echo 'apt-get install -y -t jessie-backports openjdk-8-jre unzip' >> scripts/install.sh
-      echo "install.sh updated"
-      cat scripts/install.sh
-      rsync -arv -e "ssh -i ssh_private_key" scripts/install.sh root@$VSI_HOST:app
-    {{/has}}
-    {{#has deployment.language 'SPRING'}}
-      echo "scripts/install.sh initial"
-      cat scripts/install.sh
-      # https://unix.stackexchange.com/questions/508724/failed-to-fetch-jessie-backports-repository
-      echo "apt-get update" > scripts/install.sh
-      echo "apt-get install -f" >> scripts/install.sh
-      echo 'echo "deb http://archive.debian.org/debian jessie-backports main" >> /etc/apt/sources.list' >> scripts/install.sh
-      echo 'echo "Acquire::Check-Valid-Until \"false\";" > /etc/apt/apt.conf.d/100disablechecks' >> scripts/install.sh
-      echo 'apt-get -o Acquire::Check-Valid-Until=false update' >> scripts/install.sh
-      echo 'apt-get install -y -t jessie-backports openjdk-8-jre unzip' >> scripts/install.sh
-      echo "install.sh updated"
-      cat scripts/install.sh
-      rsync -arv -e "ssh -i ssh_private_key" scripts/install.sh root@$VSI_HOST:app
-    {{/has}}
-    
     docker_image: alpine
   - name: Install
     type: builder
@@ -220,28 +190,8 @@ stages:
       #!/bin/bash
       set -eo pipefail
       VSI_HOST=$(cat hostip.txt)
+      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
 
-    {{#has deployment.language 'JAVA'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; source install.sh"
-    {{/has}}
-    {{#has deployment.language 'SPRING'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; source install.sh"
-    {{/has}}
-    {{#has deployment.language 'NODE'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
-    {{/has}}
-    {{#has deployment.language 'PYTHON'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
-    {{/has}}
-    {{#has deployment.language 'DJANGO'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
-    {{/has}}
-    {{#has deployment.language 'SWIFT'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
-    {{/has}}
-    {{#has deployment.language 'GO'}}
-      ssh -o StrictHostKeyChecking=no -i ssh_private_key root@$VSI_HOST "rm -rf /usr/src/{{name}}; cd app; dpkg -i {{name}}-0.0_1-1_all.deb; cd /usr/src/{{name}}; source install.sh"
-    {{/has}}
   - name: Start
     type: builder
     artifact_dir: ''
