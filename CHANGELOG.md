@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.7.40"></a>
+## [1.7.40](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.39...v1.7.40) (2019-08-07)
+
+
+### Bug Fixes
+
+* VSI deployment fixes ([4702b16](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4702b16))
+
+
+
 <a name="1.7.39"></a>
 ## [1.7.39](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.38...v1.7.39) (2019-08-07)
 
