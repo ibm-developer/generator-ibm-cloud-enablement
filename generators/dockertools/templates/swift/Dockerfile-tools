@@ -1,6 +1,6 @@
-FROM ibmcom/swift-ubuntu:5.0.1
+FROM swift:5.0.2
 LABEL maintainer="IBM Swift Engineering at IBM Cloud"
-LABEL Description="Template Dockerfile that extends the ibmcom/swift-ubuntu image."
+LABEL Description="Template Dockerfile that extends the swift image."
 
 # We can replace this port with what the user wants
 EXPOSE 8080 1024 1025
@@ -18,6 +18,9 @@ RUN apt-get update && apt-get dist-upgrade -y && apt-get install -y \
 {{else}}
 # RUN apt-get update && apt-get dist-upgrade -y
 {{/ifCond}}
+
+# Include base Kitura dependencies
+RUN apt-get update && apt-get install -y sudo libssl-dev libcurl4-openssl-dev
 
 # Add utils files
 ADD https://raw.githubusercontent.com/IBM-Swift/swift-ubuntu-docker/master/utils/tools-utils.sh /swift-utils/tools-utils.sh
