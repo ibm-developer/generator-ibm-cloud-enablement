@@ -11,9 +11,7 @@ nvm install 8.16.0
 apt-get install -y python3-pip
 {{/has}}
 {{#has deployment.language 'DJANGO'}}
-wget --no-check-certificate https://www.python.org/ftp/python/2.7.11/Python-2.7.11.tgz
-tar -xzf Python-2.7.11.tgz
-pip install -r requirements.txt
+apt-get install -y python3-pip
 {{/has}}
 {{#has deployment.language 'SWIFT'}}
 apt-get install -y libatomic1 libpython2.7 libcurl4-openssl-dev
@@ -30,12 +28,12 @@ ldconfig
 cd -
 {{/has}}
 {{#has deployment.language 'SPRING'}}
-echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list
-apt-get update
-apt-get install -y -t jessie-backports openjdk-8-jre
+echo "Acquire::Check-Valid-Until \"false\";" > /etc/apt/apt.conf.d/100disablechecks
+apt-get -o Acquire::Check-Valid-Until=false update
+apt-get install -y openjdk-8-jre unzip
 {{/has}}
 {{#has deployment.language 'JAVA'}}
-echo "deb http://http.debian.net/debian jessie-backports main" >> /etc/apt/sources.list
-apt-get update
-apt-get install -y -t jessie-backports openjdk-8-jre unzip
+echo "Acquire::Check-Valid-Until \"false\";" > /etc/apt/apt.conf.d/100disablechecks
+apt-get -o Acquire::Check-Valid-Until=false update
+apt-get install -y openjdk-8-jre unzip
 {{/has}}
