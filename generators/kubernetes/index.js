@@ -76,6 +76,7 @@ module.exports = class extends Generator {
 			chart: {source : 'Chart.yaml', target : 'chartDir/Chart.yaml', process: true},
 			deployment: {source : 'deployment.yaml', target : 'chartDir/templates/deployment.yaml', process: true},
 			service: {source : 'service.yaml', target : 'chartDir/templates/service.yaml', process: false},
+			serviceKnative: {source : 'service-knative.yaml', target : '.bluemix/service-knative.yaml', process: true},
 			hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
 			istio: {source : 'istio.yaml', target : 'chartDir/templates/istio.yaml', process: true},
 			basedeployment: {source : 'basedeployment.yaml', target : 'chartDir/templates/basedeployment.yaml', process: true},
@@ -115,6 +116,12 @@ module.exports = class extends Generator {
 			this.opts.kubeClusterNamespace =
 				this.bluemix.server && this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
 					this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace : 'default';
+			if (this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeDeploymentType) {
+				this.opts.kubeDeploymentType = this.bluemix.server.cloudDeploymentOptions.kubeDeploymentType;
+				if (Utils.sanitizeAlphaNumLowerCase(this.bluemix.server.cloudDeploymentOptions.kubeDeploymentType) === 'helm') {
+					delete this.fileLocations.serviceKnative; // remove knative service yaml file when not needed
+				}
+			}
 		} else {
 			// TODO(gib): we seem to be hitting this, not sure how.
 

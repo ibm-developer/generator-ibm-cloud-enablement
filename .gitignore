@@ -45,6 +45,8 @@ test/tmp
 .idea
 .vscode
 
+.floo*
+
 # output from generator 
 # Dockerfile
 # Dockerfile-tools

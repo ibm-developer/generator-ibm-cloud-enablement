@@ -144,19 +144,35 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       export PATH="downloads:$PATH"
-      IP_ADDR=$(ibmcloud cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
-      if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
-        RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"
-      else
-        RELEASE_NAME=${IMAGE_NAME}
-      fi
-      echo "RELEASE_NAME: $RELEASE_NAME"
+      if [[ "$KUBE_DEPLOY_TYPE" == "KNATIVE" ]]; then
+        kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.url'
+        TEMP_URL=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.url' )
+        TEMP_URL=${TEMP_URL%\"} # remove end quote
+        TEMP_URL=${TEMP_URL#\"} # remove beginning quote
+        export APPLICATION_URL=$TEMP_URL
 
-      PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
-      if [ "$(curl -is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint at http://$IP_ADDR:$PORT/health"
-        echo "====================================================================="
+        if [ "$(curl -is $APPLICATION_URL/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+          echo "Successfully reached health endpoint at $APPLICATION_URL/health"
+          echo "====================================================================="
+        else
+          echo "Could not reach health endpoint: $APPLICATION_URL/health"
+          exit 1;
+        fi;
       else
-        echo "Could not reach health endpoint: http://$IP_ADDR:$PORT/health"
-        exit 1;
+        IP_ADDR=$(ibmcloud cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
+        if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
+          RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"
+        else
+          RELEASE_NAME=${IMAGE_NAME}
+        fi
+        echo "RELEASE_NAME: $RELEASE_NAME"
+
+        PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
+        if [ "$(curl -is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+          echo "Successfully reached health endpoint at http://$IP_ADDR:$PORT/health"
+          echo "====================================================================="
+        else
+          echo "Could not reach health endpoint: http://$IP_ADDR:$PORT/health"
+          exit 1;
+        fi;
       fi;
