@@ -1,0 +1,15 @@
+---
+apiVersion: serving.knative.dev/v1alpha1
+kind: Service
+metadata:
+  name: {{ applicationName }}
+  namespace: {{ kubeClusterNamespace }}
+spec:
+  runLatest:
+    configuration:
+      revisionTemplate:
+        spec:
+          container:
+            image: {{ repositoryURL }}{{ applicationName }}
+            ports:
+              - containerPort: {{ servicePorts.http }}

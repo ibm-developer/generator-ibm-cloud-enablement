@@ -69,6 +69,9 @@ module.exports = class extends Generator {
 			if (!this.deployment.imageRegistryNamespace) {
 				this.deployment.imageRegistryNamespace = 'my_registry_ns';
 			}
+			if (this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeDeploymentType) {
+				this.deployment.kubeDeploymentType = this.bluemix.server.cloudDeploymentOptions.kubeDeploymentType;
+			}
 		} else {
 			this.name = this.bluemix.name;
 			this.manifestConfig.name = this.bluemix.name;
@@ -349,7 +352,11 @@ module.exports = class extends Generator {
 			deployment: this.deployment
 		});
 
-		this._writeHandlebarsFile('kube_deploy.sh', '.bluemix/scripts/kube_deploy.sh', {
+		let kubeDeployTemplate = 'kube_deploy.sh';
+		if (this.deployment.kubeDeploymentType && Utils.sanitizeAlphaNumLowerCase(this.deployment.kubeDeploymentType) === 'knative') {
+			kubeDeployTemplate = 'kube_deploy_knative.sh';
+		}
+		this._writeHandlebarsFile(kubeDeployTemplate, '.bluemix/scripts/kube_deploy.sh', {
 			deployment: this.deployment
 		});
 
