@@ -25,6 +25,7 @@ const pipelineKubeSample = fs.readFileSync(path.join(__dirname, 'samples/pipelin
 const pipelineKubeSampleSwift = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-swift.yml'), 'utf-8');
 const pipelineKubeSampleJava = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-java.yml'), 'utf-8');
 const toolchainKubeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube.yml'), 'utf-8');
+const toolchainKubeKnativeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube-knative.yml'), 'utf-8');
 
 const pipelineCFSample = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cf.yml'), 'utf-8');
 const pipelineCFEESample = fs.readFileSync(path.join(__dirname, 'samples/pipeline-cfee.yml'), 'utf-8');
@@ -121,7 +122,7 @@ describe('cloud-enablement:deployment', function () {
 
 	languages.forEach(lang => {
 		let kubeOptions = {
-			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube'))
+			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube', 'Helm'))
 		};
 
 		describe(`cloud-enablement:deployment Kube for language ${lang}`, function () {
@@ -141,6 +142,72 @@ describe('cloud-enablement:deployment', function () {
 
 			it('has toolchain.yml with correct content', function () {
 				assert.fileContent('.bluemix/toolchain.yml', toolchainKubeSample);
+			});
+
+			it('has pipeline.yml with correct content', function () {
+				if (lang === 'JAVA' || lang === 'SPRING') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleJava);
+				} else if (lang === 'SWIFT') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleSwift);
+				} else {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSample);
+				}
+			});
+
+			it('has deploy.json with correct content', function () {
+				let deployJson = JSON.parse(fs.readFileSync('.bluemix/deploy.json', 'utf8'));
+
+				let properties = deployJson.properties;
+				assert(properties['api-key']);
+				assert(properties['kube-cluster-name']);
+
+				assert(deployJson.required);
+				assert(deployJson.required.includes('api-key'));
+				assert(deployJson.required.includes('kube-cluster-name'));
+
+				let form = deployJson.form;
+				let formApiKey = form.find(function (val) {
+					return val.key === 'api-key';
+				});
+				assert(formApiKey);
+
+				let clusterName = form.find(function (val) {
+					return val.key === 'kube-cluster-name';
+				});
+				assert(clusterName);
+			});
+
+			it('replaces Kube cluster name in hpa.yaml', function () {
+				let chartFile = chartLocation + '/templates/hpa.yaml';
+				assert.fileContent(chartFile, 'namespace: my_kube_namespace');
+			});
+		});
+	});
+
+	// test knative deployment
+	languages.forEach(lang => {
+		let kubeOptions = {
+			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube', 'Knative'))
+		};
+
+		describe(`cloud-enablement:deployment Kube+Knative for language ${lang}`, function () {
+			beforeEach(function () {
+				return helpers.run(path.join(__dirname, '../generators/app'))
+					.inDir(path.join(__dirname, './tmp'))
+					.withOptions(kubeOptions);
+			});
+
+			it('has all files', function () {
+				assert.file('.bluemix/toolchain.yml');
+				assert.file('.bluemix/pipeline.yml');
+				assert.file('.bluemix/service-knative.yaml');
+				assert.file('.bluemix/deploy.json');
+				assert.file('.bluemix/scripts/container_build.sh');
+				assert.file('.bluemix/scripts/kube_deploy.sh');
+			});
+
+			it('has toolchain.yml with correct content', function () {
+				assert.fileContent('.bluemix/toolchain.yml', toolchainKubeKnativeSample);
 			});
 
 			it('has pipeline.yml with correct content', function () {

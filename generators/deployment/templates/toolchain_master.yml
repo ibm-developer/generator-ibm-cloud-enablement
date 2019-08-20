@@ -40,6 +40,7 @@ services:
           CHART_NAME: "{{tag 'form.pipeline.parameters.chart-name'}}"
           KUBE_CLUSTER_NAME: "{{tag 'form.pipeline.parameters.kube-cluster-name'}}"
           CLUSTER_NAMESPACE: "{{tag 'form.pipeline.parameters.cluster-namespace'}}"
+          KUBE_DEPLOY_TYPE: "{{tag 'form.pipeline.parameters.kube-deployment-type'}}"
           REGISTRY_NAMESPACE: "{{tag 'form.pipeline.parameters.registry-namespace'}}"
           {{/has}}
           {{#has deployment.type 'CF'}}
@@ -85,6 +86,7 @@ form:
       chart-name: {{deployment.chartName}}
       kube-cluster-name: {{deployment.kubeClusterName}}
       cluster-namespace: {{deployment.kubeClusterNamespace}}
+      kube-deployment-type: {{deployment.kubeDeploymentType}}
       registry-namespace: {{deployment.imageRegistryNamespace}}
       {{/has}}
       {{#has deployment.type 'CF'}}
