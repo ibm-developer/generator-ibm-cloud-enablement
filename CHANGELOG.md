@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.8.0"></a>
+# [1.8.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.40...v1.8.0) (2019-08-20)
+
+
+### Features
+
+* knative service.yml support ([1d2ec15](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/1d2ec15))
+* knative support ([a92829a](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/a92829a))
+
+
+
 <a name="1.7.40"></a>
 ## [1.7.40](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.7.39...v1.7.40) (2019-08-07)
 

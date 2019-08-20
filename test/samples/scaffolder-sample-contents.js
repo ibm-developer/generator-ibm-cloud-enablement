@@ -282,7 +282,10 @@ class scaffolderSample {
 		}
 	}
 
-	serverDeployment(deploymentType) {
+	/*
+	 * kubeDeploymentType: optional; only used if cloudDeploymentType is Kube; expects Helm or Knative
+	 */
+	serverDeployment(deploymentType, kubeDeploymentType) {
 		let bluemix = {
 			"name": "AcmeProject",
 			"server": {
@@ -304,6 +307,9 @@ class scaffolderSample {
 					kubeClusterName: 'my_kube_cluster',
 					kubeClusterNamespace: 'my_kube_namespace'
 				};
+				if (kubeDeploymentType) {
+					bluemix.server.cloudDeploymentOptions.kubeDeploymentType = kubeDeploymentType;
+				}
 			}
 		}
 

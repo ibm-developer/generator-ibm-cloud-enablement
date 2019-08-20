@@ -128,8 +128,25 @@ module.exports = class extends Generator {
 
 		prompts.push({
 			type: 'input',
+			name: 'kubeClusterNamespace',
+			message: 'Kube Cluster Namespace',
+			default: 'default'
+		});
+
+		prompts.push({
+			type: 'list',
+			name: 'kubeDeploymentType',
+			message: 'Kube Deployment Type',
+			choices: [
+				'HELM',
+				'KNATIVE'
+			]
+		});
+
+		prompts.push({
+			type: 'input',
 			name: 'createType',
-			message: 'ie basic, blank, ect.',
+			message: 'App Type ie basic, blank, ect.',
 			default: path.basename(process.cwd())
 		});
 
@@ -139,12 +156,23 @@ module.exports = class extends Generator {
 	configuring() {}
 
 	_processAnswers(answers) {
+		if (!this.bluemix.server) {
+			this.bluemix.server = {};
+			this.bluemix.server.cloudDeploymentOptions = {};
+		}
 		this.bluemix.backendPlatform = answers.language;
 		this.bluemix.name = answers.name;
 		this.bluemix.sanitizedName = Utils.sanitizeAlphaNumDash(answers.name);
 		answers.dockerRegistry = answers.dockerRegistry.trim();
 		this.bluemix.dockerRegistry = answers.dockerRegistry.length > 0 ? answers.dockerRegistry : '';
+		if (this.bluemix.dockerRegistry.length > 0) {
+			this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace = this.bluemix.dockerRegistry;
+		}
 		this.bluemix.cloudDeploymentType = answers.deploymentType;
+		this.bluemix.server.cloudDeploymentOptions.kubeDeploymentType = answers.kubeDeploymentType;
+		if (this.bluemix.server && this.bluemix.server.cloudDeploymentOptions) {
+			this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace = answers.kubeClusterNamespace;
+		}
 		this.opts.createType = answers.createType;
 	}
 

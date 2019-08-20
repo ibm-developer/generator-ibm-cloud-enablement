@@ -35,9 +35,9 @@ function getJsonNoServer(language) {
 	return get(language, bluemix);
 }
 
-function getJsonServerWithDeployment(language, deploymentType) {
+function getJsonServerWithDeployment(language, deploymentType, kubeDeploymentType) {
 	let scaffolderSample = new sample.scaffolderSample();
-	let bluemix = scaffolderSample.serverDeployment(deploymentType);
+	let bluemix = scaffolderSample.serverDeployment(deploymentType, kubeDeploymentType);
 	return get(language, bluemix);
 }
 

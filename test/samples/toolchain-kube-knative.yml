@@ -60,5 +60,5 @@ form:
       chart-name: myapplication
       kube-cluster-name: my_kube_cluster
       cluster-namespace: my_kube_namespace
-      kube-deployment-type: Helm
+      kube-deployment-type: Knative
       registry-namespace: my_registry_ns
