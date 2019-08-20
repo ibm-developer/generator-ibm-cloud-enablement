@@ -5,11 +5,9 @@ metadata:
   name: {{ applicationName }}
   namespace: {{ kubeClusterNamespace }}
 spec:
-  runLatest:
-    configuration:
-      revisionTemplate:
-        spec:
-          container:
-            image: {{ repositoryURL }}{{ applicationName }}
-            ports:
-              - containerPort: {{ servicePorts.http }}
+  template:
+    spec:
+      containers:
+        - image: {{ repositoryURL }}{{ applicationName }}
+          ports:
+            - containerPort: {{ servicePorts.http }}
