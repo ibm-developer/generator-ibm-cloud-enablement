@@ -146,7 +146,7 @@ module.exports = class extends Generator {
 		prompts.push({
 			type: 'input',
 			name: 'createType',
-			message: 'ie basic, blank, ect.',
+			message: 'App Type ie basic, blank, ect.',
 			default: path.basename(process.cwd())
 		});
 
