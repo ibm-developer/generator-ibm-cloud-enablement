@@ -169,6 +169,7 @@ module.exports = class extends Generator {
 			this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace = this.bluemix.dockerRegistry;
 		}
 		this.bluemix.cloudDeploymentType = answers.deploymentType;
+		this.bluemix.server.cloudDeploymentType = answers.deploymentType;
 		this.bluemix.server.cloudDeploymentOptions.kubeDeploymentType = answers.kubeDeploymentType;
 		if (this.bluemix.server && this.bluemix.server.cloudDeploymentOptions) {
 			this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace = answers.kubeClusterNamespace;
