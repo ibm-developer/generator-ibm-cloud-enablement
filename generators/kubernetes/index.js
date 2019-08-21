@@ -112,6 +112,7 @@ module.exports = class extends Generator {
 		if (this.bluemix.server) {
 			const registryNamespace = this.bluemix.server && this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace ?
 				this.bluemix.server.cloudDeploymentOptions.imageRegistryNamespace : 'replace-me-namespace';
+			this.opts.registryNamespace = registryNamespace;
 			this.opts.repositoryURL= `icr.io/${registryNamespace}/`;
 			this.opts.kubeClusterNamespace =
 				this.bluemix.server && this.bluemix.server.cloudDeploymentOptions && this.bluemix.server.cloudDeploymentOptions.kubeClusterNamespace ?
