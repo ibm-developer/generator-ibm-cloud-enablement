@@ -22,8 +22,12 @@ const fs = require('fs');
 const scaffolderSample = require('./samples/scaffolder-sample');
 
 const pipelineKubeSample = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube.yml'), 'utf-8');
+const pipelineKubeSampleKnative = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-knative.yml'), 'utf-8');
 const pipelineKubeSampleSwift = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-swift.yml'), 'utf-8');
+const pipelineKubeSampleSwiftKnative = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-swift-knative.yml'), 'utf-8');
 const pipelineKubeSampleJava = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-java.yml'), 'utf-8');
+const pipelineKubeSampleJavaKnative = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-java-knative.yml'), 'utf-8');
+
 const toolchainKubeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube.yml'), 'utf-8');
 const toolchainKubeKnativeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube-knative.yml'), 'utf-8');
 
@@ -122,7 +126,7 @@ describe('cloud-enablement:deployment', function () {
 
 	languages.forEach(lang => {
 		let kubeOptions = {
-			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube', 'Helm'))
+			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube', 'HELM'))
 		};
 
 		describe(`cloud-enablement:deployment Kube for language ${lang}`, function () {
@@ -187,7 +191,7 @@ describe('cloud-enablement:deployment', function () {
 	// test knative deployment
 	languages.forEach(lang => {
 		let kubeOptions = {
-			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube', 'Knative'))
+			bluemix: JSON.stringify(scaffolderSample.getJsonServerWithDeployment(lang, 'Kube', 'KNATIVE'))
 		};
 
 		describe(`cloud-enablement:deployment Kube+Knative for language ${lang}`, function () {
@@ -212,11 +216,11 @@ describe('cloud-enablement:deployment', function () {
 
 			it('has pipeline.yml with correct content', function () {
 				if (lang === 'JAVA' || lang === 'SPRING') {
-					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleJava);
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleJavaKnative);
 				} else if (lang === 'SWIFT') {
-					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleSwift);
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleSwiftKnative);
 				} else {
-					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSample);
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleKnative);
 				}
 			});
 

@@ -309,6 +309,8 @@ class scaffolderSample {
 				};
 				if (kubeDeploymentType) {
 					bluemix.server.cloudDeploymentOptions.kubeDeploymentType = kubeDeploymentType;
+				} else {
+					bluemix.server.cloudDeploymentOptions.kubeDeploymentType = 'HELM';
 				}
 			}
 		}
