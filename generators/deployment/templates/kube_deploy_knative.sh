@@ -29,7 +29,7 @@ fi
 
 
 # Deploy the most recent revision of the specified image
-kubectl apply -f .bluemix/service-knative.yaml
+sed -e "s/REGISTRY_URL/${REGISTRY_URL}/g" .bluemix/service-knative.yaml | kubectl apply -f -
 
 
 echo "Checking if application is ready..."

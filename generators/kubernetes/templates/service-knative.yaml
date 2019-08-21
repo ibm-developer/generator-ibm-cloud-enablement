@@ -8,6 +8,6 @@ spec:
   template:
     spec:
       containers:
-        - image: {{ repositoryURL }}{{#toLowerCase applicationName}}{{/toLowerCase}}
+        - image: REGISTRY_URL/{{ registryNamespace }}{{#toLowerCase applicationName}}{{/toLowerCase}}
           ports:
             - containerPort: {{ servicePorts.http }}
