@@ -47,7 +47,6 @@ do
 
   if [ \( -n "$SVC_STATUS_NOT_READY" \) -o \( -n "$SVC_STATUS_UNKNOWN" \) ]; then
     sleep 3
-    kubectl describe ksvc/${IMAGE_NAME}
   elif [ -n "$SVC_STATUS_READY" ]; then
     echo "Application is ready"
     break
@@ -56,6 +55,8 @@ do
     sleep 3
   fi
 done
+echo "Application service details:"
+kubectl describe ksvc/${IMAGE_NAME}
 if [ \( -n "$SVC_STATUS_NOT_READY" \) -o \( -n "$SVC_STATUS_UNKNOWN" \) ]; then
   echo "Application is not ready after waiting maximum time"
   exit 1
@@ -64,8 +65,8 @@ fi
 # Determine app url for polling from knative service
 TEMP_URL=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.url' )
 echo "Application status URL: $TEMP_URL"
-TEMP_URL=${ TEMP_URL%\" } # remove end quote
-TEMP_URL=${ TEMP_URL#\" } # remove beginning quote
+TEMP_URL=${TEMP_URL%\"} # remove end quote
+TEMP_URL=${TEMP_URL#\"} # remove beginning quote
 export APPLICATION_URL=$TEMP_URL
 if [ -z "$APPLICATION_URL" ]; then
   echo "Deploy failed, no URL found for knative service"
