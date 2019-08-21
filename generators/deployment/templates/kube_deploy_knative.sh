@@ -63,6 +63,7 @@ fi
 
 # Determine app url for polling from knative service
 TEMP_URL=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.url' )
+echo "Application status URL: $TEMP_URL"
 TEMP_URL=${ TEMP_URL%\" } # remove end quote
 TEMP_URL=${ TEMP_URL#\" } # remove beginning quote
 export APPLICATION_URL=$TEMP_URL
