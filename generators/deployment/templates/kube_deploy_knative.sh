@@ -35,24 +35,25 @@ sed -e "s/REGISTRY_URL/${REGISTRY_URL}/g" .bluemix/service-knative.yaml | kubect
 echo "Checking if application is ready..."
 for ITERATION in {1..30}
 do
+  sleep 3
+
   kubectl get ksvc/${IMAGE_NAME} --output=custom-columns=DOMAIN:.status.conditions[*].status
-  SVC_STATUS_READY=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.conditions[].status|select(. == "True")' )
+  SVC_STATUS_READY=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status?.conditions[]?.status?|select(. == "True")' )
   echo SVC_STATUS_READY=$SVC_STATUS_READY
 
-  SVC_STATUS_NOT_READY=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.conditions[].status|select(. == "False")' )
+  SVC_STATUS_NOT_READY=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status?.conditions[]?.status?|select(. == "False")' )
   echo SVC_STATUS_NOT_READY=$SVC_STATUS_NOT_READY
 
-  SVC_STATUS_UNKNOWN=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.conditions[].status|select(. == "Unknown")' )
+  SVC_STATUS_UNKNOWN=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status?.conditions[]?.status?|select(. == "Unknown")' )
   echo SVC_STATUS_UNKNOWN=$SVC_STATUS_UNKNOWN
 
   if [ \( -n "$SVC_STATUS_NOT_READY" \) -o \( -n "$SVC_STATUS_UNKNOWN" \) ]; then
-    sleep 3
+    echo "Application not ready, retrying"
   elif [ -n "$SVC_STATUS_READY" ]; then
     echo "Application is ready"
     break
   else
-    echo "Application status unknown"
-    sleep 3
+    echo "Application status unknown, retrying"
   fi
 done
 echo "Application service details:"
