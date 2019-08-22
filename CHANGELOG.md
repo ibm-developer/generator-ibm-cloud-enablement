@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.8.5"></a>
+## [1.8.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.8.4...v1.8.5) (2019-08-22)
+
+
+### Bug Fixes
+
+* safe indexing with jq in pipeline ([fd86227](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/fd86227))
+
+
+
 <a name="1.8.4"></a>
 ## [1.8.4](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.8.3...v1.8.4) (2019-08-21)
 
