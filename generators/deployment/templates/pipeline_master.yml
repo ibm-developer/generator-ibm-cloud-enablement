@@ -21,21 +21,32 @@ stages:
   {{/if}}
   {{#has deployment.type 'Kube'}}
   properties:
+  {{#has deployment.kubeDeploymentType 'HELM'}}
   - name: CHART_NAME
     value: ${CHART_NAME}
     type: text
+  {{/has}}
+  {{#has deployment.kubeDeploymentType 'KNATIVE'}}
+  - name: IMAGE_NAME
+    value: ${IMAGE_NAME}
+    type: text
+  {{/has}}
   - name: KUBECTL_VERSION
     value: v1.13.3
     type: text
+  {{#has deployment.kubeDeploymentType 'HELM'}}
   - name: HELM_VERSION
     value: v2.12.3
     type: text
+  {{/has}}
   - name: KUBECTL_DOWNLOAD_URL
     value: https://storage.googleapis.com/kubernetes-release/release/v1.13.3/bin/linux/amd64/kubectl
     type: text
+  {{#has deployment.kubeDeploymentType 'HELM'}}
   - name: HELM_DOWNLOAD_URL
     value: https://kubernetes-helm.storage.googleapis.com/helm-v2.12.3-linux-amd64.tar.gz
     type: text
+  {{/has}}
   {{/has}}
   jobs:
   - name: Build
@@ -52,7 +63,12 @@ stages:
       region_id: ${REGION_ID}
       api_key: ${API_KEY}
     namespace: ${REGISTRY_NAMESPACE}
+    {{#has deployment.kubeDeploymentType 'HELM'}}
     image_name: ${CHART_NAME}
+    {{/has}}
+    {{#has deployment.kubeDeploymentType 'KNATIVE'}}
+    image_name: ${IMAGE_NAME}
+    {{/has}}
     script: |-
       #!/bin/bash
       {{#if config.javaBuildScriptContent}}
@@ -79,7 +95,7 @@ stages:
 
       mkdir downloads
       PATH="downloads:$PATH"
-
+      {{#has deployment.kubeDeploymentType 'HELM'}}
       if [ "$(echo "$(helm version -c)" | grep $HELM_VERSION)" == "" ]; then
         echo "Downloading helm v$HELM_VERSION"
         curl -SsL "$HELM_DOWNLOAD_URL" -o "helm-${HELM_VERSION}-linux-amd64.tar.gz"
@@ -98,6 +114,7 @@ stages:
 
       echo "helm version"
       helm version -c
+      {{/has}}
       echo "kubectl version"
       kubectl version --client
 
@@ -132,9 +149,16 @@ stages:
   - name: buildProperties
     value: build.properties
     type: file
+  {{#has deployment.kubeDeploymentType 'HELM'}}
   - name: CHART_NAME
     value: ${CHART_NAME}
     type: text
+  {{/has}}
+  {{#has deployment.kubeDeploymentType 'KNATIVE'}}
+  - name: IMAGE_NAME
+    value: ${IMAGE_NAME}
+    type: text
+  {{/has}}
   - name: CLUSTER_NAMESPACE
     value: ${CLUSTER_NAMESPACE}
     type: text

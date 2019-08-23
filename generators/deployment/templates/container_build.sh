@@ -49,9 +49,11 @@ mkdir -p $ARCHIVE_DIR
 # build as input and configured with an environment properties file valued 'build.properties'
 # will be able to reuse the env variables in their job shell scripts.
 
+{{#has deployment.kubeDeploymentType 'HELM'}}
 # CHART information from build.properties is used in Helm Chart deployment to set the release name
 CHART_NAME=$(find chart/. -maxdepth 2 -type d -name '[^.]?*' -printf %f -quit)
 echo "CHART_NAME=${CHART_NAME}" >> $ARCHIVE_DIR/build.properties
+{{/has}}
 # IMAGE information from build.properties is used in Helm Chart deployment to set the release name
 echo "IMAGE_NAME=${IMAGE_NAME}" >> $ARCHIVE_DIR/build.properties
 echo "BUILD_NUMBER=${BUILD_NUMBER}" >> $ARCHIVE_DIR/build.properties
@@ -69,7 +71,9 @@ if [ -d ./scripts/ ]; then
   fi
 fi
 
+{{#has deployment.kubeDeploymentType 'HELM'}}
 echo "Copy Helm chart along with the build"
 if [ ! -d $ARCHIVE_DIR/chart/ ]; then # no need to copy if working in ./ already
   cp -r ./chart/ $ARCHIVE_DIR/
 fi
+{{/has}}
