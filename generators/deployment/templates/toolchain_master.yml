@@ -40,6 +40,9 @@ services:
           {{#has deployment.kubeDeploymentType 'HELM'}}
           CHART_NAME: "{{tag 'form.pipeline.parameters.chart-name'}}"
           {{/has}}
+          {{#has deployment.kubeDeploymentType 'KNATIVE'}}
+          IMAGE_NAME: "{{tag 'form.pipeline.parameters.image-name'}}"
+          {{/has}}
           KUBE_CLUSTER_NAME: "{{tag 'form.pipeline.parameters.kube-cluster-name'}}"
           CLUSTER_NAMESPACE: "{{tag 'form.pipeline.parameters.cluster-namespace'}}"
           KUBE_DEPLOY_TYPE: "{{tag 'form.pipeline.parameters.kube-deployment-type'}}"
@@ -87,6 +90,9 @@ form:
       {{#has deployment.type 'Kube'}}
       {{#has deployment.kubeDeploymentType 'HELM'}}
       chart-name: {{deployment.chartName}}
+      {{/has}}
+      {{#has deployment.kubeDeploymentType 'KNATIVE'}}
+      image-name: {{deployment.imageName}}
       {{/has}}
       kube-cluster-name: {{deployment.kubeClusterName}}
       cluster-namespace: {{deployment.kubeClusterNamespace}}

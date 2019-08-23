@@ -35,6 +35,7 @@ services:
           REPO: repo
           CF_APP: "{{form.pipeline.parameters.app-name}}"
           API_KEY: "{{form.pipeline.parameters.api-key}}"
+          IMAGE_NAME: "{{form.pipeline.parameters.image-name}}"
           KUBE_CLUSTER_NAME: "{{form.pipeline.parameters.kube-cluster-name}}"
           CLUSTER_NAMESPACE: "{{form.pipeline.parameters.cluster-namespace}}"
           KUBE_DEPLOY_TYPE: "{{form.pipeline.parameters.kube-deployment-type}}"
@@ -56,6 +57,7 @@ form:
       toolchain-name: "{{toolchain-name}}"
       dev-region: "{{region}}"
       api-key: "{{api-key}}"
+      image-name: myapplication
       kube-cluster-name: my_kube_cluster
       cluster-namespace: my_kube_namespace
       kube-deployment-type: KNATIVE
