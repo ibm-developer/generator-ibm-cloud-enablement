@@ -9,20 +9,14 @@ stages:
   triggers:
   - type: commit
   properties:
-  - name: CHART_NAME
-    value: ${CHART_NAME}
+  - name: IMAGE_NAME
+    value: ${IMAGE_NAME}
     type: text
   - name: KUBECTL_VERSION
     value: v1.13.3
     type: text
-  - name: HELM_VERSION
-    value: v2.12.3
-    type: text
   - name: KUBECTL_DOWNLOAD_URL
     value: https://storage.googleapis.com/kubernetes-release/release/v1.13.3/bin/linux/amd64/kubectl
-    type: text
-  - name: HELM_DOWNLOAD_URL
-    value: https://kubernetes-helm.storage.googleapis.com/helm-v2.12.3-linux-amd64.tar.gz
     type: text
   jobs:
   - name: Build
@@ -33,7 +27,7 @@ stages:
       region_id: ${REGION_ID}
       api_key: ${API_KEY}
     namespace: ${REGISTRY_NAMESPACE}
-    image_name: ${CHART_NAME}
+    image_name: ${IMAGE_NAME}
     script: |-
       #!/bin/bash
       echo "Doing Java build"
@@ -53,25 +47,6 @@ stages:
 
       mkdir downloads
       PATH="downloads:$PATH"
-
-      if [ "$(echo "$(helm version -c)" | grep $HELM_VERSION)" == "" ]; then
-        echo "Downloading helm v$HELM_VERSION"
-        curl -SsL "$HELM_DOWNLOAD_URL" -o "helm-${HELM_VERSION}-linux-amd64.tar.gz"
-        tar -zxvf helm-${HELM_VERSION}-linux-amd64.tar.gz
-        chmod 700 linux-amd64/helm
-        mv linux-amd64/helm downloads/helm
-        chmod +x downloads/helm
-      fi
-
-      if [ "$(echo "$(kubectl version --client)" | grep $KUBECTL_VERSION)" == "" ]; then
-        echo "Downloading kubectl v$KUBECTL_VERSION"
-        curl -LO "$KUBECTL_DOWNLOAD_URL"
-        chmod +x kubectl
-        mv kubectl downloads/kubectl
-      fi
-
-      echo "helm version"
-      helm version -c
       echo "kubectl version"
       kubectl version --client
 
@@ -95,8 +70,8 @@ stages:
   - name: buildProperties
     value: build.properties
     type: file
-  - name: CHART_NAME
-    value: ${CHART_NAME}
+  - name: IMAGE_NAME
+    value: ${IMAGE_NAME}
     type: text
   - name: CLUSTER_NAMESPACE
     value: ${CLUSTER_NAMESPACE}
