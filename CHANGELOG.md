@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.9.0"></a>
+# [1.9.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.8.6...v1.9.0) (2019-08-23)
+
+
+### Bug Fixes
+
+* set image name for knative toolchain ([93273f0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/93273f0))
+
+
+### Features
+
+* optimize knative toolchain ([b2c5454](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/b2c5454))
+
+
+
 <a name="1.8.6"></a>
 ## [1.8.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.8.5...v1.8.6) (2019-08-22)
 
