@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.9.1"></a>
+## [1.9.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.9.0...v1.9.1) (2019-08-26)
+
+
+### Bug Fixes
+
+* using json output in pipeline ([f9b5bbc](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f9b5bbc))
+
+
+
 <a name="1.9.0"></a>
 # [1.9.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.8.6...v1.9.0) (2019-08-23)
 
