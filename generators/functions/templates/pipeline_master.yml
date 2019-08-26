@@ -39,11 +39,8 @@ stages:
       ibmcloud login -a ${CF_TARGET_URL} --apikey ${PIPELINE_BLUEMIX_API_KEY}
       ibmcloud target --cf -o ${CF_ORG} -s ${CF_SPACE}
       export MY_SERVICE={{deployment.my_service}}
-      export SERVICE_KEYS=$(bx resource service-keys --instance-name $MY_SERVICE)
-      export SERVICE_GUID=$(echo $SERVICE_KEYS | awk 'BEGIN{FS="Created At "} {print $2}' | awk '{ print $1 }')
-      export CREDENTIALS=$(bx resource service-key $SERVICE_GUID)
-      echo $CREDENTIALS
-      export DATABASE_URL=$(echo $CREDENTIALS | awk 'BEGIN{FS="url: "} {print $2}' | awk '{ print $1 }' |  sed 's/\"//g')
+      export SERVICE_GUID=$(bx resource service-keys --instance-name $MY_SERVICE --output json | jq '.[0].guid' -r)
+      export DATABASE_URL=$(bx resource service-key $SERVICE_GUID --output json | jq '.[0].credentials.url' -r)
       curl -X PUT "$DATABASE_URL/$DATABASE"
       {{/if}}
       chmod +x .bluemix/pipeline-DEPLOY.sh
