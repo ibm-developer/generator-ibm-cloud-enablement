@@ -9,5 +9,6 @@ spec:
     spec:
       containers:
         - image: REGISTRY_URL/{{ registryNamespace }}/{{#toLowerCase applicationName}}{{/toLowerCase}}
+          imagePullPolicy: Always
           ports:
             - containerPort: {{ servicePorts.http }}
