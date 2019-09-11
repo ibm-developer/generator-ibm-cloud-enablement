@@ -25,8 +25,6 @@ else
     echo -e "Registry namespace ${REGISTRY_NAMESPACE} found."
 fi
 
-echo -e "Existing images in registry"
-
 echo "=========================================================="
 echo -e "BUILDING CONTAINER IMAGE: ${IMAGE_NAME}:${BUILD_NUMBER}"
 set -x
