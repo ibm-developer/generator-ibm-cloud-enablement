@@ -85,7 +85,7 @@ form:
     parameters:
       app-name: "{{tag 'app-name'}}"
       toolchain-name: "{{tag 'toolchain-name'}}"
-      dev-region: "{{region}}"
+      dev-region: "{{tag 'deploymentRegion'}}"
       api-key: "{{tag 'api-key'}}"
       {{#has deployment.type 'Kube'}}
       {{#has deployment.kubeDeploymentType 'HELM'}}
@@ -100,14 +100,14 @@ form:
       registry-namespace: {{deployment.imageRegistryNamespace}}
       {{/has}}
       {{#has deployment.type 'CF'}}
-      dev-space: "{{space}}"
-      dev-organization: "{{org}}"
+      dev-space: "{{tag 'deploymentSpace'}}"
+      dev-organization: "{{tag 'deploymentOrg'}}"
       cf-host: "{{tag 'cf-host'}}"
       cf-domain: "{{tag 'cf-domain'}}"
       {{/has}}
       {{#has deployment.type 'CFEE'}}
-      dev-space: "{{space}}"
-      dev-organization: "{{org}}"
+      dev-space: "{{tag 'deploymentSpace'}}"
+      dev-organization: "{{tag 'deploymentOrg'}}"
       cfee-env: "{{tag 'cfee-env'}}"
       cfee-host: "{{tag 'cfee-host'}}"
       cfee-hostname: "{{tag 'cfee-hostname'}}"

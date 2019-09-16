@@ -51,8 +51,8 @@ form:
     schema:
       $ref: deploy.json
     parameters:
-      app-name: {{name}}
-      dev-space: "{{space}}"
-      dev-organization: "{{org}}"
-      dev-region: "{{region}}"
+      app-name: "{{tag 'app-name'}}"
+      dev-space: "{{tag 'deploymentSpace'}}"
+      dev-organization: "{{tag 'deploymentOrg'}}"
+      dev-region: "{{tag 'deploymentRegion'}}"
       api-key: "{{tag 'api-key'}}"
