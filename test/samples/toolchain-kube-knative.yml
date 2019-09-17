@@ -55,7 +55,7 @@ form:
     parameters:
       app-name: "{{app-name}}"
       toolchain-name: "{{toolchain-name}}"
-      dev-region: "{{region}}"
+      dev-region: "{{deploymentRegion}}"
       api-key: "{{api-key}}"
       image-name: myapplication
       kube-cluster-name: my_kube_cluster

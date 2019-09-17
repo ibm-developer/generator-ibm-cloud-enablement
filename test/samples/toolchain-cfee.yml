@@ -56,10 +56,10 @@ form:
     parameters:
       app-name: "{{app-name}}"
       toolchain-name: "{{toolchain-name}}"
-      dev-region: "{{region}}"
+      dev-region: "{{deploymentRegion}}"
       api-key: "{{api-key}}"
-      dev-space: "{{space}}"
-      dev-organization: "{{organization}}"
+      dev-space: "{{deploymentSpace}}"
+      dev-organization: "{{deploymentOrg}}"
       cfee-env: "{{cfee-env}}"
       cfee-host: "{{cfee-host}}"
       cfee-hostname: "{{cfee-hostname}}"
