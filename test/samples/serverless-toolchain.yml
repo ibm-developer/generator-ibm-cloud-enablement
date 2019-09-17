@@ -51,8 +51,8 @@ form:
     schema:
       $ref: deploy.json
     parameters:
-      app-name: AcmeProject
-      dev-space: "{{space}}"
-      dev-organization: "{{organization}}"
-      dev-region: "{{region}}"
+      app-name: "{{app-name}}"
+      dev-space: "{{deploymentSpace}}"
+      dev-organization: "{{deploymentOrg}}"
+      dev-region: "{{deploymentRegion}}"
       api-key: "{{api-key}}"

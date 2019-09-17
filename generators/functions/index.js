@@ -61,10 +61,7 @@ module.exports = class extends Generator {
 		// create .bluemix directory for toolchain/devops related files
 		Utils.writeHandlebarsFile(this, 'toolchain_master.yml', DEV_OPS+'toolchain.yml',
 			{
-				name: this.opts.toolchainName || this.name,
-				org: this.opts.deploymentOrg || "{{organization}}",
-				space: this.opts.deploymentSpace || "{{space}}",
-				region: this.opts.deploymentRegion || "{{region}}",
+				name: this.name,
 				repoType: this.toolchainConfig.repoType,
 				deployment: this.deployment
 			});
