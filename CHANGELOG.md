@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.10.1"></a>
+## [1.10.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.10.0...v1.10.1) (2019-09-19)
+
+
+### Bug Fixes
+
+* typo ([1013312](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/1013312))
+
+
+
 <a name="1.10.0"></a>
 # [1.10.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.9.4...v1.10.0) (2019-09-17)
 
