@@ -75,4 +75,4 @@ if [ -z "$APPLICATION_URL" ]; then
 fi
 echo "Application is available"
 echo "=========================================================="
-echo -e "View the application health at: http://$APPLICATION_URL/health"
+echo -e "View the application health at: $APPLICATION_URL/health"
