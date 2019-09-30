@@ -8,7 +8,7 @@ spec:
   template:
     spec:
       containers:
-        - image: REGISTRY_URL/{{ registryNamespace }}/{{#toLowerCase applicationName}}{{/toLowerCase}}
+        - image: REGISTRY_URL/{{ registryNamespace }}/{{#toLowerCase applicationName}}{{/toLowerCase}}:latest
           imagePullPolicy: Always
           ports:
             - containerPort: {{ servicePorts.http }}
