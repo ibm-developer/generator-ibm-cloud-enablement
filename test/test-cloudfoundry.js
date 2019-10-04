@@ -83,6 +83,11 @@ describe('cloud-enablement:cloudfoundry', function () {
 			assert.fileContent('manifest.yml', 'memory: 1024M');
 		});
 
+		it('manifest.yml has SWIFT_BUILD_DIR_CACHE set to false', function () {
+			assert.file('manifest.yml');
+			assert.fileContent('manifest.yml', 'SWIFT_BUILD_DIR_CACHE : false');
+		});
+
 		it('toolchain.yml repo type is clone', function () {
 			assert.file('.bluemix/toolchain.yml');
 			assert.fileContent('.bluemix/toolchain.yml', 'type: clone');
