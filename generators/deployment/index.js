@@ -204,6 +204,7 @@ module.exports = class extends Generator {
 			// cannot read file or find a command, return to default behavior
 		}
 		this.manifestConfig.command = manifestCommand;
+		this.manifestConfig.env.SWIFT_BUILD_DIR_CACHE = false;
 		this.manifestConfig.memory = this.manifestConfig.memory || '128M';
 		this.pipelineConfig.swift = true;
 		this.cfIgnoreContent = ['.build/*', '.build-ubuntu/*', 'Packages/*'];
