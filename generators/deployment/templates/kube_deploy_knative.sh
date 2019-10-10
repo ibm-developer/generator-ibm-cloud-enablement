@@ -29,7 +29,7 @@ fi
 
 
 # Deploy the most recent revision of the specified image
-sed -e "s/image: REGISTRY_URL/image: ${REGISTRY_URL}/g" .bluemix/service-knative.yaml | 
+sed -e "s/REGISTRY_URL/${REGISTRY_URL}/g" .bluemix/service-knative.yaml | 
 sed -e "s/BUILD_NUMBER/${BUILD_NUMBER}/g" | 
 kubectl apply -f -
 
