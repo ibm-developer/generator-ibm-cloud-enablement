@@ -119,16 +119,17 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       export PATH="downloads:$PATH"
+      export HEALTH_ENDPOINT=health
       kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.url'
       TEMP_URL=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.url' )
       TEMP_URL=${TEMP_URL%\"} # remove end quote
       TEMP_URL=${TEMP_URL#\"} # remove beginning quote
       export APPLICATION_URL=$TEMP_URL
 
-      if [ "$(curl -is $APPLICATION_URL/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint at $APPLICATION_URL/health"
+      if [ "$(curl -is $APPLICATION_URL/$HEALTH_ENDPOINT --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+        echo "Successfully reached health endpoint at $APPLICATION_URL/$HEALTH_ENDPOINT"
         echo "====================================================================="
       else
-        echo "Could not reach health endpoint: $APPLICATION_URL/health"
+        echo "Could not reach health endpoint: $APPLICATION_URL/$HEALTH_ENDPOINT"
         exit 1;
       fi;

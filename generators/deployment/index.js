@@ -80,6 +80,7 @@ module.exports = class extends Generator {
 		}
 
 		this.toolchainConfig.repoType = this.opts.repoType || "clone";
+		this.deployment.backendPlatform = this.bluemix.backendPlatform;
 		switch (this.bluemix.backendPlatform) {
 			case 'NODE':
 				this._configureNode();

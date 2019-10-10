@@ -36,11 +36,20 @@ stages:
     image_name: ${CHART_NAME}
     script: |-
       #!/bin/bash
-      echo "Modifying Dockerfiles for Swift Kubernetes DevOps Toolchain deployment"
-      echo "RUN cd /swift-project && /swift-utils/tools-utils.sh build release" >> Dockerfile-tools
-      sed -i 's/COPY.*/COPY --from=0 \/swift-project .\/swift-project/' Dockerfile
-      cat Dockerfile >> Dockerfile-tools
-      mv Dockerfile-tools Dockerfile
+      echo "Doing Java build"
+      echo "DevOps sets LOG_DIR env var, which is used during Java build to check if server started, so unsetting"
+      echo "LOG_DIR: ${LOG_DIR}"
+      LOG_DIR_TEMP=$LOG_DIR
+      unset LOG_DIR
+      echo "LOG_DIR has been unset: ${LOG_DIR}"
+
+      export JAVA_HOME=$JAVA8_HOME
+      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+      ./mvnw install -DskipTests
+
+      echo "Java build finished, setting LOG_DIR back to original"
+      LOG_DIR=$LOG_DIR_TEMP
+      echo "LOG_DIR: ${LOG_DIR}"
 
       mkdir downloads
       PATH="downloads:$PATH"
@@ -135,6 +144,7 @@ stages:
     script: |-
       export PATH="downloads:$PATH"
       export HEALTH_ENDPOINT=health
+      export HEALTH_ENDPOINT=actuator/$HEALTH_ENDPOINT
       IP_ADDR=$(ibmcloud cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
       if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
         RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"

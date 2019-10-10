@@ -143,6 +143,7 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       export PATH="downloads:$PATH"
+      export HEALTH_ENDPOINT=health
       IP_ADDR=$(ibmcloud cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
       if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
         RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"
@@ -152,10 +153,10 @@ stages:
       echo "RELEASE_NAME: $RELEASE_NAME"
 
       PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
-      if [ "$(curl -is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint at http://$IP_ADDR:$PORT/health"
+      if [ "$(curl -is http://$IP_ADDR:$PORT/$HEALTH_ENDPOINT --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+        echo "Successfully reached health endpoint at http://$IP_ADDR:$PORT/$HEALTH_ENDPOINT"
         echo "====================================================================="
       else
-        echo "Could not reach health endpoint: http://$IP_ADDR:$PORT/health"
+        echo "Could not reach health endpoint: http://$IP_ADDR:$PORT/$HEALTH_ENDPOINT"
         exit 1;
       fi;

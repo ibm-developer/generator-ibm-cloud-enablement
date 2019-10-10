@@ -26,7 +26,9 @@ const pipelineKubeSampleKnative = fs.readFileSync(path.join(__dirname, 'samples/
 const pipelineKubeSampleSwift = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-swift.yml'), 'utf-8');
 const pipelineKubeSampleSwiftKnative = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-swift-knative.yml'), 'utf-8');
 const pipelineKubeSampleJava = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-java.yml'), 'utf-8');
+const pipelineKubeSampleSpring = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-spring.yml'), 'utf-8');
 const pipelineKubeSampleJavaKnative = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-java-knative.yml'), 'utf-8');
+const pipelineKubeSampleSpringKnative = fs.readFileSync(path.join(__dirname, 'samples/pipeline-kube-spring-knative.yml'), 'utf-8');
 
 const toolchainKubeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube.yml'), 'utf-8');
 const toolchainKubeKnativeSample = fs.readFileSync(path.join(__dirname, 'samples/toolchain-kube-knative.yml'), 'utf-8');
@@ -149,8 +151,10 @@ describe('cloud-enablement:deployment', function () {
 			});
 
 			it('has pipeline.yml with correct content', function () {
-				if (lang === 'JAVA' || lang === 'SPRING') {
+				if (lang === 'JAVA') {
 					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleJava);
+				} else if (lang === 'SPRING') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleSpring);
 				} else if (lang === 'SWIFT') {
 					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleSwift);
 				} else {
@@ -215,8 +219,10 @@ describe('cloud-enablement:deployment', function () {
 			});
 
 			it('has pipeline.yml with correct content', function () {
-				if (lang === 'JAVA' || lang === 'SPRING') {
+				if (lang === 'JAVA') {
 					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleJavaKnative);
+				} else if (lang === 'SPRING') {
+					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleSpringKnative);
 				} else if (lang === 'SWIFT') {
 					assert.fileContent('.bluemix/pipeline.yml', pipelineKubeSampleSwiftKnative);
 				} else {
