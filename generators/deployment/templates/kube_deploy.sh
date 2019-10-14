@@ -130,7 +130,11 @@ helm history ${RELEASE_NAME}
 # echo "Deployed Pods:"
 # kubectl describe pods --selector app=${CHART_NAME} --namespace ${CLUSTER_NAMESPACE}
 
+export HEALTH_ENDPOINT=health
+{{#has deployment.backendPlatform 'SPRING'}}
+export HEALTH_ENDPOINT=actuator/$HEALTH_ENDPOINT
+{{/has}}
 echo "=========================================================="
 IP_ADDR=$(ibmcloud cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
 PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
-echo -e "View the application health at: http://${IP_ADDR}:${PORT}/health"
+echo -e "View the application health at: http://${IP_ADDR}:${PORT}/$HEALTH_ENDPOINT"

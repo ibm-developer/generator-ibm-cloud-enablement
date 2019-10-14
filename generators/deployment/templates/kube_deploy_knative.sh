@@ -75,6 +75,10 @@ if [ -z "$APPLICATION_URL" ]; then
   echo "Deploy failed, no URL found for knative service"
   exit 1
 fi
+export HEALTH_ENDPOINT=health
+{{#has deployment.backendPlatform 'SPRING'}}
+export HEALTH_ENDPOINT=actuator/$HEALTH_ENDPOINT
+{{/has}}
 echo "Application is available"
 echo "=========================================================="
-echo -e "View the application health at: $APPLICATION_URL/health"
+echo -e "View the application health at: $APPLICATION_URL/$HEALTH_ENDPOINT"
