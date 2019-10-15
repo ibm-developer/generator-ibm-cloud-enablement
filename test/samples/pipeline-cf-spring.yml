@@ -22,7 +22,7 @@ stages:
       #!/bin/bash
       export JAVA_HOME=$JAVA8_HOME
       mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
-      ./mvnw install -DskipTests
+      ./mvnw install
 
       if  [[ -f post_build.sh ]]; then
         chmod +x post_build.sh;
