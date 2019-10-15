@@ -25,7 +25,12 @@ spec:
         imagePullPolicy: {{tag ' .Values.image.pullPolicy '}}
         livenessProbe:
           httpGet:
+            {{#has deployment.backendPlatform 'SPRING'}}
+            path: /actuator/health
+            {{/has}}
+            {{#has deployment.backendPlatform 'JAVA'}}
             path: /health
+            {{/has}}
             port: {{tag ' .Values.service.servicePort '}}
           initialDelaySeconds: {{tag ' .Values.livenessProbe.initialDelaySeconds'}}
           periodSeconds: {{tag ' .Values.livenessProbe.periodSeconds'}}

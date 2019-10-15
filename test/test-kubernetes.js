@@ -159,7 +159,7 @@ describe('cloud-enablement:kubernetes', function () {
 					assertYmlContent(readinessProbe.httpGet.port, 9080, 'readinessProbe.httpGet.port');
 				}
 				if (language === 'SPRING') {
-					assertYmlContent(readinessProbe.httpGet.path, '/health', 'readinessProbe.httpGet.path');
+					assertYmlContent(readinessProbe.httpGet.path, '/actuator/health', 'readinessProbe.httpGet.path');
 					assertYmlContent(readinessProbe.httpGet.port, 8080, 'readinessProbe.httpGet.port');
 				}
 			});

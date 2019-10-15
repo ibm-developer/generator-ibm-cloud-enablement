@@ -28,7 +28,7 @@ spec:
             port: 9080
           {{/has}}
           {{#has language 'spring'}}
-            path: /{{#if healthEndpoint}}{{healthEndpoint}}{{else}}health{{/if}}
+            path: /{{#if healthEndpoint}}{{healthEndpoint}}{{else}}actuator/health{{/if}}
             port: 8080
           {{/has}}
           initialDelaySeconds: 20
