@@ -39,7 +39,7 @@ stages:
 
       export JAVA_HOME=$JAVA8_HOME
       mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
-      ./mvnw install -DskipTests
+      ./mvnw install
 
       echo "Java build finished, setting LOG_DIR back to original"
       LOG_DIR=$LOG_DIR_TEMP
