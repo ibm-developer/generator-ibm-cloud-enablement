@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.12.0"></a>
+# [1.12.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.11.0...v1.12.0) (2019-10-18)
+
+
+### Bug Fixes
+
+* Kub -> Kube ([ddcde1d](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/ddcde1d))
+
+
+### Features
+
+* remove VSI support ([2f9da2e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/2f9da2e))
+
+
+
 <a name="1.11.0"></a>
 # [1.11.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.10.6...v1.11.0) (2019-10-18)
 
