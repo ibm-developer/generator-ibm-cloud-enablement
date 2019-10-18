@@ -118,7 +118,7 @@ module.exports = class extends Generator {
 		prompts.push({
 			type: 'input',
 			name: 'deploymentType',
-			message: 'Deployment Type (Kub, CF, etc.)',
+			message: 'Deployment Type (Kube, CF, etc.)',
 			default: path.basename(process.cwd())
 		});
 
