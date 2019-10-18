@@ -336,45 +336,6 @@ module.exports = class extends Generator {
 			this.fs.write('.cfignore', this.cfIgnoreContent);
 		}
 
-		// create .bluemix directory for toolchain/devops related files
-		this._writeHandlebarsFile('toolchain_master.yml', '.bluemix/toolchain.yml', {
-			name: this.name,
-			repoType: this.toolchainConfig.repoType,
-			deployment: this.deployment
-		});
-
-		this._writeHandlebarsFile('deploy_master.json', '.bluemix/deploy.json', {
-			deployment: this.deployment
-		});
-
-		this._writeHandlebarsFile('container_build.sh', '.bluemix/scripts/container_build.sh', {
-			deployment: this.deployment
-		});
-
-		let kubeDeployTemplate = 'kube_deploy.sh';
-		if (this.deployment.kubeDeploymentType && Utils.sanitizeAlphaNumLowerCase(this.deployment.kubeDeploymentType) === 'knative') {
-			kubeDeployTemplate = 'kube_deploy_knative.sh';
-		}
-		this._writeHandlebarsFile(kubeDeployTemplate, '.bluemix/scripts/kube_deploy.sh', {
-			deployment: this.deployment
-		});
-
-		if (Utils.sanitizeAlphaNumLowerCase(this.deployment.type) === "vsi") {
-			this._writeHandlebarsFile('vsi_pipeline_master.yml', '.bluemix/pipeline.yml', {
-				config: this.pipelineConfig,
-				name: this.name,
-				lowercaseName: Utils.sanitizeAlphaNumLowerCase(this.name),
-				deployment: this.deployment
-			});
-		}
-		else {
-			this._writeHandlebarsFile('pipeline_master.yml', '.bluemix/pipeline.yml', {
-				config: this.pipelineConfig,
-				deployment: this.deployment,
-				manifest: this.manifestConfig
-			});
-		}
-
 	}
 
 	_writeHandlebarsFile(templateFile, destinationFile, data) {

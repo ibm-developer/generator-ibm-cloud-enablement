@@ -452,13 +452,6 @@ describe('cloud-enablement:vsi', function () {
 				assert.file(variablesTerraformFile);
 			});
 
-			it('has health endpoint for pipeline.yml', function () {
-				let pipelineFile = '.bluemix/pipeline.yml';
-				assert.file(pipelineFile);
-
-				assert.fileContent(pipelineFile, 'http://${VSI_HOST}:${PORT}/health')
-			});
-
 		});
 	});
 
@@ -475,15 +468,6 @@ describe('cloud-enablement:vsi', function () {
 				.inDir(path.join(__dirname, './vsi-tmp'))
 				.withOptions({bluemix: JSON.stringify(bluemix), healthEndpoint: 'customHealth'})
 
-		});
-
-		it('should have correct file content', function () {
-			it('has customHealth endpoint for pipeline.yml', function () {
-				let pipelineFile = '.bluemix/pipeline.yml';
-				assert.file(pipelineFile);
-
-				assert.fileContent(pipelineFile, 'http://${VSI_HOST}:${PORT}/customHealth')
-			});
 		});
 	});
 
