@@ -28,7 +28,7 @@ else
 fi
 
 echo "Configuring Tiller (Helm's server component)"
-helm init --upgrade
+helm init
 kubectl rollout status -w deployment/tiller-deploy --namespace=kube-system
 while [ "$(helm version | grep "Tiller")" != "" ]; do
   echo "Waiting for server..."
