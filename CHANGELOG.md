@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.13.0"></a>
+# [1.13.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.12.0...v1.13.0) (2019-10-29)
+
+
+### Features
+
+* removing tiller upgrade from helm init ([f6761f8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f6761f8))
+
+
+
 <a name="1.12.0"></a>
 # [1.12.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.11.0...v1.12.0) (2019-10-18)
 
