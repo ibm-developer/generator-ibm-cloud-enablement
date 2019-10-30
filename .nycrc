@@ -2,7 +2,7 @@
     "check-coverage": true,
     "statements": 84,
     "branches": 70,
-    "functions": 92,
+    "functions": 91,
     "lines": 84,
     "include": [
         "generators/**/*.js"
