@@ -1,9 +1,0 @@
-node_modules					usr/src/appname
-package.json					usr/src/appname
-package-lock.json				usr/src/appname
-run-debug                       usr/src/appname
-run-dev                         usr/src/appname
-server							usr/src/appname
-public							usr/src/appname
-terraform/scripts/install.sh	usr/src/appname
-terraform/scripts/start.sh		usr/src/appname

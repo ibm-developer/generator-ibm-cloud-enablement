@@ -37,15 +37,6 @@ const sanitizeAlphaNum = (name) => {
 	return (cleanName || 'APP');
 };
 
-const createUniqueName = (name) => {
-	const hexString = new Buffer(name, 'base64').toString('hex');
-
-	const chars = hexString.length > 5 ? 5 : 4;
-
-	return new Buffer(name, 'base64').toString('hex').substring(0,chars);
-
-};
-
 function _writeHandlebarsFile(_this, templateFile, destinationFile, data) {
 	let template = _this.fs.read(_this.templatePath(templateFile));
 	let compiledTemplate = Handlebars.compile(template);
@@ -89,7 +80,6 @@ const sanitizeAlphaNumDash = (name) => {
 module.exports = {
 	sanitizeAlphaNum: sanitizeAlphaNum,
 	sanitizeAlphaNumLowerCase: sanitizeAlphaNumLowerCase,
-	createUniqueName: createUniqueName,
 	sanitizeAlphaNumDash: sanitizeAlphaNumDash,
 	writeHandlebarsFile: _writeHandlebarsFile,
 	copyFiles: _copyFiles

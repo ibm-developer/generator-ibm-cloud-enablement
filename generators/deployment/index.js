@@ -29,9 +29,9 @@ module.exports = class extends Generator {
 		} else {
 			this.opts = opts
 		}
-		if (typeof (opts.bluemix) === 'string') {
+		if (typeof(opts.bluemix) === 'string') {
 			this.bluemix = JSON.parse(opts.bluemix || '{}');
-		} else if (typeof (opts.bluemix) === 'object') {
+		} else if (typeof(opts.bluemix) === 'object') {
 			this.bluemix = opts.bluemix;
 		}
 
@@ -119,8 +119,8 @@ module.exports = class extends Generator {
 			Object.assign(this.pipelineConfig.buildJobProps, {
 				build_type: 'shell',
 				script: '|-\n' +
-				'      #!/bin/bash\n' +
-				this.pipelineConfig.postBuildScript
+					'      #!/bin/bash\n' +
+					this.pipelineConfig.postBuildScript
 			});
 		}
 	}
@@ -130,8 +130,8 @@ module.exports = class extends Generator {
 	 *
 	 * @params manifestMemoryConfig {string} the memory allocaated h
 	 */
-	_getHighestMemorySize(manifestMemoryConfig, userDefinedMinMemory){
-		if(!userDefinedMinMemory) {
+	_getHighestMemorySize(manifestMemoryConfig, userDefinedMinMemory) {
+		if (!userDefinedMinMemory) {
 			return manifestMemoryConfig;
 		} else if (!manifestMemoryConfig && userDefinedMinMemory) {
 			return userDefinedMinMemory;
@@ -146,9 +146,9 @@ module.exports = class extends Generator {
 		const userDefinedMinSize = userDefinedMinMemory.replace(/[^MmGgKk]/g, '');
 		let highestAvailableSize;
 
-		if(memMap[manifestSize.toLowerCase()] > memMap[userDefinedMinSize.toLowerCase()]){
+		if (memMap[manifestSize.toLowerCase()] > memMap[userDefinedMinSize.toLowerCase()]) {
 			highestAvailableSize = manifestMemoryConfig;
-		} else if (memMap[manifestSize.toLowerCase()] < memMap[userDefinedMinSize.toLowerCase()]){
+		} else if (memMap[manifestSize.toLowerCase()] < memMap[userDefinedMinSize.toLowerCase()]) {
 			highestAvailableSize = userDefinedMinMemory;
 		} else {
 			const manifestValue = parseInt(manifestSize.replace(/[M,m,G,g,K,k]/g, ''));
@@ -163,7 +163,7 @@ module.exports = class extends Generator {
 	_configureNode() {
 
 		if (this.fs.exists(this.destinationPath("webpack.js")) || this.fs.exists(this.destinationPath("webpack.prod.js"))) {
-			this.manifestConfig.command = 'npm prune --production && NODE_ENV=production npm start';
+			this.manifestConfig.command = 'NODE_ENV=production npm start';
 			this.manifestConfig.env.NPM_CONFIG_PRODUCTION = false;
 		} else {
 			this.manifestConfig.command = 'npm start';
@@ -182,7 +182,7 @@ module.exports = class extends Generator {
 		try {
 			// pattern type skits need a static GOPACKAGE name specified in static manifest for server.go imports
 			let manifestyml = jsyaml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
-			if ( manifestyml.applications[0].env.GOPACKAGENAME) {
+			if (manifestyml.applications[0].env.GOPACKAGENAME) {
 				this.manifestConfig.env.GOPACKAGENAME = manifestyml.applications[0].env.GOPACKAGENAME
 			}
 		} catch (err) {
@@ -194,7 +194,7 @@ module.exports = class extends Generator {
 
 	_configureSwift() {
 		this.manifestConfig.buildpack = 'swift_buildpack';
-		
+
 		// if there is a `command` in manifest.yml already, keep it. Otherwise, this is the default command string:
 		let manifestCommand = this.bluemix.name ? ("\'" + `${this.bluemix.name}` + "\'") : undefined;
 		try {
@@ -218,7 +218,10 @@ module.exports = class extends Generator {
 		if (!this.opts.artifactId) {
 			try {
 				const data = this.fs.read(this.destinationPath("pom.xml"));
-				const pomJson = xmljs.xml2json(data, { compact: true, spaces: 4 })
+				const pomJson = xmljs.xml2json(data, {
+					compact: true,
+					spaces: 4
+				})
 				const pom = JSON.parse(pomJson);
 				this.opts.artifactId = pom.project.artifactId._text;
 			} catch (err) {
@@ -236,13 +239,13 @@ module.exports = class extends Generator {
 		if (this.opts.createType && this.opts.createType.startsWith('enable/')) {
 			this.toolchainConfig.repoType = 'link';
 		}
-		let buildCommand = this.opts.buildType === 'gradle' ? '      gradle build' : '      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0\n      ./mvnw install' ;
+		let buildCommand = this.opts.buildType === 'gradle' ? '      gradle build' : '      mvn -N io.takari:maven:wrapper -Dmaven=3.5.0\n      ./mvnw install';
 		this.pipelineConfig.javaBuildScriptContent = 'export JAVA_HOME=$JAVA8_HOME\n' + buildCommand;
 		this.pipelineConfig.buildJobProps = {
 			build_type: 'shell',
 			script: '|\n' +
-			'      #!/bin/bash\n' +
-			'      ' + this.pipelineConfig.javaBuildScriptContent
+				'      #!/bin/bash\n' +
+				'      ' + this.pipelineConfig.javaBuildScriptContent
 		};
 	}
 
@@ -335,7 +338,7 @@ module.exports = class extends Generator {
 		if (this.cfIgnoreContent) {
 			this.fs.write('.cfignore', this.cfIgnoreContent);
 		}
-
+ 
 	}
 
 	_writeHandlebarsFile(templateFile, destinationFile, data) {
