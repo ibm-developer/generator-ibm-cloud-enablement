@@ -15,14 +15,8 @@ stages:
   - name: KUBECTL_VERSION
     value: v1.13.3
     type: text
-  - name: HELM_VERSION
-    value: v2.12.3
-    type: text
   - name: KUBECTL_DOWNLOAD_URL
     value: https://storage.googleapis.com/kubernetes-release/release/v1.13.3/bin/linux/amd64/kubectl
-    type: text
-  - name: HELM_DOWNLOAD_URL
-    value: https://kubernetes-helm.storage.googleapis.com/helm-v2.12.3-linux-amd64.tar.gz
     type: text
   jobs:
   - name: Build
@@ -44,24 +38,12 @@ stages:
 
       mkdir downloads
       PATH="downloads:$PATH"
-      if [ "$(echo "$(helm version -c)" | grep $HELM_VERSION)" == "" ]; then
-        echo "Downloading helm v$HELM_VERSION"
-        curl -SsL "$HELM_DOWNLOAD_URL" -o "helm-${HELM_VERSION}-linux-amd64.tar.gz"
-        tar -zxvf helm-${HELM_VERSION}-linux-amd64.tar.gz
-        chmod 700 linux-amd64/helm
-        mv linux-amd64/helm downloads/helm
-        chmod +x downloads/helm
-      fi
-
       if [ "$(echo "$(kubectl version --client)" | grep $KUBECTL_VERSION)" == "" ]; then
         echo "Downloading kubectl v$KUBECTL_VERSION"
         curl -LO "$KUBECTL_DOWNLOAD_URL"
         chmod +x kubectl
         mv kubectl downloads/kubectl
       fi
-
-      echo "helm version"
-      helm version -c
       echo "kubectl version"
       kubectl version --client
 
@@ -103,6 +85,24 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
+      TILLER_VERSION=$(helm version -s | sed 's/.*v\([0-9\.]*\).*/\1/g')
+      CLIENT_VERSION=$(helm version -c | sed 's/.*v\([0-9\.]*\).*/\1/g')
+      echo "TILLER_VERSION"
+      echo $TILLER_VERSION
+      helm version
+      HELM_DOWNLOAD_URL=https://kubernetes-helm.storage.googleapis.com/
+      if [ "$TILLER_VERSION" != "$CLIENT_VERSION" ]; then
+        echo "Downloading helm v$TILLER_VERSION"
+        curl -SsL "$HELM_DOWNLOAD_URL"helm-v"$TILLER_VERSION"-linux-amd64.tar.gz -o "helm-v${TILLER_VERSION}-linux-amd64.tar.gz"
+        tar -zxvf helm-v${TILLER_VERSION}-linux-amd64.tar.gz
+        chmod 700 linux-amd64/helm
+        mv linux-amd64/helm downloads/helm
+        chmod +x downloads/helm
+      fi
+
+      echo "helm version"
+      helm version
+
       export PATH="downloads:$PATH"
       echo "source the kube_deploy script to run in current shell"
       source .bluemix/scripts/kube_deploy.sh
@@ -150,3 +150,4 @@ stages:
         echo "Could not reach health endpoint: http://$IP_ADDR:$PORT/health"
         exit 1;
       fi;
+
