@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.13.1"></a>
+## [1.13.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.13.0...v1.13.1) (2019-10-31)
+
+
+### Bug Fixes
+
+* download tiller version to client ([83f296e](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/83f296e))
+
+
+
 <a name="1.13.0"></a>
 # [1.13.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.12.0...v1.13.0) (2019-10-29)
 
