@@ -41,14 +41,6 @@ function getJsonServerWithDeployment(language, deploymentType, kubeDeploymentTyp
 	return get(language, bluemix);
 }
 
-function getJsonServerless(language) {
-	let scaffolderSample = new sample.scaffolderSample();
-	let bluemix = scaffolderSample.noServices();
-	bluemix.cloudant = scaffolderSample.fullContents().cloudant;
-	bluemix.server.cloudDeploymentType = "Functions";
-	return get(language, bluemix);
-}
-
 function get(language, bluemix) {
 	bluemix.backendPlatform = language;
 	if(language === 'JAVA') {
@@ -64,6 +56,5 @@ module.exports = {
 	getJson : getJson,
 	getJsonNoServices : getJsonNoServices,
 	getJsonNoServer : getJsonNoServer,
-	getJsonServerWithDeployment: getJsonServerWithDeployment,
-	getJsonServerless: getJsonServerless
+	getJsonServerWithDeployment: getJsonServerWithDeployment
 }
