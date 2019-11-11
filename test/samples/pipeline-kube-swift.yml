@@ -85,11 +85,16 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
-      TILLER_VERSION=$(helm version -s | sed 's/.*v\([0-9\.]*\).*/\1/g')
-      CLIENT_VERSION=$(helm version -c | sed 's/.*v\([0-9\.]*\).*/\1/g')
+      if $(helm version -s) ; then
+        TILLER_VERSION=$(helm version -s | sed 's/.*v\([0-9\.]*\).*/\1/g')
+        CLIENT_VERSION=$(helm version -c | sed 's/.*v\([0-9\.]*\).*/\1/g')
+        helm version
+      else
+        TILLER_VERSION=2.16.0
+        CLIENT_VERSION=2.16.0
+      fi
       echo "TILLER_VERSION"
       echo $TILLER_VERSION
-      helm version
       HELM_DOWNLOAD_URL=https://kubernetes-helm.storage.googleapis.com/
       if [ "$TILLER_VERSION" != "$CLIENT_VERSION" ]; then
         echo "Downloading helm v$TILLER_VERSION"
@@ -99,9 +104,6 @@ stages:
         mv linux-amd64/helm downloads/helm
         chmod +x downloads/helm
       fi
-
-      echo "helm version"
-      helm version
 
       export PATH="downloads:$PATH"
       echo "source the kube_deploy script to run in current shell"
