@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.14.1"></a>
+## [1.14.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.14.0...v1.14.1) (2019-11-11)
+
+
+### Bug Fixes
+
+* update pipeline for helm on new clusters ([e4baba7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e4baba7))
+
+
+
 <a name="1.14.0"></a>
 # [1.14.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.13.1...v1.14.0) (2019-11-04)
 
