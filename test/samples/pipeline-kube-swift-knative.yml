@@ -37,7 +37,7 @@ stages:
       mv Dockerfile-tools Dockerfile
 
       mkdir downloads
-      PATH="downloads:$PATH"
+      export PATH="downloads:$PATH"
       echo "kubectl version"
       kubectl version --client
 

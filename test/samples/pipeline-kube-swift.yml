@@ -37,7 +37,7 @@ stages:
       mv Dockerfile-tools Dockerfile
 
       mkdir downloads
-      PATH="downloads:$PATH"
+      export PATH="downloads:$PATH"
       if [ "$(echo "$(kubectl version --client)" | grep $KUBECTL_VERSION)" == "" ]; then
         echo "Downloading kubectl v$KUBECTL_VERSION"
         curl -LO "$KUBECTL_DOWNLOAD_URL"
@@ -85,16 +85,14 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
-      if $(helm version -s) ; then
+      if helm version -s ; then
         TILLER_VERSION=$(helm version -s | sed 's/.*v\([0-9\.]*\).*/\1/g')
         CLIENT_VERSION=$(helm version -c | sed 's/.*v\([0-9\.]*\).*/\1/g')
-        helm version
+        echo "TILLER_VERSION: $TILLER_VERSION"
+        echo "CLIENT_VERSION: $CLIENT_VERSION"
       else
         TILLER_VERSION=2.16.0
-        CLIENT_VERSION=2.16.0
       fi
-      echo "TILLER_VERSION"
-      echo $TILLER_VERSION
       HELM_DOWNLOAD_URL=https://kubernetes-helm.storage.googleapis.com/
       if [ "$TILLER_VERSION" != "$CLIENT_VERSION" ]; then
         echo "Downloading helm v$TILLER_VERSION"
