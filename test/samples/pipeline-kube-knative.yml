@@ -32,7 +32,7 @@ stages:
       #!/bin/bash
 
       mkdir downloads
-      PATH="downloads:$PATH"
+      export PATH="downloads:$PATH"
       echo "kubectl version"
       kubectl version --client
 
