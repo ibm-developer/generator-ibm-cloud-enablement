@@ -46,7 +46,7 @@ stages:
       echo "LOG_DIR: ${LOG_DIR}"
 
       mkdir downloads
-      PATH="downloads:$PATH"
+      export PATH="downloads:$PATH"
       echo "kubectl version"
       kubectl version --client
 
