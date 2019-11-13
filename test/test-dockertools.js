@@ -280,7 +280,7 @@ describe('cloud-enablement:dockertools', function () {
 					assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 				});
 
-				if ( language === "SPRING" ) {
+				if ( language === "SPRING" && buildType == "gradle") {
 					it('Dockerfile contains full jar name and app.jar', function () {
 						assert.fileContent('Dockerfile', `${artifactId}-${javaVersion}.jar /app.jar`);
 					});
@@ -294,6 +294,22 @@ describe('cloud-enablement:dockertools', function () {
 						assert.noFileContent('cli-config.yml', 'run-cmd');
 					});
 				}
+
+				if ( language === "SPRING" && buildType == "maven") {
+					it('Dockerfile contains full jar name and app.jar', function () {
+						assert.fileContent('Dockerfile', `--from=builder /app/target/springmicroservice-1.0-SNAPSHOT.jar /app.ja`);
+					});
+					it('.dockerignore does not contain wlp', function () {
+						assert.noFileContent('.dockerignore', 'wlp');
+					});
+					it('Dockerfile-tools does not contain wlp', function () {
+						assert.noFileContent('Dockerfile-tools', 'wlp/bin');
+					});
+					it('cli-config file does not have a run-cmd', function () {
+						assert.noFileContent('cli-config.yml', 'run-cmd');
+					});
+				}
+
 				if (language === 'JAVA' || language === 'libertyBeta') {
 					it('.dockerignore ignores workarea and logs', function () {
 						assert.fileContent('.dockerignore', 'workarea');
@@ -335,8 +351,8 @@ describe('cloud-enablement:dockertools', function () {
 					});
 				} else /* buildType === 'maven' */ {
 					it('Dockerfile references target directory', function () {
-						assert.fileContent('Dockerfile', 'target');
-						assert.noFileContent('Dockerfile', 'build');
+						assert.fileContent('Dockerfile', '/app/target');
+						assert.noFileContent('Dockerfile', '/app/build');
 					});
 					it('Dockerfile-tools references maven', function () {
 						assert.fileContent('Dockerfile-tools', 'maven');
@@ -400,8 +416,8 @@ describe('cloud-enablement:dockertools', function () {
 					});
 				} else {
 					it('creates COPY lines for javametrics options with maven', function () {
-						assert.fileContent('Dockerfile','COPY /target/liberty/wlp/usr/shared/resources /config/resources/');
-						assert.fileContent('Dockerfile','COPY /src/main/liberty/config/jvmbx.options /config/jvm.options');
+						assert.fileContent('Dockerfile','COPY --from=builder /app/target/liberty/wlp/usr/shared/resources /config/resources/');
+						assert.fileContent('Dockerfile','COPY --from=builder /app/src/main/liberty/config/jvmbx.options /config/jvm.options');
 					});
 				}
 			});
