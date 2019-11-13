@@ -1,11 +1,28 @@
+FROM ibmjava:8-sdk AS builder
+LABEL maintainer="IBM Java Engineering at IBM Cloud"
+
+WORKDIR /app
+COPY . /app
+
+{{#has buildType 'maven'}}
+RUN apt-get update && apt-get install -y maven
+RUN mvn -N io.takari:maven:wrapper -Dmaven=3.5.0
+RUN ./mvnw install
+{{/has}}
+{{#has buildType 'gradle'}}
+RUN apt-get update && apt-get install -y gradle
+RUN gradle build
+{{/has}}
+
 FROM ibmjava:8-sfj
 LABEL maintainer="IBM Java Engineering at IBM Cloud"
 
 {{#has buildType 'maven'}}
-COPY target/{{artifactId}}-{{version}}.jar /app.jar
+COPY --from=builder /app/target/springmicroservice-1.0-SNAPSHOT.jar /app.jar
 {{/has}}
 {{#has buildType 'gradle'}}
-COPY build/libs/{{artifactId}}-{{version}}.jar /app.jar
+RUN gradle build
+COPY --from=builder /app/build/libs/{{artifactId}}-{{version}}.jar /app.jar
 {{/has}}
 
 ENV JAVA_OPTS=""

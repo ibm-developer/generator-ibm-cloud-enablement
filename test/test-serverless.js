@@ -16,7 +16,6 @@
 
 const helpers = require('yeoman-test');
 const assert = require('yeoman-assert');
-const fs = require('fs');
 const path = require('path');
 
 const scaffolderSample = require('./samples/scaffolder-sample');
@@ -24,10 +23,6 @@ const scaffolderSampleNode = scaffolderSample.getJsonServerless('NODE');
 const scaffolderSamplePython = scaffolderSample.getJsonServerless('PYTHON');
 const scaffolderSampleSwift = scaffolderSample.getJsonServerless('SWIFT');
 
-const deploySample = fs.readFileSync(path.join(__dirname, 'samples/serverless-deploy.json'), 'utf-8');
-const pipelineSample = fs.readFileSync(path.join(__dirname, 'samples/serverless-pipeline.yml'), 'utf-8');
-const pipelineDeploySample = fs.readFileSync(path.join(__dirname, 'samples/serverless-pipeline-DEPLOY.sh'), 'utf-8');
-const toolchainSample = fs.readFileSync(path.join(__dirname, 'samples/serverless-toolchain.yml'), 'utf-8');
 
 describe('cloud-enablement:serverless', function () {
 	
@@ -38,24 +33,6 @@ describe('cloud-enablement:serverless', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSamplePython)});
 		});
 
-		it('has all .bluemix files', function () {
-			assert.file('.bluemix/deploy.json');
-			assert.file('.bluemix/pipeline-DEPLOY.sh');
-			assert.file('.bluemix/pipeline.yml');
-			assert.file('.bluemix/toolchain.yml');
-		});
-
-		it('.bluemix files have correct contents', function () {
-			let deployGenerated = fs.readFileSync('.bluemix/deploy.json', 'utf8');
-			let pipelineGenerated = fs.readFileSync('.bluemix/pipeline.yml', 'utf8');
-			let pipelineDeployGenerated = fs.readFileSync('.bluemix/pipeline-DEPLOY.sh', 'utf8');
-			let toolchainGenerated = fs.readFileSync('.bluemix/toolchain.yml', 'utf8');
-
-			assert.equal(deployGenerated, deploySample);
-			assert.equal(pipelineGenerated, pipelineSample);
-			assert.equal(pipelineDeployGenerated, pipelineDeploySample);
-			assert.equal(toolchainGenerated, toolchainSample);
-		});
 
 		it('does not have docker files', function () {
 			assert.noFile([
@@ -84,25 +61,6 @@ describe('cloud-enablement:serverless', function () {
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleNode)});
 		});
 
-		it('has all .bluemix files', function () {
-			assert.file('.bluemix/deploy.json');
-			assert.file('.bluemix/pipeline-DEPLOY.sh');
-			assert.file('.bluemix/pipeline.yml');
-			assert.file('.bluemix/toolchain.yml');
-		});
-
-		it('.bluemix files have correct contents', function () {
-			let deployGenerated = fs.readFileSync('.bluemix/deploy.json', 'utf8');
-			let pipelineGenerated = fs.readFileSync('.bluemix/pipeline.yml', 'utf8');
-			let pipelineDeployGenerated = fs.readFileSync('.bluemix/pipeline-DEPLOY.sh', 'utf8');
-			let toolchainGenerated = fs.readFileSync('.bluemix/toolchain.yml', 'utf8');
-
-			assert.equal(deployGenerated, deploySample);
-			assert.equal(pipelineGenerated, pipelineSample);
-			assert.equal(pipelineDeployGenerated, pipelineDeploySample);
-			assert.equal(toolchainGenerated, toolchainSample);
-		});
-
 		it('does not have docker files', function () {
 			assert.noFile([
 				'Dockerfile',
@@ -128,25 +86,6 @@ describe('cloud-enablement:serverless', function () {
 			return helpers.run(path.join(__dirname, '../generators/app'))
 				.inDir(path.join(__dirname, './tmp'))
 				.withOptions({bluemix: JSON.stringify(scaffolderSampleSwift)});
-		});
-
-		it('has all .bluemix files', function () {
-			assert.file('.bluemix/deploy.json');
-			assert.file('.bluemix/pipeline-DEPLOY.sh');
-			assert.file('.bluemix/pipeline.yml');
-			assert.file('.bluemix/toolchain.yml');
-		});
-
-		it('.bluemix files have correct contents', function () {
-			let deployGenerated = fs.readFileSync('.bluemix/deploy.json', 'utf8');
-			let pipelineGenerated = fs.readFileSync('.bluemix/pipeline.yml', 'utf8');
-			let pipelineDeployGenerated = fs.readFileSync('.bluemix/pipeline-DEPLOY.sh', 'utf8');
-			let toolchainGenerated = fs.readFileSync('.bluemix/toolchain.yml', 'utf8');
-
-			assert.equal(deployGenerated, deploySample);
-			assert.equal(pipelineGenerated, pipelineSample);
-			assert.equal(pipelineDeployGenerated, pipelineDeploySample);
-			assert.equal(toolchainGenerated, toolchainSample);
 		});
 
 		it('does not have docker files', function () {
