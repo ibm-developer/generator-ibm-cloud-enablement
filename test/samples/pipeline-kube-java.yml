@@ -46,7 +46,7 @@ stages:
       echo "LOG_DIR: ${LOG_DIR}"
 
       mkdir downloads
-      PATH="downloads:$PATH"
+      export PATH="downloads:$PATH"
       if [ "$(echo "$(kubectl version --client)" | grep $KUBECTL_VERSION)" == "" ]; then
         echo "Downloading kubectl v$KUBECTL_VERSION"
         curl -LO "$KUBECTL_DOWNLOAD_URL"
@@ -94,11 +94,14 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
-      TILLER_VERSION=$(helm version -s | sed 's/.*v\([0-9\.]*\).*/\1/g')
-      CLIENT_VERSION=$(helm version -c | sed 's/.*v\([0-9\.]*\).*/\1/g')
-      echo "TILLER_VERSION"
-      echo $TILLER_VERSION
-      helm version
+      if helm version -s ; then
+        TILLER_VERSION=$(helm version -s | sed 's/.*v\([0-9\.]*\).*/\1/g')
+        CLIENT_VERSION=$(helm version -c | sed 's/.*v\([0-9\.]*\).*/\1/g')
+        echo "TILLER_VERSION: $TILLER_VERSION"
+        echo "CLIENT_VERSION: $CLIENT_VERSION"
+      else
+        TILLER_VERSION=2.16.0
+      fi
       HELM_DOWNLOAD_URL=https://kubernetes-helm.storage.googleapis.com/
       if [ "$TILLER_VERSION" != "$CLIENT_VERSION" ]; then
         echo "Downloading helm v$TILLER_VERSION"
@@ -108,9 +111,6 @@ stages:
         mv linux-amd64/helm downloads/helm
         chmod +x downloads/helm
       fi
-
-      echo "helm version"
-      helm version
 
       export PATH="downloads:$PATH"
       echo "source the kube_deploy script to run in current shell"

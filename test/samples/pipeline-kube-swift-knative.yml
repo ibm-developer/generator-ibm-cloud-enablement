@@ -9,8 +9,8 @@ stages:
   triggers:
   - type: commit
   properties:
-  - name: CHART_NAME
-    value: ${CHART_NAME}
+  - name: IMAGE_NAME
+    value: ${IMAGE_NAME}
     type: text
   - name: KUBECTL_VERSION
     value: v1.13.3
@@ -27,7 +27,7 @@ stages:
       region_id: ${REGION_ID}
       api_key: ${API_KEY}
     namespace: ${REGISTRY_NAMESPACE}
-    image_name: ${CHART_NAME}
+    image_name: ${IMAGE_NAME}
     script: |-
       #!/bin/bash
       echo "Modifying Dockerfiles for Swift Kubernetes DevOps Toolchain deployment"
@@ -38,12 +38,6 @@ stages:
 
       mkdir downloads
       export PATH="downloads:$PATH"
-      if [ "$(echo "$(kubectl version --client)" | grep $KUBECTL_VERSION)" == "" ]; then
-        echo "Downloading kubectl v$KUBECTL_VERSION"
-        curl -LO "$KUBECTL_DOWNLOAD_URL"
-        chmod +x kubectl
-        mv kubectl downloads/kubectl
-      fi
       echo "kubectl version"
       kubectl version --client
 
@@ -67,8 +61,8 @@ stages:
   - name: buildProperties
     value: build.properties
     type: file
-  - name: CHART_NAME
-    value: ${CHART_NAME}
+  - name: IMAGE_NAME
+    value: ${IMAGE_NAME}
     type: text
   - name: CLUSTER_NAMESPACE
     value: ${CLUSTER_NAMESPACE}
@@ -85,24 +79,6 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       #!/bin/bash
-      if helm version -s ; then
-        TILLER_VERSION=$(helm version -s | sed 's/.*v\([0-9\.]*\).*/\1/g')
-        CLIENT_VERSION=$(helm version -c | sed 's/.*v\([0-9\.]*\).*/\1/g')
-        echo "TILLER_VERSION: $TILLER_VERSION"
-        echo "CLIENT_VERSION: $CLIENT_VERSION"
-      else
-        TILLER_VERSION=2.16.0
-      fi
-      HELM_DOWNLOAD_URL=https://kubernetes-helm.storage.googleapis.com/
-      if [ "$TILLER_VERSION" != "$CLIENT_VERSION" ]; then
-        echo "Downloading helm v$TILLER_VERSION"
-        curl -SsL "$HELM_DOWNLOAD_URL"helm-v"$TILLER_VERSION"-linux-amd64.tar.gz -o "helm-v${TILLER_VERSION}-linux-amd64.tar.gz"
-        tar -zxvf helm-v${TILLER_VERSION}-linux-amd64.tar.gz
-        chmod 700 linux-amd64/helm
-        mv linux-amd64/helm downloads/helm
-        chmod +x downloads/helm
-      fi
-
       export PATH="downloads:$PATH"
       echo "source the kube_deploy script to run in current shell"
       source .bluemix/scripts/kube_deploy.sh
@@ -134,20 +110,16 @@ stages:
       kubernetes_cluster: ${KUBE_CLUSTER_NAME}
     script: |-
       export PATH="downloads:$PATH"
-      IP_ADDR=$(ibmcloud cs workers ${PIPELINE_KUBERNETES_CLUSTER_NAME} | grep normal | head -n 1 | awk '{ print $2 }')
-      if [[ "${CLUSTER_NAMESPACE}" != "default" ]]; then
-        RELEASE_NAME="${CLUSTER_NAMESPACE}-${IMAGE_NAME}"
-      else
-        RELEASE_NAME=${IMAGE_NAME}
-      fi
-      echo "RELEASE_NAME: $RELEASE_NAME"
+      kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.url'
+      TEMP_URL=$( kubectl get ksvc/${IMAGE_NAME} -o json | jq '.status.url' )
+      TEMP_URL=${TEMP_URL%\"} # remove end quote
+      TEMP_URL=${TEMP_URL#\"} # remove beginning quote
+      export APPLICATION_URL=$TEMP_URL
 
-      PORT=$(kubectl get services --namespace ${CLUSTER_NAMESPACE} | grep ${RELEASE_NAME} | sed 's/[^:]*:\([0-9]*\).*/\1/g')
-      if [ "$(curl -is http://$IP_ADDR:$PORT/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
-        echo "Successfully reached health endpoint at http://$IP_ADDR:$PORT/health"
+      if [ "$(curl -is $APPLICATION_URL/health --connect-timeout 3 --max-time 5 --retry 2 --retry-max-time 30 | head -n 1 | grep 200)" != "" ]; then
+        echo "Successfully reached health endpoint at $APPLICATION_URL/health"
         echo "====================================================================="
       else
-        echo "Could not reach health endpoint: http://$IP_ADDR:$PORT/health"
+        echo "Could not reach health endpoint: $APPLICATION_URL/health"
         exit 1;
       fi;
-
