@@ -62,7 +62,6 @@ module.exports = class extends Generator {
 			this.deployment.type = this.bluemix.server.cloudDeploymentType || 'CF';
 			this.deployment.chartName = Utils.sanitizeAlphaNumLowerCase(this.name || this.bluemix.name);
 			this.deployment.imageName = Utils.sanitizeAlphaNumLowerCase(this.name || this.bluemix.name);
-			this.deployment.scriptsDir = '.bluemix/scripts';
 			this.deployment.hasMongo = this.opts.createType === 'mern' || this.opts.createType === 'mean';
 			if (!this.deployment.kubeClusterNamespace) {
 				this.deployment.kubeClusterNamespace = 'default';
