@@ -280,7 +280,7 @@ describe('cloud-enablement:dockertools', function () {
 					assert.fileContent('cli-config.yml', `chart-path : "chart/${applicationName.toLowerCase()}"`);
 				});
 
-				if ( language === "SPRING" && buildType == "gradle") {
+				if ( language === "SPRING") {
 					it('Dockerfile contains full jar name and app.jar', function () {
 						assert.fileContent('Dockerfile', `${artifactId}-${javaVersion}.jar /app.jar`);
 					});
@@ -294,22 +294,7 @@ describe('cloud-enablement:dockertools', function () {
 						assert.noFileContent('cli-config.yml', 'run-cmd');
 					});
 				}
-
-				if ( language === "SPRING" && buildType == "maven") {
-					it('Dockerfile contains full jar name and app.jar', function () {
-						assert.fileContent('Dockerfile', `--from=builder /app/target/springmicroservice-1.0-SNAPSHOT.jar /app.ja`);
-					});
-					it('.dockerignore does not contain wlp', function () {
-						assert.noFileContent('.dockerignore', 'wlp');
-					});
-					it('Dockerfile-tools does not contain wlp', function () {
-						assert.noFileContent('Dockerfile-tools', 'wlp/bin');
-					});
-					it('cli-config file does not have a run-cmd', function () {
-						assert.noFileContent('cli-config.yml', 'run-cmd');
-					});
-				}
-
+			
 				if (language === 'JAVA' || language === 'libertyBeta') {
 					it('.dockerignore ignores workarea and logs', function () {
 						assert.fileContent('.dockerignore', 'workarea');
