@@ -18,7 +18,7 @@ FROM ibmjava:8-sfj
 LABEL maintainer="IBM Java Engineering at IBM Cloud"
 
 {{#has buildType 'maven'}}
-COPY --from=builder /app/target/springmicroservice-1.0-SNAPSHOT.jar /app.jar
+COPY --from=builder /app/target/{{artifactId}}-{{version}}.jar /app.jar
 {{/has}}
 {{#has buildType 'gradle'}}
 RUN gradle build
