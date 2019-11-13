@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.14.2"></a>
+## [1.14.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.14.1...v1.14.2) (2019-11-12)
+
+
+### Bug Fixes
+
+* export for helm version ([395f86c](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/395f86c))
+
+
+
+<a name="1.14.1"></a>
+## [1.14.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.14.0...v1.14.1) (2019-11-11)
+
+
+### Bug Fixes
+
+* update pipeline for helm on new clusters ([e4baba7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e4baba7))
+
+
+
+<a name="1.14.0"></a>
+# [1.14.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.13.1...v1.14.0) (2019-11-04)
+
+
+### Features
+
+* **functions:** remove functions from cloud enablement ([3da130d](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3da130d))
+
+
+
 <a name="1.13.1"></a>
 ## [1.13.1](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.13.0...v1.13.1) (2019-10-31)
 
