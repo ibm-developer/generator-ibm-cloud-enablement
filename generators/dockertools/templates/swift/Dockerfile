@@ -32,7 +32,7 @@ RUN echo "$bx_dev_user ALL=NOPASSWD: ALL" > /etc/sudoers.d/user && \
 COPY . /swift-project
 RUN cd /swift-project && /swift-utils/tools-utils.sh build release
 
-FROM swift:5.0.2-slim
+FROM swift:5.1
 LABEL maintainer="IBM Swift Engineering at IBM Cloud"
 LABEL Description="Template Dockerfile that extends the swift:slim image."
 
