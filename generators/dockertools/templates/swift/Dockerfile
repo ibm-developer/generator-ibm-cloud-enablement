@@ -1,6 +1,6 @@
-FROM swift:5.1
+FROM swift:5.1 as builder
 LABEL maintainer="IBM Swift Engineering at IBM Cloud"
-LABEL Description="Template Dockerfile that extends the ibmcom/swift-ubuntu image."
+LABEL Description="Template Dockerfile that extends the ibmcom/swift-ubuntu image. This first container builds the swift project."
 
 RUN apt-get update && apt-get install -y sudo openssl libssl-dev libcurl4-openssl-dev
 
@@ -34,7 +34,7 @@ RUN cd /swift-project && /swift-utils/tools-utils.sh build release
 
 FROM swift:5.1
 LABEL maintainer="IBM Swift Engineering at IBM Cloud"
-LABEL Description="Template Dockerfile that extends the swift:slim image."
+LABEL Description="Template Dockerfile that extends the swift image. This second container runs the swift executable."
 
 # We can replace this port with what the user wants
 EXPOSE 8080
@@ -63,7 +63,7 @@ RUN chmod -R 555 /swift-utils
 RUN if [ $bx_dev_user != "root" ]; then useradd -ms /bin/bash -u $bx_dev_userid $bx_dev_user; fi
 
 # Bundle application source & binaries
-COPY --from=0 /swift-project ./swift-project
+COPY --from=builder /swift-project ./swift-project
 
 # Command to start Swift application
 CMD [ "sh", "-c", "cd /swift-project && .build-ubuntu/release/{{executableName}}" ]
