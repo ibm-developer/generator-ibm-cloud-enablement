@@ -3,6 +3,9 @@ FROM golang:1.10.3-alpine
 # Update packages and install dependency packages for services
 RUN apk update && apk add --no-cache bash git
 
+# Set GOPATH Environment Variable
+ENV GOPATH /go
+
 # Change working directory
 WORKDIR $GOPATH/src/{{applicationName}}/
 
