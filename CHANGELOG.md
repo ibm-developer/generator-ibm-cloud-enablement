@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.15.0"></a>
+# [1.15.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.14.2...v1.15.0) (2019-11-22)
+
+
+### Features
+
+* adding new Dockerfile template for Swift generated apps cloud-enablement. ([332f88b](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/332f88b))
+* removing .bluemix folder and contents from Cloud Enablement. Also updates to Dockerfiles to make them work with OTC Toolchain Templates ([4de8045](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/4de8045))
+* Updated GO dockerfile template to set GOPATH explicitly for use by external toolchain ([5ea13ad](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/5ea13ad))
+
+
+
 <a name="1.14.2"></a>
 ## [1.14.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.14.1...v1.14.2) (2019-11-12)
 
