@@ -76,7 +76,7 @@ module.exports = class extends Generator {
 			chart: {source : 'Chart.yaml', target : 'chartDir/Chart.yaml', process: true},
 			deployment: {source : 'deployment.yaml', target : 'chartDir/templates/deployment.yaml', process: true},
 			service: {source : 'service.yaml', target : 'chartDir/templates/service.yaml', process: false},
-			serviceKnative: {source : 'service-knative.yaml', target : 'service.yml', process: true},
+			serviceKnative: {source : 'service-knative.yaml', target : 'service.yaml', process: true},
 			hpa: {source : 'hpa.yaml', target : 'chartDir/templates/hpa.yaml', process: true},
 			istio: {source : 'istio.yaml', target : 'chartDir/templates/istio.yaml', process: true},
 			basedeployment: {source : 'basedeployment.yaml', target : 'chartDir/templates/basedeployment.yaml', process: true},
