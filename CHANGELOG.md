@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+<a name="1.15.3"></a>
+## [1.15.3](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.2...v1.15.3) (2019-12-05)
+
+
+### Bug Fixes
+
+* revert swift docker base image to 5.0.2 ([3bd79eb](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/3bd79eb))
+
+
+
 <a name="1.15.2"></a>
 ## [1.15.2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.1...v1.15.2) (2019-12-04)
 
