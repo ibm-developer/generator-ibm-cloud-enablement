@@ -4,6 +4,7 @@ metadata:
   name: "{{tag '  .Chart.Name '}}-deployment"
   labels:
     chart: '{{tag ' .Chart.Name '}}-{{tag ' .Chart.Version | replace "+" "_" '}}'
+    app: "{{tag '  .Chart.Name '}}"
 spec:
   replicas: {{tag ' .Values.replicaCount '}}
   strategy:
@@ -15,7 +16,7 @@ spec:
   template:
     metadata:
       labels:
-        app: "{{tag '  .Chart.Name '}}-selector"
+        app: "{{tag '  .Chart.Name '}}"
         version: "current"
     spec:
       containers:
