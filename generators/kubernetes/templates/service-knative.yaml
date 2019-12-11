@@ -3,7 +3,6 @@ apiVersion: serving.knative.dev/v1alpha1
 kind: Service
 metadata:
   name: {{#toLowerCase applicationName}}{{/toLowerCase}}
-  namespace: {{ kubeClusterNamespace }}
 spec:
   template:
     spec:
