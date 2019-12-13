@@ -7,11 +7,11 @@ metadata:
 spec:
   type: {{tag ' .Values.service.type '}}
   ports:
-  - name: http
-    port: {{tag ' .Values.service.servicePort '}}
 {{#if servicePorts.https}}
   - name: https
     port: {{tag ' .Values.service.servicePortHttps '}}
 {{/if}}
+  - name: http
+    port: {{tag ' .Values.service.servicePort '}}
   selector:
     app: "{{tag '  .Chart.Name '}}"
