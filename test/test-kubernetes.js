@@ -180,8 +180,8 @@ describe('cloud-enablement:kubernetes', function () {
 			it('has service.yaml with correct content', function () {
 				let serviceyml = getSafeYaml(chartLocation + '/templates/service.yaml');
 				if (language === 'JAVA') {
-					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
-					assertYmlContent(serviceyml.spec.ports[1].name, 'https', 'serviceyml.spec.ports[1].name');
+					assertYmlContent(serviceyml.spec.ports[0].name, 'https', 'serviceyml.spec.ports[0].name');
+					assertYmlContent(serviceyml.spec.ports[1].name, 'http', 'serviceyml.spec.ports[1].name');
 				}
 				if (language === 'SPRING') {
 					assertYmlContent(serviceyml.spec.ports[0].name, 'http', 'serviceyml.spec.ports[0].name');
