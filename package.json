@@ -30,7 +30,7 @@
   "dependencies": {
     "fs-extra": "^2.0.0",
     "glob": "^7.1.2",
-    "handlebars": "^4.4.3",
+    "handlebars": "^4.7.2",
     "js-yaml": "^3.13.1",
     "lodash": "^4.17.15",
     "xml-js": "^1.6.11",
@@ -43,7 +43,7 @@
     "mocha": "^5.2.0",
     "mocha-multi-reporters": "^1.1.7",
     "nyc": "^14.1.1",
-    "standard-version": "^4.4.0",
+    "standard-version": "^7.1.0",
     "xunit-file": "^1.0.0",
     "yeoman-assert": "^2.2.2",
     "yeoman-test": "^2.0.0"
