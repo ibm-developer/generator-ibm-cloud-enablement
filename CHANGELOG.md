@@ -1,6 +1,20 @@
-# Change Log
+# Changelog
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+### [1.15.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.7...v1.15.8) (2020-02-04)
+
+### [1.15.7](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.6...v1.15.7) (2020-01-29)
+
+<a name="1.15.6"></a>
+## [1.15.6](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.5...v1.15.6) (2019-12-13)
+
+
+### Bug Fixes
+
+* changed java port order listing so that OTC External toolchains will pick the correct port to show the user ([f2cf4d2](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/f2cf4d2))
+
+
 
 <a name="1.15.5"></a>
 ## [1.15.5](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.4...v1.15.5) (2019-12-11)
