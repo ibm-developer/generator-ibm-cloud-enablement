@@ -55,7 +55,7 @@ Following command line arguments are supported:
 * `--services {stringified-array}` - used to add an extra service container for `docker-compose`.
 * `--nodeCFMinMemory` - used to defined a minimum requirement for node CF deployment. (e.g 384M)
 
-**Note**: Adding the `--services` option will generate and use `docker-compose and docker-compose-tools` for docker containers.
+> **Note**: Adding the `--services` option will generate and use `docker-compose and docker-compose-tools` for docker containers.
 
 ## Artifacts
 
