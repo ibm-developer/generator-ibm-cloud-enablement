@@ -195,7 +195,7 @@ module.exports = class extends Generator {
 		this.manifestConfig.buildpack = 'swift_buildpack';
 
 		// if there is a `command` in manifest.yml already, keep it. Otherwise, this is the default command string:
-		let manifestCommand = this.bluemix.name ? ("\'" + `${this.bluemix.name}` + "\'") : undefined;
+		let manifestCommand = this.bluemix.name ? ("'" + `${this.bluemix.name}` + "'") : undefined;
 		try {
 			let manifestyml = jsyaml.safeLoad(fs.readFileSync('manifest.yml', 'utf8'));
 			manifestCommand = manifestyml.applications[0].command ? manifestyml.applications[0].command : manifestCommand;
@@ -259,7 +259,7 @@ module.exports = class extends Generator {
 		let excludes = [];
 		if (this.opts.libertyVersion === 'beta') {
 			this.manifestConfig.env.IBM_LIBERTY_BETA = 'true'
-			this.manifestConfig.env.JBP_CONFIG_LIBERTY = '\"version: +\"'
+			this.manifestConfig.env.JBP_CONFIG_LIBERTY = '"version: +"'
 		}
 		if (this.bluemix.cloudant) {
 			excludes.push('cloudantNoSQLDB=config');
