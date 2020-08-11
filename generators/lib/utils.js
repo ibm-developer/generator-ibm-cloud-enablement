@@ -71,10 +71,10 @@ function _copyFiles(_this, srcPath, dstPath, templateContext) {
 const sanitizeAlphaNumDash = (name) => {
 	name = name || 'appname';
 	return name
-    .toLowerCase()
-    .replace(REGEX_LEADING_ALPHA, '')
-    .replace(/ /g, '-')
-    .replace(REGEX_ALPHA_NUM_DASH, '');
+		.toLowerCase()
+		.replace(REGEX_LEADING_ALPHA, '')
+		.replace(/ /g, '-')
+		.replace(REGEX_ALPHA_NUM_DASH, '');
 };
 
 module.exports = {

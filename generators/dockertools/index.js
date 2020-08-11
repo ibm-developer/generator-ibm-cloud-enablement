@@ -106,9 +106,9 @@ module.exports = class extends Generator {
 		let compilationOptions = "";
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
-			if (this.bluemix.hasOwnProperty(servKey)) {
+			if (Object.prototype.hasOwnProperty.call(this.bluemix, servKey)) {
 				serviceItems.push(services[servKey]);
-				if (services[servKey].hasOwnProperty("compilationOptions")) {
+				if (Object.prototype.hasOwnProperty.call(services[servKey], "compliationOptions")) {
 					compilationOptions = compilationOptions + " " + services[servKey].compilationOptions;
 				}
 			}
@@ -118,15 +118,15 @@ module.exports = class extends Generator {
 		// Retrieve envs, port and images names if availables for each services
 		for (let index = 0; index < this.opts.services.length; index++) {
 			const servKey = this.opts.services[index];
-			if (services[servKey].hasOwnProperty('envs')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'envs')) {
 				serviceEnvs.push(services[servKey].envs);
 			}
 
-			if (services[servKey].hasOwnProperty('imageName')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
 
-			if (services[servKey].hasOwnProperty('port')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'port')) {
 				servicePorts.push(services[servKey].port);
 			}
 		}
@@ -224,7 +224,7 @@ module.exports = class extends Generator {
 		// Iterate over service keys to search for provisioned services and their environments
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
-			if (this.bluemix.hasOwnProperty(servKey)) {
+			if (Object.prototype.hasOwnProperty.call(this.bluemix, servKey)) {
 				if (services[servKey].package) {
 					servicesPackages.push(services[servKey].package);
 				}
@@ -235,14 +235,14 @@ module.exports = class extends Generator {
 		// Retrieve envs, port and images names if availables for each services
 		for (let index = 0; index < this.opts.services.length; index++) {
 			const servKey = this.opts.services[index];
-			if (services[servKey].hasOwnProperty('envs')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'envs')) {
 				serviceEnvs.push(services[servKey].envs);
 			}
 
-			if (services[servKey].hasOwnProperty('imageName')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
-			if (services[servKey].hasOwnProperty('port')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey],'port')) {
 				servicePorts.push(services[servKey].port);
 			}
 		}
@@ -418,7 +418,7 @@ module.exports = class extends Generator {
 		// Iterate over service keys to search for provisioned services
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
-			if (this.bluemix.hasOwnProperty(servKey)) {
+			if (Object.prototype.hasOwnProperty.call(this.bluemix,servKey)) {
 				if (services[servKey].package) {
 					servicesPackages.push(services[servKey].package);
 				}
@@ -429,13 +429,13 @@ module.exports = class extends Generator {
 		// Retrieve envs, port and images names if availables for each services
 		for (let index = 0; index < this.opts.services.length; index++) {
 			const servKey = this.opts.services[index];
-			if (services[servKey].hasOwnProperty('envs')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'envs')) {
 				serviceEnvs.push(services[servKey].envs);
 			}
-			if (services[servKey].hasOwnProperty('imageName')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
-			if (services[servKey].hasOwnProperty('port')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'port')) {
 				servicePorts.push(services[servKey].port);
 			}
 
@@ -564,7 +564,7 @@ module.exports = class extends Generator {
 		// Iterate over service keys to search for provisioned services
 		for (let index in servKeys) {
 			const servKey = servKeys[index];
-			if (this.bluemix.hasOwnProperty(servKey)) {
+			if (Object.prototype.hasOwnProperty.call(this.bluemix, servKey)) {
 				if (services[servKey].package) {
 					servicesPackages.push(services[servKey].package);
 				}
@@ -577,18 +577,18 @@ module.exports = class extends Generator {
 		for (let index = 0; index < this.opts.services.length; index++) {
 			const servKey = this.opts.services[index];
 
-			if (services[servKey].hasOwnProperty('envs')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'envs')) {
 				serviceEnvs.push(services[servKey].envs);
 			}
 
-			if (services[servKey].hasOwnProperty('imageName')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
 
-			if (services[servKey].hasOwnProperty('imageName')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'imageName')) {
 				serviceImageNames.push(services[servKey].imageName);
 			}
-			if (services[servKey].hasOwnProperty('port')) {
+			if (Object.prototype.hasOwnProperty.call(services[servKey], 'port')) {
 
 				servicePorts.push(services[servKey].port);
 			}
