@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.16.0](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.9...v1.16.0) (2021-01-04)
+
+
+### Features
+
+* **package.json:** update dependencies ([c507531](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/c507531e1a9f455599ced7049a88449093957a5a))
+* **package.json:** update dependencies ([e108238](https://github.com/ibm-developer/generator-ibm-cloud-enablement/commit/e108238e960f13f4921364ef418f088a5da6147c))
+
 ### [1.15.9](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.8...v1.15.9) (2020-08-11)
 
 ### [1.15.8](https://github.com/ibm-developer/generator-ibm-cloud-enablement/compare/v1.15.7...v1.15.8) (2020-02-04)
