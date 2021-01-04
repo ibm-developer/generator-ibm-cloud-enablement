@@ -38,14 +38,14 @@
   },
   "devDependencies": {
     "coveralls": "^3.1.0",
-    "eslint": "^7.14.0",
+    "eslint": "^7.17.0",
     "eslint-plugin-ejs": "0.0.2",
     "mocha": "^8.2.1",
     "mocha-multi-reporters": "^1.5.1",
     "nyc": "^15.1.0",
-    "standard-version": "^9.0.0",
+    "standard-version": "^9.1.0",
     "xunit-file": "^1.0.0",
     "yeoman-assert": "^3.1.1",
-    "yeoman-test": "^3.0.0"
+    "yeoman-test": "^4.0.0"
   }
 }
